@@ -1,0 +1,50 @@
+.dialog{
+	width: 100% !important;
+	max-width: 100% !important;
+}
+#clave {
+	width: 90px ;
+	margin-right: 10px;
+}
+
+#descripcion{
+	width: 300px;
+	min-width: 200px;
+	max-width: 100% !important;
+	width: calc(100% - 100px);
+}
+
+#ponderacionMin,
+#ponderacionMax
+{
+	width: calc(50% - 5px);
+}
+
+#ponderacionMax{
+	margin-right: 10px !important;
+}
+
+.text-area-style {
+	width: 49% !important;
+
+}
+
+.text-area-style textarea
+{
+	height: 112px !important;
+
+}
+
+.container-text-area{
+	display: flex;
+	flex-direction: column;
+}
+
+.container-text-area mat-form-field{
+	width: 100% !important;
+}
+
+.center{
+	width: 90% !important;
+	margin: auto;
+}

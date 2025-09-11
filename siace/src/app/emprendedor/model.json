@@ -1,0 +1,50 @@
+{
+   "title": "Emprendedor",
+   "entity": "emprendedor",
+   "api": {
+      "url": "Emprendedores"
+   },
+   "filter": [
+      "empId"
+   ],
+   "fields": [
+      {
+         "name": "empId",
+         "label": "Clave",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "empClaveAcceso",
+         "type": "string",
+         "label": "Clave de Acceso",
+         "required": true
+      },
+      {
+         "name": "empRazonSocial",
+         "type": "string",
+         "label": "Razón Social",
+         "required": true
+      },   
+      {
+         "name": "empDomicilio",
+         "type": "string",
+         "label": "Domicilio",
+         "required": true
+      },      
+      {
+         "name": "empTelefono",
+         "type": "string",
+         "label": "Teléfono",
+         "required": true
+      },      
+      {
+         "name": "empCorreo",
+         "type": "string",
+         "label": "Correo",
+         "required": true
+      }   
+   
+   ]
+}

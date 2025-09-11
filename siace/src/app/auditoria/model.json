@@ -1,0 +1,59 @@
+{
+   "title": "Auditoria",
+   "entity": "auditoria",
+   "api": {
+      "url": "Auditorias"
+   },
+   "filter": [
+      "audUsrId",
+      "audTipo"
+
+   ],
+   "fields": [
+      {
+         "name": "audId",
+         "label": "Clave",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "audModulo",
+         "type": "string",
+         "label": "Módulo",
+         "required": true
+      },
+      {
+         "name": "audFecha",
+         "type": "date",
+         "label": "Fecha",
+         "required": true
+      },
+      {
+         "name": "audUsrId",
+         "type": "number",
+         "label": "Usuario",
+         "required": true
+      },
+      {
+         "name": "audTipo",
+         "type": "string",
+         "label": "Tipo",
+         "required": true
+      },
+      {
+         "name": "audJsonOriginal",
+         "type": "string",
+         "label": "Original",
+         "required": true
+      },
+      {
+         "name": "audJsonModificado",
+         "type": "string",
+         "label": "Modificación",
+         "required": false
+      },
+
+
+      ]
+}

@@ -1,0 +1,118 @@
+<h2>Detalle del lista precios</h2>
+<form
+  *ngIf="listaPrecio"
+  #editForm="ngForm"
+  (ngSubmit)="save()"
+  autocomplete="off"
+>
+  <div class="row">
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label>Clave</mat-label>
+        <input
+          matInput
+          [(ngModel)]="listaPrecio.lprId"
+          id="lprId"
+          name="lprId"
+          placeholder="Clave"
+          readonly
+        />
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label for="lprNombre">Nombre</mat-label>
+        <input
+          matInput
+          [(ngModel)]="listaPrecio.lprNombre"
+          id="lprNombre"
+          name="lprNombre"
+          placeholder="Nombre"
+          required
+        />
+        <mat-error *ngIf="listaPrecio.lprNombre == ''"
+          >Nombre es requerido</mat-error
+        >
+      </mat-form-field>
+    </div>
+
+    <!-- <div class="col-md-4">
+      
+      <mat-form-field>
+         <mat-label for="lprActivo">Activo</mat-label>
+         <input matInput [(ngModel)]="listaPrecio.lprActivo" id="lprActivo" name="lprActivo" placeholder="Activo" >
+         
+      </mat-form-field>
+   </div> -->
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label>Activo</mat-label>
+        <mat-select
+          [(ngModel)]="listaPrecio.lprActivo"
+          id="banActivo"
+          name="banActivo"
+          required
+        >
+          <mat-option [value]="true">Sí</mat-option>
+          <mat-option [value]="false">No</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+
+
+      <mat-form-field appearance="fill">
+        <mat-label for="fechaVigencia">Fecha Vigencia</mat-label>
+        <input
+          matInput
+          [matDatepicker]="pickerVigencia"
+          [(ngModel)]="listaPrecio.lprFechaVigencia"
+          id="fechaVigencia"
+          name="fechaVigencia"
+          placeholder="Selecciona fecha vigencia"
+        />
+
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="pickerVigencia"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #pickerVigencia></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-4">
+  
+      <mat-form-field appearance="fill">
+        <mat-label>Fecha Alta</mat-label>
+        <input
+          matInput
+          [matDatepicker]="pickerAlta"
+          [(ngModel)]="listaPrecio.lprFechaAlta"
+          id="fechaAlta"
+          name="fechaAlta"
+          placeholder="Selecciona fecha alta"
+        />
+
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="pickerAlta"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #pickerAlta></mat-datepicker>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="button-row text-center" role="group">
+    <button
+      type="submit"
+      mat-raised-button
+      color="primary"
+      [disabled]="!editForm.form.valid"
+    >
+      Guardar
+    </button>
+    <button mat-button mat-dialog-close>Cancelar</button>
+  </div>
+</form>

@@ -1,0 +1,65 @@
+<h2>Detalle del presentacion</h2>
+<form
+  *ngIf="presentacion"
+  #editForm="ngForm"
+  (ngSubmit)="save()"
+  autocomplete="off"
+>
+  <div class="row">
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label>Clave</mat-label>
+        <input
+          matInput
+          [(ngModel)]="presentacion.preId"
+          id="preId"
+          name="preId"
+          placeholder="Clave"
+          readonly
+        />
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label for="preNombre">Nombre</mat-label>
+        <input
+          matInput
+          [(ngModel)]="presentacion.preNombre"
+          id="preNombre"
+          name="preNombre"
+          placeholder="Nombre"
+          required
+        />
+        <mat-error *ngIf="presentacion.preNombre == ''"
+          >Nombre es requerido</mat-error
+        >
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label>Activo:</mat-label>
+        <mat-select
+          [(ngModel)]="presentacion.preActivo"
+          id="banActivo"
+          name="banActivo"
+        >
+          <mat-option [value]="true">Sí</mat-option>
+          <mat-option [value]="false">No</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="button-row text-center" role="group">
+    <button
+      type="submit"
+      mat-raised-button
+      color="primary"
+      [disabled]="!editForm.form.valid"
+    >
+      Guardar
+    </button>
+    <button mat-button mat-dialog-close>Cancelar</button>
+  </div>
+</form>

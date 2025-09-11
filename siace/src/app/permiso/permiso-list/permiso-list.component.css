@@ -1,0 +1,46 @@
+/*Mantener la jerarquia*/
+.childNode {
+  margin-left: 40px;
+}
+
+.catalogo {
+  position: relative !important;
+  overflow: hidden !important;
+
+}
+
+.catalogo__card {
+  min-width: auto !important;
+}
+
+.catalogo__table-container {
+  min-width: 700px !important;
+
+}
+
+.contenedor-button mat-form-field {
+  height: 50px !important;
+  padding: 0px !important;
+}
+
+#emprendedor {
+  margin-right: 10px !important;
+}
+
+@media (max-width: 700px) {
+  .contenedor-button {
+    flex-direction: column;
+
+  }
+
+  #rol,
+  #emprendedor {
+    width: 100% !important;
+    margin-bottom: 5px
+  }
+
+  .catalogo__table-container {
+    min-width: 100% !important;
+  }
+
+}

@@ -1,0 +1,52 @@
+{
+   "title": "Familia",
+   "entity": "familia",
+   "module": "Catalogo de Familias",
+   "singular": "familia",
+   "columns": 3,
+   "api": {
+      "url": "Familias"
+   },
+   "filter": [
+      "famIdParent",
+      "famSmaId",
+	   "famId"
+   ],
+   "fields": [
+      {
+         "name": "famId",
+         "label": "Clave",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "famSmaId",
+         "label": "Submarca",
+         "type": "number",
+         "required" : true
+      },
+      {
+         "name": "famIdParent",
+         "label": "Familia Padre",
+         "type": "number"
+      },
+      {
+         "name": "famNombre",
+         "label": "Nombre",
+         "type": "string",
+         "required" : true
+      },
+      {
+         "name": "famSku",
+         "label": "SKU",
+         "type": "string",
+         "required" : true
+      },
+      {
+         "name": "famActivo",
+         "label": "Activo",
+         "type": "boolean"
+      }
+   ]
+}

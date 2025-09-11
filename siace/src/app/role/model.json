@@ -1,0 +1,26 @@
+{ 
+    "title": "Role",
+    "entity": "role",
+    "api": {
+      "url": "Roles"
+    },
+    "fields": [
+      {
+        "name": "rolId",
+        "label": "Clave",
+        "isId": true,
+        "readonly": true,
+        "type": "number"
+      },
+      {
+        "name": "rolNombre",
+        "type": "string",
+        "label": "Descripción"
+      },
+	  {
+        "name": "rolPrmId",
+        "label": "Organización",
+        "type": "number"
+      } 
+    ]
+}

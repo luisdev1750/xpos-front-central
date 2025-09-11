@@ -1,0 +1,57 @@
+{
+   "title": "Actividad",
+   "entity": "actividad",
+   "api": {
+      "url": "Actividades"
+   },
+   "filter": [
+      "aaaId",
+      "aaaNivId",
+      "aaaPilId"
+   ],
+   "fields": [
+      {
+         "name": "aaaId",
+         "label": "Clave",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "aaaDescripcion",
+         "type": "string",
+         "label": "Descripción",
+         "required": true
+      },
+      {
+         "name": "aaaNivId",
+         "type": "number",
+         "label": "Nivel",
+         "required": true
+      },
+      {
+         "name": "aaaPilId",
+         "type": "number",
+         "label": "Pilar",
+         "required": true
+      },      
+      {
+         "name": "aaaPredecesora",
+         "type": "number",
+         "label": "Predecesora",
+         "required": false
+      },      
+      {
+         "name": "aaaDuracion",
+         "type": "number",
+         "label": "Duración",
+         "required": false
+      },      
+      {
+         "name": "aaaEstatus",
+         "type": "number",
+         "label": "Predecesora",
+         "required": false
+      }
+   ]
+}

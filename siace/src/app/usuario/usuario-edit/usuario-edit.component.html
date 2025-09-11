@@ -1,0 +1,198 @@
+<h2>Detalle del usuario</h2>
+<form *ngIf="usuario" #editForm="ngForm" (ngSubmit)="save()" autocomplete="off">
+  <div class="row">
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label>Clave</mat-label>
+        <input
+          matInput
+          [(ngModel)]="usuario.usuId"
+          id="usuId"
+          name="usuId"
+          placeholder="Clave"
+          readonly
+        />
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label for="usuNombre">Nombre Completo</mat-label>
+        <input
+          matInput
+          [(ngModel)]="usuario.usuNombre"
+          id="usuNombre"
+          name="usuNombre"
+          placeholder="Nombre Completo"
+          required
+        />
+        <mat-error *ngIf="usuario.usuNombre == ''"
+          >Nombre Completo es requerido</mat-error
+        >
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label for="usuUser">Usuario</mat-label>
+        <input
+          matInput
+          [(ngModel)]="usuario.usuUser"
+          id="usuUser"
+          name="usuUser"
+          placeholder="Usuario"
+          required
+        />
+        <mat-error *ngIf="usuario.usuUser == ''"
+          >Usuario es requerido</mat-error
+        >
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label for="usuPassword">Contraseña</mat-label>
+        <input
+          matInput
+          [(ngModel)]="usuario.usuPassword"
+          id="usuPassword"
+          name="usuPassword"
+          placeholder="Contraseña"
+          required
+        />
+        <mat-error *ngIf="usuario.usuPassword == undefined"
+          >Contraseña es requerido</mat-error
+        >
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label for="usuCorreoElectronico">Correo Electrónico</mat-label>
+        <input
+          matInput
+          [(ngModel)]="usuario.usuCorreoElectronico"
+          id="usuCorreoElectronico"
+          name="usuCorreoElectronico"
+          placeholder="Correo Electrónico"
+          required
+        />
+        <mat-error *ngIf="usuario.usuCorreoElectronico == undefined"
+          >Correo Electrónico es requerido</mat-error
+        >
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-4">
+        <mat-form-field>
+        <mat-label>Perfil</mat-label>
+        <mat-select
+         (selectionChange)="onPerfilChange($event)"
+         [value] = "usuario.usuPerId"
+        >
+          <mat-option
+            *ngFor="let perfil of perfilListsFilter"
+            [value]="perfil.perId"
+          >
+            {{ perfil.perNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label>Sucursal</mat-label>
+        <mat-select
+         (selectionChange)="onSucursalChange($event)"
+         [value] = "usuario.usuSucId"
+        >
+          <mat-option
+            *ngFor="let sucursal of sucursalListsFilter"
+            [value]="sucursal.sucId"
+          >
+            {{ sucursal.sucNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+
+
+    </div>
+
+    <div class="col-md-4">
+      <mat-form-field appearance="fill">
+        <mat-label for="fechaVigencia">Fecha Alta</mat-label>
+        <input
+          matInput
+          [matDatepicker]="pickerAlta"
+          [(ngModel)]="usuario.usuFechaAlta"
+          id="usuFechaAlta"
+          name="usuFechaAlta"
+          placeholder="Selecciona fecha alta"
+        />
+
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="pickerAlta"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #pickerAlta></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-4">
+      <mat-form-field appearance="fill">
+        <mat-label for="fechaVigencia">Fecha Modificación</mat-label>
+        <input
+          matInput
+          [matDatepicker]="pickerModificacion"
+          [(ngModel)]="usuario.usuFecha_Modificacion"
+          id=".suFecha_Modificacion"
+          name="usuFecha_Modificacion"
+          placeholder="Selecciona fecha modificación"
+        />
+
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="pickerModificacion"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #pickerModificacion></mat-datepicker>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+
+   <div class="col-md-4">
+     <mat-form-field>
+        <mat-label>Activo</mat-label>
+        <mat-select
+          id="banActivo"
+          name="banActivo"
+          [(ngModel)]="usuario.usuActivo"
+          (selectionChange)="onActivoChange($event)"
+          
+        >
+          <mat-option [value]="true">Sí</mat-option>
+          <mat-option [value]="false">No</mat-option>
+        </mat-select>
+
+
+      </mat-form-field>
+   </div>
+
+  </div>
+  <div class="button-row text-center" role="group">
+    <button
+      type="submit"
+      mat-raised-button
+      color="primary"
+      [disabled]="!editForm.form.valid"
+    >
+      Guardar
+    </button>
+    <button mat-button mat-dialog-close>Cancelar</button>
+  </div>
+</form>

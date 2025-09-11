@@ -1,0 +1,78 @@
+{
+   "title": "Sucursal",
+   "entity": "sucursal",
+   "module": "Catalogo de Sucursales",
+   "singular": "sucursal",
+   "columns": 3,
+   "api": {
+      "url": "Sucursales"
+   },
+   "filter": [
+	  "sucCiuId",
+	  "sucColId",
+	  "sucEmpId",
+	  "sucId"
+   ],
+   "fields": [
+      {
+         "name": "sucId",
+         "label": "ID",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "sucNombre",
+         "label": "Nombre",
+         "type": "string",
+         "required": true
+      },
+      {
+         "name": "sucNumero",
+         "label": "Número",
+         "type": "number",
+         "required": true
+      },
+      {
+         "name": "sucCalle",
+         "label": "Calle",
+         "type": "string"
+      },
+      {
+         "name": "sucNumeroExterior",
+         "label": "Número Exterior",
+         "type": "string"
+      },
+      {
+         "name": "sucNumeroInterior",
+         "label": "Número Interior",
+         "type": "string"
+      },
+      {
+         "name": "sucLatitud",
+         "label": "Latitud",
+         "type": "string"
+      },
+      {
+         "name": "sucLongitud",
+         "label": "Longitud",
+         "type": "string"
+      },
+	  
+      {
+         "name": "sucCiuId",
+         "label": "Ciudad",
+         "type": "string"
+      },
+	  {
+         "name": "sucColId",
+         "label": "Ciudad",
+         "type": "string"
+      },
+	  {
+         "name": "sucEmpId",
+         "label": "Empresa",
+         "type": "string"
+      }
+   ]
+}

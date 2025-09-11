@@ -1,0 +1,36 @@
+<div class="dialog">
+   <div class="row">
+      <div class="col-10 col-md-11">
+         <h1 class="dialog-title">Detalle de la Evidencia</h1>
+      </div>
+      <div class="col-1 text-right">
+         <button mat-button mat-dialog-close class="close-icon close-min-button">
+            <mat-icon>close</mat-icon>
+         </button>
+      </div>
+   </div>
+
+   <form *ngIf="evidencia" class="dialog-form-container" #editForm="ngForm" (ngSubmit)="save()" autocomplete="off">
+
+      <div class="center field-wrap700">
+         <mat-form-field id="clave" *ngIf="evidencia.eviId>0">
+            <mat-label>Clave</mat-label>
+            <input matInput [(ngModel)]="evidencia.eviId" id="eviId" name="eviId" placeholder="Clave" readonly>
+         </mat-form-field>
+
+         <mat-form-field id="descripcion">
+            <mat-label for="eviDescripcion">Descripción</mat-label>
+            <input matInput [(ngModel)]="evidencia.eviDescripcion" id="eviDescripcion" name="eviDescripcion"
+               placeholder="Clave de Acceso" required
+               [readonly]="veaFechaActivacion !== null && veaFechaActivacion !== undefined">
+            <mat-error *ngIf="evidencia.eviDescripcion==''">Descripción es requerido</mat-error>
+         </mat-form-field>
+      </div>
+
+      <div class="button-row text-center" role="group">
+         <button *ngIf="veaFechaActivacion == null && veaFechaActivacion == undefined" type="submit" mat-raised-button
+            color="primary" [disabled]="!editForm.form.valid">Guardar</button>
+         <button mat-button mat-dialog-close>Cancelar</button>
+      </div>
+   </form>
+</div>

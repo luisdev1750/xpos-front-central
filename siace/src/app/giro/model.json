@@ -1,0 +1,25 @@
+{
+   "title": "Giro",
+   "entity": "giro",
+   "api": {
+      "url": "Giros"
+   },
+   "filter": [
+      "girId"
+   ],
+   "fields": [
+      {
+         "name": "girId",
+         "label": "Clave",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "girDescripcion",
+         "type": "string",
+         "label": "Descripción",
+         "required": true
+      }
+      ]
+}

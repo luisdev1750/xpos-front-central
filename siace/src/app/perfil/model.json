@@ -1,0 +1,40 @@
+{
+   "title": "Perfil",
+   "entity": "perfil",
+   "module": "Catalogo de Perfiles",
+   "singular": "perfil",
+   "columns": 3,
+   "api": {
+      "url": "Perfiles"
+   },
+   "filter": [
+      "perActivo",
+	   "perId"
+   ],
+   "fields": [
+      {
+         "name": "perId",
+         "label": "Clave",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "perNombre",
+         "label": "Nombre",
+         "type": "string",
+         "required" : true
+      },
+      {
+         "name": "perClave",
+         "label": "Código",
+         "type": "string",
+         "required" : true
+      },
+      {
+         "name": "perActivo",
+         "label": "Nombre",
+         "type": "string"
+      }
+   ]
+}

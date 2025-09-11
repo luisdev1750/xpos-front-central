@@ -1,0 +1,17 @@
+.indicator-title {
+  font-size: 3.0rem;
+  font-weight: 500;
+  color: var(--toolbar-color) !important;
+}
+
+.especial {
+  margin-top: 0px !important;
+}
+
+.bottom-no-margin {
+  margin-bottom: 0px !important;
+}
+
+.indicator {
+  border-radius: 0.8rem !important;
+}

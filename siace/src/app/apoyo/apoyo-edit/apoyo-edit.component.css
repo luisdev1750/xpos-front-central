@@ -1,0 +1,43 @@
+.tab-generales{
+	  width: 100%;
+}
+
+
+.tab-generales mat-form-field{
+	width: calc(50% - 10px);
+	margin-right: 10px;
+}
+
+@media (max-width: 768px) {
+	.tab-generales mat-form-field{
+		width: 100%;
+		margin-right: 0px;
+	}
+	
+	.tab-generales{
+		flex-direction: column;
+	}
+}
+
+.mat-form-field-emulate{
+	background-color: #f5f5f5;
+	width: 100%;
+	display: flex;
+	justify-content: left;
+	margin-bottom: 10px;
+}
+
+.mat-form-field-emulate span{
+	margin-top: auto;
+	margin-bottom: auto;
+}
+
+.mat-form-field-emulate button{
+	margin-top: 0px !important;
+	margin-bottom: 0px !important;
+}
+
+
+.alineador{
+	flex-direction: column !important;
+}

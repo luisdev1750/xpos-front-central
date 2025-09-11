@@ -1,0 +1,72 @@
+<div class="dialog pilares">
+  <h1 class="dialog-title">Detalle del pilar</h1>
+  <form class="dialog-form-container" *ngIf="pilarCopia" #editForm="ngForm" (ngSubmit)="save()" autocomplete="off">
+
+    <div class="center field-wrap700">
+      <mat-form-field id="clave" *ngIf="pilarCopia.pilId > 0">
+        <mat-label>Clave</mat-label>
+        <input matInput [(ngModel)]="pilarCopia.pilId" id="pilId" name="pilId" placeholder="Clave" readonly>
+      </mat-form-field>
+
+      <mat-form-field id="descripcion">
+        <mat-label for="pilDescripcion">Nombre</mat-label>
+        <input matInput [(ngModel)]="pilarCopia.pilDescripcion" id="pilDescripcion" name="pilDescripcion"
+          placeholder="Descripción" required>
+        <mat-error *ngIf="pilarCopia.pilDescripcion === ''">Descripción es requerida</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="center">
+      <mat-form-field id="ponderacionMax">
+        <mat-label for="pilPondMax">Ponderación Máx.</mat-label>
+        <input matInput type="number" [(ngModel)]="pilarCopia.pilPondMax" id="pilPondMax" name="pilPondMax"
+          placeholder="Ponderación Máx.">
+      </mat-form-field>
+
+      <mat-form-field id="ponderacionMin">
+        <mat-label for="pilPondMin">Ponderación Mín.</mat-label>
+        <input matInput type="number" [(ngModel)]="pilarCopia.pilPondMin" id="pilPondMin" name="pilPondMin"
+          placeholder="Ponderación Mín.">
+      </mat-form-field>
+    </div>
+
+    <!-- Mat Expansion Panel for Textareas -->
+    <mat-accordion class="container-text-area">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>Descripción emergente</mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-form-field class="text-area-style" id="pilarCopiaEmergente">
+          <textarea matInput type="text" [(ngModel)]="pilarCopia.pilDescripcionEmergente" id="pilDescripcionEmergente"
+            name="pilDescripcionEmergente" placeholder="Descripción emergente."></textarea>
+        </mat-form-field>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>Descripción desarrollado</mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-form-field class="text-area-style" id="pilarCopiaDesarrollado">
+          <textarea matInput type="text" [(ngModel)]="pilarCopia.pilDescripcionDesarrollado" id="pilDescripcionDesarrollado"
+            name="pilDescripcionDesarrollado" placeholder="Descripción desarrollado"></textarea>
+        </mat-form-field>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>Descripción optimizado</mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-form-field class="text-area-style" id="pilarCopiaOptimizado">
+          <textarea matInput type="text" [(ngModel)]="pilarCopia.pilDescripcionOptimizado" id="pilDescripcionOptimizado"
+            name="pilDescripcionOptimizado" placeholder="Descripción optimizado"></textarea>
+        </mat-form-field>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <div class="button-row text-center" role="group">
+      <button type="submit" mat-raised-button color="primary" [disabled]="!editForm.form.valid">Guardar</button>
+      <button mat-button mat-dialog-close>Cancelar</button>
+    </div>
+
+  </form>
+</div>

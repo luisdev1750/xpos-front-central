@@ -1,0 +1,20 @@
+<div class="row ">
+  <div class="col-10 col-md-11 ">
+  </div>
+  <div class="col-1 text-right">
+     <button mat-button mat-dialog-close class="close-icon close-min-button">
+        <mat-icon>close</mat-icon>
+     </button>
+  </div>
+</div>
+
+
+<div class="upload-container">
+  <form>
+    <div class="form-group">
+      <label class="dialog-title" for="fileInput">Subir Archivo (Excel)</label>
+      <input type="file" id="fileInput" accept=".xlsx" (change)="onFileSelected($event)">
+    </div>
+    <button type="button" (click)="onUpload()">Cargar Archivo</button>
+  </form>
+</div>

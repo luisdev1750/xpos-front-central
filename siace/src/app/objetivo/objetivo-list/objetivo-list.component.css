@@ -1,0 +1,31 @@
+.contenedor-button{
+	background-color:  var(--background) !important;
+	width: 100% !important;
+}
+
+
+@media (max-width: 600px) {
+	.contenedor-button{
+		width: 100wh !important;
+	}
+}
+
+/* Hacer que el botón sea sticky */
+.sticky-button {
+	position: sticky;
+	top: 10px; /* Puedes ajustar la distancia del borde superior */
+	z-index: 100; /* Asegúrate de que esté por encima del contenido desplazable */
+ }
+ 
+ /* Estilo para el contenedor de la tabla */
+ .table-container {
+	max-height: 400px; /* Puedes ajustar la altura máxima según tu necesidad */
+	overflow-y: auto;  /* Permitir desplazamiento vertical */
+	margin-top: 20px; /* Espacio entre el botón y la tabla */
+ }
+ 
+ /* Ajustar la tabla para que ocupe el 100% del ancho */
+ .catalogo__table {
+	width: 100%;
+ }
+ 

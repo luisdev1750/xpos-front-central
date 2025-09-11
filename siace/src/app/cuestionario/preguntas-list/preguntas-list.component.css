@@ -1,0 +1,266 @@
+body {
+  background-color: #ffffff;
+}
+
+.contenedor {
+  background-color: white;
+  min-height: 100vh;
+}
+
+.question-container {
+  background-color: inherit;
+  box-shadow: 2px 2px 5px #5E1500;
+  border-radius: 8px;
+  box-shadow: none;
+  width: 90%;
+  margin: 0 auto;
+  margin-bottom: 15px;
+}
+
+.question-label {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.question-input,
+.question-radio,
+.question-checkbox {
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.question-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.question-radio-label,
+.question-checkbox-label {
+  font-size: 16px;
+}
+
+.valores-ponderados-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  /* Espacio entre cada elemento */
+  width: 85%;
+  margin: 0 auto;
+}
+
+.pilar-item {
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  box-shadow: none
+}
+
+.pilar-title {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.valor-ponderado {
+  margin: 10px 0 0;
+  font-size: 16px;
+  color: #555;
+}
+
+.valores-ponderados-container {
+  margin: 20px 0;
+  padding: 15px;
+  background-color: #3498db;
+  border-radius: 8px;
+  color: #ecf0f1;
+  margin: 20px auto;
+  width: 90%;
+}
+
+.pilar-item {
+  margin-bottom: 10px;
+}
+
+.pilar-title {
+  font-size: 1.5em;
+  color: #f39c12;
+  margin-bottom: 5px;
+}
+
+.valor-ponderado {
+  font-size: 1.2em;
+  color: #bdc3c7;
+}
+
+.pilar-navigation {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
+}
+
+.pilar-navigation button {
+  padding: 10px 20px;
+  font-size: 1em;
+  border: none;
+  border-radius: 5px;
+  background-color: var(--button-color);
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.pilar-navigation button:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+}
+
+.pilar-navigation button:hover:not(:disabled) {
+  background-color: #2980b9;
+}
+
+.nav-buttons {
+  padding-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
+  margin: 0 auto;
+}
+
+.nav-button {
+  padding: 10px 20px;
+  font-size: 1em;
+  border: none;
+  border-radius: 2rem;
+  background-color: var(--button-color);
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.nav-button:hover:not(:disabled) {
+  background-color: var(--mat-tab-color);
+  transform: scale(1.05);
+}
+
+.nav-button:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+}
+
+.preguntas-title {
+  background-color: var(--mat-tab-header-active-hover-indicator-color);
+  color: #ffffff;
+  padding: 3px 2px;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  box-shadow: none;
+  width: 90%;
+  margin: 0 auto;
+  margin-bottom: 1rem;
+  
+}
+
+.valores-ponderados-container {
+  background-color: #dddddd;
+  /* Fondo gris suave */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+.pilar-title {
+  font-size: 1.2rem;
+  margin-top: 0;
+  color: #333333;
+  /* Color de texto gris oscuro */
+}
+
+.valor-ponderado {
+  font-size: 1rem;
+  color: #555555;
+  /* Color de texto gris más claro */
+  margin-top: 8px;
+}
+
+h4 {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #333333;
+  /* Color de texto gris oscuro */
+  margin-top: 10px;
+  width: 90%;
+  margin: 0 auto;
+  margin-bottom: 1rem;
+}
+
+.boton-reporte {
+  display: flex;
+  justify-content: center;
+
+}
+
+.boton-reporte button {
+  background-color: orangered;
+}
+
+.boton-nueva-encuesta {
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: left;
+}
+
+.preguntas-title {
+  margin: 0 auto;
+  margin-top: 1rem;
+}
+
+label {
+  margin: 0 auto;
+  margin-top: 1rem;
+  color: #5E1500 !important;
+}
+
+.pilar {
+  margin-top: 7px;
+  margin-bottom: 0px;
+  color: #5E1500;
+  width: fit-content;
+  padding: 5px 7px;
+  border-radius: 10px;
+  font-size: 1.4em;
+}
+
+.red-asterisk {
+  color: red;
+  margin-right: 5px;
+}
+
+
+/*Para alinear estilos*/
+.catalogo {
+  height: auto;
+  padding: 0% !important;
+  color: var(--mat-tab-color) !important;
+  overflow-y:  scroll !important;
+}
+
+.contenedor{
+  overflow-y: hidden !important;
+}
+
+.catalogo__card {
+  margin: 0px auto !important;
+  padding: 0px !important;
+  height: auto;
+  max-width: 1400px !important;
+}

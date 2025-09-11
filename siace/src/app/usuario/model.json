@@ -1,0 +1,77 @@
+{
+   "title": "Usuario",
+   "entity": "usuario",
+   "module": "Catalogos de Usuarios",
+   "singular": "usuario",
+   "columns": 3,
+   "api": {
+      "url": "Usuarios"
+   },
+   "filter": [
+      "usuActivo",
+      "usuPerId",
+      "usuSucId",
+	  "usuId"
+   ],
+   "fields": [
+      {
+         "name": "usuId",
+         "label": "Clave",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "usuNombre",
+         "label": "Nombre Completo",
+         "type": "string",
+         "required": true
+      },
+      {
+         "name": "usuUser",
+         "label": "Usuario",
+         "type": "string",
+         "required": true
+      },
+      {
+         "name": "usuPassword",
+         "label": "Contraseña",
+         "type": "password",
+         "required": true
+      },
+      {
+         "name": "usuCorreoElectronico",
+         "label": "Correo Electrónico",
+         "type": "email",
+         "required": true
+      },
+      {
+         "name": "usuPerId",
+         "label": "Perfil",
+         "type": "number",
+         "required": true
+      },
+      {
+         "name": "usuSucId",
+         "label": "Sucursal",
+         "type": "number"
+      },
+      {
+         "name": "usuActivo",
+         "label": "Activo",
+         "type": "boolean"
+      },
+      {
+         "name": "usuFechaAlta",
+         "label": "Fecha Alta",
+         "type": "datetime",
+         "readonly": true
+      },
+      {
+         "name": "usuFecha_Modificacion",
+         "label": "Fecha Modificación",
+         "type": "datetime",
+         "readonly": true
+      }
+   ]
+}

@@ -1,0 +1,67 @@
+/* Estilo para modal */
+
+.dialog-title{
+   text-transform: capitalize;
+}
+
+#guardar{
+   margin-right: 10px;
+}
+
+.evidencias-container {
+   display: flex;
+   flex-direction: column;
+   gap: 6px;
+}
+
+.evidencia-item {
+   display: flex;
+   flex-direction: column;
+   border: 1px solid hsl(0, 0%, 90%);
+   padding: 2px 3px;
+   border-radius: 8px;
+   max-width: 95%;
+   margin: auto;
+   background-color: var(--body-shadow);
+}
+
+.evidencia-header {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+}
+
+.evidencia-details {
+   display: flex;
+   flex-direction: column;
+   gap: 8px;
+}
+.font-weight-bold{
+   font-weight: bold;
+}
+
+
+.evidencia-descripcion{
+   font-size: 14px !important;
+   color: var(--foreground);
+   text-align: center !important;
+}
+
+
+.file-input {
+   width: 100%;
+}
+
+.clear-button {
+   align-self: flex-start;
+}
+
+
+.col-close{
+   text-align: right;
+   justify-content: end;
+}
+
+.row-close{
+   max-width: 100%;
+}

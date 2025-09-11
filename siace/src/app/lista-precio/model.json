@@ -1,0 +1,47 @@
+
+{
+   "title": "ListaPrecio",
+   "entity": "TcListaPrecio",
+   "module": "Catalogo de Lista Precios",
+   "singular": "lista precios",
+   "columns": 3,
+   "api": {
+      "url": "ListaPrecios"
+   },
+   "filter": [
+		"lprActivo",
+      "lprFechaVigencia",
+	  "lprFechaAlta",
+	  "lprId"
+   ],
+   "fields": [
+      {
+         "name": "lprId",
+         "label": "Clave",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "lprNombre",
+         "label": "Nombre",
+         "type": "string",
+         "required" : true
+      },
+      {
+         "name": "lprActivo",
+         "label": "Activo",
+         "type": "boolean"
+      },
+ {
+         "name": "lprFechaVigencia",
+         "label": "Fecha de vigencia",
+         "type": "string"
+      },
+	  {
+         "name": "lprFechaAlta",
+         "label": "Fecha Alta",
+         "type": "string"
+      },
+   ]
+}

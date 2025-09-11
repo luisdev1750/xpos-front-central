@@ -1,0 +1,21 @@
+<h2 mat-dialog-title>Evento</h2>
+<mat-dialog-content class="mat-typography">
+  <form>
+    <mat-form-field class="todo-width">
+      <input 
+        #eventText 
+        matInput 
+         [formControl]="this.eveText" 
+        required 
+        name="eventText" 
+        placeholder="Descripción del evento">
+      <mat-hint>Descripción del evento</mat-hint>
+      <mat-error *ngIf="eveText.invalid">{{getErrorMessage()}}</mat-error>
+    </mat-form-field>
+  </form>
+  
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cerrar</button>
+  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Guardar</button>
+</mat-dialog-actions>

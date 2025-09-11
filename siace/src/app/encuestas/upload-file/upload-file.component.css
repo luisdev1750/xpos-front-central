@@ -1,0 +1,50 @@
+/* src/app/document-list/document-list.component.css */
+.upload-container {
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid rgb(226, 219, 219);
+    border-radius: 10px;
+    background-color: var(--body-shadow);
+    max-width: 500px; 
+    margin: 0 auto; 
+  }
+  
+
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+    width: 100%;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  input[type="file"] {
+    width: 100%;
+    padding: 10px;
+  }
+  
+  button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--button-color);
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+.dialog-title{
+  text-align: center;
+}
+
+
+  

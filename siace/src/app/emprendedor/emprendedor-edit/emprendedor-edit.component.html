@@ -1,0 +1,153 @@
+<div class="dialog-version">
+  <div class="row row-cleaner-space">
+     <div class="col-10 col-md-11 ">
+       <h1 class="dialog-title">Detalle del emprendedor</h1>
+     </div>
+     <div class="col-1 text-right">
+       <button mat-button mat-dialog-close class="close-icon close-min-button">
+         <mat-icon>close</mat-icon>
+       </button>
+     </div>
+   </div>
+
+<div class="dialog">
+  <form [formGroup]="formulario" (ngSubmit)="save()" autocomplete="off">
+    <div class="row">
+      <div class="col-md-6">
+        <mat-form-field *ngIf="emprendedor.empId > 0">
+          <mat-label>Clave</mat-label>
+          <input matInput formControlName="empId" id="empId" placeholder="Clave" readonly>
+        </mat-form-field>
+      </div>
+      <div class="col-md-6">
+       
+
+        <div class="col-md-6">
+          <mat-form-field>
+      <mat-label for="empEdad">Edad</mat-label>
+      <input matInput formControlName="empEdad" id="empEdad" placeholder="Edad">
+      <mat-error *ngIf="formulario.get('empEdad')?.hasError('required')">
+        RFC es requerido
+      </mat-error>
+    </mat-form-field>
+
+
+    
+      </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <mat-form-field>
+          <mat-label for="empRazonSocial">Nombre o Razón Social</mat-label>
+          <input matInput formControlName="empRazonSocial" id="empRazonSocial" placeholder="Razón Social">
+          <mat-error *ngIf="formulario.get('empRazonSocial')?.hasError('required')">
+            Razón Social es requerida
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-md-6">
+        <mat-form-field>
+          <mat-label for="empDomicilio">Domicilio</mat-label>
+          <input matInput formControlName="empDomicilio" id="empDomicilio" placeholder="Domicilio">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <mat-form-field>
+          <mat-label for="empTelefono">Teléfono</mat-label>
+          <input matInput formControlName="empTelefono" id="empTelefono" placeholder="Teléfono">
+          <mat-error *ngIf="formulario.get('empTelefono')?.hasError('required')">
+            Teléfono es requerido
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-md-6">
+        <mat-form-field>
+          <mat-label for="empCorreo">Correo Electrónico</mat-label>
+          <input matInput formControlName="empCorreo" id="empCorreo" placeholder="Correo Electrónico">
+          <mat-error *ngIf="formulario.get('empCorreo')?.hasError('required')">
+            Correo Electrónico es requerido
+          </mat-error>
+          <mat-error *ngIf="formulario.get('empCorreo')?.hasError('email')">
+            Ingrese un correo válido
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <mat-form-field>
+          <mat-label><span >Nivel de Estudios</span></mat-label>
+          <mat-select formControlName="empNieId" id="empNieId">
+            <mat-option *ngFor="let nivel of nivelesList" [value]="nivel.nieId">{{ nivel.nieDescripcion }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      
+      <div class="col-md-6">
+        <mat-form-field>
+          <mat-label for="empNombreCompleto">Nombre de Contacto</mat-label>
+          <input matInput formControlName="empNombreCompleto" id="empNombreCompleto" placeholder="Nombre de contacto">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <mat-form-field>
+          <mat-label for="empRfc">RFC</mat-label>
+          <input matInput formControlName="empRfc" id="empRfc" placeholder="RFC">
+          <mat-error *ngIf="formulario.get('empRfc')?.hasError('required')">
+            RFC es requerido
+          </mat-error>
+        </mat-form-field>
+
+        
+
+        
+      </div>
+      <div class="col-md-6">
+        <mat-form-field>
+          <mat-label for="empNombreTemporal">Nombre Provisional del Proyecto</mat-label>
+          <input matInput formControlName="empNombreTemporal" id="empNombreTemporal" placeholder="Nombre provisional del proyecto">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <mat-form-field>
+          <mat-label><span>Giro</span></mat-label>
+          <mat-select formControlName="empGiroId" id="empGiroId">
+            <mat-option *ngFor="let giro of girosList" [value]="giro.girId">{{ giro.girDescripcion }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-md-6">
+        <mat-form-field appearance="fill">
+          <mat-label><span >Necesidades</span></mat-label>
+      
+          <mat-select  formControlName="empNec" [(ngModel)]="selectedNecesidadesIds"  multiple>
+            <mat-option *ngFor="let necesidad of necesidadesList" [value]="necesidad.necId">{{necesidad.necDescripcion}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </div>
+    </div>
+
+
+ 
+
+    <div class="button-row text-center" role="group">
+      <button type="submit" mat-raised-button color="primary" 
+      
+      >Guardar</button>
+      <button mat-button mat-dialog-close>Cancelar</button>
+    </div>
+  </form>
+</div>

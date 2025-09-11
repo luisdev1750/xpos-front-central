@@ -1,0 +1,141 @@
+<nav aria-label="breadcrumb">
+   <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
+      <li class="breadcrumb-item active">
+         Catalogo de Sucursales
+      </li>
+   </ol>
+</nav>
+
+<div class="proin-main">
+   <mat-card class="proin-card">
+      <h2>Catalogo de Sucursales</h2>
+      <form #f="ngForm">
+         
+         <mat-form-field>
+            <mat-label>ID:</mat-label>
+            <input matInput type="search" [(ngModel)]="filter.sucId" id="sucId"
+               name="sucId">
+         </mat-form-field>
+         
+         <mat-form-field>
+            <mat-label>Ciudad:</mat-label>
+            <input matInput type="search" [(ngModel)]="filter.sucCiuId" id="sucCiuId"
+               name="sucCiuId">
+         </mat-form-field>
+         
+         <mat-form-field>
+            <mat-label>Ciudad:</mat-label>
+            <input matInput type="search" [(ngModel)]="filter.sucColId" id="sucColId"
+               name="sucColId">
+         </mat-form-field>
+         
+         <mat-form-field>
+            <mat-label>Empresa:</mat-label>
+            <input matInput type="search" [(ngModel)]="filter.sucEmpId" id="sucEmpId"
+               name="sucEmpId">
+         </mat-form-field>
+         
+
+         <button mat-mini-fab color="accent" (click)="add()" [disabled]="!f?.valid">
+            <mat-icon>add</mat-icon>
+         </button>
+      </form>
+      <div *ngIf="sucursalList.length > 0">
+         
+         <table mat-table #table [dataSource]="sucursalList">
+            
+            <ng-container matColumnDef="sucId">
+               <mat-header-cell *matHeaderCellDef>
+                  ID
+               </mat-header-cell>
+               <mat-cell *matCellDef="let item"> {{item.sucId}} </mat-cell>
+            </ng-container>
+            
+            <ng-container matColumnDef="sucNombre">
+               <mat-header-cell *matHeaderCellDef>
+                  Nombre
+               </mat-header-cell>
+               <mat-cell *matCellDef="let item"> {{item.sucNombre}} </mat-cell>
+            </ng-container>
+            
+            <ng-container matColumnDef="sucNumero">
+               <mat-header-cell *matHeaderCellDef>
+                  Número
+               </mat-header-cell>
+               <mat-cell *matCellDef="let item"> {{item.sucNumero}} </mat-cell>
+            </ng-container>
+            
+            <ng-container matColumnDef="sucCalle">
+               <mat-header-cell *matHeaderCellDef>
+                  Calle
+               </mat-header-cell>
+               <mat-cell *matCellDef="let item"> {{item.sucCalle}} </mat-cell>
+            </ng-container>
+            
+            <ng-container matColumnDef="sucNumeroExterior">
+               <mat-header-cell *matHeaderCellDef>
+                  Número Exterior
+               </mat-header-cell>
+               <mat-cell *matCellDef="let item"> {{item.sucNumeroExterior}} </mat-cell>
+            </ng-container>
+            
+            <ng-container matColumnDef="sucNumeroInterior">
+               <mat-header-cell *matHeaderCellDef>
+                  Número Interior
+               </mat-header-cell>
+               <mat-cell *matCellDef="let item"> {{item.sucNumeroInterior}} </mat-cell>
+            </ng-container>
+            
+            <ng-container matColumnDef="sucLatitud">
+               <mat-header-cell *matHeaderCellDef>
+                  Latitud
+               </mat-header-cell>
+               <mat-cell *matCellDef="let item"> {{item.sucLatitud}} </mat-cell>
+            </ng-container>
+            
+            <ng-container matColumnDef="sucLongitud">
+               <mat-header-cell *matHeaderCellDef>
+                  Longitud
+               </mat-header-cell>
+               <mat-cell *matCellDef="let item"> {{item.sucLongitud}} </mat-cell>
+            </ng-container>
+            
+            <ng-container matColumnDef="sucCiuId">
+               <mat-header-cell *matHeaderCellDef>
+                  Ciudad
+               </mat-header-cell>
+               <mat-cell *matCellDef="let item"> {{item.sucCiuId}} </mat-cell>
+            </ng-container>
+            
+            <ng-container matColumnDef="sucColId">
+               <mat-header-cell *matHeaderCellDef>
+                  Ciudad
+               </mat-header-cell>
+               <mat-cell *matCellDef="let item"> {{item.sucColId}} </mat-cell>
+            </ng-container>
+            
+            <ng-container matColumnDef="sucEmpId">
+               <mat-header-cell *matHeaderCellDef>
+                  Empresa
+               </mat-header-cell>
+               <mat-cell *matCellDef="let item"> {{item.sucEmpId}} </mat-cell>
+            </ng-container>
+            
+            <ng-container matColumnDef="actions">
+               <mat-header-cell *matHeaderCellDef></mat-header-cell>
+               <mat-cell *matCellDef="let item">
+                  <button (click)="edit(item)" mat-button color="warn" class="button-edit">
+                     <mat-icon>edit</mat-icon>
+                  </button>&nbsp;
+                  <button (click)="delete(item)" mat-button color="warn">
+                     <mat-icon>delete</mat-icon>
+                  </button>
+               </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+         </table>
+      </div>
+   </mat-card>
+</div>

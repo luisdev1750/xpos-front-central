@@ -1,0 +1,66 @@
+<div class="catalogo">
+   <div class="catalogo-header">
+      <h1 class="catalogo__title">
+         <img src="../../../assets/icons/table_chart.svg" alt="Descripción del icono" width="40" height="40">
+         Pilares
+      </h1>
+   </div>
+
+   <mat-card class="catalogo__card button-no-shadow">
+
+      <div class="contenedor-button">
+         <form #f="ngForm">
+            <button mat-mini-fab class="catalogo__add-button button-no-shadow" color="accent" (click)="add()" [disabled]="!f?.valid">
+               <mat-icon>add</mat-icon>
+            </button>
+         </form>
+      </div>
+
+      <div class="catalogo__table-container currentTable" *ngIf="pilarList.length > 0">
+
+         <table mat-table class="catalogo__table" #table  [dataSource]="dataSource">
+
+            <ng-container matColumnDef="pilId">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Clave </mat-header-cell>
+               <mat-cell *matCellDef="let item" class="catalogo__cell"> {{item.pilId}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="pilDescripcion">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Descripción </mat-header-cell>
+               <mat-cell *matCellDef="let item" class="catalogo__cell"> {{item.pilDescripcion}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="pilPondMax">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Ponderación Máx. </mat-header-cell>
+               <mat-cell *matCellDef="let item" class="catalogo__cell"> {{item.pilPondMax}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="pilPondMin">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Ponderación Mín. </mat-header-cell>
+               <mat-cell *matCellDef="let item" class="catalogo__cell"> {{item.pilPondMin}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell">Acciones</mat-header-cell>
+               <mat-cell *matCellDef="let item" class="catalogo__cell">
+                  <div class="catalogo__action-buttons">
+                     <button (click)="edit(item)" mat-button color="warn">
+                        <mat-icon>edit</mat-icon>
+                     </button>&nbsp;
+                     <button (click)="delete(item)" mat-button color="warn">
+                        <mat-icon>delete</mat-icon>
+                     </button>
+                  </div>
+               </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+         </table>
+      </div>
+      <div class="contenedor-paginator">
+         <mat-paginator class="catalogo__table paginator" [pageSizeOptions] = "[10, 20]" showFirstLastButtons></mat-paginator>
+      </div>
+
+   </mat-card>
+</div>

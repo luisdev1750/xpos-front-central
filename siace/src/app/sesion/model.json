@@ -1,0 +1,57 @@
+{
+   "title": "Sesion",
+   "entity": "sesion",
+   "api": {
+      "url": "Sesiones"
+   },
+   "filter": [
+      "sesId",
+      "sesTisId",
+      "sesEmpId"
+   ],
+   "fields": [
+      {
+         "name": "sesId",
+         "label": "Clave",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "sesTisId",
+         "type": "number",
+         "label": "Tipo de Sesión",
+         "required": true
+      },
+      {
+         "name": "sesHoraIni",
+         "type": "date",
+         "label": "Hora Inicio",
+         "required": true
+      },
+      {
+         "name": "sesHoraFin",
+         "type": "date",
+         "label": "Hora Fin",
+         "required": true
+      },
+      {
+         "name": "sesEmpId",
+         "type": "number",
+         "label": "Emprendedor",
+         "required": true
+      },
+      {
+         "name": "sesUsrId",
+         "type": "number",
+         "label": "Usuario",
+         "required": true
+      },
+      {
+         "name": "sesFecha",
+         "type": "date",
+         "label": "Fecha",
+         "required": true
+      }
+  ]
+}

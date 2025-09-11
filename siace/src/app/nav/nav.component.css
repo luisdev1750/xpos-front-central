@@ -1,0 +1,148 @@
+/* BEM styles */
+.sidenav-container {
+  height: 100%; 
+  text-align: left !important;
+}
+
+.sidenav {
+  width: 200px;
+}
+
+/*.sidenav .mat-toolbar {
+  background: inherit;
+}*/
+
+/*.mdc-list-item:focus {
+   opacity:0.0 !important;
+   background-color: unset;
+ }*/
+
+.mat-toolbar.mat-mdc-primary {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.full-width {
+   width: 100%;
+   min-width: 200px;
+}
+
+.menu-button {
+   transition: 300ms ease-in-out;
+   transform: rotate(0deg);
+}
+
+.menu-button.rotated {
+   transform: rotate(180deg);
+}
+
+.submenu {
+   overflow-y: hidden;
+   transition: transform 300ms ease;
+   transform: scaleY(0);
+   transform-origin: top;
+   padding-left: 30px;
+}
+
+.submenu.expanded {
+   transform: scaleY(1);
+}
+
+mat-sidenav mat-toolbar{
+   padding-left: 20px !important;
+}
+
+mat-toolbar {
+   background: rgb(255, 255, 255) !important;
+   color: #fff;
+}
+
+mat-nav-list {
+   background-color: rgb(255, 255, 255);
+}
+
+mat-toolbar div {
+   background-color: yellow;
+}
+
+.mat-toolbar-row {
+   background-color: rgb(255, 255, 255) !important;
+   padding: 0 5px;
+}
+
+.mat-button:hover {
+   background-color: #ffffff; /* Color de acento cuando se pasa el mouse */
+}
+
+/* Personalizar campos de entrada (input) */
+.mat-form-field-underline {
+   background-color: #ffffff; /* Subrayado de color de acento */
+}
+
+.mat-input-element {
+   color: #3f51b5; /* Color de texto dentro del input */
+}
+
+/* Personalizar el color de advertencia */
+.mat-warn {
+   background-color: var(--toolbar-contrast-color) !important; /* Color de advertencia */
+   color: white !important;
+}
+
+mat-sidenav-container {
+   position: absolute;
+}
+
+.mat-drawer-container {
+   position: static !important;
+}
+
+.mdc-list-item__primary-text {
+   color: red !important;
+}
+
+li.nav-item {
+   border-bottom: 1px #4019191f solid;
+   margin-bottom: 20px;
+   display: flex;
+}
+
+.mat-mdc-list-item {
+   border-bottom: 1px #4019191f solid;
+   padding-top: 20px !important;
+}
+
+.iconos {
+   margin-right: 5px;
+   height: 30px;
+   width: 30px;
+}
+
+.mat-drawer {
+   padding-right: 30px;
+}
+
+/* Nuevas clases para los estilos en línea */
+.toolbar--sidenav {
+   margin: 0px !important;
+   justify-self: left !important;
+}
+
+.toolbar__logo {
+   width: 60px !important;
+   margin-left: 0px !important;
+   padding: 0px !important;
+}
+
+.list-item-parent {
+   color: #8E6957 !important;
+}
+
+nana {
+   color:red !important;
+}
+
+.mat-mdc-focus-indicator {
+  background-color: #8E6957 !important;
+}

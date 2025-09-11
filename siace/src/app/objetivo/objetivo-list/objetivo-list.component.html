@@ -1,0 +1,45 @@
+<div class="contenedor-button sticky-button">
+   <form #f="ngForm">
+      <button mat-mini-fab color="accent" [ngStyle]="{transform: 'scale(0.9)'}" (click)="add()" [disabled]="!f?.valid">
+         <mat-icon>add</mat-icon>
+      </button>
+   </form>
+</div>
+
+<div class="table-container" *ngIf="objetivoList.length > 0">
+   <table mat-table class="catalogo__table" #table [dataSource]="objetivoList">
+
+      <ng-container matColumnDef="objId">
+         <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Clave </mat-header-cell>
+         <mat-cell class="catalogo__cell" *matCellDef="let item"> {{item.objId}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="objNombre">
+         <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Nombre </mat-header-cell>
+         <mat-cell class="catalogo__cell" *matCellDef="let item"> {{item.objNombre}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="objDescripcion">
+         <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Descripción </mat-header-cell>
+         <mat-cell class="catalogo__cell" *matCellDef="let item"> {{item.objDescripcion}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="objFormato">
+         <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Formato </mat-header-cell>
+         <mat-cell class="catalogo__cell" *matCellDef="let item"> {{item.objFormato}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+         <mat-header-cell *matHeaderCellDef class="catalogo__header-cell">Acciones</mat-header-cell>
+         <mat-cell class="catalogo__cell" *matCellDef="let item">
+            <button (click)="edit(item)" mat-button color="accent">
+               <mat-icon>edit</mat-icon>
+            </button>&nbsp;
+            <button (click)="delete(item)" mat-button color="accent"><mat-icon>delete</mat-icon></button>
+         </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+   </table>
+</div>

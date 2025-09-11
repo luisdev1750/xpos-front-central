@@ -1,0 +1,166 @@
+<div class="catalogo">
+   <div class="catalogo-header">
+      <h1 class="catalogo__title">
+         <img src="../../../assets/icons/location_city.svg" alt="Descripción del icono" width="40" height="40">
+         Emprendedores
+      </h1>
+   </div>
+
+    
+
+   <mat-card class="catalogo__card button-no-shadow">
+      <div class="contenedor-button">
+         <form #f="ngForm">
+            <div class="contenedor-button">
+               <mat-form-field appearance="fill" id="emprendedor" class="autocomplete-subject" floatLabel="always">
+                  <mat-label>Razón Social</mat-label>
+                  <!-- <input matInput [(ngModel)]="logEmpNombre" id="logEmpNombre" name="logEmpNombre" *ngIf="logEmpId"
+                     disabled="logEmpId"> -->
+                  <ng-container><!--*ngIf="!logEmpId"-->
+                     <input matInput [(ngModel)]="empFilter" [matAutocomplete]="autoRazon" id="empFilter" name="empFilter"
+                        placeholder="Todos" (ngModelChange)="changeRazonFilter()">
+                     <mat-autocomplete #autoRazon="matAutocomplete" [displayWith]="displayFn"
+                        (optionSelected)="selectRazon($event)">
+                        <mat-option *ngFor="let emp of empModelFilter " [value]="emp" [matTooltip]="emp.empRazonSocial">
+                           {{emp.empRazonSocial}}
+                        </mat-option>
+                     </mat-autocomplete>
+                  </ng-container>
+                  <button type="button" mat-icon-button matSuffix (click)="cleanRazon()">
+                     <mat-icon>close</mat-icon>
+                  </button>
+               </mat-form-field>
+
+               <mat-form-field appearance="fill" id="emprendedorRfc" class="autocomplete-subject" floatLabel="always">
+                  <mat-label>RFC</mat-label>
+                  <ng-container >
+                     <input matInput [(ngModel)]="empRfc" [matAutocomplete]="autoRfc" id="empRfc" name="empRfc"
+                        placeholder="Todos" (ngModelChange)="changeRfcFilter()">
+                     <mat-autocomplete #autoRfc="matAutocomplete" [displayWith]="displayFnRfc"
+                        (optionSelected)="selectRfc($event)">
+                        <mat-option *ngFor="let emp of empModelFilter " [value]="emp" [matTooltip]="emp.empRfc">
+                           {{emp.empRfc}}
+                        </mat-option>
+                     </mat-autocomplete>
+                  </ng-container>
+                  <button type="button" mat-icon-button matSuffix (click)="cleanRfc()">
+                     <mat-icon>close</mat-icon>
+                  </button>
+               </mat-form-field>
+
+               <!--<button mat-mini-fab class="catalogo__add-button button-no-shadow" [ngStyle]="{transform: 'scale(0.9)'
+              }" color="accent" (click)="add()" [disabled]="!f?.valid">
+                  <mat-icon>add</mat-icon>
+               </button>-->
+               <mat-form-field appearance="fill">
+                  <mat-label>Estado del emprendedor</mat-label>
+                  <mat-select [(ngModel)]="statusSelection.empTipo" name="tipo" (selectionChange)="onSelectionChange($event)">
+                    <mat-option *ngFor="let option of tipos" [value]="option">
+                      {{ option }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+            </div>
+         </form>
+      </div>
+
+      <div class="catalogo__table-container currentTable" *ngIf="dataSource">
+         <table mat-table class="catalogo__table " style="border-radius: 12px !important;" #table
+            [dataSource]="dataSource">
+
+            <!-- <ng-container matColumnDef="empId">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Clave </mat-header-cell>
+               <mat-cell *matCellDef="let item" class="catalogo__cell"> {{item.empId}} </mat-cell>
+            </ng-container> -->
+            <ng-container matColumnDef="empRfc">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> RFC </mat-header-cell>
+               <mat-cell *matCellDef="let item" class="catalogo__cell"> {{item.empRfc}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="empClaveAcceso">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Clave de Acceso </mat-header-cell>
+               <mat-cell *matCellDef="let item" class="catalogo__cell"> {{item.empClaveAcceso}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="empRazonSocial">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Razón Social </mat-header-cell>
+               <mat-cell *matCellDef="let item" class="catalogo__cell"> {{item.empRazonSocial}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="empDomicilio">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Domicilio </mat-header-cell>
+               <mat-cell *matCellDef="let item" class="catalogo__cell"> {{item.empDomicilio}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="empTelefono">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Teléfono </mat-header-cell>
+               <mat-cell *matCellDef="let item" class="catalogo__cell"> {{item.empTelefono}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="empCorreo">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Correo </mat-header-cell>
+               <mat-cell *matCellDef="let item" class="catalogo__cell"> {{item.empCorreo}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="empNivelEstudios">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Nivel de Estudios </mat-header-cell>
+               <mat-cell *matCellDef="let item" class="catalogo__cell"> {{item.empNivelEstudios}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="empNombreEmpresa">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Nombre Empresa </mat-header-cell>
+               <mat-cell *matCellDef="let item" class="catalogo__cell"> {{item.empNombreEmpresa}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="empNombreTemporal">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Nombre Temporal </mat-header-cell>
+               <mat-cell *matCellDef="let item" class="catalogo__cell"> {{item.empNombreTemporal}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="empIndustria">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Giro </mat-header-cell>
+               <mat-cell *matCellDef="let item" class="catalogo__cell"> {{item.empIndustria}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="empNecesidades">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Necesidades </mat-header-cell>
+               <mat-cell *matCellDef="let item" class="catalogo__cell"> {{item.empNecesidades}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="empVersion">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> No. Versión </mat-header-cell>
+               <mat-cell *matCellDef="let item" class="catalogo__cell"> {{item.empVersion === 0 ? '' : item.empVersion}}
+               </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="empFechaBaja">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Fecha Baja</mat-header-cell>
+               <mat-cell *matCellDef="let item" class="catalogo__cell"> {{item.empFechaBaja  | date : "dd/MM/yyyy"  }} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Acciones </mat-header-cell>
+               <mat-cell *matCellDef="let item" class="catalogo__cell">
+                  <div class="catalogo__action-buttons">
+                     <button (click)="edit(item)" mat-button color="warn">
+                        <mat-icon>edit</mat-icon>
+                     </button>&nbsp;
+                     <button (click)="delete(item)" mat-button color="warn">
+                        <mat-icon>delete</mat-icon>
+                     </button>
+                  </div>
+               </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+         </table>
+
+
+
+      </div>
+      <div class="contenedor-paginator">
+         <mat-paginator class="catalogo__table paginator" [pageSizeOptions]="[10, 20]"
+            showFirstLastButtons></mat-paginator>
+      </div>
+   </mat-card>
+</div>

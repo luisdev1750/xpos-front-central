@@ -1,0 +1,12 @@
+<div class="dialog">
+   <h1 mat-dialog-title>{{data.title}}</h1>
+<div mat-dialog-content>
+   {{data.message}}
+</div>
+<br/>
+<div class="button-row text-center" role="group">
+   <button type="button" mat-raised-button color="primary" mat-dialog-close (click)="confirm()">Confirmar</button>
+   <button mat-button mat-dialog-close>Cerrar</button>
+ </div>
+</div>
+

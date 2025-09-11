@@ -1,0 +1,40 @@
+{
+   "title": "TipoPromocion",
+   "entity": "tipopromocion",
+   "module": "Catalogo de Tipos de Promociones",
+   "singular": "tipo de promoción",
+   "columns": 3,
+   "api": {
+      "url": "TiposPromociones"
+   },
+   "filter": [
+      "tprActivo",
+      "tprId"
+   ],
+   "fields": [
+      {
+         "name": "tprId",
+         "label": "Clave",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "tprNombre",
+         "label": "Nombre",
+         "type": "string",
+         "required" : true
+      },
+      {
+         "name": "tprActivo",
+         "label": "Activo",
+         "type": "boolean"
+      },
+      {
+         "name": "tprClave",
+         "label": "Código",
+         "type": "string",
+         "required" : true
+      }
+   ]
+}

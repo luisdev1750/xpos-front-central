@@ -1,0 +1,97 @@
+<div class="">
+   <div class="row row-cleaner-space">
+      <div class="col-11">
+         <h1 class="dialog-title">Detalle de la actividad</h1>
+      </div>
+      <div class="col-1 text-right">
+         <button mat-button mat-dialog-close class="close-icon close-min-button">
+            <mat-icon>close</mat-icon>
+         </button>
+      </div>
+   </div>
+
+   <mat-tab-group>
+      <mat-tab label="Datos generales">
+         <form *ngIf="actividad"  #editForm="ngForm" (ngSubmit)="save()" autocomplete="off">
+
+            <div class="">
+            <div class="row justify-content-center">
+               <div class="col-auto" *ngIf="actividad.aaaId>0 ;else vacio">
+                  <mat-form-field>
+                     <mat-label>Clave</mat-label>
+                     <input matInput [(ngModel)]="actividad.aaaId" id="aaaId" name="aaaId" placeholder="Clave" readonly>
+                  </mat-form-field>
+               </div>
+               <ng-template #vacio>
+                  <div class="col-auto" id="vacio">
+                  </div>
+               </ng-template>
+               <div class="col-auto">
+                  <mat-form-field>
+                     <mat-label for="aaaDescripcion">Descripción</mat-label>
+                     <input matInput [(ngModel)]="actividad.aaaDescripcion" id="aaaDescripcion" name="aaaDescripcion"
+                        placeholder="Descripción" required
+                        [readonly]="veaFechaActivacion !== null && veaFechaActivacion !== undefined">
+                     <mat-error *ngIf="actividad.aaaDescripcion==''">Descripción es requerido</mat-error>
+                  </mat-form-field>
+               </div>
+               <div class="col-auto">
+                  <mat-form-field appearance="fill">
+                     <mat-label>Nivel</mat-label>
+                     <mat-select [(ngModel)]="actividad.aaaNivId" id="nivId" name="nivId"
+                        [disabled]="veaFechaActivacion !== null && veaFechaActivacion !== undefined">
+                        <mat-option *ngFor="let item of nivModel"
+                           [value]="item.nivId">{{item.nivDescripcion}}</mat-option>
+                     </mat-select>
+                  </mat-form-field>
+               </div>
+               <div class="col-auto">
+                  <mat-form-field appearance="fill">
+                     <mat-label>Pilar</mat-label>
+                     <mat-select [(ngModel)]="actividad.aaaPilId" id="pilId" name="pilId"
+                        (selectionChange)="onPilarChange()"
+                        [disabled]="veaFechaActivacion !== null && veaFechaActivacion !== undefined">
+                        <mat-option *ngFor="let item of pilModel"
+                           [value]="item.pilId">{{item.pilDescripcion}}</mat-option>
+                     </mat-select>
+                  </mat-form-field>
+               </div>
+               <div class="col-auto">
+                  <mat-form-field appearance="fill">
+                     <mat-label>Predecesora</mat-label>
+                     <mat-select [(ngModel)]="actividad.aaaPredecesora" id="aaaPredecesora" name="aaaPredecesora"
+                        [disabled]="veaFechaActivacion !== null && veaFechaActivacion !== undefined">
+                        <mat-option [value]="0">Ninguna</mat-option>
+                        <mat-option *ngFor="let item of aaaModel"
+                           [value]="item.aaaId">{{item.aaaDescripcion}}</mat-option>
+                     </mat-select>
+                  </mat-form-field>
+               </div>
+               <div class="col-auto">
+                  <mat-form-field>
+                     <mat-label for="aaaDuracion">Duración</mat-label>
+                     <input matInput type="number" [(ngModel)]="actividad.aaaDuracion" id="aaaDuracion"
+                        name="aaaDuracion" placeholder="Duración"
+                        [readonly]="veaFechaActivacion !== null && veaFechaActivacion !== undefined">
+                  </mat-form-field>
+               </div>
+
+            </div>
+            </div>
+            <div class="button-row text-center" role="group">
+               <button class="margen-derecho" *ngIf="veaFechaActivacion == null && veaFechaActivacion == undefined" type="submit"
+                  mat-raised-button color="primary" [disabled]="!editForm.form.valid">Guardar</button>
+               <button mat-button mat-dialog-close>Cancelar</button>
+            </div>
+
+         </form>
+      </mat-tab>
+      <mat-tab label="Guía" *ngIf="actividad.aaaId>0">
+         <app-apoyo [aaaId]="actividad.aaaId" [veaFechaActivacion]="veaFechaActivacion"></app-apoyo>
+      </mat-tab>
+      <mat-tab label="Respaldo" *ngIf="actividad.aaaId>0"><!--*ngIf="actividad.aaaId>0"-->
+         <app-evidencia [aaaId]="actividad.aaaId" [veaFechaActivacion]="veaFechaActivacion"></app-evidencia>
+      </mat-tab>
+   </mat-tab-group>
+
+</div>

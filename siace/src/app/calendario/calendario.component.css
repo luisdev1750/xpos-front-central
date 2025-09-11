@@ -1,0 +1,202 @@
+.contenedor-button mat-form-field{
+   min-width: 240px !important;
+   width: auto;
+}
+
+mat-form-field{
+   margin-right: 15px;
+}
+
+.contenedor-button{
+   margin-top: 5px;
+   
+}
+
+.butones-centrales{
+   margin-top: 3px;
+   border-radius: 10px;
+   padding: 10px 15px !important;
+   flex-wrap: wrap;
+}
+
+@media (max-width: 600px) {
+   .butones-centrales{
+      width: 100%;
+      margin: 0px !important;
+      padding: 0px !important;
+   }
+   mat-form-field{
+      margin-right: 15px;
+   }
+}
+
+.color-white{
+   background-color: var(--body-shadow) !important;
+}
+
+h3{
+   color: var(--Background) !important;
+   font-style: bold;
+}
+
+.calendario-componente-contanedor{
+   width: 95%;
+   margin: 0 auto;
+}
+
+@media (max-width: 600px) {
+   .contenedor-button mat-form-field{
+      min-width: 100% !important;
+   }
+}
+
+pre {
+   background-color: #f5f5f5;
+   padding: 15px;
+ }
+
+ 
+.cal-month-view .cal-day-badge {
+   background-color: var(--mat-tab-header-active-hover-indicator-color)!important;
+   color: #fff!important;
+}
+
+.cal-month-view .cal-event {
+   width: 15px;
+   height: 15px;
+}
+
+.cal-month-view .cal-events {
+   display: block;
+}
+
+.mat-mdc-list .mat-mdc-list-item{
+   height:initial!important;
+}
+
+
+.cal-month-view .cal-day-number {
+   font-size: 1.5em;
+   opacity: 0.6;
+}
+
+.cal-month-view .cal-button-add{
+   opacity: 0.6;
+}
+
+.cal-month-view .cal-cell-top {
+   min-height: 60px;
+}
+
+.cal-cell-row.cal-header, .cal-cell-row.cal-header:hover{
+   background:#1B2C4C;color:#fff;
+}
+
+
+
+.col-list{
+   background-color: #F3FBFE;
+   padding: 0px 0px;
+}
+
+.col-list .mat-paginator-container{
+   background-color: #F3FBFE;
+}
+
+
+.todo-form{
+   background-color: var(--body-shadow);
+   color: #F3FBFE;
+   padding-top: 10px;
+}
+
+.col-list p{
+   padding: 0px 16px;
+}
+
+.col-list .mat-flat-button.mat-accent, .col-list .mat-raised-button.mat-accent, .col-list .mat-fab.mat-accent, .col-list .mat-mini-fab.mat-accent {
+   color: #71CAD1;
+   background-color: #F3FBFE;
+}
+
+calendar .btn-primary {
+   background-color: #F2F2F2;
+   border-color: #808080;
+   color: black;
+}
+
+
+calendar .btn-primary:not(:disabled):not(.disabled).active, calendar .btn-primary:not(:disabled):not(.disabled):active, .show> calendar .btn-primary.dropdown-toggle {
+   background-color: var(--mat-tab-header-active-hover-indicator-color);
+   border-color: #F2F2F2;
+   color: #F2F2F2;
+}
+
+.cal-week-view .cal-header.cal-today,
+.cal-month-view .cal-day-cell.cal-today {
+   background-color: rgba(216, 50, 0, 0.229) !important;
+}
+
+.cal-extended {
+   text-align: right;
+   width: 100%;
+   color: #1B2C4C; 
+   font-size: 10px;
+   display: block;
+}
+
+.mat-button-toggle-group-appearance-standard { bottom: 8px!important; } 
+.group-mini{ width: 150px; max-width: 150px;}
+.mat-option{ font-size: 14px; line-height: 20px;}
+.autocomplete-subject{width: 245px; max-width: 245px;}
+.autocomplete-subject button {right: -10px;}
+.icon-pdf{position: absolute!important;right:0px;z-index: 5;}
+
+
+
+
+
+.catalogo-header{
+   margin-bottom: 5px !important;
+}
+
+.btn-group div {
+   background-color: var(--mat-tab-color);
+   color: var(--background);
+   border: none !important;
+}
+
+.btn-group.active,
+.btn-group div:hover {
+   background-color: var(--mat-tab-header-active-hover-indicator-color) !important;
+   
+}
+
+.title-eventos,
+.eventos{
+   background-color: var(--body-shadow);
+   color: var(--mat-tab-color) !important;
+   padding-top: 10px;
+}
+
+.title-eventos{
+   text-align: center !important;
+}
+
+
+.butones-centrales form{
+   margin-top: 5px !important;
+}
+
+.eventos-title{
+   color: var(--mat-tab-color-active) !important;   
+}
+
+.evento-single{
+   margin-bottom: 0px !important;
+   margin-top: 0.5em !important;
+}
+
+.evento-single{
+   padding: 0px 1px !important;
+}

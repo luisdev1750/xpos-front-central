@@ -1,0 +1,10 @@
+#fecha{
+	margin-right: 10px;
+}
+
+@media (max-width: 550px) {
+	#buscadores mat-form-field{
+		min-width: 100% !important;
+	}
+}
+

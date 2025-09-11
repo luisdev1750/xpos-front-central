@@ -1,0 +1,17 @@
+
+.dialog{
+	width: fit-content;
+	min-width: fit-content;
+}
+
+#clave{
+	width: 90px;
+	margin-right: 10px;
+}
+
+#descripcion{
+	width: 300px;
+	min-width: 200px;
+}
+
+

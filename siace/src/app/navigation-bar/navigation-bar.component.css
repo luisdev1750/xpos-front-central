@@ -1,0 +1,69 @@
+ul{
+   list-style: none;
+}
+
+li p {
+   padding-top: 5px;
+   font-size: 12px;
+}
+
+img{
+   width: 200px;
+}
+.button-menu {
+   background-color: #ffffff; /* Fondo blanco */
+   color: black; /* Color del ícono */
+   border-radius: 8px; /* Bordes ligeramente redondeados */
+   font-weight: bold; /* El icono en negrita */
+   padding: 8px; /* Relleno interno más pequeño */
+   width: 40px; /* Ancho más pequeño */
+   height: 40px; /* Alto más pequeño */
+   display: flex; /* Para centrar el icono */
+   justify-content: center; /* Centramos horizontalmente */
+   align-items: center; /* Centramos verticalmente */
+   border: none; /* Sin borde predeterminado */
+   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra para dar efecto de elevación */
+   transition: box-shadow 0.3s ease; /* Animación de sombra en hover */
+}
+
+
+.logo {
+   margin-left: 3vw;
+   width: 350px;
+   height: 40px;
+   background-image: url(../../assets/images/logo.svg);
+   background-color: var(--mat-toolbar-container-background-color);
+   background-repeat: no-repeat;
+   background-size: contain;
+   background-blend-mode: luminosity;
+   transition: background-blend-mode 0.3s ease, background-color 0.3s ease, filter 0.3s ease;
+}
+
+.logo:hover {
+   background-blend-mode: normal;
+   background-color: transparent;
+   cursor: pointer;
+   filter: brightness(1.5);
+}
+
+
+.icono-large {
+   font-size: 1.5em; margin-top: 15px;
+}
+
+.texto-em
+{
+   font-size: 0.8em;
+}
+
+.texto-personalizado{
+   font-size: 1.0em !important; margin-top: 20px;
+}
+
+.no-select {
+   user-select: none; /* Evita la selección en navegadores compatibles */
+   -webkit-user-select: none; /* Para Safari */
+   -moz-user-select: none; /* Para Firefox */
+   -ms-user-select: none; /* Para Internet Explorer/Edge */
+   pointer-events: none; /* Opcional: evita cualquier interacción con el ícono */
+}

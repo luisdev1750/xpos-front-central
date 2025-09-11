@@ -1,0 +1,39 @@
+{
+   "title": "Apoyo",
+   "entity": "apoyo",
+   "api": {
+      "url": "Apoyos"
+   },
+   "filter": [
+      "apoAaaId"
+   ],
+   "fields": [
+      {
+         "name": "apoId",
+         "label": "Clave",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "apoDescripcion",
+         "type": "string",
+         "label": "Descripción",
+         "required": true
+      },
+      {
+         "name": "apoTutorial",
+         "type": "string",
+         "label": "Tutorial",
+         "required": true
+      },
+      {
+         "name": "apoLiga",
+         "type": "string",
+         "label": "Liga",
+         "required": false
+      }
+
+
+      ]
+}

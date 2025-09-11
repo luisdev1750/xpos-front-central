@@ -1,0 +1,74 @@
+<div class="extend-dialog">
+
+  <div class="row">
+    <div class="col-10 col-md-11">
+       <h1 class="dialog-title">Detalle del tipo de sesión</h1>
+    </div>
+    <div class="col-1 text-right">
+       <button mat-button mat-dialog-close class="close-icon close-min-button">
+          <mat-icon>close</mat-icon>
+       </button>
+    </div>
+ </div>
+  
+  <mat-tab-group class="responsive-tab-group">
+    
+    <mat-tab label="Datos generales">
+      <form class="dialog-form-container" *ngIf="tipoSesionCopia" #editForm="ngForm" (ngSubmit)="save()" autocomplete="off">
+
+        <div class="left field-wrap700">
+
+        <mat-form-field id="clave" *ngIf="tipoSesionCopia.tisId > 0">
+          <mat-label>Clave</mat-label>
+          <input matInput [(ngModel)]="tipoSesionCopia.tisId" id="tisId" name="tisId" placeholder="Clave" readonly>
+        </mat-form-field>
+
+        <mat-form-field id="nombre">
+          <mat-label for="tisNombre">Nombre</mat-label>
+          <input matInput [(ngModel)]="tipoSesionCopia.tisNombre" id="tisNombre" name="tisNombre" placeholder="Nombre" required>
+          <mat-error *ngIf="tipoSesionCopia.tisNombre === ''">Nombre es requerido</mat-error>
+        </mat-form-field>
+
+
+        <mat-form-field id="tipoAspecto">
+          <mat-label>Tipo de aspecto</mat-label>
+          <mat-select [(ngModel)]="tipoSesionCopia.tisTiaId" id="tisTiaId" name="tisTiaId">
+            <mat-option *ngFor="let item of tiaModel" [value]="item.tiaId">{{ item.tiaNombre }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        
+
+      </div>
+
+      <div class="left field-wrap700">
+
+        <mat-form-field id="duracion">
+          <mat-label for="tisDuracion">Duración</mat-label>
+          <input matInput type="number" [(ngModel)]="tipoSesionCopia.tisDuracion" id="tisDuracion" name="tisDuracion" placeholder="Duración">
+          <mat-error *ngIf="tipoSesionCopia.tisDuracion === undefined">Duración es requerida</mat-error>
+        </mat-form-field>
+
+        <mat-form-field id="lineamiento">
+          <mat-label for="tisLineamiento">Lineamiento</mat-label>
+          <input matInput [(ngModel)]="tipoSesionCopia.tisLineamiento" id="tisLineamiento" name="tisLineamiento" placeholder="Lineamiento" required>
+          <mat-error *ngIf="tipoSesionCopia.tisLineamiento === ''">Lineamiento es requerido</mat-error>
+        </mat-form-field>
+
+      </div>
+
+        <div class="button-row text-center">
+          <button type="submit" mat-raised-button color="primary" [disabled]="!editForm.form.valid">Guardar</button>
+          <button mat-button color="primary" mat-dialog-close>Cancelar</button>
+        </div>
+      
+
+      </form>
+    </mat-tab>
+
+    <mat-tab label="Objetivos" *ngIf="tipoSesionCopia.tisId > 0">
+      <app-objetivo [tisId]="tipoSesionCopia.tisId"></app-objetivo>
+    </mat-tab>
+    
+  </mat-tab-group>
+</div>

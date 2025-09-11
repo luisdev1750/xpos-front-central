@@ -1,0 +1,53 @@
+<div class="contenedor">
+  <app-nav-logo [isActivate]="true"></app-nav-logo>
+
+  <div class="catalogo">
+    <div class="catalogo-header">
+      <h1 class="catalogo__title">Resultados</h1>
+    </div>
+
+    <div class="catalogo__card">
+
+      <table class="styled-table rounded-table">
+        <!-- Encabezados de la tabla -->
+        <thead>
+          <tr>
+            <th>Pilares</th>
+            <th>Descripción</th>
+            <th>Puntaje</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Contenedor para iterar sobre los datos recibidos -->
+          <ng-container *ngFor="let pilar of resultados">
+            <!-- Fila para cada elemento del array -->
+            <tr>
+              <!-- Columna para la descripción del pilar -->
+              <td>{{ pilar.pilDescripcion }}</td>
+
+              <!-- Columna para la puntuación general, puedes calcular o dejar vacío -->
+              <td class ="columna-2">
+                <p>{{pilar.pilDetalles}}</p>
+              </td>
+              <!-- Columna para la puntuación parcial -->
+              <td>{{ pilar.sumaPilar }}</td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+
+      <div class="promedio-container">
+        <div class="promedio-elemento">
+          <strong>Promedio:</strong> {{ promedioPilar | number:'1.2-2' }}
+        </div>
+        <div class="promedio-elemento">
+          <button class="nav-button" (click)="generarPdf()">Generar reporte PDF</button>
+        </div>
+      </div>
+
+
+
+    </div>
+  </div>
+
+</div>

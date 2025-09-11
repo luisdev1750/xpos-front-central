@@ -1,0 +1,75 @@
+/* Estilo para actividades */
+.actividades-container {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   width: 100%;
+   margin-top: 20px;
+}
+
+.actividad-item {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   width: 100%;
+   padding: 10px;
+   border-bottom: 1px solid #ccc;
+}
+
+.actividad-button {
+   flex-grow: 1;
+   width: 100%;
+   justify-content: left;
+   font-size: 13px;
+   color: #3f51b5;
+   /* Color primario de Material */
+   /*background-color: #e8eaf6;*/
+   /* Fondo ligeramente contrastante */
+   border: none;
+   padding: 10px;
+   border-radius: 4px;
+   cursor: pointer;
+   transition: background-color 0.3s;
+}
+
+
+
+.actividad-checkbox {
+   margin-left: 20px;
+}
+
+
+.button-blanco{
+   background-color: white !important;
+   color: black !important;
+}
+
+.button-amarillo{
+   background-color: #fad87a !important;
+}
+
+.button-verde{
+   background-color: rgb(120 160 120) !important;
+   color: white !important;
+}
+
+
+.button-amarillo,.button-blanco,.button-verde{
+   border-radius: 12px !important;
+   padding: 5px 10px !important;
+   margin: 5px !important;
+   font-size: 12px !important;
+   font-weight: bold !important;
+   border: none !important;
+   cursor: pointer !important;
+}
+
+
+@media (max-width: 600px) {
+   .button{
+      padding: 0px !important;
+      margin: 0px !important;
+      font-size: 10px !important;
+   }
+   
+}

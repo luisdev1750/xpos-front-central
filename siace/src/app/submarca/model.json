@@ -1,0 +1,41 @@
+{
+   "title": "Submarcas",
+   "entity": "submarca",
+   "module": "Catalogo de Submarcas",
+   "singular": "submarca",
+   "columns": 3,
+   "api": {
+      "url": "Submarcas"
+   },
+   "filter": [
+      "smaActivo",
+      "smaMarId",
+	   "smaId"
+   ],
+   "fields": [
+      {
+         "name": "smaId",
+         "label": "Clave",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "smaMarId",
+         "label": "Clave de Marca",
+         "type": "number",
+         "required" : true
+      },
+      {
+         "name": "smaNombre",
+         "label": "Nombre",
+         "type": "string",
+         "required" : true
+      },
+      {
+         "name": "smaActivo",
+         "label": "Activo",
+         "type": "boolean"
+      }
+   ]
+}

@@ -1,0 +1,81 @@
+<div class="catalogo ">
+
+   <div class="catalogo-header">
+      <h1 class="catalogo__title">
+         <img src="../../../assets/images/icons/version.svg" alt="Descripción del icono" width="40" height="40">
+          Versiones A3
+      </h1>
+   </div>
+
+   <mat-card class="catalogo__card button-no-shadow">
+      
+      <div class="contenedor-button">
+      <form #f="ngForm" >
+         <button mat-mini-fab class="catalogo__add-button button-no-shadow" color="accent" [ngStyle]="{transform: 'scale(0.9)'
+              }" (click)="add()"
+            [disabled]="!f?.valid">
+            <mat-icon>add</mat-icon>
+         </button>
+      </form>
+   </div>
+      <div class="catalogo__table-container" *ngIf="versionList.length > 0">
+
+         <table class="catalogo__table" mat-table #table  [dataSource]="dataSource">
+
+            <ng-container matColumnDef="veaId" class="enumerable">
+               <mat-header-cell  *matHeaderCellDef class="catalogo__header-cell enumerable"> Clave </mat-header-cell>
+               <mat-cell  class="catalogo__cell enumerable" *matCellDef="let item"> {{item.veaId}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="veaFecha">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Fecha </mat-header-cell>
+               <mat-cell class="catalogo__cell"  *matCellDef="let item"> {{item.veaFecha | date:'dd/MM/yyyy HH:mm'}}
+               </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="veaNoVersion">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell enumerable"> Versión </mat-header-cell>
+               <mat-cell class="catalogo__cell enumerable" *matCellDef="let item"> {{item.veaNoVersion}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="usuario">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Usuario </mat-header-cell>
+               <mat-cell class="catalogo__cell" *matCellDef="let item"> {{item.usuario}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="veaActivo">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell checkbox"> Activo </mat-header-cell>
+               <mat-cell class="catalogo__cell checkbox" *matCellDef="let item">
+                  <mat-checkbox [checked]="item.veaActivo" *ngIf="item.veaActivo" [disabled]="true"></mat-checkbox>
+               </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Acciones </mat-header-cell>
+               <mat-cell class="catalogo__cell" *matCellDef="let item">
+                  <button (click)="edit(item)" mat-button color="warn">
+                     <mat-icon
+                        *ngIf="item.veaFechaActivacion == null && item.veaFechaActivacion == undefined">edit</mat-icon>
+                     <mat-icon
+                        *ngIf="item.veaFechaActivacion !== null && item.veaFechaActivacion !== undefined">visibility</mat-icon>
+                  </button>&nbsp;
+                  <button (click)="delete(item)" mat-button color="warn"
+                     *ngIf="item.veaFechaActivacion  == null && item.veaFechaActivacion == undefined">
+                     <mat-icon>delete</mat-icon>
+                  </button>&nbsp;
+                  <button (click)="clonar(item)" mat-button color="warn">
+                     <mat-icon>file_copy</mat-icon>
+                  </button>
+               </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+         </table>
+      </div>
+      <div class="contenedor-paginator">
+         <mat-paginator class="catalogo__table paginator" [pageSizeOptions] = "[10, 20]" showFirstLastButtons></mat-paginator>
+      </div>
+
+   </mat-card>
+</div>

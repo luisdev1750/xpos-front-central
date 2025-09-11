@@ -1,0 +1,124 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
+    <li class="breadcrumb-item active">Catalogo de Familias</li>
+  </ol>
+</nav>
+
+<div class="proin-main">
+  <mat-card class="proin-card">
+    <h2>Catalogo de Familias</h2>
+    <form #f="ngForm">
+      <div class="row align-items-center">
+        <div class="col-md-2">
+          <mat-form-field>
+            <mat-label>Clave:</mat-label>
+            <input
+              matInput
+              type="search"
+              [(ngModel)]="filter.famId"
+              id="famId"
+              name="famId"
+            />
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-2">
+          <mat-form-field>
+            <mat-label>Submarca</mat-label>
+              <mat-select (selectionChange)="onSubmarcaChange($event)">
+              <mat-option
+                *ngFor="let submarca of submarcasListsFilter"
+                [value]="submarca.smaId"
+              >
+                {{ submarca.smaNombre }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+     
+
+
+        <div class="col-md-3">
+          <mat-form-field>
+            <mat-label>Familia Padre:</mat-label>
+            
+              <mat-select (selectionChange)="onFamiliaPadreChange($event)">
+                <mat-option
+                  *ngFor="let familia of familiasListFilter"
+                  [value]="familia.famId"
+                >
+                  {{ familia.famNombre }}
+                </mat-option>
+              </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-2">
+          <button
+            mat-mini-fab
+            color="accent"
+            (click)="add()"
+            [disabled]="!f?.valid"
+          >
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <div *ngIf="familiaList.length > 0">
+      <table mat-table #table [dataSource]="familiaList">
+        <ng-container matColumnDef="famId">
+          <mat-header-cell *matHeaderCellDef> Clave </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.famId }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="famSmaId">
+          <mat-header-cell *matHeaderCellDef> Submarca </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.famSubNombre }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="famIdParent">
+          <mat-header-cell *matHeaderCellDef> Familia Padre </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.famParentNombre }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="famNombre">
+          <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.famNombre }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="famSku">
+          <mat-header-cell *matHeaderCellDef> SKU </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.famSku }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="famActivo">
+          <mat-header-cell *matHeaderCellDef> Activo </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.famActivo }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            <button
+              (click)="edit(item)"
+              mat-button
+              color="warn"
+              class="button-edit"
+            >
+              <mat-icon>edit</mat-icon></button
+            >&nbsp;
+            <!-- <button (click)="delete(item)" mat-button color="warn">
+              <mat-icon>delete</mat-icon>
+            </button> -->
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+      </table>
+    </div>
+  </mat-card>
+</div>

@@ -1,0 +1,67 @@
+<div class="contenedor pregunta-list">
+  <app-nav-logo></app-nav-logo>
+
+  <div class="catalogo">
+    <mat-card class="catalogo__card">
+
+      <h3 class="preguntas-title">Preguntas</h3>
+      <h4 class="pilar"><strong>{{ pilaresNameDos[pilarActualIndex].pildDescription }}</strong></h4>
+      <div class="preguntas-list-container">
+        <div *ngFor="let pregunta of obtenerPreguntasDelPilarActual()" class="question-container">
+          <div [ngSwitch]="pregunta.preTipId">
+            <!-- Pregunta abierta -->
+            <div class="" *ngSwitchCase="3">
+              <label class="question-label"><span *ngIf="pregunta.preObligatoria"
+                  [ngClass]="{ 'red-asterisk': pregunta.preObligatoria }">*</span>{{ pregunta.prePregunta }} </label>
+              <input type="text" class="question-input" (input)="onRespuestaTextoCambiado(pregunta, $event)"
+                [(ngModel)]="pregunta.contestaciones[0].corValor" />
+            </div>
+
+            <!-- Selección única -->
+            <div *ngSwitchCase="4">
+              <label class="question-label">
+                <span *ngIf="pregunta.preObligatoria" [ngClass]="{ 'red-asterisk': pregunta.preObligatoria }">*</span>
+                {{ pregunta.prePregunta }}</label>
+              <div class="respuesta" *ngFor="let respuesta of pregunta.respuesta">
+                <input type="radio" [name]="pregunta.preId" class="question-radio" [checked]="respuesta.seleccionado"
+                  (change)="onRespuestaSeleccionada(pregunta, respuesta)" />
+                <label class="question-radio-label">{{ respuesta.resValor }} </label>
+              </div>
+            </div>
+
+            <!-- Selección múltiple -->
+            <div *ngSwitchCase="5">
+              <label class="question-label">
+                <span *ngIf="pregunta.preObligatoria" [ngClass]="{ 'red-asterisk': pregunta.preObligatoria }">*</span>
+                {{ pregunta.prePregunta }}</label>
+              <div *ngFor="let respuesta of pregunta.respuesta">
+                <div class="respuesta">
+
+                  <input type="checkbox" class="question-checkbox"
+                    (change)="onCheckboxRespuestaSeleccionada(pregunta, respuesta)"
+                    [checked]="respuesta.seleccionado" />
+                  <label class="question-checkbox-label">
+                    {{ respuesta.resValor }}
+                  </label>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="nav-buttons">
+          <button class="nav-button" (click)="irAPilarAnterior()">Anterior</button>
+          <button class="nav-button" (click)="irAPilarSiguiente()">
+            Siguiente
+          </button>
+        </div>
+
+      </div>
+
+
+    </mat-card>
+  </div>
+
+</div>

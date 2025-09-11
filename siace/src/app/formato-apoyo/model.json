@@ -1,0 +1,39 @@
+{
+   "title": "FormatoApoyo",
+   "entity": "formato-apoyo",
+   "api": {
+      "url": "FormatosApoyos"
+   },
+   "filter": [
+      "foaApoId"
+   ],
+   "fields": [
+      {
+         "name": "foaId",
+         "label": "Clave",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "foaDescripcion",
+         "type": "string",
+         "label": "Descripción",
+         "required": true
+      },
+      {
+         "name": "foaArchivo",
+         "type": "string",
+         "label": "Archivo",
+         "required": true
+      },
+      {
+         "name": "foaApoId",
+         "type": "number",
+         "label": "Apoyo",
+         "required": true
+      }
+
+
+      ]
+}

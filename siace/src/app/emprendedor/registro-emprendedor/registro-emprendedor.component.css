@@ -1,0 +1,192 @@
+.fondo{
+  height: 100vh;
+  background-color: white;
+}
+
+.catalogo__title
+{
+  height: auto;
+  background-color: white;
+}
+
+.catalogo__header{
+  justify-self: flex-start;
+  margin-left: 0px;
+  margin-top: 5px;
+}
+
+.catalogo{
+  height: auto;
+  display: flex;
+}
+
+.catalogo__card{
+  display: flex !important;
+  margin: auto;
+  padding-bottom: 2px;
+  min-width :auto !important;
+  justify-content: center;
+  
+}
+
+.catalogo__form-container
+{
+  max-width: 600px !important;
+  margin-left: 5%;
+  margin-right: 5%;
+  padding-bottom: 5px;
+  padding: 0px !important;
+  margin: 0px !important;
+}
+
+/* Ajustes para el botón */
+.btn-success {
+  background-color: #28a745;
+  border: none;
+  padding: 10px 30px;
+  border-radius: 50px; /* Hace que el botón sea redondeado */
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.formulario {
+  text-align: left;
+}
+
+/* Cambios en el formulario */
+.formulario label {
+  font-weight: bold;
+  font-size: 0.875rem; /* Reducir tamaño de fuente de las etiquetas si es necesario */
+  
+  color: #757575; /* Color gris para las etiquetas */
+}
+
+.mat-mdc-text-field-wrapper,
+input{
+  height: 30px !important;
+  /*border-radius: 12px !important;*/
+}
+
+.mat-mdc-text-field-wrapper{
+  background-color: #f5f5f5 !important;
+  padding: 0px !important;
+}
+
+
+select{
+  height: 30px !important;
+  /*border-radius: 12px !important;*/
+  padding: 0px !important;
+  
+}
+
+.compact-row {
+  height: fit-content;
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+}
+
+button{
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+
+
+
+/* Alineación del botón */
+.form-group {
+  display: flex;
+  justify-content: flex-end; /* Botón alineado a la derecha */
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid #ccc; /* Línea gris claro */
+  margin: 20px 0;
+}
+
+/* Estilo de los inputs */
+.form-control {
+  /*border-radius: 8px; /* Hace que los campos sean redondeados */
+  padding: 10px;
+}
+
+
+
+/* Para las etiquetas de campos requeridos */
+.formulario label.required::after {
+  content: "* ";
+  color: red; /* Asterisco en rojo */
+}
+
+/* Ajustes generales */
+.formulario label {
+
+  color: #757575; /* Color gris para las etiquetas */
+}
+
+
+/* Botón redondeado */
+.btn-success {
+  background-color: #28a745;
+  border: none;
+  padding: 10px 30px;
+  border-radius: 50px; /* Botón redondeado */
+
+}
+
+@media (max-width: 768px) {
+  .catalogo__card {
+    margin-left: 2vw;
+
+  }
+  .catalogo__form-container, .catalogo__card{
+    width: 96%;
+  }
+
+  
+}
+
+
+img {
+  color: var(--light-brown); /* Color que quieres aplicar */
+}
+
+
+
+.btn-siace {
+  border-radius: 25px !important;
+  font-weight: 700 !important;
+  font-style: italic !important;
+}
+
+.btn-siace-lg {
+  border-radius: 25px !important;
+  font-weight: 700 !important;
+  font-style: italic !important;
+  padding-left: 10% !important;
+  padding-right: 10% !important;
+}
+
+.btn-red-siace {
+  background-color: #F35858 !important;
+  color: white !important;
+}
+
+.btn-transparent-siace {
+  background-color: transparent !important;
+  color: #9d4c34 !important;
+}
+
+
+input.ng-invalid.ng-touched,
+select.ng-invalid.ng-touched,
+.mat-select.ng-invalid.ng-touched {
+  border-color: red;
+}
+
+
+.angularInput{
+  background-color: #f5f5f5;
+}

@@ -1,0 +1,32 @@
+{
+   "title": "Evidencia",
+   "entity": "evidencia",
+   "api": {
+      "url": "Evidencias"
+   },
+   "filter": [
+      "eviId",
+      "eviAaaId"
+   ],
+   "fields": [
+      {
+         "name": "eviId",
+         "label": "Clave",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "eviDescripcion",
+         "type": "string",
+         "label": "Clave de Acceso",
+         "required": true
+      },
+      {
+         "name": "eviAaaId",
+         "type": "number",
+         "label": "Actividad",
+         "required": true
+      }   
+   ]
+}

@@ -1,0 +1,57 @@
+{
+   "title": "TasaCuota",
+   "entity": "tasacuota",
+   "module": "Catalogo de Tasas o Cuotas",
+   "singular": "tasa o cuota",
+   "columns": 3,
+   "api": {
+      "url": "TasasOCuotas"
+   },
+   "filter": [
+      "tocActivo",
+      "tocTfaId",
+      "tocImpId",
+	   "tocId"
+   ],
+   "fields": [
+      {
+         "name": "tocId",
+         "label": "Clave",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "tocTasaocuota",
+         "label": "Tasa o Cuota",
+         "type": "number"
+      },
+      {
+         "name": "tocImpId",
+         "label": "Clave de Impuesto",
+         "type": "number",
+         "required" : true
+      },
+      {
+         "name": "tocTfaId",
+         "label": "Clave de Tipos Factores",
+         "type": "number",
+         "required" : true
+      },
+      {
+         "name": "tocTraslado",
+         "label": "Traslado",
+         "type": "boolean"
+      },
+      {
+         "name": "tocRetencion",
+         "label": "Retención",
+         "type": "boolean"
+      },
+      {
+         "name": "tocActivo",
+         "label": "Activo",
+         "type": "boolean"
+      }
+   ]
+}

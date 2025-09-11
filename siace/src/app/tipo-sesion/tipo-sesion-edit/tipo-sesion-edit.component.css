@@ -1,0 +1,60 @@
+#clave,
+#nombre,
+#tipoAspecto{
+	margin-right: 10px;
+	width: 45%;
+}
+
+#lineamiento{
+	min-width: 43%;
+	margin-right: 10px;
+}
+
+#duracion{
+	margin-right: 10px;
+	width: 90px;
+}
+
+#clave{
+	width: 90px ;
+}
+
+.center{
+  display: flex;
+  justify-content: space-around;
+}
+
+.left{
+  display: flex;
+  justify-content: flex-start;
+}
+
+.responsive-tab-group{
+	overflow-y: hidden !important;
+}
+.extend-dialog{
+	padding-top: 0px !important;
+	padding-bottom: 0px !important;
+}
+
+.button-row{
+	margin: 10% auto 5px auto !important; 
+}
+
+.button-row button{
+	margin-right: 10px;
+}
+
+@media (max-width: 700px) {
+	#clave,
+	#nombre,
+	#duracion,
+	#tipoAspecto,
+	#lineamiento{
+		width: 100% !important;
+	}
+
+	.button-row{
+		margin-top: 0px !important;
+	}
+}

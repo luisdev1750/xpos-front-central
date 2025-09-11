@@ -1,0 +1,23 @@
+<form id="buscadores" #f="ngForm" autocomplete="off">
+	<!-- Campo de fecha inicial -->
+	<mat-form-field appearance="fill" id="fecha">
+	  <mat-label for="fechaIni">Fecha Inicial</mat-label>
+	  <input matInput [matDatepicker]="pickerIni" [(ngModel)]="fechaIni" (ngModelChange)="search()" id="fechaIni" name="fechaIni"
+				placeholder="Fecha inicial" required [max]="fechaFin">
+	  <mat-datepicker-toggle matSuffix [for]="pickerIni"></mat-datepicker-toggle>
+	  <mat-datepicker #pickerIni></mat-datepicker>
+	  <mat-error *ngIf="fechaIni == undefined">Fecha es requerida</mat-error>
+	</mat-form-field>
+ 
+	<!-- Campo de fecha final -->
+	<mat-form-field appearance="fill" >
+	  <mat-label for="fechaFin">Fecha Final</mat-label>
+	  <input matInput [matDatepicker]="pickerEnd" [(ngModel)]="fechaFin" (ngModelChange)="search()" id="fechaFin" name="fechaFin"
+				placeholder="Fecha final" required [min]="fechaIni">
+	  <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+	  <mat-datepicker #pickerEnd></mat-datepicker>
+	  <mat-error *ngIf="fechaFin == undefined">Fecha es requerida</mat-error>
+	</mat-form-field>
+
+ </form>
+ 

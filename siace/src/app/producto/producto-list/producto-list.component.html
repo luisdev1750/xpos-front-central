@@ -1,0 +1,222 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
+    <li class="breadcrumb-item active">Catalogo de Productos</li>
+  </ol>
+</nav>
+
+<div class="proin-main">
+  <mat-card class="proin-card">
+    <h2>Catalogo de Productos</h2>
+    <form #f="ngForm">
+      <mat-form-field>
+        <mat-label>ID:</mat-label>
+        <input
+          matInput
+          type="search"
+          [(ngModel)]="filter.proId"
+          id="proId"
+          name="proId"
+        />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Familia</mat-label>
+        <mat-select (selectionChange)="OnFamiliaChange($event)">
+          <mat-option
+            *ngFor="let familia of familiaList"
+            [value]="familia.famId"
+          >
+            {{ familia.famNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+ 
+      <mat-form-field>
+        <mat-label>Presentacion</mat-label>
+        <mat-select (selectionChange)="OnPresentacionChange($event)">
+          <mat-option
+            *ngFor="let presentacion of presentacionList"
+            [value]="presentacion.preId"
+          >
+            {{ presentacion.preNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Activo:</mat-label>
+        <mat-select
+          [(ngModel)]="filter.proActivo"
+          id="banActivo"
+          name="banActivo"
+          (selectionChange)="onActivoChange()"
+        >
+          <mat-option value="all">Todos</mat-option>
+          <mat-option value="true">Sí</mat-option>
+          <mat-option value="false">No</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button
+        mat-mini-fab
+        color="accent"
+        (click)="add()"
+        [disabled]="!f?.valid"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+    </form>
+    
+    <div *ngIf="dataSource.data.length > 0">
+      <table mat-table #table [dataSource]="dataSource">
+        <ng-container matColumnDef="proId">
+          <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.proId }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="proNombre">
+          <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.proNombre }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="proNombreCorto">
+          <mat-header-cell *matHeaderCellDef> Nombre Corto </mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            {{ item.proNombreCorto }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="proSku">
+          <mat-header-cell *matHeaderCellDef> SKU </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.proSku }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="proCodigoBarras">
+          <mat-header-cell *matHeaderCellDef>
+            Código de Barras
+          </mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            {{ item.proCodigoBarras }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="proFamId">
+          <mat-header-cell *matHeaderCellDef> Familia </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.proFamId }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="proPreId">
+          <mat-header-cell *matHeaderCellDef> Presentación </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.proPreId }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="proUnmId">
+          <mat-header-cell *matHeaderCellDef>
+            Unidad de Medida
+          </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.proUnmId }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="proDescripcionFabricante">
+          <mat-header-cell *matHeaderCellDef>
+            Descripción Fabricante
+          </mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            {{ item.proDescripcionFabricante }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="proRecomendacionUso">
+          <mat-header-cell *matHeaderCellDef>
+            Recomendación de Uso
+          </mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            {{ item.proRecomendacionUso }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="proAlto">
+          <mat-header-cell *matHeaderCellDef> Alto </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.proAlto }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="proLongitud">
+          <mat-header-cell *matHeaderCellDef> Longitud </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.proLongitud }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="proAncho">
+          <mat-header-cell *matHeaderCellDef> Ancho </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.proAncho }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="proPeso">
+          <mat-header-cell *matHeaderCellDef> Peso </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.proPeso }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="proClaveProdServ">
+          <mat-header-cell *matHeaderCellDef> Clave Prod/Serv </mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            {{ item.proClaveProdServ }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="proDevolucion">
+          <mat-header-cell *matHeaderCellDef>
+            Permite Devolución
+          </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.proDevolucion }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="proActivo">
+          <mat-header-cell *matHeaderCellDef> Activo </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.proActivo }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="proFechaAlta">
+          <mat-header-cell *matHeaderCellDef> Fecha Alta </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.proFechaAlta }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="proFechaModificacion">
+          <mat-header-cell *matHeaderCellDef>
+            Fecha Modificación
+          </mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            {{ item.proFechaModificacion }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            <button
+              (click)="edit(item)"
+              mat-button
+              color="warn"
+              class="button-edit"
+            >
+              <mat-icon>edit</mat-icon></button
+            >&nbsp;
+            <button (click)="delete(item)" mat-button color="warn">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+      </table>
+    </div>
+    
+    <!-- Paginador -->
+    <div class="contenedor-paginator">
+      <mat-paginator 
+        class="paginator" 
+        [pageSizeOptions]="[10, 20, 50, 100]"
+        showFirstLastButtons>
+      </mat-paginator>
+    </div>
+    
+  </mat-card>
+</div>

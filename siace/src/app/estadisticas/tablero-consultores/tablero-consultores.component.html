@@ -1,0 +1,52 @@
+<div class="catalogo-header">
+    <h1 class="catalogo__title">
+       <img src="../../../assets/icons/bar_chart_icon.svg" alt="Descripción del icono" width="40" height="40">
+        Estadísticas
+    </h1>
+ </div>
+
+<div class="main-siace">
+    
+    <div class="main-siace__container m-start">
+        <app-buscadores></app-buscadores>
+    </div>
+
+    <div *ngIf="this.tipo=='consultor'">
+
+        <div class="main-siace__container">
+            <app-indicadores></app-indicadores>
+        </div>
+
+        <div class="main-siace__container colored-border-container">
+
+            <div class="main-siace__card border-raidus3 m-row-4">
+                <app-column-promedio-contestacion ></app-column-promedio-contestacion>
+            </div>
+            
+
+            <div class="main-siace__card border-raidus3 m-row-4">
+                <app-pie-entrevistas></app-pie-entrevistas>
+            </div>
+            
+            <div class="main-siace__card border-raidus3 m-row-4">
+                <app-column-numero-tipos-sesiones></app-column-numero-tipos-sesiones>
+            </div>
+            
+            <div class="main-siace__card border-raidus3 m-row-4">
+                <app-pie-emprendedores-nivel></app-pie-emprendedores-nivel>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="this.tipo=='emprendedor'">
+        <div class=" colored-border-container">
+            <div class="main-siace__card m-row-1 border-raidus10">
+                <app-clustered-column-avance-emprendedor></app-clustered-column-avance-emprendedor>
+            
+            </div>
+        </div>
+    </div>
+    
+    <app-handler-click></app-handler-click>
+</div>
+

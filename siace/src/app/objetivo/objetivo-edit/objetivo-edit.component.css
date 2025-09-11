@@ -1,0 +1,23 @@
+#clave{
+	width: 90px ;
+	margin-right: 10px !important;
+}
+
+
+#nombre{
+	width: calc(100% - 100px);
+}
+
+#descripcion,#formato{
+	width: calc(50% - 5px);
+}
+
+#descripcion{
+	margin-right: 10px !important;
+}
+
+@media (max-width: 700px) {
+	#clave,#nombre,#descripcion,#formato{
+		width: 100% !important;
+	}
+}

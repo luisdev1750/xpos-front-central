@@ -1,0 +1,87 @@
+<nav aria-label="breadcrumb">
+   <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
+      <li class="breadcrumb-item active">
+         Catalogo de Configuración de Sucursales
+      </li>
+   </ol>
+</nav>
+
+<div class="proin-main">
+   <mat-card class="proin-card">
+      <h2>Catalogo de Configuración de Sucursales</h2>
+      <form #f="ngForm">
+         
+         <mat-form-field>
+            <mat-label>Clave:</mat-label>
+            <input matInput type="search" [(ngModel)]="filter.scoId" id="scoId"
+               name="scoId">
+         </mat-form-field>
+         
+         <mat-form-field>
+            <mat-label>Clave de Sucursal:</mat-label>
+            <input matInput type="search" [(ngModel)]="filter.scoSucId" id="scoSucId"
+               name="scoSucId">
+         </mat-form-field>
+         
+
+         <button mat-mini-fab color="accent" (click)="add()" [disabled]="!f?.valid">
+            <mat-icon>add</mat-icon>
+         </button>
+      </form>
+      <div *ngIf="sucursalConfigList.length > 0">
+         
+         <table mat-table #table [dataSource]="sucursalConfigList">
+            
+            <ng-container matColumnDef="scoId">
+               <mat-header-cell *matHeaderCellDef>
+                  Clave
+               </mat-header-cell>
+               <mat-cell *matCellDef="let item"> {{item.scoId}} </mat-cell>
+            </ng-container>
+            
+            <ng-container matColumnDef="scoSucId">
+               <mat-header-cell *matHeaderCellDef>
+                  Clave de Sucursal
+               </mat-header-cell>
+               <mat-cell *matCellDef="let item"> {{item.scoSucId}} </mat-cell>
+            </ng-container>
+            
+            <ng-container matColumnDef="scoHost">
+               <mat-header-cell *matHeaderCellDef>
+                  Host
+               </mat-header-cell>
+               <mat-cell *matCellDef="let item"> {{item.scoHost}} </mat-cell>
+            </ng-container>
+            
+            <ng-container matColumnDef="scoTokenUser">
+               <mat-header-cell *matHeaderCellDef>
+                  Token de Usuario
+               </mat-header-cell>
+               <mat-cell *matCellDef="let item"> {{item.scoTokenUser}} </mat-cell>
+            </ng-container>
+            
+            <ng-container matColumnDef="scoTokenPassword">
+               <mat-header-cell *matHeaderCellDef>
+                  Token de contraseña
+               </mat-header-cell>
+               <mat-cell *matCellDef="let item"> {{item.scoTokenPassword}} </mat-cell>
+            </ng-container>
+            
+            <ng-container matColumnDef="actions">
+               <mat-header-cell *matHeaderCellDef></mat-header-cell>
+               <mat-cell *matCellDef="let item">
+                  <button (click)="edit(item)" mat-button color="warn" class="button-edit">
+                     <mat-icon>edit</mat-icon>
+                  </button>&nbsp;
+                  <button (click)="delete(item)" mat-button color="warn">
+                     <mat-icon>delete</mat-icon>
+                  </button>
+               </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+         </table>
+      </div>
+   </mat-card>
+</div>

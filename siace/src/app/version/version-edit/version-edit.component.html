@@ -1,0 +1,67 @@
+<div class="dialog-version">
+   <div class="row row-cleaner-space">
+      <div class="col-10 col-md-11 ">
+        <h1 class="dialog-title">Detalle de la versión</h1>
+      </div>
+      <div class="col-1 text-right">
+        <button mat-button mat-dialog-close class="close-icon close-min-button">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </div>
+
+   <mat-tab-group>
+      <mat-tab label="Datos generales">
+         <form *ngIf="version" class="" #editForm="ngForm" (ngSubmit)="save()" autocomplete="off">
+            <br>
+            <div class="row justify-content-center">
+               
+               <div id="clave" *ngIf="version.veaId > 0">
+                  <mat-form-field class="w-100">
+                     <mat-label>Clave</mat-label>
+                     <input matInput [(ngModel)]="version.veaId" id="veaId" name="veaId" placeholder="Clave" readonly>
+                  </mat-form-field>
+               </div>
+
+               <div id="fecha">
+                  <mat-form-field class="w-100">
+                     <mat-label for="veaFecha">Fecha</mat-label>
+                     <input matInput [matDatepicker]="picker" [(ngModel)]="version.veaFecha" id="veaFecha" name="veaFecha"
+                        placeholder="Fecha" required [readonly]="veaFechaActivacion !== null && veaFechaActivacion !== undefined">
+                     <mat-datepicker-toggle matSuffix [for]="picker" [disabled]="veaFechaActivacion !== null && veaFechaActivacion !== undefined"></mat-datepicker-toggle>
+                     <mat-datepicker #picker></mat-datepicker>
+                     <mat-error *ngIf="version.veaFecha === undefined">Fecha es requerido</mat-error>
+                  </mat-form-field>
+               </div>
+
+               <div id="activo">
+                  <mat-checkbox [(ngModel)]="version.veaActivo" id="veaActivo" name="veaActivo"
+                        [disabled]="veaFechaActivacion !== null && veaFechaActivacion !== undefined">
+                     Activo
+                  </mat-checkbox>
+               </div>
+
+               <div id="version" *ngIf="veaId">
+                  <mat-form-field class="w-100">
+                     <mat-label for="veaNoVersion">Versión</mat-label>
+                     <input matInput type="number" [(ngModel)]="version.veaNoVersion" id="veaNumero" name="veaNumero"
+                        placeholder="Versión" 
+                        [readonly]="veaFechaActivacion !== null && veaFechaActivacion !== undefined || veaId !== null">
+                     <mat-error *ngIf="version.veaNoVersion === undefined">Versión es requerido</mat-error>
+                  </mat-form-field>
+               </div>
+            </div>
+
+               <div class="button-row text-center">
+                  <button type="submit" mat-raised-button color="primary" 
+                     [disabled]="!editForm.form.valid || veaFechaActivacion !== null && veaFechaActivacion !== undefined" id="button-guardar">Guardar</button>
+                  <button mat-button mat-dialog-close>Cancelar</button>
+                </div>
+         </form>
+      </mat-tab>
+
+      <mat-tab class="actividadesA3-tab" label="Actividades A3" *ngIf="veaId"><!--*ngIf="veaId"-->
+         <app-actividad [veaId]="veaId" [veaActivo]="veaActivo" [veaFechaActivacion]="veaFechaActivacion"></app-actividad>
+      </mat-tab>
+   </mat-tab-group>
+</div>

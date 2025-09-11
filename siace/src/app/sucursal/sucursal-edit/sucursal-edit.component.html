@@ -1,0 +1,106 @@
+<h2>Detalle del sucursal</h2>
+<form *ngIf="sucursal" #editForm="ngForm" (ngSubmit)="save()" autocomplete="off">
+
+<div class="row">
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label>ID</mat-label>
+         <input matInput [(ngModel)]="sucursal.sucId" id="sucId" name="sucId" placeholder="ID" readonly>
+         
+         
+      </mat-form-field>
+   </div>
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="sucNombre">Nombre</mat-label>
+         <input matInput [(ngModel)]="sucursal.sucNombre" id="sucNombre" name="sucNombre" placeholder="Nombre" required>
+         <mat-error *ngIf="sucursal.sucNombre==''">Nombre es requerido</mat-error>
+      </mat-form-field>
+   </div>
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="sucNumero">Número</mat-label>
+         <input matInput type="number" [(ngModel)]="sucursal.sucNumero" id="sucNumero" name="sucNumero" placeholder="Número">
+         
+         <mat-error *ngIf="sucursal.sucNumero==undefined">Número es requerido</mat-error>
+      </mat-form-field>
+   </div>
+</div>
+<div class="row">
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="sucCalle">Calle</mat-label>
+         <input matInput [(ngModel)]="sucursal.sucCalle" id="sucCalle" name="sucCalle" placeholder="Calle" >
+         
+      </mat-form-field>
+   </div>
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="sucNumeroExterior">Número Exterior</mat-label>
+         <input matInput [(ngModel)]="sucursal.sucNumeroExterior" id="sucNumeroExterior" name="sucNumeroExterior" placeholder="Número Exterior" >
+         
+      </mat-form-field>
+   </div>
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="sucNumeroInterior">Número Interior</mat-label>
+         <input matInput [(ngModel)]="sucursal.sucNumeroInterior" id="sucNumeroInterior" name="sucNumeroInterior" placeholder="Número Interior" >
+         
+      </mat-form-field>
+   </div>
+</div>
+<div class="row">
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="sucLatitud">Latitud</mat-label>
+         <input matInput [(ngModel)]="sucursal.sucLatitud" id="sucLatitud" name="sucLatitud" placeholder="Latitud" >
+         
+      </mat-form-field>
+   </div>
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="sucLongitud">Longitud</mat-label>
+         <input matInput [(ngModel)]="sucursal.sucLongitud" id="sucLongitud" name="sucLongitud" placeholder="Longitud" >
+         
+      </mat-form-field>
+   </div>
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="sucCiuId">Ciudad</mat-label>
+         <input matInput [(ngModel)]="sucursal.sucCiuId" id="sucCiuId" name="sucCiuId" placeholder="Ciudad" >
+         
+      </mat-form-field>
+   </div>
+</div>
+<div class="row">
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="sucColId">Ciudad</mat-label>
+         <input matInput [(ngModel)]="sucursal.sucColId" id="sucColId" name="sucColId" placeholder="Ciudad" >
+         
+      </mat-form-field>
+   </div>
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="sucEmpId">Empresa</mat-label>
+         <input matInput [(ngModel)]="sucursal.sucEmpId" id="sucEmpId" name="sucEmpId" placeholder="Empresa" >
+         
+      </mat-form-field>
+   </div>
+</div>
+   <div class="button-row text-center" role="group">
+      <button type="submit" mat-raised-button color="primary" [disabled]="!editForm.form.valid">Guardar</button>
+      <button mat-button mat-dialog-close>Cancelar</button>
+  </div>
+</form>

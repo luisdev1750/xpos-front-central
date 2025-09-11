@@ -1,0 +1,62 @@
+<!-- Condición para mostrar actividades o mensaje de no filtros -->
+<div *ngIf="aaaNivId && emp?.empId; else noFiltros">
+   <div *ngIf="actividades.length > 0; else noActivities" class="actividades-container">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+         <ng-container matColumnDef="actividad">
+            <th mat-header-cell *matHeaderCellDef> Actividad </th>
+            <td mat-cell *matCellDef="let actividad; let i = index">
+               <button mat-button class="actividad-button" (click)="openEvidenciasModal(actividad)">
+                  <strong>Actividad {{i + 1}}.- </strong>{{ actividad.aaaDescripcion }}
+               </button>
+            </td>
+         </ng-container>
+
+         <ng-container matColumnDef="checkbox">
+            <th mat-header-cell *matHeaderCellDef> Completado </th>
+            <td mat-cell *matCellDef="let actividad">
+               <mat-checkbox disabled [checked]="actividad.actividadEstatus"></mat-checkbox>
+               {{actividad.evidenciasRealizadas}}/{{actividad.evidenciasTotales}}
+            </td>
+         </ng-container>
+
+         <tr mat-header-row *matHeaderRowDef="displayedColumnsClient"></tr>
+         <tr mat-row *matRowDef="let row; columns: displayedColumnsClient;"></tr>
+      </table>
+   </div>
+   <ng-template #noActivities>
+      <p>No hay actividades disponibles.</p>
+   </ng-template>
+</div>
+
+<ng-template #noFiltros>
+   <table mat-table [dataSource]="dataSource1" class="mat-elevation-z8">
+
+      <!-- Columna Actividad -->
+      <ng-container matColumnDef="actividad">
+         <th mat-header-cell *matHeaderCellDef> Actividad </th>
+         <td mat-cell *matCellDef="let actividad; let i = index">
+            <button mat-button class="actividad-button" (click)="openEvidenciasModal(actividad)">
+               <strong>{{ actividad.aaaDescripcion }}</strong>
+            </button>
+         </td>
+      </ng-container>
+
+      <ng-container matColumnDef="checkbox">
+         <th mat-header-cell *matHeaderCellDef> Completado </th>
+         <td mat-cell *matCellDef="let actividad">
+            <mat-checkbox disabled [checked]="actividad.actividadEstatus"></mat-checkbox>
+            <span class="button" [ngClass]="{
+             'button-blanco': actividad.evidenciasRealizadas === 0,
+             'button-amarillo': actividad.evidenciasRealizadas > 0 && actividad.evidenciasRealizadas < actividad.evidenciasTotales,
+             'button-verde': actividad.evidenciasRealizadas === actividad.evidenciasTotales
+           }">
+               {{actividad.evidenciasRealizadas}}/{{actividad.evidenciasTotales}}
+            </span>
+         </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumnsAdmin"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumnsAdmin;"></tr>
+   </table>
+</ng-template>

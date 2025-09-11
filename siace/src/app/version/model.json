@@ -1,0 +1,37 @@
+{
+   "title": "Version",
+   "entity": "version",
+   "api": {
+      "url": "Versiones"
+   },
+   "filter": [
+      "veaId"
+   ],
+   "fields": [
+      {
+         "name": "veaId",
+         "label": "Clave",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "veaFecha",
+         "type": "date",
+         "label": "Fecha",
+         "required": true
+      },
+      {
+         "name": "veaNumero",
+         "type": "number",
+         "label": "Versión",
+         "required": true
+      },
+      {
+         "name": "veaActivo",
+         "type": "boolean",
+         "label": "Activo",
+         "required": true
+      }
+   ]
+}

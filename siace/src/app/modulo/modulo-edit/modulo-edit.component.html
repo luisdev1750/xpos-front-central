@@ -1,0 +1,39 @@
+
+<h2>Detalle del Módulo</h2>
+<form *ngIf="modulo" #editForm="ngForm" (ngSubmit)="save()" autocomplete="off">
+
+  <mat-form-field>
+    <mat-label>Clave</mat-label>
+    <input matInput [(ngModel)]="modulo.modId" id="modId" name="modId" placeholder="Clave" readonly> 
+	
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label for="modModId">Padre</mat-label>
+    <input matInput type="number" [(ngModel)]="modulo.modModId" id="modModId" name="modModId" placeholder="Padre" >
+	
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label for="modNombre">Nombre</mat-label>
+    <input matInput [(ngModel)]="modulo.modNombre" id="modNombre" name="modNombre" placeholder="Nombre" required>
+	<mat-error *ngIf="modulo.modNombre==''">Nombre es requerido</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label for="modUrl">Usuario</mat-label>
+    <input matInput [(ngModel)]="modulo.modUrl" id="modUrl" name="modUrl" placeholder="Usuario" >
+	
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label for="modIcono">Icono</mat-label>
+    <input matInput [(ngModel)]="modulo.modIcono" id="modIcono" name="modIcono" placeholder="Icono" >
+	
+  </mat-form-field>
+
+  <div class="button-row text-center" role="group">
+    <button type="submit" mat-raised-button color="primary" [disabled]="!editForm.form.valid">Guardar</button>
+    <button mat-button mat-dialog-close>Cerrar</button>
+  </div>
+</form>

@@ -1,0 +1,34 @@
+{
+   "title": "Marca",
+   "entity": "marca",
+   "module": "Catalogo de Marcas",
+   "singular": "marca",
+   "columns": 3,
+   "api": {
+      "url": "Marcas"
+   },
+   "filter": [
+      "marActivo",
+	   "marId"
+   ],
+   "fields": [
+      {
+         "name": "marId",
+         "label": "Clave",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "marNombre",
+         "label": "Nombre",
+         "type": "string",
+         "required" : true
+      },
+      {
+         "name": "marActivo",
+         "label": "Activo",
+         "type": "boolean"
+      }
+   ]
+}

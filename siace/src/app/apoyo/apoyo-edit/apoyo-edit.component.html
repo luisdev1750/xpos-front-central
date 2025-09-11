@@ -1,0 +1,71 @@
+<div class="row apoyo-dialog">
+  <div class="col-md-11">
+     <h1 class="dialog-title">Detalle del Apoyo</h1>
+  </div>
+  <div class="col-md-1 col-close">
+     <button mat-button mat-dialog-close class="close-icon close-min-button">
+        <mat-icon>close</mat-icon>
+     </button>
+  </div>
+</div>
+<mat-tab-group>
+  <mat-tab label="Datos Generales">
+    <form class="tab-generales" [formGroup]="apoyoForm" (ngSubmit)="save()"><!--*ngIf="apoyo" #editForm="ngForm"-->
+
+      <mat-form-field *ngIf="apoyoForm.get('apoId')?.value"><!--*ngIf="apoyo.apoId>0"-->
+        <mat-label>Clave</mat-label>
+        <input matInput formControlName="apoId" id="apoId" name="apoId" placeholder="Clave" readonly><!--[(ngModel)]="apoyo.apoId"-->
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label for="apoTitulo">Título</mat-label>
+        <input matInput formControlName="apoTitulo" id="apoTitulo" name="apoTitulo"
+          placeholder="Título" required [readonly]="veaFechaActivacion !== null && veaFechaActivacion !== undefined" autocomplete="off"><!--[(ngModel)]="apoyo.apoDescripcion"-->
+        <mat-error >Descripción es requerido</mat-error><!--*ngIf="apoyo.apoDescripcion==''"--><!--*ngIf="apoyoForm.get('apoTitulo')?.errors").errors"-->
+      </mat-form-field>
+    
+      <mat-form-field id="">
+        <mat-label for="apoDescripcion">Descripción</mat-label>
+        <input matInput formControlName="apoDescripcion" id="apoDescripcion" name="apoDescripcion"
+          placeholder="Descripción" required [readonly]="veaFechaActivacion !== null && veaFechaActivacion !== undefined" autocomplete="off"><!--[(ngModel)]="apoyo.apoDescripcion"-->
+        <mat-error >Descripción es requerido</mat-error><!--*ngIf="apoyo.apoDescripcion==''"--><!--*ngIf="apoyoForm.get('apoDescripcion').errors"-->
+      </mat-form-field>
+
+      
+        <mat-form-field #arch *ngIf="!data.apoyo.apoTutorial">
+          <ngx-mat-file-input formControlName="basicfile" placeholder="Tutorial" valuePlaceholder="Tutorial*" required [disabled]="veaFechaActivacion !== null && veaFechaActivacion !== undefined"></ngx-mat-file-input>
+          <mat-icon matSuffix>note_add</mat-icon>
+        </mat-form-field>
+      
+        <mat-form-field id="liga">
+          <mat-label for="apoLiga">Liga</mat-label>
+          <input matInput formControlName="apoLiga" id="apoLiga" name="apoLiga" placeholder="Liga" [readonly]="veaFechaActivacion !== null && veaFechaActivacion !== undefined"  autocomplete="off"><!--[(ngModel)]="apoyo.apoLiga"-->
+        </mat-form-field>
+      
+
+      <ng-container *ngIf="data.apoyo.apoTutorial">
+        <div class="mat-form-field-emulate">
+          <span>{{getFileName(data.apoyo.apoTutorial)}}</span>
+        <button type="button" mat-icon-button color="primary" aria-label="Download"
+        (click)="onDownloadClick(data.apoyo.apoTutorialUrl)"><!--(click)="onDownloadClick(data.apoTutorial)"-->
+          <mat-icon >visibility</mat-icon><!--*ngIf="veaFechaActivacion !== null && veaFechaActivacion !== undefined"-->
+        </button>
+        <button type="button" *ngIf="veaFechaActivacion == null && veaFechaActivacion == undefined" mat-icon-button color="accent" aria-label="Delete"
+        (click)="onDeleteClick(data.apoyo)">
+          <mat-icon>delete</mat-icon>
+        </button>
+        </div>
+        
+      </ng-container>
+      
+    
+      <div class="button-row text-center" role="group">
+        <button *ngIf="veaFechaActivacion == null && veaFechaActivacion == undefined" type="submit" mat-raised-button color="primary" [disabled]="!apoyoForm.valid">Guardar</button><!--[disabled]="!editForm.form.valid"-->
+        <button mat-button mat-dialog-close>Cancelar</button>
+      </div>
+    </form>
+  </mat-tab>
+  <mat-tab label="Formatos" *ngIf="data.apoyo.apoId>0">
+    <app-formato-apoyo [apoId]="data.apoyo.apoId" [veaFechaActivacion]="data.veaFechaActivacion"></app-formato-apoyo>
+  </mat-tab>
+</mat-tab-group>

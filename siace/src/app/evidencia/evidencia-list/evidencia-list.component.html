@@ -1,0 +1,51 @@
+
+<div class="contenedor-button">
+
+<form #f="ngForm">
+   <button *ngIf="veaFechaActivacion == null && veaFechaActivacion == undefined" mat-mini-fab color="accent" (click)="add()" [disabled]="!f?.valid" [ngStyle]="{transform: 'scale(0.9)'
+              }">
+      <mat-icon>add</mat-icon>
+   </button>
+</form>
+
+</div>
+
+<div *ngIf="evidenciaList.length > 0; else noEvidencias">
+
+   <table class="catalogo__table-container" mat-table #table [dataSource]="dataSource"><!--evidenciaList-->
+
+      <ng-container matColumnDef="eviId">
+         <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Clave </mat-header-cell>
+         <mat-cell class="catalogo__cell" *matCellDef="let item"> {{item.eviId}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="eviDescripcion">
+         <mat-header-cell class="catalogo__header-cell" *matHeaderCellDef> Descripción </mat-header-cell>
+         <mat-cell class="catalogo__cell" *matCellDef="let item"> {{item.eviDescripcion}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="eviAaaId">
+         <mat-header-cell class="catalogo__header-cell" *matHeaderCellDef> Actividad </mat-header-cell>
+         <mat-cell class="catalogo__cell" *matCellDef="let item"> {{item.eviAaaId}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+         <mat-header-cell class="catalogo__header-cell" *matHeaderCellDef></mat-header-cell>
+         <mat-cell class="catalogo__cell" *matCellDef="let item">
+            <button (click)="edit(item)" mat-button color="accent">
+               <mat-icon *ngIf="veaFechaActivacion == null && veaFechaActivacion == undefined">edit</mat-icon>
+               <mat-icon *ngIf="veaFechaActivacion !== null && veaFechaActivacion !== undefined">visibility</mat-icon>
+            </button>&nbsp;
+            <button *ngIf="veaFechaActivacion == null && veaFechaActivacion == undefined" (click)="delete(item)" mat-button color="accent"><mat-icon>delete</mat-icon></button>
+         </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+   </table>
+</div>
+<div class="contenedor-paginator" ><!--*ngIf="evidenciaList.length > 0"-->
+   <mat-paginator class="catalogo__table paginator" [pageSizeOptions] = "[10, 20]" showFirstLastButtons></mat-paginator>
+</div>
+<ng-template #noEvidencias>
+   <p>No hay evidencias para esta actividad.</p>
+</ng-template>

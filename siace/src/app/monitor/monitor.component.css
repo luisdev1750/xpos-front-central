@@ -1,0 +1,146 @@
+.catalogo{
+  height: auto !important;
+  max-height: auto !important;
+}
+
+.contenedor-button
+{
+  overflow: hidden;
+}
+
+.catalogo__card mat-form-field{
+  margin-right: 10px !important;
+  padding: 2px !important;
+}
+
+.link-cell {
+  color: var(--mat-tab-color-active);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.link-cell:hover {
+  color: var(--mat-tab-color-active);
+}
+
+.login-form {
+
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.container-stepper {
+  width: 55%;
+  margin: 0 auto;
+}
+
+.mat-horizontal-stepper-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: black solid 1px !important;
+}
+
+.mat-step-label {
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.mat-stepper-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mat-stepper-header .mat-stepper-step {
+  margin-bottom: 16px;
+}
+
+.mat-stepper-header .mat-stepper-step .mat-stepper-step-icon {
+  margin-top: 0;
+}
+
+
+.mat-horizontal-stepper-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mat-step-label {
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.mat-stepper-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mat-stepper-header .mat-stepper-step {
+  margin-bottom: 16px;
+}
+
+.mat-stepper-header .mat-stepper-step .mat-stepper-step-icon {
+  margin-top: 0;
+}
+
+.step-header {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.step-title {
+  flex: 1;
+  text-align: center;
+}
+
+
+.step-buttons {
+  display: flex;
+  gap: 4px;
+  /* Espaciado entre los botones */
+  justify-content: space-around;
+}
+
+.small-button {
+  width: 35px;
+  height: 35px;
+  min-width: 24px;
+}
+
+.small-icon {
+  font-size: 16px;
+  /* Ajusta el tamaño del ícono si es necesario */
+}
+
+.completed-step {
+  background-color: var(--mat-tab-color-active);
+  color: white;
+}
+
+.pending-step {
+  background-color: grey;
+  color: white;
+}
+
+.parcial {
+  background-color: var(--mat-tab-color);
+  color: white;
+}
+
+.disabled {
+  background-color: grey;
+  color: white;
+}
+
+
+@media (max-width: 768px) {
+  .monitor mat-form-field{
+    margin-bottom: 10px !important;
+    width: 100% !important;
+  }
+}

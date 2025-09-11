@@ -1,0 +1,25 @@
+{
+   "title": "NivelEstudio",
+   "entity": "nivel-estudio",
+   "api": {
+      "url": "NivelesEstudios"
+   },
+   "filter": [
+      "nieId"
+   ],
+   "fields": [
+      {
+         "name": "nieId",
+         "label": "Clave",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "nieDescripcion",
+         "type": "string",
+         "label": "Descripción",
+         "required": true
+      }
+      ]
+}

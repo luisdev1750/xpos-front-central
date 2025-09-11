@@ -1,0 +1,158 @@
+<div class="catalogo auditoria">
+   <div class="catalogo-header">
+      <h1 class="catalogo__title">
+         <img src="../../../assets/icons/business.svg" alt="Descripción del icono" width="35" height="35">
+         Auditorias
+      </h1>
+   </div>
+
+   <mat-card class="catalogo__card auditoria button-no-shadow">
+      <div class="contenedor-button">
+         <form #f="ngForm" autocomplete="off">
+
+             <mat-form-field appearance="fill">
+                        <mat-label for="fechaIni">Fecha de vigencia</mat-label>
+                        <input matInput [matDatepicker]="pickerVigencia" id="fechaVigencia"
+                            name="fechaVigencia" placeholder="Fecha de vigencia" />
+                        <mat-datepicker-toggle matSuffix [for]="pickerVigencia"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerVigencia></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+               <mat-label for="fechaIni">Fecha inicial</mat-label>
+               <input matInput [matDatepicker]="pickerIni" [(ngModel)]="filter.audFechaInicial" id="fechaIni"
+                  name="fechaIni" placeholder="Fecha inicial" required [max]="fechaFin" (dateChange)="search()" />
+               <mat-datepicker-toggle matSuffix [for]="pickerIni"></mat-datepicker-toggle>
+               <mat-datepicker #pickerIni></mat-datepicker>
+               <mat-error *ngIf="fechaIni == undefined">Fecha es requerida</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+               <mat-label for="fechaFin">Fecha final</mat-label>
+               <input matInput [matDatepicker]="pickerEnd" [(ngModel)]="filter.audFechaFinal" id="fechaFin"
+                  name="fechaFin" placeholder="Fecha final" required [min]="fechaIni" (dateChange)="search()" />
+               <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+               <mat-datepicker #pickerEnd></mat-datepicker>
+               <mat-error *ngIf="fechaFin == undefined">Fecha es requerida</mat-error>
+            </mat-form-field>
+
+            <!-- Seleccionar Módulo -->
+            <mat-form-field appearance="fill">
+               <mat-label>Seleccionar módulo</mat-label>
+               <mat-select [(ngModel)]="this.filter.audModulo" name="tabla"
+                  (selectionChange)="onSelectionChange($event, 'audModulo')">
+                  <mat-option *ngFor="let option of options" [value]="option">
+                     {{ option }}
+                  </mat-option>
+               </mat-select>
+            </mat-form-field>
+
+            <!-- Seleccionar Tipo -->
+            <mat-form-field appearance="fill">
+               <mat-label>Seleccionar tipo</mat-label>
+               <mat-select [(ngModel)]="this.filter.audTipo" name="tabla"
+                  (selectionChange)="onSelectionChange($event, 'audTipo')">
+                  <mat-option *ngFor="let option of tipos" [value]="option">
+                     {{ option }}
+                  </mat-option>
+               </mat-select>
+            </mat-form-field>
+
+            <!-- Seleccionar Usuario -->
+            <mat-form-field appearance="fill">
+               <mat-label>Seleccionar usuario</mat-label>
+               <mat-select [(ngModel)]="this.filter.audUsrId" name="tipo"
+                  (selectionChange)="onSelectionChange($event, 'audUsrId')">
+                  <mat-option *ngFor="let user of usuarios" [value]="user.usrId">
+                     {{ user.usrUsuario}}
+                  </mat-option>
+               </mat-select>
+            </mat-form-field>
+         </form>
+      </div>
+
+      <div class="catalogo__table-container currentTable" *ngIf="auditoriaList.length > 0">
+         <table mat-table  class="catalogo__table" #table [dataSource]="dataSource">
+            <ng-container class="clave" matColumnDef="audId">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell clave-cell"> Clave </mat-header-cell>
+               <mat-cell *matCellDef="let item" class="catalogo__cell clave-cell"> {{ item.audId }} </mat-cell>
+            </ng-container>
+
+            <ng-container id="modulo" matColumnDef="audModulo">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Módulo </mat-header-cell>
+               <mat-cell *matCellDef="let item" class="catalogo__cell"> {{ item.audModulo }} </mat-cell>
+            </ng-container>
+
+            <ng-container id="fecha" matColumnDef="audFecha">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell fecha-cell"> Fecha </mat-header-cell>
+               <mat-cell *matCellDef="let item" class="catalogo__cell fecha-cell">
+                  {{ item.audFecha | date : "dd/MM/yyyy HH:mm" }}
+               </mat-cell>
+            </ng-container>
+
+            <ng-container id="usuario"  matColumnDef="audUsrId">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Usuario </mat-header-cell>
+               <mat-cell *matCellDef="let item" class="catalogo__cell"> {{ item.audUsrName }} </mat-cell>
+            </ng-container>
+
+            <ng-container id="tipo" matColumnDef="audTipo">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell  tipo-cell"> Tipo </mat-header-cell>
+               <mat-cell *matCellDef="let item" class="catalogo__cell  tipo-cell"> {{ item.audTipo }} </mat-cell>
+            </ng-container>
+
+            <ng-container id="original" matColumnDef="audJsonOriginal">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Original </mat-header-cell>
+               <mat-cell *matCellDef="let item" class="catalogo__cell">
+                 <span 
+                   class="link-style"
+                   (click)="showDetails(
+                     getJsonDiff(item.audJsonOriginal, item.audJsonModificado).original, 
+                     'Original'
+                   )"
+                 >
+                   {{ getJsonDiff(item.audJsonOriginal, item.audJsonModificado).original | slice : 0 : 50 }}
+                 </span>
+               </mat-cell>
+             </ng-container>
+             
+             <ng-container id="modificacion" matColumnDef="audJsonModificado">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Modificación </mat-header-cell>
+               <mat-cell *matCellDef="let item" class="catalogo__cell">
+                 <span 
+                   class="link-style"
+                   (click)="showDetails(
+                     getJsonDiff(item.audJsonOriginal, item.audJsonModificado).modificado, 
+                     'Modificado'
+                   )"
+                 >
+                   {{ getJsonDiff(item.audJsonOriginal, item.audJsonModificado).modificado | slice : 0 : 50 }}
+                 </span>
+               </mat-cell>
+             </ng-container>
+             
+
+            <ng-container matColumnDef="actions">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Acciones </mat-header-cell>
+               <mat-cell *matCellDef="let item" class="catalogo__cell">
+                  <div class="catalogo__action-buttons">
+                     <button (click)="edit(item)" mat-button color="warn">
+                        <mat-icon>edit</mat-icon>
+                     </button>&nbsp;
+                     <button (click)="delete(item)" mat-button color="warn">
+                        <mat-icon>delete</mat-icon>
+                     </button>
+                  </div>
+               </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+         </table>
+      </div>
+      <div class="contenedor-paginator">
+         <mat-paginator class="catalogo__table paginator" [pageSizeOptions]="[10, 20]"
+            showFirstLastButtons></mat-paginator>
+      </div>
+
+   </mat-card>
+</div>

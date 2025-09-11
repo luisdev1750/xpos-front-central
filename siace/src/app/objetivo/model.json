@@ -1,0 +1,39 @@
+{
+   "title": "Objetivo",
+   "entity": "objetivo",
+   "api": {
+      "url": "Objetivos"
+   },
+   "filter": [
+      "objId",
+      "objTisId"
+   ],
+   "fields": [
+      {
+         "name": "objId",
+         "label": "Clave",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "objNombre",
+         "type": "string",
+         "label": "Nombre",
+         "required": true
+      },
+      {
+         "name": "objDescripcion",
+         "type": "string",
+         "label": "Descripción",
+         "required": false
+      },
+      {
+         "name": "objFormato",
+         "type": "string",
+         "label": "Formato",
+         "required": true
+      }
+
+  ]
+}

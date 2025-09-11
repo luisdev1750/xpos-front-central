@@ -1,0 +1,121 @@
+{
+   "title": "Producto",
+   "entity": "producto",
+   "module": "Catalogo de Productos",
+   "singular": "producto",
+   "columns": 3,
+   "api": {
+      "url": "Productos"
+   },
+   "filter": [
+      "proFamId",
+      "proActivo",
+	  "proPreId",
+	  "proFamId",
+	  "proId"
+	  
+   ],
+   "fields": [
+      {
+         "name": "proId",
+         "label": "ID",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "proNombre",
+         "label": "Nombre",
+         "type": "string",
+         "required": true
+      },
+      {
+         "name": "proNombreCorto",
+         "label": "Nombre Corto",
+         "type": "string"
+      },
+      {
+         "name": "proSku",
+         "label": "SKU",
+         "type": "string",
+         "required": true
+      },
+      {
+         "name": "proCodigoBarras",
+         "label": "Código de Barras",
+         "type": "string"
+      },
+      {
+         "name": "proFamId",
+         "label": "Familia",
+         "type": "number"
+      },
+      {
+         "name": "proPreId",
+         "label": "Presentación",
+         "type": "number"
+      },
+      {
+         "name": "proUnmId",
+         "label": "Unidad de Medida",
+         "type": "number"
+      },
+      {
+         "name": "proDescripcionFabricante",
+         "label": "Descripción Fabricante",
+         "type": "text"
+      },
+      {
+         "name": "proRecomendacionUso",
+         "label": "Recomendación de Uso",
+         "type": "text"
+      },
+      {
+         "name": "proAlto",
+         "label": "Alto",
+         "type": "string"
+      },
+      {
+         "name": "proLongitud",
+         "label": "Longitud", 
+         "type": "string"
+      },
+      {
+         "name": "proAncho",
+         "label": "Ancho",
+         "type": "string"
+      },
+      {
+         "name": "proPeso",
+         "label": "Peso",
+         "type": "string"
+      },
+      {
+         "name": "proClaveProdServ",
+         "label": "Clave Prod/Serv",
+         "type": "string"
+      },
+      {
+         "name": "proDevolucion",
+         "label": "Permite Devolución",
+         "type": "boolean"
+      },
+      {
+         "name": "proActivo",
+         "label": "Activo",
+         "type": "boolean"
+      },
+      {
+         "name": "proFechaAlta",
+         "label": "Fecha Alta",
+         "type": "datetime",
+         "readonly": true
+      },
+      {
+         "name": "proFechaModificacion",
+         "label": "Fecha Modificación",
+         "type": "datetime",
+         "readonly": true
+      }
+   ]
+}

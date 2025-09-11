@@ -1,0 +1,25 @@
+{
+   "title": "TipoAspecto",
+   "entity": "tipo-aspecto",
+   "api": {
+      "url": "TiposAspectos"
+   },
+   "filter": [
+      "tiaId"
+   ],
+   "fields": [
+      {
+         "name": "tiaId",
+         "label": "Clave",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "tiaNombre",
+         "type": "string",
+         "label": "Nombre",
+         "required": true
+      }
+  ]
+}

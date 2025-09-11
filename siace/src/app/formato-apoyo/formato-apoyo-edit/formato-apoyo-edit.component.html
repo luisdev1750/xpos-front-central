@@ -1,0 +1,39 @@
+<div class="">
+   <div class="row row-cleaner-space">
+      <div class="col-11">
+         <h1 class="dialog-title">Detalle del Formato</h1>
+      </div>
+      <div class="col-1 text-right">
+         <button mat-button mat-dialog-close class="close-icon close-min-button">
+            <mat-icon>close</mat-icon>
+         </button>
+      </div>
+   </div>
+
+   <form class="dialog-form-container" [formGroup]="apoyoForm" (ngSubmit)="save()">
+
+      <div class="center field-wrap700">
+         <mat-form-field id="clave" *ngIf="apoyoForm.get('foaId')?.value">
+            <mat-label>Clave</mat-label>
+            <input matInput formControlName="foaId" id="foaId" name="foaId" placeholder="Clave" readonly>
+         </mat-form-field>
+
+         <mat-form-field id="apoyo">
+            <mat-label for="foaApoId">Apoyo</mat-label>
+            <input matInput type="number" formControlName="foaApoId" id="foaApoId" name="foaApoId" placeholder="Apoyo"
+               readonly>
+         </mat-form-field>
+
+         <mat-form-field id="file">
+            <ngx-mat-file-input formControlName="basicfile" placeholder="Archivo" valuePlaceholder="Archivo*" required></ngx-mat-file-input>
+            <mat-icon matSuffix>note_add</mat-icon>
+         </mat-form-field>
+      </div>
+
+      <div class="button-row text-center" role="group">
+         <button type="submit" mat-raised-button color="primary">Guardar</button>
+         <button mat-button mat-dialog-close>Cancelar</button>
+      </div>
+   </form>
+
+</div>

@@ -1,0 +1,52 @@
+<div class="main-container">
+  <div class="header-section">
+    <div class="logo-side">S</div>
+    <div class="logo-main">XPOS</div>
+  </div>
+  
+  <div class="form-section">
+    <form class="login-form" (ngSubmit)="f.form.valid && login();" #f="ngForm" autocomplete="off" novalidate>
+      <div class="form-group">
+        <label for="userLogin" class="form-label">Usuario:</label>
+        <input
+          type="text"
+          class="form-input"
+          id="userLogin"
+          name="userLogin"
+          placeholder="Ingresa tu usuario"
+          [(ngModel)]="username"
+          #userLogin="ngModel"
+          [ngClass]="{ 'is-invalid': f.submitted && userLogin.invalid }"
+          required
+        >
+      </div>
+      
+      <div class="form-group">
+        <label for="userPass" class="form-label">Contraseña:</label>
+        <input
+          type="password"
+          class="form-input"
+          id="userPass"
+          name="userPass"
+          placeholder="Ingresa tu contraseña"
+          [(ngModel)]="password"
+          #userPass="ngModel"
+          [ngClass]="{ 'is-invalid': f.submitted && userPass.invalid }"
+          required
+        >
+      </div>
+      
+      <div class="form-group">
+        <button type="submit" class="btn-login">Iniciar Sesión</button>
+      </div>
+      
+      <div *ngIf="loginError" class="error-message">
+        Usuario no registrado. Verifique su usuario y contraseña
+      </div>
+    </form>
+  </div>
+</div>
+
+<button class="survey-button" (click)="onSubmit()">
+  Responder la encuesta
+</button>

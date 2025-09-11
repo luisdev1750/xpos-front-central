@@ -1,0 +1,31 @@
+.logo {
+	margin-left: 3vw;
+	width: 350px;
+	height: 40px;
+	background-image: url(../../../assets/images/logo.svg);
+	background-color: var(--toolbar-color);
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-blend-mode: luminosity;
+	transition: background-blend-mode 0.3s ease, background-color 0.3s ease, filter 0.3s ease;
+ }
+ 
+ .logo:hover {
+	background-blend-mode: normal;
+	background-color: transparent;
+	filter: brightness(1.5);
+ }
+
+ .activo:hover{
+	cursor: pointer;
+ }
+
+ .logo img{
+	width: 200px;
+ }
+ 
+ .nav-fake {
+	padding: 15px 30px !important; ;
+	width: 100%;
+	background-color: var(--toolbar-color);
+ }

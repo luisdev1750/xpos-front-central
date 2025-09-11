@@ -1,0 +1,132 @@
+<div *ngIf="!logEmpId && !empId" class="apoyo">
+   <mat-card class=" button-no-shadow">
+      <div class="contenedor-button">
+
+      </div>
+      <form #f="ngForm">
+
+         <button *ngIf="veaFechaActivacion == null && veaFechaActivacion == undefined" mat-mini-fab color="accent"
+            (click)="add()" [disabled]="!f?.valid" [ngStyle]="{transform: 'scale(0.9)'
+              }">
+            <mat-icon>add</mat-icon>
+         </button>
+      </form>
+
+      <div class="catalogo__table-container" *ngIf="apoyoList.length > 0; else noApoyos">
+
+
+         <table class="catalogo__table" mat-table #table [dataSource]="dataSource"><!--apoyoList"-->
+
+            <ng-container matColumnDef="apoId">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Clave </mat-header-cell>
+               <mat-cell class="catalogo__cell" *matCellDef="let item"> {{item.apoId}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="apoTitulo">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Título </mat-header-cell>
+               <mat-cell class="catalogo__cell" *matCellDef="let item"> {{item.apoTitulo}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="apoDescripcion">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Descripción </mat-header-cell>
+               <mat-cell class="catalogo__cell" *matCellDef="let item"> {{item.apoDescripcion}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="apoTutorial">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Tutorial </mat-header-cell>
+               <mat-cell class="catalogo__cell" *matCellDef="let item"> {{getFileName(item.apoTutorial)}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="apoLiga">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Liga </mat-header-cell>
+               <mat-cell class="catalogo__cell" *matCellDef="let item"> {{item.apoLiga}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Acciones</mat-header-cell>
+               <mat-cell class="catalogo__cell" *matCellDef="let item">
+                  <button (click)="edit(item)" mat-button color="accent">
+                     <mat-icon *ngIf="veaFechaActivacion == null && veaFechaActivacion == undefined">edit</mat-icon>
+                     <mat-icon
+                        *ngIf="veaFechaActivacion !== null && veaFechaActivacion !== undefined">visibility</mat-icon>
+                  </button>&nbsp;
+                  <button *ngIf="veaFechaActivacion == null && veaFechaActivacion == undefined" (click)="delete(item)"
+                     mat-button color="accent"><mat-icon>delete</mat-icon></button>
+               </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+         </table>
+      </div>
+      <div class="contenedor-paginator" ><!--*ngIf="apoyoList.length > 0"-->
+         <mat-paginator class="catalogo__table paginator" [pageSizeOptions] = "[10, 20]" showFirstLastButtons></mat-paginator>
+      </div>
+      <ng-template #noApoyos>
+         <p>No hay apoyos para esta actividad.</p>
+      </ng-template>
+   </mat-card>
+</div>
+
+<!----------------------------ESTO ES UNA VISUALIZACION EN MODO "USUARIO" QUE SE USA EN RESPUESTAS A3 -->
+
+<div *ngIf="logEmpId || empId" class="apoyo">
+   <mat-card>
+      <mat-accordion *ngIf="apoyoList.length > 0; else noApoyosA3">
+         <mat-expansion-panel *ngFor="let item of apoyoList">
+            <mat-expansion-panel-header>
+               <mat-panel-title>
+                  {{item.apoTitulo}}
+               </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div *ngIf="item.apoTutorial" class="apoyo-contenido">
+               <span>{{item.apoDescripcion}}</span>
+               <div class="content-container">
+                  <!-- Sección Tutorial -->
+                  <div class="section">
+                    <div class="title">
+                      <strong>Tutorial</strong>
+                    </div>
+                    <div class="content">
+                      <span class="tutorial-descripcion">{{getFileName(item.apoTutorial)}}</span>
+                    </div>
+                  </div>
+                
+                  <!-- Sección Descargar -->
+                  <div class="section">
+                    <div class="title">
+                      <strong>Descargar</strong>
+                    </div>
+                    <div class="content">
+                      <button mat-icon-button color="primary" aria-label="Download"
+                        (click)="onDownloadClick(item.apoTutorialUrl)">
+                        <mat-icon>download</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                
+                  <!-- Sección Liga -->
+                  <div class="section">
+                    <div class="title">
+                      <strong>Liga</strong>
+                    </div>
+                    <div class="content">
+                      <a *ngIf="item.apoLiga" [href]="item.apoLiga" target="_blank">
+                        <mat-icon>link</mat-icon>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+
+               <button class="btn-docs" mat-flat-button (click)="openFormatoApoyoDialog(item.apoId, empId)">Formatos
+                  <mat-icon>insert_drive_file</mat-icon></button>
+            </div>
+         </mat-expansion-panel>
+      </mat-accordion>
+      <ng-template #noApoyosA3>
+         <hr>
+         <br>
+         <p class="text-center">No hay apoyos disponibles.</p>
+      </ng-template>
+   </mat-card>
+</div>

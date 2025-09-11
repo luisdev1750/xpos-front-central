@@ -1,0 +1,38 @@
+{
+   "title": "Pilar",
+   "entity": "pilar",
+   "api": {
+      "url": "Pilares"
+   },
+   "filter": [
+      "pilId"
+   ],
+   "fields": [
+      {
+         "name": "pilId",
+         "label": "Clave",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "pilDescripcion",
+         "type": "string",
+         "label": "Clave de Acceso",
+         "required": true
+      },
+      {
+         "name": "pilPondMax",
+         "type": "number",
+         "label": "Ponderación Máx.",
+         "required": false
+      },
+      {
+         "name": "pilPondMin",
+         "type": "number",
+         "label": "Ponderación Mín.",
+         "required": false
+      }   
+   
+   ]
+}

@@ -1,0 +1,41 @@
+<mat-toolbar color="primary" *ngIf="isLogin">
+
+   <mat-toolbar-row>
+ 
+     <button mat-icon-button (click)="toggleSidenav.emit()" class="button-menu">
+      <mat-icon class="no-select">menu</mat-icon>
+
+     </button>
+ 
+
+        <div class="logo" ></div>
+        
+
+
+     <div fxFlex fxLayout fxLayoutAlign="flex-end">
+ 
+       <ul fxLayout fxLayoutGap="20px">
+ 
+         <li fxHide.xs>
+           <p class="texto-personalizado">{{usrNombreComp}}</p>
+         </li>
+ 
+         <li>
+           <button mat-icon-button [matMenuTriggerFor]="auth" class="icono-large">
+             <mat-icon class="texto-em">person_outline</mat-icon>
+           </button>
+           <mat-menu #auth="matMenu">
+             <button mat-menu-item (click)="logout()">
+               <mat-icon>exit_to_app</mat-icon>
+               <span>Cerrar Sesión</span>
+             </button>
+           </mat-menu>
+         </li>
+ 
+       </ul>
+ 
+     </div>
+ 
+   </mat-toolbar-row>
+ 
+ </mat-toolbar>

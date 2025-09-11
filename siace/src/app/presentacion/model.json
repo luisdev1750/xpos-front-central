@@ -1,0 +1,34 @@
+{
+   "title": "Presentacion",
+   "entity": "presentacion",
+   "module": "Catalogo de Presentaciones",
+   "singular": "presentacion",
+   "columns": 3,
+   "api": {
+      "url": "Presentaciones"
+   },
+   "filter": [ 
+     "preActivo",
+	 "preId"
+   ],
+   "fields": [
+      {
+         "name": "preId",
+         "label": "Clave",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "preNombre",
+         "label": "Nombre",
+         "type": "string",
+         "required": true
+      },
+      {
+         "name": "preActivo",
+         "label": "Activo",
+         "type": "boolean"
+      }
+   ]
+}

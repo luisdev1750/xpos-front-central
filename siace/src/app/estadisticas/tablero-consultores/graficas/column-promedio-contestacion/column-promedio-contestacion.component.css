@@ -1,0 +1,6 @@
+.chart-title {
+   text-align: center;
+   font-size: 24px;
+   font-weight: 500;
+   margin-bottom: 20px; /* Espacio entre el título y el gráfico */
+}

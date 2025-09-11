@@ -1,0 +1,29 @@
+.catalogo__table-container{
+	width: 100% !important;
+}
+
+.content-container {
+	display: flex;
+	justify-content: space-between;
+	gap: 10px;
+ }
+ 
+ .section {
+	flex: 1;
+	text-align: center;
+ }
+ 
+ .title {
+	margin-bottom: 10px;
+ }
+ 
+ .content {
+	min-height: 40px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+ }
+ 
+ .tutorial-descripcion {
+	word-break: break-word;
+ }

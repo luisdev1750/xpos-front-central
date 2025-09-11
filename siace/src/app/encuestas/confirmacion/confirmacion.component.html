@@ -1,0 +1,31 @@
+<div>
+  <div class="row">
+    <div class="col-10 col-md-11">
+      <h1 class="dialog-title">{{ data.titulo }}</h1>
+    </div>
+    <div class="col-1 text-right">
+      <button mat-button mat-dialog-close class="close-icon close-min-button">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </div>
+
+
+  
+
+
+
+  <div mat-dialog-content style=" word-break: break-word;"
+    [innerHTML]="data.mensaje">
+  </div>
+
+
+  <div class="button-row text-center" role="group">
+    <button id="confirmar" type="button" mat-raised-button color="primary" mat-dialog-close (click)="confirmar()">
+      Confirmar
+    </button>
+    <button mat-button (click)="cerrarSinEvento()">
+      Cancelar
+    </button>
+  </div>
+</div>

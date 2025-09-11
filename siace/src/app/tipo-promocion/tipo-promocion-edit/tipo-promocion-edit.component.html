@@ -1,0 +1,53 @@
+<h2>Detalle del tipo de promoción</h2>
+<form *ngIf="tipoPromocion" #editForm="ngForm" (ngSubmit)="save()" autocomplete="off">
+
+<div class="row">
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label>Clave</mat-label>
+         <input matInput [(ngModel)]="tipoPromocion.tprId" id="tprId" name="tprId" placeholder="Clave" readonly>
+         
+         
+      </mat-form-field>
+   </div>
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="tprNombre">Nombre</mat-label>
+         <input matInput [(ngModel)]="tipoPromocion.tprNombre" id="tprNombre" name="tprNombre" placeholder="Nombre" required>
+         <mat-error *ngIf="tipoPromocion.tprNombre==''">Nombre es requerido</mat-error>
+      </mat-form-field>
+   </div>
+     <div class="col-md-4">
+      <mat-form-field>
+        <mat-label>Activo</mat-label>
+        <mat-select
+          [(ngModel)]="tipoPromocion.tprActivo"
+          id="tprActivo"
+          name="tprActivo"
+          required
+        >
+          <mat-option [value]="true">Sí</mat-option>
+          <mat-option [value]="false">No</mat-option>
+        </mat-select>
+        <mat-error *ngIf="!tipoPromocion.tprActivo">Activo es requerido</mat-error>
+      </mat-form-field>
+    </div>
+  
+</div>
+<div class="row">
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="tprClave">Código</mat-label>
+         <input matInput [(ngModel)]="tipoPromocion.tprClave" id="tprClave" name="tprClave" placeholder="Código" required>
+         <mat-error *ngIf="tipoPromocion.tprClave==''">Código es requerido</mat-error>
+      </mat-form-field>
+   </div>
+</div>
+   <div class="button-row text-center" role="group">
+      <button type="submit" mat-raised-button color="primary" [disabled]="!editForm.form.valid">Guardar</button>
+      <button mat-button mat-dialog-close>Cancelar</button>
+  </div>
+</form>

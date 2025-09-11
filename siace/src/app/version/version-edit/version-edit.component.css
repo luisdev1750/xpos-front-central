@@ -1,0 +1,73 @@
+
+.dialog-version{
+	width: 100% !important;
+	height: 100% !important;
+	max-width: 100% !important;
+	min-height: 100% !important;
+
+}
+
+.actividadesA3-tab{
+	width: 100% !important;
+}
+
+#button-guardar{
+	margin-right: 10px;
+}
+
+.catalogo__card{
+	padding-left: 0px !important;
+	padding-right: 0px !important;
+	margin: 0px !important;
+	min-width: auto !important;
+}
+
+#clave {
+	width: 110px
+}
+
+.dialog-version #clave {
+	width: 110px
+ }
+ 
+ .dialog-version #fecha {
+	width: 240px
+ }
+ 
+ .dialog-version #activo{
+	width: 180px;
+ }
+ 
+ .dialog-version #version {
+	width: 110px
+ }
+
+ .tab-detalles-generales{
+	display: flex;
+	flex-direction: column;
+ }
+
+ .tab-detalles-generales #apoyo{
+	width: 110px;
+ }
+
+ .tab-detalles-generales #descripcion,
+ .tab-detalles-generales #titulo{
+	min-width: 250px;
+	width: 300px;
+ }
+
+ .tab-detalles-generales #contenedor-archivo{
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+ }
+
+ .tab-detalles-generales #contenedor-archivo button{
+	width: fit-content !important;
+ }
+
+ .tab-detalles-generales #liga{
+	width: 100%;
+ }

@@ -1,0 +1,73 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/calendar">Inicio</a></li>
+    <li class="breadcrumb-item active">Módulos</li>
+  </ol>
+</nav>
+
+<div class="main-siace">
+   <mat-card class="card-siace">
+
+      <h2>Módulos</h2>
+      <form #f="ngForm">
+      
+         <mat-form-field>
+            <mat-label>Clave:</mat-label>
+            <input matInput type="search" [(ngModel)]="filter.modId" id="modId" name="modId">
+         </mat-form-field>
+      
+         <mat-form-field>
+            <mat-label>Padre:</mat-label>
+            <input matInput type="search" [(ngModel)]="filter.modModId" id="modModId" name="modModId">
+         </mat-form-field>
+      
+        <button mat-mini-fab color="primary" (click)="search()" [disabled]="!f?.valid"><mat-icon>search</mat-icon></button>
+		<button mat-mini-fab color="accent" (click)="add()" [disabled]="!f?.valid">
+            <mat-icon>add</mat-icon>
+         </button>
+      </form>
+	 
+      <div *ngIf="moduloList.length > 0">
+      
+         <table mat-table #table [dataSource]="moduloList">
+         
+            <ng-container matColumnDef="modId">
+               <mat-header-cell *matHeaderCellDef> Clave </mat-header-cell>
+               <mat-cell *matCellDef="let item"> {{item.modId}} </mat-cell>
+            </ng-container>
+         
+            <ng-container matColumnDef="modModId">
+               <mat-header-cell *matHeaderCellDef> Padre </mat-header-cell>
+               <mat-cell *matCellDef="let item"> {{item.modModId}} </mat-cell>
+            </ng-container>
+         
+            <ng-container matColumnDef="modNombre">
+               <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+               <mat-cell *matCellDef="let item"> {{item.modNombre}} </mat-cell>
+            </ng-container>
+         
+            <ng-container matColumnDef="modUrl">
+               <mat-header-cell *matHeaderCellDef> Usuario </mat-header-cell>
+               <mat-cell *matCellDef="let item"> {{item.modUrl}} </mat-cell>
+            </ng-container>
+         
+            <ng-container matColumnDef="modIcono">
+               <mat-header-cell *matHeaderCellDef> Icono </mat-header-cell>
+               <mat-cell *matCellDef="let item"> {{item.modIcono}} </mat-cell>
+            </ng-container>
+         
+            <ng-container matColumnDef="actions">
+               <mat-header-cell *matHeaderCellDef></mat-header-cell>
+               <mat-cell *matCellDef="let item">
+                  <button (click)="edit(item)" mat-button color="warn" class="button-edit">
+                     <mat-icon>edit</mat-icon>
+                  </button>&nbsp;
+                  <button (click)="delete(item)" mat-button color="warn"><mat-icon>delete</mat-icon></button>
+               </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+         </table>
+      </div>
+   </mat-card>
+</div>

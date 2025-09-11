@@ -1,0 +1,54 @@
+<h2>Detalle del configuración de sucursal</h2>
+<form *ngIf="sucursalConfig" #editForm="ngForm" (ngSubmit)="save()" autocomplete="off">
+
+<div class="row">
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label>Clave</mat-label>
+         <input matInput [(ngModel)]="sucursalConfig.scoId" id="scoId" name="scoId" placeholder="Clave" readonly>
+         
+         
+      </mat-form-field>
+   </div>
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="scoSucId">Clave de Sucursal</mat-label>
+         <input matInput type="number" [(ngModel)]="sucursalConfig.scoSucId" id="scoSucId" name="scoSucId" placeholder="Clave de Sucursal">
+         
+         <mat-error *ngIf="sucursalConfig.scoSucId==undefined">Clave de Sucursal es requerido</mat-error>
+      </mat-form-field>
+   </div>
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="scoHost">Host</mat-label>
+         <input matInput [(ngModel)]="sucursalConfig.scoHost" id="scoHost" name="scoHost" placeholder="Host" >
+         
+      </mat-form-field>
+   </div>
+</div>
+<div class="row">
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="scoTokenUser">Token de Usuario</mat-label>
+         <input matInput [(ngModel)]="sucursalConfig.scoTokenUser" id="scoTokenUser" name="scoTokenUser" placeholder="Token de Usuario" >
+         
+      </mat-form-field>
+   </div>
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="scoTokenPassword">Token de contraseña</mat-label>
+         <input matInput [(ngModel)]="sucursalConfig.scoTokenPassword" id="scoTokenPassword" name="scoTokenPassword" placeholder="Token de contraseña" >
+         
+      </mat-form-field>
+   </div>
+</div>
+   <div class="button-row text-center" role="group">
+      <button type="submit" mat-raised-button color="primary" [disabled]="!editForm.form.valid">Guardar</button>
+      <button mat-button mat-dialog-close>Cancelar</button>
+  </div>
+</form>

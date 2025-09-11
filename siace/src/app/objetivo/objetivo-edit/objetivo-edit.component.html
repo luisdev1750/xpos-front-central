@@ -1,0 +1,50 @@
+<div class="dialog edit">
+   <div class="row">
+      <div class="col-10 col-md-11">
+         <h1 class="dialog-title">Detalle del objetivo</h1>
+      </div>
+      <div class="col-1 text-right">
+         <button mat-button mat-dialog-close class="close-icon close-min-button">
+            <mat-icon>close</mat-icon>
+         </button>
+      </div>
+   </div>
+   <form class="dialog-form-container" *ngIf="objetivo" #editForm="ngForm" (ngSubmit)="save()" autocomplete="off">
+
+      <div class="center field-wrap700">
+
+         
+         <mat-form-field id="clave" *ngIf="objetivo.objId > 0">
+            <mat-label>Clave</mat-label>
+            <input matInput [(ngModel)]="objetivo.objId" id="objId" name="objId" placeholder="Clave" readonly>
+         </mat-form-field>
+
+         <mat-form-field id="nombre">
+            <mat-label for="objNombre">Nombre</mat-label>
+            <input matInput [(ngModel)]="objetivo.objNombre" id="objNombre" name="objNombre" placeholder="Nombre" required>
+            <mat-error *ngIf="objetivo.objNombre === ''">Nombre es requerido</mat-error>
+         </mat-form-field>
+
+      </div>
+
+      <div class="center field-wrap700">
+
+         <mat-form-field id="descripcion">
+            <mat-label for="objDescripcion">Descripción</mat-label>
+            <input matInput [(ngModel)]="objetivo.objDescripcion" id="objDescripcion" name="objDescripcion" placeholder="Descripción">
+         </mat-form-field>
+
+         <mat-form-field id="formato">
+            <mat-label for="objFormato">Formato</mat-label>
+            <input matInput [(ngModel)]="objetivo.objFormato" id="objFormato" name="objFormato" placeholder="Formato" required>
+            <mat-error *ngIf="objetivo.objFormato === ''">Formato es requerido</mat-error>
+         </mat-form-field>
+      </div>
+
+      <div class="button-row text-center" role="group">
+         <button type="submit" mat-raised-button color="primary" [disabled]="!editForm.form.valid">Guardar</button>
+         <button mat-button mat-dialog-close>Cancelar</button>
+      </div>
+
+   </form>
+</div>

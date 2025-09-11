@@ -1,0 +1,44 @@
+{
+   "title": "TipoSesion",
+   "entity": "tipo-sesion",
+   "api": {
+      "url": "TiposSesiones"
+   },
+   "filter": [
+      "tisId",
+      "tistiaId"
+   ],
+   "fields": [
+      {
+         "name": "tisId",
+         "label": "Clave",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "tisNombre",
+         "type": "string",
+         "label": "Nombre",
+         "required": true
+      },
+      {
+         "name": "tisTiaId",
+         "type": "number",
+         "label": "Tipo de Aspecto",
+         "required": true
+      },
+      {
+         "name": "tisDuracion",
+         "type": "number",
+         "label": "Duración",
+         "required": true
+      },
+      {
+         "name": "tisLineamiento",
+         "type": "string",
+         "label": "Lineamiento",
+         "required": true
+      }
+  ]
+}

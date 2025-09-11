@@ -1,0 +1,184 @@
+<div class="fondo">
+   <app-nav-logo></app-nav-logo>
+
+   <div class="catalogo__header">
+      <h1 class="catalogo__title">
+         <img class="catalogo__icon" src="../../../assets/icons/diagnostico.svg" alt="Descripción del icono"
+            width="40" height="40">
+         Registro nuevo emprendedor
+      </h1>
+   </div>
+
+      <div class="catalogo registro">
+
+         <div class="catalogo__card ">
+            <div class="catalogo__form-container ">
+               <form class="formulario" [formGroup]="formulario" (ngSubmit)="onSubmit()" autocomplete="off">
+
+                  <div class="row justify-content-center">
+                     <div class="col-12 col-md-6">
+                        <!-- Razón Social -->
+                        <div class="form-group row compact-row">
+                           <label for="razonSocial"
+                              class="col-form-label text-right label-fixed-width compact-label required">Nombre o Razón
+                              Social</label>
+                           <div class="col">
+                              <input type="text" class="form-control compact-input" formControlName="empRazonSocial"
+                                 id="razonSocial">
+                           </div>
+                        </div>
+                     </div>
+
+                     <div class="col-12 col-md-6">
+                        <!-- RFC (Campo obligatorio) -->
+                        <div class="form-group row compact-row h80">
+                           <label for="rfc"
+                              class="col-form-label text-right label-fixed-width compact-label required">RFC</label>
+                           <div class="col">
+                              <input type="text" class="form-control compact-input" formControlName="empRfc" id="rfc">
+                           </div>
+                        </div>
+                     </div>
+
+                     <div class="col-12 col-md-12">
+                        <!-- Domicilio -->
+                        <div class="form-group row compact-row">
+                           <label for="domicilio"
+                              class="col-form-label text-right label-fixed-width compact-label">Domicilio</label>
+                           <div class="col">
+                              <input type="text" class="form-control compact-input" formControlName="empDomicilio"
+                                 id="domicilio">
+                           </div>
+                        </div>
+                     </div>
+
+                     <div class="col-12 col-md-6">
+                        <!-- Teléfono -->
+                        <div class="form-group row compact-row">
+                           <label for="telefono"
+                              class="col-form-label text-right label-fixed-width compact-label required">Teléfono</label>
+                           <div class="col">
+                              <input type="tel" class="form-control compact-input" formControlName="empTelefono"
+                                 id="telefono">
+                           </div>
+                        </div>
+                     </div>
+
+                     <div class="col-12 col-md-6">
+                        <!-- Correo (Campo obligatorio) -->
+                        <div class="form-group row compact-row">
+                           <label for="correo"
+                              class="col-form-label text-right label-fixed-width compact-label required">Correo</label>
+                           <div class="col">
+                              <input type="email" class="form-control compact-input" formControlName="empCorreo"
+                                 id="correo">
+                           </div>
+                        </div>
+                     </div>
+
+                     <div class="col-12 col-md-12">
+                        <!-- Nombre Completo (Campo obligatorio) -->
+                        <div class="form-group row compact-row">
+                           <label for="nombreCompleto"
+                              class="col-form-label text-right label-fixed-width compact-label required">Nombre
+                              de Contacto</label>
+                           <div class="col">
+                              <input type="text" class="form-control compact-input" formControlName="empNombreCompleto"
+                                 id="nombreCompleto">
+                           </div>
+                        </div>
+                     </div>
+
+                     <div class="col-12 col-md-6">
+                        <!-- Edad -->
+                        <div class="form-group row compact-row">
+                           <label for="edad"
+                              class="col-form-label text-right label-fixed-width compact-label">Edad</label>
+                           <div class="col">
+                              <input type="number" class="form-control compact-input" formControlName="empEdad"
+                                 id="edad">
+                           </div>
+                        </div>
+                     </div>
+
+                     <div class="col-12 col-md-6">
+                        <!-- Nivel de Estudios -->
+                        <div class="form-group row compact-row">
+                           <label for="nivelEstudios"
+                              class="col-form-label text-right label-fixed-width compact-label">Nivel de
+                              Estudios</label>
+                           <div class="col">
+                              <select class="form-select compact-input" formControlName="empNie" id="nivelEstudios">
+                                 <option *ngFor="let nivel of nivelesList" [value]="nivel.nieId">
+                                    {{ nivel.nieDescripcion }}
+                                 </option>
+                              </select>
+                           </div>
+                        </div>
+                     </div>
+
+                     
+
+                     <div class="col-12 col-md-12">
+                        <!-- Nombre Provisional del Proyecto -->
+                        <div class="form-group row compact-row">
+                           <label for="nombreProyecto"
+                              class="col-form-label text-right label-fixed-width compact-label">Nombre Provisional del
+                              Proyecto</label>
+                           <div class="col">
+                              <input type="text" class="form-control compact-input"
+                                 formControlName="empNombreTemporal" id="nombreProyecto">
+                           </div>
+                        </div>
+                     </div>
+
+                     <div class="col-12 col-md-12">
+                        <!-- Industria o Sector (Campo obligatorio) -->
+                        <div class="form-group row compact-row">
+                           <label for="industria"
+                              class="col-form-label text-right label-fixed-width compact-label required">Industria o
+                              sector
+                              en el que se encuentra tu empresa o proyecto</label>
+                           <div class="col">
+                              <select class="form-select compact-input" formControlName="empGiro" id="industria">
+                                 <option *ngFor="let giro of girosList" [value]="giro.girId">
+                                    {{ giro.girDescripcion }}
+                                 </option>
+                              </select>
+                           </div>
+                        </div>
+                     </div>
+
+                     <div class="col-12 col-md-12">
+                        <!-- Necesidades (Campo obligatorio) -->
+                        <div class="form-group row compact-row">
+                           <label for="mat-select-necesidades"
+                              class="col-form-label text-right label-fixed-width compact-label required">
+                              ¿Cuáles son las principales necesidades que tienes hoy en tu empresa?
+                           </label>
+                           <div class="col">
+                              <mat-form-field appearance="fill" class="w-100 compact-input">
+                                 <mat-select  id="mat-select-necesidades" multiple
+                                    (selectionChange)="onSelectionChange($event)">
+                                    <mat-option *ngFor="let necesidad of necesidadesList" [value]="necesidad.necId">
+                                       {{ necesidad.necDescripcion }}
+                                    </mat-option>
+                                 </mat-select>
+                              </mat-form-field>
+                           </div>
+                        </div>
+                     </div>
+
+
+
+                     <!-- Botón de Guardar (alineado a la derecha) -->
+                     <div class="form-group d-flex justify-content-end" style="width: 96% !important;">
+                        <button type="submit" class="btn btn-siace-lg btn-red-siace">Guardar</button>
+                     </div>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+   
+</div>

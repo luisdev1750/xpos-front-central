@@ -1,0 +1,111 @@
+<h2>Detalle de la familia</h2>
+<form *ngIf="familia" #editForm="ngForm" (ngSubmit)="save()" autocomplete="off">
+  
+  <!-- Primera fila -->
+  <div class="row">
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label>Clave</mat-label>
+        <input matInput 
+               [(ngModel)]="familia.famId" 
+               id="famId" 
+               name="famId" 
+               placeholder="Clave" 
+               readonly>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label>Familia Padre</mat-label>
+        <mat-select [value]="familia.famIdParent" (selectionChange)="onFamiliaPadreChange($event)">
+          <mat-option *ngFor="let familia of familiasListFilter" 
+                      [value]="familia.famId">
+            {{ familia.famNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label>Submarca</mat-label>
+        <mat-select [value]="familia.famSmaId"  (selectionChange)="onSubmarcaChange($event)">
+          <mat-option *ngFor="let submarca of submarcasLists" 
+                      [value]="submarca.smaId">
+            {{ submarca.smaNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <!-- Segunda fila -->
+  <div class="row">
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label>Nombre</mat-label>
+        <input matInput 
+               [(ngModel)]="familia.famNombre" 
+               id="famNombre" 
+               name="famNombre" 
+               placeholder="Nombre" 
+               required>
+        <mat-error *ngIf="familia.famNombre==''">
+          Nombre es requerido
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label>SKU</mat-label>
+        <input matInput 
+               [(ngModel)]="familia.famSku" 
+               id="famSku" 
+               name="famSku" 
+               placeholder="SKU" 
+               required>
+        <mat-error *ngIf="familia.famSku==''">
+          SKU es requerido
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+      <div class="col-md-4">
+      <mat-form-field>
+         <mat-label>Activo</mat-label>
+         <mat-select [(ngModel)]="familia.famActivo" id="banActivo" name="banActivo" required>
+            <mat-option [value]="true">Sí</mat-option>
+            <mat-option [value]="false">No</mat-option>
+         </mat-select>
+         <mat-error *ngIf="!familia.famActivo && familia.famActivo !== false">Activo es requerido</mat-error>
+      </mat-form-field>
+   </div>
+
+    <!-- <div class="col-md-4">
+      <mat-form-field>
+        <mat-label>Activo</mat-label>
+        <input matInput 
+               [(ngModel)]="familia.famActivo" 
+               id="famActivo" 
+               name="famActivo" 
+               placeholder="Activo">
+      </mat-form-field>
+    </div> -->
+  </div>
+
+  <!-- Botones -->
+  <div class="button-row text-center" role="group">
+    <button type="submit" 
+            mat-raised-button 
+            color="primary" 
+            [disabled]="!editForm.form.valid">
+      Guardar
+    </button>
+    <button mat-button mat-dialog-close>
+      Cancelar
+    </button>
+  </div>
+
+</form>

@@ -1,0 +1,4 @@
+{
+   "appService.defaultWebAppToDeploy": "/subscriptions/85ab72ea-d2b0-457f-9684-9e07077263a4/resourceGroups/siace/providers/Microsoft.Web/sites/siacetest",
+   "appService.deploySubpath": "dist\\siga\\browser"
+}

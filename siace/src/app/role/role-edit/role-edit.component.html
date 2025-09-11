@@ -1,0 +1,60 @@
+<div class="dialog">
+
+  <div class="row row-cleaner-space.row">
+    <div class="col-10 col-md-11 ">
+      <h1 class="dialog-title">Detalle del rol</h1>
+    </div>
+    <div class="col-1 text-right">
+      <button mat-button mat-dialog-close class="close-icon close-min-button">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </div>
+  
+  <form *ngIf="role" #editForm="ngForm" (ngSubmit)="save()" autocomplete="off">
+
+    <mat-form-field *ngIf="role.rolId">
+      <mat-label>Clave</mat-label>
+      <input matInput [(ngModel)]="role.rolId" id="rolId" name="rolId" placeholder="Clave" readonly>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label for="rolNombre">Descripción</mat-label>
+      <input matInput maxlength="50" [(ngModel)]="role.rolNombre" id="rolNombre" name="rolNombre"
+        placeholder="Descripción">
+    </mat-form-field>
+
+
+    <mat-form-field>
+      <mat-label for="rolSufix">Sufijo</mat-label>
+      <input matInput maxlength="5" [(ngModel)]="role.rolSufix" id="rolSufix" name="rolSufix"
+        placeholder="Sufijo (5 caracteres)">
+    </mat-form-field>
+
+
+    <mat-form-field appearance="fill" class="autocomplete-subject buscadores" floatLabel="always">
+      <mat-label>Emprendedor</mat-label>
+      <ng-container *ngIf="!this.logEmpId">
+        <input matInput [(ngModel)]="empFilter" [matAutocomplete]="auto" id="empFilter" name="empFilter"
+          placeholder="Todos" (ngModelChange)="changeEmprendedorFilter()" [disabled]="role.rolId!==undefined">
+        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn"
+          (optionSelected)="selectEmprendedor($event)">
+          <mat-option *ngFor="let emp of empModelFilter " [value]="emp" [matTooltip]="emp.empRazonSocial">
+            {{emp.empRazonSocial}}
+          </mat-option>
+        </mat-autocomplete>
+      </ng-container>
+      <input matInput [(ngModel)]="logEmpNombre" id="logEmpNombre" name="logEmpNombre" *ngIf="logEmpId"
+        disabled="logEmpId">
+      <button class="tache" *ngIf="!this.logEmpId" type="button" mat-icon-button matSuffix (click)="cleanEmprendedor()"
+        [disabled]="role.rolId!==undefined">
+        <mat-icon *ngIf="role.rolId==undefined">close</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <div class="button-row text-center" role="group">
+      <button type="submit" mat-raised-button color="primary" [disabled]="!editForm.form.valid">Guardar</button>
+      <button mat-button mat-dialog-close>Cerrar</button>
+    </div>
+  </form>
+</div>

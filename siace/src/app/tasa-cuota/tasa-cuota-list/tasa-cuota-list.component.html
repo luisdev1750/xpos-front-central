@@ -1,0 +1,130 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
+    <li class="breadcrumb-item active">Catalogo de Tasas o Cuotas</li>
+  </ol>
+</nav>
+
+<div class="proin-main">
+  <mat-card class="proin-card">
+    <h2>Catalogo de Tasas o Cuotas</h2>
+    <form #f="ngForm">
+      <mat-form-field>
+        <mat-label>Clave:</mat-label>
+        <input
+          matInput
+          type="search"
+          [(ngModel)]="filter.tocId"
+          id="tocId"
+          name="tocId"
+        />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Clave de impuestos</mat-label>
+        <mat-select (selectionChange)="OnMarcaChange($event)">
+          <mat-option
+            *ngFor="let impuesto of listImpuestosFilter"
+            [value]="impuesto.impId"
+          >
+            {{ impuesto.impNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Clave de tipo de factores</mat-label>
+        <mat-select (selectionChange)="OnFactorChange($event)">
+          <mat-option
+            *ngFor="let factor of listTiposFactoresFilter"
+            [value]="factor.tfaId"
+          >
+            {{ factor.tfaTipofactor }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Activo:</mat-label>
+        <mat-select
+          [(ngModel)]="filter.tocActivo"
+          id="banActivo"
+          name="banActivo"
+          (selectionChange)="OnActivoChange()"
+        >
+          <mat-option value="all">Todos</mat-option>
+          <mat-option value="true">Sí</mat-option>
+          <mat-option value="false">No</mat-option>
+        </mat-select>
+      </mat-form-field>
+     
+
+      <button
+        mat-mini-fab
+        color="accent"
+        (click)="add()"
+        [disabled]="!f?.valid"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+    </form>
+    <div *ngIf="tasaCuotaList.length > 0">
+      <table mat-table #table [dataSource]="tasaCuotaList">
+        <ng-container matColumnDef="tocId">
+          <mat-header-cell *matHeaderCellDef> Clave </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.tocId }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tocTasaocuota">
+          <mat-header-cell *matHeaderCellDef> Tasa o Cuota </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.tocTasaocuota }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tocImpId">
+          <mat-header-cell *matHeaderCellDef>
+            Clave de Impuesto
+          </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.impNombre }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tocTfaId">
+          <mat-header-cell *matHeaderCellDef>
+            Clave de Tipos Factores
+          </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.tfaTipofactor }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tocTraslado">
+          <mat-header-cell *matHeaderCellDef> Traslado </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.tocTraslado }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tocRetencion">
+          <mat-header-cell *matHeaderCellDef> Retención </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.tocRetencion }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tocActivo">
+          <mat-header-cell *matHeaderCellDef> Activo </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.tocActivo }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            <button
+              (click)="edit(item)"
+              mat-button
+              color="warn"
+              class="button-edit"
+            >
+              <mat-icon>edit</mat-icon></button
+            >
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+      </table>
+    </div>
+  </mat-card>
+</div>

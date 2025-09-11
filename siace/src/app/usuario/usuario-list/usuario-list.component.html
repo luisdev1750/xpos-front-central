@@ -1,0 +1,154 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
+    <li class="breadcrumb-item active">Catalogos de Usuarios</li>
+  </ol>
+</nav>
+
+<div class="proin-main">
+  <mat-card class="proin-card">
+    <h2>Catalogos de Usuarios</h2>
+    <form #f="ngForm">
+      <mat-form-field>
+        <mat-label>Clave:</mat-label>
+        <input
+          matInput
+          type="search"
+          [(ngModel)]="filter.usuId"
+          id="usuId"
+          name="usuId"
+        />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Perfil</mat-label>
+        <mat-select
+            (selectionChange)="onPerfilChange($event)"  
+        
+        >
+          <mat-option
+            *ngFor="let perfil of perfilListsFilter"
+            [value]="perfil.perId"
+          >
+            {{ perfil.perNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Sucursal</mat-label>
+        <mat-select
+         (selectionChange)="onSucursalChange($event)"
+        >
+          <mat-option
+            *ngFor="let sucursal of sucursalListsFilter"
+            [value]="sucursal.sucId"
+          >
+            {{ sucursal.sucNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Activo:</mat-label>
+        <mat-select
+          [(ngModel)]="filter.usuActivo"
+          id="usuActivo"
+          name="usuActivo"
+          (selectionChange)="onActivoChange()"
+        >
+          <mat-option value="all">Todos</mat-option>
+          <mat-option value="true">Sí</mat-option>
+          <mat-option value="false">No</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button
+        mat-mini-fab
+        color="accent"
+        (click)="add()"
+        [disabled]="!f?.valid"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+    </form>
+    <div *ngIf="usuarioList.length > 0">
+      <table mat-table #table [dataSource]="usuarioList">
+        <ng-container matColumnDef="usuId">
+          <mat-header-cell *matHeaderCellDef> Clave </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.usuId }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="usuNombre">
+          <mat-header-cell *matHeaderCellDef> Nombre Completo </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.usuNombre }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="usuUser">
+          <mat-header-cell *matHeaderCellDef> Usuario </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.usuUser }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="usuPassword">
+          <mat-header-cell *matHeaderCellDef> Contraseña </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.usuPassword }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="usuCorreoElectronico">
+          <mat-header-cell *matHeaderCellDef>
+            Correo Electrónico
+          </mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            {{ item.usuCorreoElectronico }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="usuPerId">
+          <mat-header-cell *matHeaderCellDef> Perfil </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.perfilNombre }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="usuSucId">
+          <mat-header-cell *matHeaderCellDef> Sucursal </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.sucursalNombre }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="usuActivo">
+          <mat-header-cell *matHeaderCellDef> Activo </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.usuActivo }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="usuFechaAlta">
+          <mat-header-cell *matHeaderCellDef> Fecha Alta </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.usuFechaAlta }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="usuFecha_Modificacion">
+          <mat-header-cell *matHeaderCellDef>
+            Fecha Modificación
+          </mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            {{ item.usuFecha_Modificacion }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            <button
+              (click)="edit(item)"
+              mat-button
+              color="warn"
+              class="button-edit"
+            >
+              <mat-icon>edit</mat-icon></button
+            >&nbsp;
+          
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+      </table>
+    </div>
+  </mat-card>
+</div>

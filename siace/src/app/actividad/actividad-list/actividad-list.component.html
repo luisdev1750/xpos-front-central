@@ -1,0 +1,87 @@
+<div class="tab-actividades">
+   <form #f="ngForm" class="catalogo__form">
+      <mat-form-field appearance="fill" id="pilar">
+         <mat-label>Pilar</mat-label>
+         <mat-select [(ngModel)]="pilId" id="pilId" name="pilId" (selectionChange)="search()">
+            <mat-option [value]="0">Todos</mat-option>
+            <mat-option *ngFor="let item of pilModel" [value]="item.pilId">{{item.pilDescripcion}}</mat-option>
+         </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" id="nivel">
+         <mat-label>Nivel</mat-label>
+         <mat-select [(ngModel)]="nivId" id="nivId" name="nivId" (selectionChange)="search()">
+            <mat-option *ngFor="let item of nivModel" [value]="item.nivId">{{item.nivDescripcion}}</mat-option>
+         </mat-select>
+      </mat-form-field>
+   
+      <button mat-mini-fab color="accent" class="catalogo__add-button" (click)="add()" [disabled]="!f?.valid" *ngIf="veaFechaActivacion == null && veaFechaActivacion == undefined">
+         <mat-icon>add</mat-icon>
+      </button>
+   </form>
+   <mat-card class="catalogo__card">
+      
+   
+      <div class="catalogo__table-container" *ngIf="actividadListByVersion.length > 0 || veaId == 0; else noActividades">
+         <table class="catalogo__table" mat-table #table [dataSource]="dataSource"><!--"actividadListByVersion"-->
+         
+            <ng-container matColumnDef="aaaId">
+               <mat-header-cell class="catalogo__header-cell" *matHeaderCellDef> Clave </mat-header-cell>
+               <mat-cell class="catalogo__cell" *matCellDef="let item"> {{item.aaaId}} </mat-cell>
+            </ng-container>
+         
+            <ng-container matColumnDef="aaaDescripcion">
+               <mat-header-cell class="catalogo__header-cell" *matHeaderCellDef> Descripción </mat-header-cell>
+               <mat-cell class="catalogo__cell" *matCellDef="let item"> {{item.aaaDescripcion}} </mat-cell>
+            </ng-container>
+         
+            <ng-container matColumnDef="nivDescripcion">
+               <mat-header-cell class="catalogo__header-cell" *matHeaderCellDef> Nivel </mat-header-cell>
+               <mat-cell class="catalogo__cell" *matCellDef="let item"> {{item.nivDescripcion}} </mat-cell>
+            </ng-container>
+         
+            <ng-container matColumnDef="pilDescripcion">
+               <mat-header-cell class="catalogo__header-cell" *matHeaderCellDef> Pilar </mat-header-cell>
+               <mat-cell class="catalogo__cell" *matCellDef="let item"> {{item.pilDescripcion}} </mat-cell>
+            </ng-container>
+         
+            <ng-container matColumnDef="aaaAaaDescripcion">
+               <mat-header-cell class="catalogo__header-cell" *matHeaderCellDef> Predecesora </mat-header-cell>
+               <mat-cell class="catalogo__cell" *matCellDef="let item"> {{item.aaaAaaDescripcion}} </mat-cell>
+            </ng-container>
+         
+            <ng-container matColumnDef="aaaDuracion">
+               <mat-header-cell class="catalogo__header-cell" *matHeaderCellDef> Duración </mat-header-cell>
+               <mat-cell class="catalogo__cell" *matCellDef="let item"> {{item.aaaDuracion}} </mat-cell>
+            </ng-container>
+         
+            <ng-container matColumnDef="aaaEstatus">
+               <mat-header-cell class="catalogo__header-cell" *matHeaderCellDef> Estatus </mat-header-cell>
+               <mat-cell class="catalogo__cell" *matCellDef="let item"> {{item.aaaEstatus}} </mat-cell>
+            </ng-container>
+         
+            <ng-container matColumnDef="actions">
+               <mat-header-cell class="catalogo__header-cell" *matHeaderCellDef></mat-header-cell>
+               <mat-cell class="catalogo__cell" *matCellDef="let item">
+                  <button (click)="edit(item)" mat-button color="accent">
+                     <mat-icon *ngIf="veaFechaActivacion == null && veaFechaActivacion == undefined">edit</mat-icon>
+                     <mat-icon *ngIf="veaFechaActivacion !== null && veaFechaActivacion !== undefined">visibility</mat-icon>
+                  </button>&nbsp;
+                  <button (click)="delete(item)" mat-button color="accent" *ngIf="veaFechaActivacion == null && veaFechaActivacion == undefined">
+                     <mat-icon>delete</mat-icon>
+                  </button>
+               </mat-cell>
+            </ng-container>
+         
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+         </table>
+      </div>
+      <div class="contenedor-paginator" ><!--*ngIf="actividadListByVersion.length > 0"-->
+         <mat-paginator class="catalogo__table paginator" [pageSizeOptions] = "[10, 20]" showFirstLastButtons></mat-paginator>
+      </div>
+      <ng-template #noActividades>
+         <p>No hay actividades para esta versión.</p>
+      </ng-template>
+   </mat-card>
+</div>

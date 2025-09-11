@@ -1,0 +1,10 @@
+.container{
+	width: 100%;
+}
+
+/* Para las etiquetas de campos requeridos */
+/* Estilo para mostrar el asterisco en campos requeridos */
+mat-form-field .required::before {
+	content: "* ";
+
+  }

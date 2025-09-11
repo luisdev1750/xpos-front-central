@@ -1,0 +1,48 @@
+<siga-navigation-bar *ngIf="isAuthenticated()" (toggleSidenav)="sigaSideNav.toggle()"
+   (closeSidenav)="sigaSideNav.close()" class="custom-toolbar">
+</siga-navigation-bar>
+
+<mat-sidenav-container class="sidenav-container custom-toolbar" color="accent">
+
+   <mat-sidenav #sigaSideNav mode="over" role="navigation" class="custom-toolbar">
+
+      <mat-toolbar color="warn" class="custom-toolbar toolbar--sidenav">
+         <img src="../../assets/images/a3.svg" class="toolbar__logo" alt="">
+      </mat-toolbar>
+
+      <mat-nav-list class="custom-toolbar">
+         <div *ngFor="let item of modParent" class="list-item-parent">
+
+            <!-- Enlaces con URLs no nulas -->
+            <a mat-list-item class="parent" *ngIf="item.modUrl != null" (click)="sigaSideNav.close()"
+               [routerLink]="item.modUrl" >
+               <img src="assets/icons/{{item.modIcono}}.svg" class="iconos">
+               {{item.modNombre}}
+            </a>
+
+            <!-- Elementos de menú sin URL -->
+            <mat-list-item (click)="showSubmenu(item)"  *ngIf="item.modUrl == null">
+               <img src="assets/icons/{{item.modIcono}}.svg" class="iconos">
+               <span class="full-width">{{item.modNombre}}</span>
+               <mat-icon class="menu-button" [ngClass]="{'rotated' : item.modExpanded}">
+                  expand_more
+               </mat-icon>
+            </mat-list-item>
+
+            <!-- Submenús -->
+            <div class="submenu submenu--{{item.modId}}" [ngClass]="{'expanded' : item.modExpanded}"
+               *ngIf="item.modExpanded">
+               <a *ngFor="let childItem of getChildren(item)" mat-list-item (click)="sigaSideNav.close()"
+                  [routerLink]="childItem.modUrl" routerLinkActive="list-item-active" [routerLinkActiveOptions]="{ exact: true }">
+                  <img class="iconos" src="assets/icons/{{childItem.modIcono}}.svg">
+                  {{childItem.modNombre}}
+               </a>
+            </div>
+         </div>
+      </mat-nav-list>
+   </mat-sidenav>
+
+   <mat-sidenav-content role="main">
+      <router-outlet></router-outlet>
+   </mat-sidenav-content>
+</mat-sidenav-container>

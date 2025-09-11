@@ -1,0 +1,39 @@
+.link-item {
+  color: var(--mat-tab-color-active);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.link-cell {
+  color: var(--mat-tab-color-active);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.contenedor-button{
+  margin-bottom: 5px;
+}
+
+.contenedor-button mat-form-field {
+  margin-right: 10px;
+}
+
+@media (max-width: 750px) {
+  .contenedor-button {
+    flex-direction: column;
+  }
+
+  .contenedor-button mat-form-field {
+    margin-right: 10px;
+    margin-bottom: 10px;
+    width: calc(50% - 10px);
+  }
+}
+
+.archivo-cell{
+  min-width: 400px;
+}
+
+.numPregunta{
+  min-width: 300px;
+}

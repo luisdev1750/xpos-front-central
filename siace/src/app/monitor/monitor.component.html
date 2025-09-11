@@ -1,0 +1,119 @@
+<div class="catalogo">
+   <div class="catalogo-header">
+      <h1 class="catalogo__title">
+         <img src="../../../assets/icons/edit_attributes.svg" alt="Descripción del icono" width="40" height="40">
+         Monitor de estatus
+      </h1>
+   </div>
+
+   <mat-card class="catalogo__card button-no-shadow monitor">
+      <div class="contenedor-button catalogo__table-container monitor">
+         <form #f="ngForm" autocomplete="off">
+            <mat-form-field appearance="fill" class="mat-form-fiel-container-width">
+               <mat-label for="fechaIni">Fecha inicial</mat-label>
+               <input matInput [matDatepicker]="pickerIni" [(ngModel)]="fechaIni" id="fechaIni" name="fechaIni"
+                  placeholder="Fecha inicial" required [max]="fechaFin" (dateChange)="sendInfo()" />
+               <mat-datepicker-toggle matSuffix [for]="pickerIni"></mat-datepicker-toggle>
+               <mat-datepicker #pickerIni></mat-datepicker>
+               <mat-error *ngIf="fechaIni == undefined">Fecha es requerida</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="mat-form-fiel-container mat-form-fiel-container-width">
+               <mat-label for="fechaFin">Fecha final</mat-label>
+               <input matInput [matDatepicker]="pickerEnd" [(ngModel)]="fechaFin" id="fechaFin" name="fechaFin"
+                  placeholder="Fecha final" required [min]="fechaIni" (dateChange)="sendInfo()"/>
+               <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+               <mat-datepicker #pickerEnd></mat-datepicker>
+               <mat-error *ngIf="fechaFin == undefined">Fecha es requerida</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" id="emprendedor" class="autocomplete-subject" floatLabel="always">
+               <mat-label>Razón Social</mat-label>
+               <!-- <input matInput [(ngModel)]="logEmpNombre" id="logEmpNombre" name="logEmpNombre" *ngIf="logEmpId"
+                  disabled="logEmpId"> -->
+               <ng-container><!--*ngIf="!logEmpId"-->
+                  <input matInput [(ngModel)]="empFilter" [matAutocomplete]="autoRazon" id="empFilter" name="empFilter"
+                     placeholder="Todos" (ngModelChange)="changeRazonFilter()">
+                  <mat-autocomplete #autoRazon="matAutocomplete" [displayWith]="displayFn"
+                     (optionSelected)="selectRazon($event)">
+                     <mat-option *ngFor="let emp of empModelFilter " [value]="emp" [matTooltip]="emp.empRazonSocial">
+                        {{emp.empRazonSocial}}
+                     </mat-option>
+                  </mat-autocomplete>
+               </ng-container>
+               <button type="button" mat-icon-button matSuffix (click)="cleanRazon()">
+                  <mat-icon>close</mat-icon>
+               </button>
+            </mat-form-field>
+         </form>
+      </div>
+
+      <div class="catalogo__table-container currentTable" *ngIf="dataSource">
+         <table mat-table [dataSource]="dataSource" class="catalogo__table mat-elevation-z8" style="border-radius: 12px !important;">
+            
+            <!-- ID Column -->
+            <ng-container matColumnDef="conId">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell auto-cell">Clave</mat-header-cell>
+               <mat-cell *matCellDef="let element" class="catalogo__cell auto-cell">{{ element.conId }}</mat-cell>
+            </ng-container>
+
+            <!-- Nombre Column -->
+            <ng-container matColumnDef="conNombre">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell">Razón Social</mat-header-cell>
+               <mat-cell *matCellDef="let element" class="catalogo__cell link-cell" (click)="handleClick(element)">
+                  {{ element.empRazonSocial }}
+               </mat-cell>
+            </ng-container>
+
+            <!-- Fecha Column -->
+            <ng-container matColumnDef="conFecha">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell">Fecha</mat-header-cell>
+               <mat-cell *matCellDef="let element" class="catalogo__cell">
+                  {{ element.conFecha | date : "dd/MM/yyyy HH:mm" }}
+               </mat-cell>
+            </ng-container>
+
+            <!-- Resultado Column -->
+            <ng-container matColumnDef="resultado">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell auto-cell">Resultado</mat-header-cell>
+               <mat-cell *matCellDef="let element" class="catalogo__cell auto-cell">{{ element.conPromedio }}</mat-cell>
+            </ng-container>
+
+            <!-- Stepper Column -->
+
+            <div class="step-header" *ngFor="let step of steps; let i = index" class="step-title">
+                  <ng-container matColumnDef="grafica{{i}}" >
+                     <mat-header-cell *matHeaderCellDef class="catalogo__header-cell auto-cell">
+                     <div class="step-header">
+                        <span class="step-title">
+                           {{step}}
+                        </span>
+                     </div>
+                     </mat-header-cell>
+                     
+                     <mat-cell *matCellDef="let element" class="catalogo__cell auto-cell">
+                     <div class="step-buttons">
+                        <div  class="tooltip-container">
+                           <button mat-icon-button
+                           [ngClass]="getStepClass(i , element)"
+                           class="small-button"
+                           (click)="onStepClick(i + 1, element.conId, element.emeEtaId, element)">
+                           <mat-icon>{{ getStepIcon(i+1) }}</mat-icon>
+                           </button>
+                           
+                        </div>
+                     </div>
+                     </mat-cell>
+                  </ng-container>
+             </div>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+         </table>
+      </div>
+
+      <div class="contenedor-paginator">
+         <mat-paginator class="catalogo__table paginator" [pageSizeOptions] = "[10, 20]" showFirstLastButtons></mat-paginator>
+      </div>
+   </mat-card>
+</div>

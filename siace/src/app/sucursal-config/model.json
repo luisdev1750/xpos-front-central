@@ -1,0 +1,44 @@
+{
+   "title": "SucursalConfig",
+   "entity": "sucursalconfig",
+   "module": "Catalogo de Configuración de Sucursales",
+   "singular": "configuración de sucursal",
+   "columns": 3,
+   "api": {
+      "url": "SucursalesConfig"
+   },
+   "filter": [
+      "scoSucId",
+	   "scoId"
+   ],
+   "fields": [
+      {
+         "name": "scoId",
+         "label": "Clave",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "scoSucId",
+         "label": "Clave de Sucursal",
+         "type": "number",
+         "required" : true
+      },
+      {
+         "name": "scoHost",
+         "label": "Host",
+         "type": "string"
+      },
+      {
+         "name": "scoTokenUser",
+         "label": "Token de Usuario",
+         "type": "string"
+      },
+      {
+         "name": "scoTokenPassword",
+         "label": "Token de contraseña",
+         "type": "string"
+      }
+   ]
+}

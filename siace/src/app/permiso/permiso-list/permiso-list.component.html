@@ -1,0 +1,73 @@
+<div class="catalogo permisos">
+   <div class="catalogo-header">
+      <h1 class="catalogo__title">
+         <img src="../../../assets/icons/supervised_user_circle.svg" alt="Descripción del icono" width="40" height="40">
+         Permisos
+      </h1>
+   </div>
+
+   <mat-card class="catalogo__card">
+
+      <div class="contenedor-button">
+         <form #f="ngForm">
+               <mat-form-field id="emprendedor" appearance="fill" class="autocomplete-subject" floatLabel="always">
+                  <mat-label>Emprendedor</mat-label>
+
+                  <ng-container *ngIf="!logEmpId">
+                     <input matInput [(ngModel)]="empFilter" [matAutocomplete]="auto" id="empFilter" name="empFilter"
+                        placeholder="Todos" (ngModelChange)="changeEmprendedorFilter()">
+                     <mat-autocomplete id="emprendedor" #auto="matAutocomplete" [displayWith]="displayFn"
+                        (optionSelected)="selectEmprendedor($event)">
+                        <mat-option *ngFor="let emp of empModelFilter " [value]="emp" [matTooltip]="emp.empRazonSocial">
+                           {{emp.empRazonSocial}}
+                        </mat-option>
+                     </mat-autocomplete>
+                  </ng-container>
+
+                  <input matInput [(ngModel)]="logEmpNombre" id="logEmpNombre" name="logEmpNombre" *ngIf="logEmpId"
+                     disabled="logEmpId">
+                  <button *ngIf="!logEmpId" type="button" mat-icon-button matSuffix (click)="cleanEmprendedor()">
+                     <mat-icon>close</mat-icon>
+                  </button>
+               </mat-form-field>
+
+
+               <mat-form-field appearance="fill" id="rol">
+                  <mat-label>Rol</mat-label>
+                  <mat-select [(ngModel)]="rolId" id="rolId" name="rolId" (selectionChange)="search()">
+                     <mat-option *ngFor="let item of rolModel" [value]="item.rolId">{{item.rolNombre}}</mat-option>
+                  </mat-select>
+               </mat-form-field>
+         </form>
+      </div>
+
+
+      <div *ngIf="perModel.length > 0" class="catalogo__table-container">
+         
+            <table mat-table class="catalogo__table" #table [dataSource]="dataSource">
+               <ng-container matColumnDef="modNombre">
+                  <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Módulo </mat-header-cell>
+                  <mat-cell *matCellDef="let item" [ngClass]="{childNode: item.modNivel>1}">
+                     {{item.modNombre}}
+                  </mat-cell>
+               </ng-container>
+
+               <ng-container matColumnDef="perChecked">
+                  <mat-header-cell *matHeaderCellDef class="catalogo__header-cell td-sm"> Permiso </mat-header-cell>
+                  <mat-cell *matCellDef="let item" class="catalogo__cell td-sm">
+                     <mat-checkbox [(ngModel)]="item.perChecked" name="perChecked" (change)="changePermiso(item)">
+                     </mat-checkbox>
+                  </mat-cell>
+               </ng-container>
+
+               <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+               <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </table>
+         
+      </div>
+      <div class="contenedor-paginator">
+         <mat-paginator class="catalogo__table paginator" [pageSizeOptions]="[10, 20]"
+            showFirstLastButtons></mat-paginator>
+      </div>
+   </mat-card>
+</div>

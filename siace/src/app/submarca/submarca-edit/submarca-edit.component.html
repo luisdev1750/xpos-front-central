@@ -1,0 +1,70 @@
+<h2>Detalle del submarca</h2>
+<form *ngIf="submarca" #editForm="ngForm" (ngSubmit)="save()" autocomplete="off">
+
+<div class="row">
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label>Clave</mat-label>
+         <input matInput [(ngModel)]="submarca.smaId" id="smaId" name="smaId" placeholder="Clave" readonly>
+
+
+      </mat-form-field>
+   </div>
+
+   <div class="col-md-4">
+      <mat-form-field>
+        <mat-label>Marca</mat-label>
+        <mat-select
+        [value]="submarca.smaMarId"
+         (selectionChange)="onMarcaChange($event)"
+        >
+          <mat-option
+            *ngFor="let marca of marcaListsFilter"
+            [value]="marca.marId"
+          >
+            {{ marca.marNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <!-- <mat-form-field>
+         <mat-label for="smaMarId">Clave de Marca</mat-label>
+         <input matInput type="number" [(ngModel)]="submarca.smaMarId" id="smaMarId" name="smaMarId" placeholder="Clave de Marca">
+
+         <mat-error *ngIf="submarca.smaMarId==undefined">Clave de Marca es requerido</mat-error>
+      </mat-form-field> -->
+   </div>
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="smaNombre">Nombre</mat-label>
+         <input matInput [(ngModel)]="submarca.smaNombre" id="smaNombre" name="smaNombre" placeholder="Nombre" required>
+         <mat-error *ngIf="submarca.smaNombre==''">Nombre es requerido</mat-error>
+      </mat-form-field>
+   </div>
+</div>
+<div class="row">
+
+   <div class="col-md-4">
+     <mat-form-field>
+        <mat-label>Activo</mat-label>
+        <mat-select
+          id="banActivo"
+          name="banActivo"
+          [(ngModel)]="submarca.smaActivo"
+          (selectionChange)="onActivoChange($event)"
+          
+        >
+          <mat-option [value]="true">Sí</mat-option>
+          <mat-option [value]="false">No</mat-option>
+        </mat-select>
+
+
+      </mat-form-field>
+   </div>
+</div>
+   <div class="button-row text-center" role="group">
+      <button type="submit" mat-raised-button color="primary" [disabled]="!editForm.form.valid">Guardar</button>
+      <button mat-button mat-dialog-close>Cancelar</button>
+  </div>
+</form>

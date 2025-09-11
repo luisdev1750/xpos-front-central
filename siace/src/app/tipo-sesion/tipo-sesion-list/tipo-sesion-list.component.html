@@ -1,0 +1,47 @@
+<div class="catalogo">
+   <div class="catalogo-header">
+      <h1 class="catalogo__title">
+         <img src="../../../assets/icons/layers.svg" alt="Descripción del icono" width="40" height="40">
+         Tipos de sesiones
+      </h1>
+   </div>
+
+   <mat-card class="catalogo__card button-no-shadow">
+      <div class="contenedor-button">
+         <form #f="ngForm">
+            <button mat-mini-fab class="catalogo__add-button button-no-shadow" color="accent" (click)="add()" [disabled]="!f?.valid" [ngStyle]="{transform: 'scale(0.9)'}" >
+               <mat-icon>add</mat-icon>
+            </button>
+         </form>
+      </div>
+
+      <div class="catalogo__table-container" *ngIf="tipoSesionList.length > 0">
+         <table class="catalogo__table" mat-table [dataSource]="dataSource">
+            <ng-container [matColumnDef]="column" *ngFor="let column of displayedColumns">
+               <mat-header-cell *matHeaderCellDef class="catalogo__header-cell">{{ this.displayedColumnsName[column] }}</mat-header-cell>
+               <mat-cell class="catalogo__cell" *matCellDef="let emp">
+                  <ng-container *ngIf="column === 'actions'; else defaultCell">
+                     <div class="catalogo__action-buttons">
+                        <button (click)="edit(emp)" mat-button color="warn">
+                           <mat-icon>edit</mat-icon>
+                        </button>
+                        <button (click)="delete(emp)" mat-button color="warn">
+                           <mat-icon>delete</mat-icon>
+                        </button>
+                     </div>
+                  </ng-container>
+                  <ng-template #defaultCell>
+                     {{ emp[column] }}
+                  </ng-template>
+               </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let emprow; columns: displayedColumns"></mat-row>
+         </table>
+      </div>
+      <div class="contenedor-paginator">
+         <mat-paginator class="catalogo__table paginator" [pageSizeOptions] = "[10, 20]" showFirstLastButtons></mat-paginator>
+      </div>
+   </mat-card>
+</div>

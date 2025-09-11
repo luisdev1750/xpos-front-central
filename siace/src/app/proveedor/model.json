@@ -1,0 +1,85 @@
+{
+   "title": "Proveedor",
+   "entity": "proveedor",
+   "module": "Catalogo de Proveedores",
+   "singular": "proveedor",
+   "columns": 3,
+   "api": {
+      "url": "Proveedores"
+   },
+   "filter": [
+      "pveActivo",
+      "pveCiuId",
+      "pveColId",
+	   "pveId"
+   ],
+   "fields": [
+      {
+         "name": "pveId",
+         "label": "Clave",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "pveNombre",
+         "label": "Nombre",
+         "type": "string",
+         "required" : true
+      },
+      {
+         "name": "pveActivo",
+         "label": "Activo",
+         "type": "boolean"
+      },
+      {
+         "name": "pveCalle",
+         "label": "Calle",
+         "type": "string",
+         "required" : true
+      },
+      {
+         "name": "pveNumeroExterior",
+         "label": "Número Exterior",
+         "type": "string",
+         "required" : true
+      },
+      {
+         "name": "pveNumeroInterior",
+         "label": "Número Interior",
+         "type": "string"
+      },
+      {
+         "name": "pveCiuId",
+         "label": "Ciudad",
+         "type": "string"
+      },
+      {
+         "name": "pveColId",
+         "label": "Colonia",
+         "type": "number",
+         "required" : true
+      },
+      {
+         "name": "pveTelefono",
+         "label": "Teléfono",
+         "type": "number",
+         "required" : true
+      },
+      {
+         "name": "pveCorreoElectronico",
+         "label": "Email",
+         "type": "string"
+      },
+      {
+         "name": "pveObservaciones",
+         "label": "Observaciones",
+         "type": "string"
+      },
+      {
+         "name": "pveNumero",
+         "label": "Número",
+         "type": "string"
+      }
+   ]
+}

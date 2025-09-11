@@ -1,0 +1,25 @@
+{
+   "title": "Nivel",
+   "entity": "nivel",
+   "api": {
+      "url": "Niveles"
+   },
+   "filter": [
+      "nivId"
+   ],
+   "fields": [
+      {
+         "name": "nivId",
+         "label": "Clave",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "nivDescripcion",
+         "type": "string",
+         "label": "Descripción",
+         "required": true
+      }
+  ]
+}

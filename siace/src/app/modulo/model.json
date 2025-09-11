@@ -1,0 +1,42 @@
+{
+   "title": "Module",
+   "entity": "module",
+   "api": {
+      "url": "Modulos"
+   },
+   "filter": [
+      "modId",
+      "modModId",
+      "rolId"
+   ],
+   "fields": [
+      {
+         "name": "modId",
+         "label": "Clave",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "modModId",
+         "label": "Padre",
+         "type": "number"
+      },
+      {
+         "name": "modNombre",
+         "label": "Nombre",
+         "type": "string",
+         "required" : true
+      },
+      {
+         "name": "modUrl",
+         "label": "Usuario",
+         "type": "string"
+      },
+      {
+         "name": "modIcono",
+         "label": "Icono",
+         "type": "string"
+      }
+   ]
+}

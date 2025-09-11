@@ -1,0 +1,25 @@
+{
+   "title": "Necesidad",
+   "entity": "necesidad",
+   "api": {
+      "url": "Necesidades"
+   },
+   "filter": [
+      "nieId"
+   ],
+   "fields": [
+      {
+         "name": "necId",
+         "label": "Clave",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "necDescripcion",
+         "type": "string",
+         "label": "Descripción",
+         "required": true
+      }
+      ]
+}

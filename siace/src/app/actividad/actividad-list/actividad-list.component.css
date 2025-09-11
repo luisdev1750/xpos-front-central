@@ -1,0 +1,17 @@
+.tab-actividades{
+  min-width: auto !important;
+}
+
+.catalogo__form{
+  width: 100% !important;
+}
+
+#nivel,#pilar{
+  margin-right: 10px;
+}
+
+.catalogo__card,
+.catalogo__table{
+  min-width: 100% !important;
+  max-width: 100% !important; 
+}

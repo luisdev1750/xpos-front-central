@@ -1,0 +1,63 @@
+<h2>Detalle de la Auditoria</h2>
+<form *ngIf="auditoria" #editForm="ngForm" (ngSubmit)="save()">
+   <div class="row">
+      <div class="col-md-6">
+         <mat-form-field>
+            <mat-label>Clave</mat-label>
+            <input matInput [(ngModel)]="auditoria.audId" id="audId" name="audId" placeholder="Clave" readonly>
+         </mat-form-field>
+      </div>
+      <div class="col-md-6">
+         <mat-form-field>
+            <mat-label for="audUsrId">Usuario</mat-label>
+            <input matInput type="number" [(ngModel)]="auditoria.audUsrId" id="audUsrId" name="audUsrId"
+               placeholder="Usuario">
+            <mat-error *ngIf="auditoria.audUsrId==undefined">Usuario es requerido</mat-error>
+         </mat-form-field>
+      </div>
+   </div>
+
+   <div class="row">
+      <div class="col-md-6">
+         <mat-form-field>
+            <mat-label for="audTipo">Tipo</mat-label>
+            <input matInput [(ngModel)]="auditoria.audTipo" id="audTipo" name="audTipo" placeholder="Tipo" required>
+            <mat-error *ngIf="auditoria.audTipo==''">Tipo es requerido</mat-error>
+         </mat-form-field>
+      </div>
+      <div class="col-md-6">
+         <mat-form-field>
+            <mat-label for="audFecha">Fecha</mat-label>
+            <input matInput [matDatepicker]="picker" [(ngModel)]="auditoria.audFecha" id="audFecha" name="audFecha"
+               placeholder="Fecha" required>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="auditoria.audFecha==undefined">Fecha es requerido</mat-error>
+         </mat-form-field>
+      </div>
+   </div>
+
+   <mat-form-field>
+      <mat-label for="audModulo">Módulo</mat-label>
+      <input matInput [(ngModel)]="auditoria.audModulo" id="audModulo" name="audModulo" placeholder="Módulo" required>
+      <mat-error *ngIf="auditoria.audModulo==''">Módulo es requerido</mat-error>
+   </mat-form-field>
+
+   <mat-form-field>
+      <mat-label for="audJsonOriginal">Original</mat-label>
+      <input matInput [(ngModel)]="auditoria.audJsonOriginal" id="audJsonOriginal" name="audJsonOriginal"
+         placeholder="Original" required>
+      <mat-error *ngIf="auditoria.audJsonOriginal==''">Original es requerido</mat-error>
+   </mat-form-field>
+
+   <mat-form-field>
+      <mat-label for="audJsonModificado">Modificación</mat-label>
+      <input matInput [(ngModel)]="auditoria.audJsonModificado" id="audJsonModificado" name="audJsonModificado"
+         placeholder="Modificación">
+   </mat-form-field>
+
+   <div class="button-row text-center" role="group">
+      <button type="submit" mat-raised-button color="primary" [disabled]="!editForm.form.valid">Guardar</button>
+      <button mat-button mat-dialog-close>Cancelar</button>
+   </div>
+</form>

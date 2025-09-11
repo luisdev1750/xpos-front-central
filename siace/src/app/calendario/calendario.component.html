@@ -1,0 +1,179 @@
+<div class="catalaogo calendario-container"> 
+
+   <div class="catalogo-header">
+      <h1 class="catalogo__title">
+         <img src="../../../assets/icons/event.svg" alt="Descripción del icono" width="40" height="40">
+          Calendario
+      </h1>
+   </div>
+
+   <div class="row calendario-componente-contanedor justify-content-center color-white">
+      <div class="col-md-9">
+
+         <div class="contenedor-button ">
+            <form class="form-container" #f="ngForm">
+               <mat-form-field appearance="fill" id="tipo">
+                  <mat-label>Tipo de Sesión</mat-label>
+                  <mat-select [(ngModel)]="tisId" id="tisId" name="tisId" placeholder="Tipo de Sesión"
+                     (selectionChange)="search()">
+                     <mat-option [value]="0">Todos</mat-option>
+                     <mat-option *ngFor="let c of tisModel" [value]="c.tisId">{{c.tisNombre}}</mat-option>
+                  </mat-select>
+               </mat-form-field>
+   
+               <mat-form-field appearance="fill" class="autocomplete-subject">
+                  <mat-label>Emprendedor</mat-label>
+                  <input matInput [(ngModel)]="empFilter" [matAutocomplete]="auto" 
+                     id="empFilter" name="empFilter" (ngModelChange)="changeEmprendedorFilter()">
+                  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="selectEmprendedor($event)">
+                     <mat-option *ngFor="let emp of empModelFilter " [value]="emp" [matTooltip]="emp.empRazonSocial">{{emp.empRazonSocial}}</mat-option>
+                  </mat-autocomplete>
+                  <button type="button" mat-icon-button matSuffix (click)="cleanEmprendedor()">
+                     <mat-icon>close</mat-icon>
+                   </button>
+               </mat-form-field>
+   
+            </form>
+         </div>
+
+         <div class="row text-center butones-centrales">
+            <div class="col-md-4 align-items-center">
+               <div class="btn-group">
+                  <div class="btn btn-primary" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"
+                     (viewDateChange)="closeOpenMonthViewDay()">
+                     Previo
+                  </div>
+                  <div class="btn btn-outline-secondary" mwlCalendarToday [(viewDate)]="viewDate">
+                     Hoy
+                  </div>
+                  <div class="btn btn-primary" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"
+                     (viewDateChange)="closeOpenMonthViewDay()">
+                     Siguiente
+                  </div>
+               </div>
+            </div>
+
+            <div class="col-md-4 align-items-center">
+               <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'es' |  titlecase }}</h3>
+            </div>
+            <div class="col-md-4  align-items-center">
+               <div class="btn-group">
+                  <div class="btn btn-primary" (click)="setView(CalendarView.Month)"
+                     [class.active]="view === CalendarView.Month">
+                     Mes
+                  </div>
+                  <div class="btn btn-primary" (click)="setView(CalendarView.Week)"
+                     [class.active]="view === CalendarView.Week">
+                     Semana
+                  </div>
+                  <div class="btn btn-primary" (click)="setView(CalendarView.Day)"
+                     [class.active]="view === CalendarView.Day">
+                     Día
+                  </div>
+               </div>
+            </div>
+         </div>
+         <br />
+         <div [ngSwitch]="view">
+            <mwl-calendar-month-view *ngSwitchCase="CalendarView.Month" [viewDate]="viewDate" [events]="events"
+               [refresh]="refresh" [locale]="locale" [activeDayIsOpen]="activeDayIsOpen"
+               (dayClicked)="dayClicked($event.day)" (eventClicked)="handleEvent('Clicked', $event.event)"
+               (eventTimesChanged)="eventTimesChanged($event)" [cellTemplate]="customCellTemplate">
+            </mwl-calendar-month-view>
+            <mwl-calendar-week-view *ngSwitchCase="CalendarView.Week" [viewDate]="viewDate" [events]="events"
+               [refresh]="refresh" [locale]="locale" (eventClicked)="handleEvent('Clicked', $event.event)"
+               (eventTimesChanged)="eventTimesChanged($event)">
+            </mwl-calendar-week-view>
+            <mwl-calendar-day-view *ngSwitchCase="CalendarView.Day" [viewDate]="viewDate" [events]="events"
+               [refresh]="refresh" [locale]="locale" (eventClicked)="handleEvent('Clicked', $event.event)"
+               (eventTimesChanged)="eventTimesChanged($event)">
+            </mwl-calendar-day-view>
+         </div>
+      </div>
+
+
+      <div class="col-md-3 col-list eventos">
+         <form class="todo-form">
+            <div class="d-flex justify-content-center title-eventos">
+               <h3 class="eventos-title">Sesiones por atender</h3>&nbsp;&nbsp;
+               <button mat-mini-fab color="accent" [ngStyle]="{transform: 'scale(0.9)'
+              }" (click)="addManualEvent(undefined)">
+                  <mat-icon>add</mat-icon>
+               </button>
+            </div>
+         </form> 
+
+         <p *ngIf="sesModeloPendiente.length > 0" class="mat-body-1 todoStatus">
+            <span class="mat-body-2">{{sesModeloPendiente.length}}</span> sesiones pendientes
+         </p>
+
+         <mat-list>
+            <mat-list-item disableRipple="false" *ngFor="let sesion of sesPendientes">
+               <mat-checkbox [(ngModel)]="sesion.checked" color="primary" (change)="attendSesion(sesion)" mat-list-icon>
+               </mat-checkbox>
+               <p class="evento-single"><strong> {{sesion.sesHoraIni | date: 'dd/MM/yyyy HH:mm'}} </strong><br>
+               {{sesion.sesDescripcion.split(":")[0]}} <br>
+              {{sesion.sesDescripcion.split(":")[1]}}
+            </p>
+               <mat-divider></mat-divider>
+            </mat-list-item>
+         </mat-list>
+
+         <mat-paginator #paginator [length]="sesModeloPendiente.length" [pageSize]="5" hidePageSize="true">
+         </mat-paginator>
+      </div>
+   </div>
+</div>
+
+<ng-template
+
+      #customCellTemplate
+      let-day="day"
+      let-openDay="openDay"
+      let-locale="locale"
+      let-tooltipPlacement="tooltipPlacement"
+      let-highlightDay="highlightDay"
+      let-unhighlightDay="unhighlightDay"
+      let-eventClicked="eventClicked"
+      let-tooltipTemplate="tooltipTemplate"
+      let-tooltipAppendToBody="tooltipAppendToBody"
+      let-tooltipDelay="tooltipDelay"
+      let-trackByEventId="trackByEventId"
+      let-validateDrag="validateDrag"
+    >
+    <div class="eventos-pendientes">
+      <div class="cal-cell-top" (dblclick)="addManualEvent(day.date)">
+        <span class="cal-day-badge" *ngIf="day.badgeTotal > 0">{{
+          day.badgeTotal
+        }}</span>
+        <span class="cal-day-number">{{
+          day.date | calendarDate: 'monthViewDayNumber':locale
+        }}</span>
+ 
+      </div>
+      <div class="cal-events" *ngIf="day.events.length > 0">
+        <div
+          class="cal-event"
+          *ngFor="let event of castSesiones(day.events) | slice:0:showAll ? undefined :12; trackBy: trackByEventId"
+          
+          (mouseenter)="highlightDay.emit({ event: event })"
+          (mouseleave)="unhighlightDay.emit({ event: event })"   
+          [ngStyle]="{ backgroundColor: event.color?.primary }"       
+          [ngClass]="event?.cssClass!"
+          [mwlCalendarTooltip]="
+            event.title | calendarEventTitle: 'monthTooltip':event
+          "
+          [tooltipPlacement]="tooltipPlacement"
+          [tooltipEvent]="event"
+          [tooltipTemplate]="tooltipTemplate"
+          [tooltipAppendToBody]="tooltipAppendToBody"
+          [tooltipDelay]="tooltipDelay"
+          (mwlClick)="eventClicked.emit({ event: event })"
+        ></div>
+        <span (click)="showAll = !showAll" *ngIf="day.events.length>12" class="cal-extended">
+           <br/>
+           {{ day.events.length - 12 }} {{ showAll ? '-' : '+' }}
+        </span>
+      </div>
+   </div>
+    </ng-template>

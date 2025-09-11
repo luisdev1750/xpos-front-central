@@ -1,0 +1,71 @@
+<div class="catalogo respuestaA3">
+
+   <div class="catalogo-header">
+      <h1 class="catalogo__title">
+         <img src="../../../assets/icons/rate_review.svg" alt="Descripción del icono" width="40" height="40">
+         Actividades A3
+      </h1>
+   </div>
+
+   <mat-card class="contenido catalogo__card">
+      <div *ngIf="!logEmpId">
+         <form #f="ngForm">
+            <mat-form-field appearance="fill" class="autocomplete-subject">
+               <mat-label>Emprendedor</mat-label>
+               <input matInput [(ngModel)]="empFilter" [matAutocomplete]="auto" id="empFilter" name="empFilter"
+                  (ngModelChange)="changeEmprendedorFilter()">
+               <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn"
+                  (optionSelected)="selectEmprendedor($event)">
+                  <mat-option *ngFor="let emp of empModelFilter " [value]="emp" [matTooltip]="emp.empRazonSocial">
+                     {{emp.empRazonSocial}}
+                  </mat-option>
+               </mat-autocomplete>
+               <button type="button" mat-icon-button matSuffix (click)="cleanEmprendedor()">
+                  <mat-icon>close</mat-icon>
+               </button>
+            </mat-form-field>
+         </form>
+      </div>
+
+      <div class="contenido1" *ngIf="empSelect && versionCheck && pilares.length>0; else noVersion"><!--empId && pilares && pilares.length>0-->
+
+         <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" [disableRipple]="true" (selectedIndexChange)="onTabChange($event)">
+            <mat-tab *ngFor="let nivel of niveles; let i = index">
+               <ng-container *ngIf="pilares.length > 0">
+
+                  <ng-template mat-tab-label>
+                     <div matBadge="{{ (nivel.porcentajeNivel | number: '1.0-0') }}%" matBadgeOverlap="false">{{nivel.nivDescripcion}}</div>
+                  </ng-template>
+
+                  <mat-accordion>
+                     <mat-expansion-panel *ngFor="let pilar of pilares; let index = index"
+                        (opened)="onPanelOpen(pilar)">
+                        <mat-expansion-panel-header>
+                           <mat-panel-title class="full-width">
+                              <strong>Pilar {{index + 1}}.- </strong> {{ pilar.pilDescripcion }}
+                              <button [ngClass]="{
+                              'button-blanco': pilar.porcentajePilar === 0,
+                              'button-amarillo': pilar.porcentajePilar > 0 && pilar.porcentajePilar < 100,
+                              'button-verde': pilar.porcentajePilar === 100
+                            }" mat-flat-button color="primary" class="button">
+                                 {{ pilar.porcentajePilar | number: '1.0-2' }}%
+                              </button>
+
+                           </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <app-a3-list [aaaPilId]="pilar.pilId" [aaaNivId]="aaaNivId" [aaaEmpId]="empId"
+                           (buscarNivel)="refreshData()"><!--*ngIf="selectedPilarId === pilar.pilId"-->
+                        </app-a3-list>
+                     </mat-expansion-panel>
+                  </mat-accordion>
+               </ng-container>
+            </mat-tab>
+         </mat-tab-group>
+
+      </div>
+      <ng-template #noVersion>
+         <p *ngIf="empSelect && !versionCheck">Este emprendedor aún no se encuentra en esta etapa.</p>
+      </ng-template>
+   </mat-card>
+
+</div>

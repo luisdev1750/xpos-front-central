@@ -1,0 +1,109 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
+    <li class="breadcrumb-item active">Catalogo de Submarcas</li>
+  </ol>
+</nav>
+
+<div class="proin-main">
+  <mat-card class="proin-card">
+    <h2>Catalogo de Submarcas</h2>
+    <form #f="ngForm">
+      <mat-form-field>
+        <mat-label>Clave:</mat-label>
+        <input
+          matInput
+          type="search"
+          [(ngModel)]="filter.smaId"
+          id="smaId"
+          name="smaId"
+        />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Marca</mat-label>
+        <mat-select
+        (selectionChange)="OnMarcaChange($event)"
+        >
+          <mat-option
+            *ngFor="let marca of marcaListsFilter"
+            [value]="marca.marId"
+          >
+            {{ marca.marNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    
+   
+
+      <mat-form-field>
+        <mat-label>Activo</mat-label>
+        <mat-select
+          [(ngModel)]="filter.smaActivo"
+          id="banActivo"
+          name="banActivo"    
+         (ngModelChange)="onActivoModelChange($event)"
+
+        >
+        <mat-option [value]="all">Todos</mat-option>
+          <mat-option [value]="true">Sí</mat-option>
+          <mat-option [value]="false">No</mat-option>
+        </mat-select>
+        
+        
+      </mat-form-field>
+
+      <button
+        mat-mini-fab
+        color="accent"
+        (click)="add()"
+        [disabled]="!f?.valid"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+    </form>
+    <div *ngIf="submarcaList.length > 0">
+      <table mat-table #table [dataSource]="submarcaList">
+        <ng-container matColumnDef="smaId">
+          <mat-header-cell *matHeaderCellDef> Clave </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.smaId }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="smaMarId">
+          <mat-header-cell *matHeaderCellDef> Marca </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.smaMarNombre }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="smaNombre">
+          <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.smaNombre }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="smaActivo">
+          <mat-header-cell *matHeaderCellDef> Activo </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.smaActivo }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            <button
+              (click)="edit(item)"
+              mat-button
+              color="warn"
+              class="button-edit"
+            >
+              <mat-icon>edit</mat-icon></button
+            >&nbsp;
+            <!-- <button (click)="delete(item)" mat-button color="warn">
+              <mat-icon>delete</mat-icon>
+            </button> -->
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+      </table>
+    </div>
+  </mat-card>
+</div>

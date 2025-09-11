@@ -1,0 +1,88 @@
+<div *ngIf="!logEmpId && !empId">
+   <div class="">
+      <mat-card class="">
+         <div class="contenedor-button">
+            <form #f="ngForm">
+               <button *ngIf="veaFechaActivacion == null && veaFechaActivacion == undefined" mat-mini-fab color="accent"
+                  (click)="add()" [disabled]="!f?.valid" [ngStyle]="{transform: 'scale(0.9)'
+                 }">
+                  <mat-icon>add</mat-icon>
+               </button>
+            </form>
+         </div>
+         
+
+         <div class="catalogo__table-container" *ngIf="formatoApoyoList.length > 0; else noFormatos">
+
+            <table mat-table #table [dataSource]="dataSource"><!--formatoApoyoList-->
+
+               <ng-container matColumnDef="foaId">
+                  <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Clave </mat-header-cell>
+                  <mat-cell class="catalogo__cell" *matCellDef="let item"> {{item.foaId}} </mat-cell>
+               </ng-container>
+
+               <ng-container matColumnDef="foaArchivo">
+                  <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> Archivo </mat-header-cell>
+                  <mat-cell class="catalogo__cell" *matCellDef="let item"> {{getFileName(item.foaArchivo)}} </mat-cell>
+               </ng-container>
+
+               <ng-container matColumnDef="actions">
+                  <mat-header-cell *matHeaderCellDef class="catalogo__header-cell"></mat-header-cell>
+                  <mat-cell class="catalogo__cell" *matCellDef="let item">
+                     <button (click)="onDownloadClick(item.foaArchivoUrl)" mat-button color="primary">
+                        <mat-icon>visibility</mat-icon>
+                     </button>&nbsp;
+                     <button *ngIf="veaFechaActivacion == null && veaFechaActivacion == undefined"
+                        (click)="delete(item)" mat-button color="accent"><mat-icon>delete</mat-icon></button>
+                  </mat-cell>
+               </ng-container>
+               <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+               <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </table>
+         </div>
+         <div class="contenedor-paginator" ><!--*ngIf="formatoApoyoList.length > 0"-->
+            <mat-paginator class="catalogo__table paginator" [pageSizeOptions] = "[10, 20]" showFirstLastButtons></mat-paginator>
+         </div>
+         <ng-template #noFormatos>
+            <p>No hay formatos para este apoyo.</p>
+         </ng-template>
+      </mat-card>
+   </div>
+</div>
+
+<!----------------------------ESTO ES UNA VISUALIZACION EN MODO "USUARIO" QUE SE USA EN RESPUESTAS A3 -->
+<div *ngIf="logEmpId || empId">
+
+   <div class="row row-cleaner-space">
+      <div class="col-10 col-md-11 ">
+         <h1 class="dialog-title">Formatos</h1>
+      </div>
+      <div class="col-1 text-right">
+         <button mat-button mat-dialog-close class="close-icon close-min-button">
+            <mat-icon>close</mat-icon>
+         </button>
+      </div>
+   </div>
+   <mat-card class="documento-card">
+      <div *ngIf="formatoApoyoList.length > 0; else noFormatosA3">
+         <div *ngFor="let item of formatoApoyoList">
+            <div class="row">
+               <div class="col-11">
+                  <span class="documento-descripcion">{{getFileName(item.foaArchivo)}}</span>
+               </div>
+               <div class="col-1">
+                  <button mat-icon-button color="primary" aria-label="Download"
+                     (click)="onDownloadClick(item.foaArchivoUrl)">
+                     <mat-icon>download</mat-icon>
+                  </button>
+               </div>
+            </div>
+         </div>
+      </div>
+      <ng-template #noFormatosA3>
+         <hr>
+         <br>
+         <p class="text-center">No hay formatos disponibles.</p>
+      </ng-template>
+   </mat-card>
+</div>

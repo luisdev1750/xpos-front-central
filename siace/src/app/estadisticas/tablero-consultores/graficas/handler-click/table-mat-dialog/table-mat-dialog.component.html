@@ -1,0 +1,42 @@
+
+<div class="row row-cleaner-space">
+  <div class="col-10 col-md-11 ">
+     <!--<h1 class="dialog-title">{{ data.title }}</h1>-->
+     <h1 class="dialog-title"> Detalle del emprendedor</h1>
+  </div>
+  <div class="col-1 text-right">
+     <button mat-button mat-dialog-close class="close-icon close-min-button">
+        <mat-icon>close</mat-icon>
+     </button>
+  </div>
+</div>
+
+<div class="table-container">
+  <table mat-table [dataSource]="dataSource">
+
+    <!-- Encabezados dinámicos con clases BEM -->
+    <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
+      <th mat-header-cell *matHeaderCellDef class="catalogo__header-cell"> {{ columnHeaders[column] }} </th>
+      <td mat-cell *matCellDef="let element" class="catalogo__cell">
+        <!-- Sesiones dinámicas -->
+        <ng-container *ngIf="column.startsWith('sesion')">
+          {{ element.sesFechas[+column.slice(6)] || '' }}
+        </ng-container>
+        <!-- Otros datos -->
+        <ng-container *ngIf="!column.startsWith('sesion')">
+          {{ element[column] !== undefined ? element[column] : '' }}
+        </ng-container>
+      </td>
+    </ng-container>
+
+    <!-- Fila de encabezado -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns" class="table-mat-dialog__header-row"></tr>
+
+    <!-- Fila de datos -->
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-mat-dialog__row"></tr>
+
+  </table>
+</div>
+<div class="contenedor-paginator" *ngIf="this.data.content.length > 0">
+  <mat-paginator class="catalogo__table paginator" [pageSizeOptions] = "[10, 20]" showFirstLastButtons></mat-paginator>
+</div>

@@ -1,0 +1,78 @@
+<div class="row row-cleaner-space">
+   <div class="col-10 col-md-11 ">
+      <h1 class="dialog-title">{{aaaDescripcion}}</h1>
+   </div>
+   <div class="col-1 text-right">
+      <button mat-button mat-dialog-close class="close-icon close-min-button">
+         <mat-icon>close</mat-icon>
+      </button>
+   </div>
+</div>
+
+<mat-tab-group>
+   <mat-tab label="Guía">
+      <app-apoyo [aaaId]="idActividad" [empId]="idEmprendedor"></app-apoyo>
+   </mat-tab>
+   
+   <mat-tab label="Respaldo">
+      <div *ngIf="respuestas.length > 0; else noEvidencias" class="evidencias-container">
+         <div [formGroup]="myGroup">
+            <div *ngFor="let evidencia of respuestas; let i = index" [attr.id]="'evidencia-item-' + evidencia.reaEviId"
+               class="evidencia-item mb-3">
+               <div class="row">
+                  <div class="col-12 text-center">
+                     <span class="font-weight-bold evidencia-descripcion">{{ evidencia.eviDescripcion }}</span>
+                  </div>
+               </div>
+               <div class="row mt-2">
+                  <div class="col-10">
+                     <ng-container *ngIf="!evidencia.reaArchivo; else archivoSubido">
+                        <mat-form-field appearance="fill" class="w-100">
+                           <ngx-mat-file-input [formControlName]="'multiplefile' + i" placeholder="Subir Archivo" valuePlaceholder="Subir Archivo*"
+                              class="file-input" (change)="onFileSelected($event, evidencia, i)"
+                              multiple></ngx-mat-file-input>
+                           <mat-icon matSuffix>note_add</mat-icon>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill" class="w-100">
+                           <mat-label>Descripción</mat-label>
+                           <input type="text" matInput class="description-input" placeholder="Descripción"
+                              [required]="evidencia.requireDescription"  maxlength="250">
+                        </mat-form-field>
+                     </ng-container>
+                     <ng-template #archivoSubido>
+                        <mat-form-field appearance="fill" class="w-100">
+                           <mat-label>Descripción del Archivo guardado en esta evidencia</mat-label>
+                           <input type="text" matInput class="description-input" [value]="evidencia.reaDescripcion"
+                              (input)="onDescriptionEdited(evidencia.reaId, $event)"  maxlength="250">
+                        </mat-form-field>
+                     </ng-template>
+                  </div>
+                  <div class="col-2 d-flex align-items-center justify-content-center flex-row">
+                     <ng-container *ngIf="evidencia.reaArchivo">
+                        <button mat-icon-button color="primary" aria-label="Download"
+                           (click)="onDownloadClick(evidencia.reaArchivoUrl)">
+                           <!--(click)="onDownloadClick(evidencia)"-->
+                           <mat-icon>visibility</mat-icon>
+                        </button>
+                        <button mat-icon-button color="primary" aria-label="Delete" (click)="onDeleteClick(evidencia)">
+                           <mat-icon>delete</mat-icon>
+                        </button>
+                     </ng-container>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <ng-template #noEvidencias>
+         <hr>
+         <br>
+         <p class="text-center">No hay evidencias disponibles.</p>
+      </ng-template>
+
+      <div class="button-row text-center" role="group">
+         <button id="guardar" type="button" mat-raised-button color="primary" (click)="onSaveClick()">Guardar</button>
+         <button mat-button mat-dialog-close>Cancelar</button>
+      </div>
+   </mat-tab>
+</mat-tab-group>

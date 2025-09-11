@@ -1,0 +1,143 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
+    <li class="breadcrumb-item active">Catalogo de Lista Precios</li>
+  </ol>
+</nav>
+
+<div class="proin-main">
+  <mat-card class="proin-card">
+    <h2>Catalogo de Lista Precios</h2>
+    <form #f="ngForm">
+      <mat-form-field>
+        <mat-label>Clave:</mat-label>
+        <input
+          matInput
+          type="search"
+          [(ngModel)]="filter.lprId"
+          id="lprId"
+          name="lprId"
+        />
+      </mat-form-field>
+
+       
+         <mat-form-field>
+            <mat-label>Activo:</mat-label>
+            <mat-select
+              [(ngModel)]="filter.lprActivo"
+              id="marActivo"
+              name="marActivo"
+              (selectionChange)="onActivoChange()"
+            >
+              <mat-option value="all">Todos</mat-option>
+              <mat-option value="true">Sí</mat-option>
+              <mat-option value="false">No</mat-option>
+            </mat-select>
+         </mat-form-field>
+
+      <!-- <mat-form-field>
+            <mat-label>Fecha de vigencia:</mat-label>
+            <input matInput type="search" [(ngModel)]="filter.lprFechaVigencia" id="lprFechaVigencia"
+               name="lprFechaVigencia">
+         </mat-form-field> -->
+      <mat-form-field appearance="fill">
+        <mat-label for="fechaVigencia">Fecha Vigencia</mat-label>
+        <input
+          matInput
+          [matDatepicker]="pickerVigencia"
+          [(ngModel)]="filter.lprFechaVigencia"
+          id="fechaVigencia"
+          name="fechaVigencia"
+          (dateChange)="onFechaAltaChange($event)"
+          placeholder="Selecciona fecha vigencia"
+        />
+
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="pickerVigencia"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #pickerVigencia></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label for="fechaAlta">Fecha Alta</mat-label>
+        <input
+          matInput
+          [matDatepicker]="pickerAlta"
+          [(ngModel)]="filter.lprFechaAlta"
+          (dateChange)="onFechaAltaChange($event)"
+          id="fechaAlta"
+          name="fechaAlta"
+          placeholder="Selecciona fecha alta"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="pickerAlta"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #pickerAlta></mat-datepicker>
+      </mat-form-field>
+
+    
+
+      <button
+        mat-mini-fab
+        color="accent"
+        (click)="add()"
+    
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+    </form>
+    <div *ngIf="listaPrecioList.length > 0">
+      <table mat-table #table [dataSource]="listaPrecioList">
+        <ng-container matColumnDef="lprId">
+          <mat-header-cell *matHeaderCellDef> Clave </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.lprId }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="lprNombre">
+          <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.lprNombre }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="lprActivo">
+          <mat-header-cell *matHeaderCellDef> Activo </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.lprActivo }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="lprFechaVigencia">
+          <mat-header-cell *matHeaderCellDef>
+            Fecha de vigencia
+          </mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            {{ item.lprFechaVigencia }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="lprFechaAlta">
+          <mat-header-cell *matHeaderCellDef> Fecha Alta </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.lprFechaAlta }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            <button
+              (click)="edit(item)"
+              mat-button
+              color="warn"
+              class="button-edit"
+            >
+              <mat-icon>edit</mat-icon></button
+            >&nbsp;
+            <!-- <button (click)="delete(item)" mat-button color="warn">
+              <mat-icon>delete</mat-icon>
+            </button> -->
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+      </table>
+    </div>
+  </mat-card>
+</div>
