@@ -1,0 +1,86 @@
+<h2>Detalle del detalle de promoción</h2>
+<form *ngIf="promocionDetalle" #editForm="ngForm" (ngSubmit)="save()" autocomplete="off">
+
+<div class="row">
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label>Clave</mat-label>
+         <input matInput [(ngModel)]="promocionDetalle.prdId" id="prdId" name="prdId" placeholder="Clave" readonly>
+         
+         
+      </mat-form-field>
+   </div>
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="prdPmoId">Promoción</mat-label>
+         <input matInput type="number" [(ngModel)]="promocionDetalle.prdPmoId" id="prdPmoId" name="prdPmoId" placeholder="Promoción">
+         
+         <mat-error *ngIf="promocionDetalle.prdPmoId==undefined">Promoción es requerido</mat-error>
+      </mat-form-field>
+   </div>
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="prdProId">Producto</mat-label>
+         <input matInput type="number" [(ngModel)]="promocionDetalle.prdProId" id="prdProId" name="prdProId" placeholder="Producto">
+         
+         
+      </mat-form-field>
+   </div>
+</div>
+<div class="row">
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="prdFamId">Familia</mat-label>
+         <input matInput type="number" [(ngModel)]="promocionDetalle.prdFamId" id="prdFamId" name="prdFamId" placeholder="Familia">
+         
+         
+      </mat-form-field>
+   </div>
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="prdPreId">Presentación</mat-label>
+         <input matInput type="number" [(ngModel)]="promocionDetalle.prdPreId" id="prdPreId" name="prdPreId" placeholder="Presentación">
+         
+         
+      </mat-form-field>
+   </div>
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="prdProcentajeDescuento">Porcentaje Descuento (%)</mat-label>
+         <input matInput type="number" [(ngModel)]="promocionDetalle.prdProcentajeDescuento" id="prdProcentajeDescuento" name="prdProcentajeDescuento" placeholder="Porcentaje Descuento (%)">
+         
+         
+      </mat-form-field>
+   </div>
+</div>
+<div class="row">
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="prdNxmProdCompra">Productos a Comprar (NxM)</mat-label>
+         <input matInput type="number" [(ngModel)]="promocionDetalle.prdNxmProdCompra" id="prdNxmProdCompra" name="prdNxmProdCompra" placeholder="Productos a Comprar (NxM)">
+         
+         
+      </mat-form-field>
+   </div>
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="prdNxmProdObsequio">Productos de Obsequio (NxM)</mat-label>
+         <input matInput type="number" [(ngModel)]="promocionDetalle.prdNxmProdObsequio" id="prdNxmProdObsequio" name="prdNxmProdObsequio" placeholder="Productos de Obsequio (NxM)">
+         
+         
+      </mat-form-field>
+   </div>
+</div>
+   <div class="button-row text-center" role="group">
+      <button type="submit" mat-raised-button color="primary" [disabled]="!editForm.form.valid">Guardar</button>
+      <button mat-button mat-dialog-close>Cancelar</button>
+  </div>
+</form>

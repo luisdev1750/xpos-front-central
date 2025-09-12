@@ -1,0 +1,41 @@
+{
+   "title": "SucursalProductoStock",
+   "entity": "sucursalproductostock",
+   "module": "Catalogo de Sucursales Productos Stock",
+   "singular": "sucursal productos stock",
+   "columns": 3,
+   "api": {
+      "url": "SucursalesProductosStock"
+   },
+   "filter": [
+	  "spsProId",
+	  "spsSucId"
+   ],
+   "fields": [
+      {
+         "name": "spsSucId",
+         "label": "Clave",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "spsProId",
+         "label": "Menú",
+         "type": "number",
+         "required": true
+      },
+	  {
+         "name": "spsStockMinimo",
+         "label": "Stock minimo",
+         "type": "number",
+         "required": true
+      },
+	  {
+         "name": "spsStockMaximo",
+         "label": "Stock maximo",
+         "type": "number",
+         "required": true
+      }
+   ]
+}

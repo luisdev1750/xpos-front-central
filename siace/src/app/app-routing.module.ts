@@ -101,7 +101,22 @@ const routes: Routes = [
             (m) => m.ProductoModule
           ),
       },
-      // {tasa-cuota
+      {
+        path: 'promocion-detalle',
+        loadChildren: () =>
+          import('./promocion-detalle/promocion-detalle.module').then(
+            (m) => m.PromocionDetalleModule
+          ),
+      },
+        {
+        path: 'sucursal-prod-stock',
+        loadChildren: () =>
+          import('./sucursal-prod-stock/sucursal-prod-stock.module').then(
+            (m) => m.SucursalProdStockModule
+          ),
+      }
+       ,
+      // {tasa-cuota sucursal-prod-stock
       //    path: 'cuestionario',
       //    loadChildren: () => import('./cuestionario/cuestionario.module').then(m => m.CuestionarioModule),
       //    canActivate: [AuthGuard]

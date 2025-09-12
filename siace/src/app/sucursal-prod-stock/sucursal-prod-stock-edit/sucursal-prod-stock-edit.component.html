@@ -1,0 +1,92 @@
+<h2>Detalle del sucursal productos stock</h2>
+<form
+  *ngIf="sucursalProdStock"
+  #editForm="ngForm"
+  (ngSubmit)="save()"
+  autocomplete="off"
+>
+  <div class="row">
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label>Sucursal</mat-label>
+        <mat-select
+          [value]="sucursalProdStock.spsSucId"
+          (selectionChange)="onChangeSucursalId($event)"
+           [disabled]="isReadonly" 
+        >
+          <mat-option
+            *ngFor="let sucursal of listSucursal"
+            [value]="sucursal.sucId"
+          >
+            {{ sucursal.sucNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label>Producto</mat-label>
+        <mat-select
+          [value]="sucursalProdStock.spsProId"
+          (selectionChange)="OnChangeProducto($event)"
+           [disabled]="isReadonly" 
+        >
+          <mat-option
+            *ngFor="let producto of listProducto"
+            [value]="producto.proId"
+          >
+            {{ producto.proNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label for="spsStockMinimo">Stock minimo</mat-label>
+        <input
+          matInput
+          type="number"
+          [(ngModel)]="sucursalProdStock.spsStockMinimo"
+          id="spsStockMinimo"
+          name="spsStockMinimo"
+          placeholder="Stock minimo"
+        />
+
+        <mat-error *ngIf="sucursalProdStock.spsStockMinimo == undefined"
+          >Stock minimo es requerido</mat-error
+        >
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label for="spsStockMaximo">Stock maximo</mat-label>
+        <input
+          matInput
+          type="number"
+          [(ngModel)]="sucursalProdStock.spsStockMaximo"
+          id="spsStockMaximo"
+          name="spsStockMaximo"
+          placeholder="Stock maximo"
+        />
+
+        <mat-error *ngIf="sucursalProdStock.spsStockMaximo == undefined"
+          >Stock maximo es requerido</mat-error
+        >
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="button-row text-center" role="group">
+    <button
+      type="submit"
+      mat-raised-button
+      color="primary"
+      [disabled]="!editForm.form.valid"
+    >
+      Guardar
+    </button>
+    <button mat-button mat-dialog-close>Cancelar</button>
+  </div>
+</form>

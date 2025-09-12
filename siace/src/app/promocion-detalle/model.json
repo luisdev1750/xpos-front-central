@@ -1,0 +1,62 @@
+{
+   "title": "PromocionDetalle",
+   "entity": "promociondetalle",
+   "module": "Transacciones Promociones Detalles",
+   "singular": "detalle de promoción",
+   "columns": 3,
+   "api": {
+      "url": "PromocionesDetalles"
+   },
+   "filter": [
+      "prdFamId",
+	  "prdPreId",
+	  "prdProId",
+	  "prdPmoId",
+	  "prdId"
+   ],
+   "fields": [
+      {
+         "name": "prdId",
+         "label": "Clave",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "prdPmoId",
+         "label": "Promoción",
+         "type": "number",
+         "required": true
+      },
+      {
+         "name": "prdProId",
+         "label": "Producto",
+         "type": "number"
+      },
+      {
+         "name": "prdFamId",
+         "label": "Familia",
+         "type": "number"
+      },
+      {
+         "name": "prdPreId",
+         "label": "Presentación",
+         "type": "number"
+      },
+      {
+         "name": "prdProcentajeDescuento",
+         "label": "Porcentaje Descuento (%)",
+         "type": "number"
+      },
+      {
+         "name": "prdNxmProdCompra",
+         "label": "Productos a Comprar (NxM)",
+         "type": "number"
+      },
+      {
+         "name": "prdNxmProdObsequio",
+         "label": "Productos de Obsequio (NxM)",
+         "type": "number"
+      }
+   ]
+}

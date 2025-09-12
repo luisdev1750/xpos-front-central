@@ -1,0 +1,107 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
+    <li class="breadcrumb-item active">
+      Catalogo de Sucursales Productos Stock
+    </li>
+  </ol>
+</nav>
+
+<div class="proin-main">
+  <mat-card class="proin-card">
+    <h2>Catalogo de Sucursales Productos Stock</h2>
+    <form #f="ngForm">
+      <mat-form-field>
+        <mat-label>Clave:</mat-label>
+        <input
+          matInput
+          type="search"
+          [(ngModel)]="filter.spsSucId"
+          id="spsSucId"
+          name="spsSucId"
+        />
+      </mat-form-field>
+
+      <!-- <div class="col-md-4">
+        <mat-form-field>
+          <mat-label>Sucursales</mat-label>
+          <mat-select
+            [value]="filter.spsSucId"
+            (selectionChange)="onSucursalChange($event)"
+          >
+            <mat-option
+              *ngFor="let sucursal of listSucursal"
+              [value]="sucursal.sucId"
+            >
+              {{ sucursal.sucNombre }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div> -->
+
+      <!-- <mat-form-field>
+        <mat-label>Sucursal:</mat-label>
+        <input
+          matInput
+          type="search"
+          [(ngModel)]="filter.spsProId"
+          id="spsProId"
+          name="spsProId"
+        />
+      </mat-form-field> -->
+
+      <button
+        mat-mini-fab
+        color="accent"
+        (click)="add()"
+        [disabled]="!f?.valid"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+    </form>
+    <div *ngIf="sucursalProdStockList.length > 0">
+      <table mat-table #table [dataSource]="sucursalProdStockList">
+        <ng-container matColumnDef="spsSucId">
+          <mat-header-cell *matHeaderCellDef> Sucursal</mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.sucursalNombre }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="spsProId">
+          <mat-header-cell *matHeaderCellDef> Producto </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.productoNombre }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="spsStockMinimo">
+          <mat-header-cell *matHeaderCellDef> Stock minimo </mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            {{ item.spsStockMinimo }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="spsStockMaximo">
+          <mat-header-cell *matHeaderCellDef> Stock maximo </mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            {{ item.spsStockMaximo }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            <button
+              (click)="edit(item)"
+              mat-button
+              color="warn"
+              class="button-edit"
+            >
+              <mat-icon>edit</mat-icon></button
+            >&nbsp;
+         
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+      </table>
+    </div>
+  </mat-card>
+</div>
