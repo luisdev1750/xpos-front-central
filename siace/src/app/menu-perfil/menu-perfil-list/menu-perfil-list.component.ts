@@ -114,6 +114,7 @@ export class MenuPerfilListComponent implements OnInit {
                 'Transacción exitosa'
               );
               this.menuPerfilService.setIsUpdated(true);
+               window.location.reload();
             } else this.toastr.error('Ha ocurrido un error', 'Error');
           },
           error: (err) => {

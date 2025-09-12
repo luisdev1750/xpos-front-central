@@ -115,6 +115,7 @@ export class MenuPerfilEditComponent implements OnInit {
           );
           this.menuPerfilService.setIsUpdated(true);
           this.dialogRef.close();
+           window.location.reload();
         } else this.toastr.error('Ha ocurrido un error', 'Error');
       },
       error: (err) => {
