@@ -116,6 +116,13 @@ const routes: Routes = [
           ),
       }
        ,
+        {
+        path: 'menu-perfil',
+        loadChildren: () =>
+          import('./menu-perfil/menu-perfil.module').then(
+            (m) => m.MenuPerfilModule
+          ),
+      },
       // {tasa-cuota sucursal-prod-stock
       //    path: 'cuestionario',
       //    loadChildren: () => import('./cuestionario/cuestionario.module').then(m => m.CuestionarioModule),

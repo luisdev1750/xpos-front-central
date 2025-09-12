@@ -1,0 +1,29 @@
+{
+   "title": "MenuPerfil",
+   "entity": "menuperfil",
+   "module": "Catalogo de Menú perfiles",
+   "singular": "perfil",
+   "columns": 3,
+   "api": {
+      "url": "MenuPerfiles"
+   },
+   "filter": [
+      "mepMenId",
+	  "mepPerId"
+   ],
+   "fields": [
+      {
+         "name": "mepPerId",
+         "label": "Clave",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "mepMenId",
+         "label": "Menú",
+         "type": "number",
+         "required": true
+      }
+   ]
+}

@@ -12,16 +12,20 @@
     <h2>Catalogo de Sucursales Productos Stock</h2>
     <form #f="ngForm">
       <mat-form-field>
-        <mat-label>Clave:</mat-label>
-        <input
-          matInput
-          type="search"
-          [(ngModel)]="filter.spsSucId"
-          id="spsSucId"
-          name="spsSucId"
-        />
-      </mat-form-field>
-
+          <mat-label>Sucursal</mat-label>
+          <mat-select
+            [value]="filter.spsSucId"
+            (selectionChange)="onSucursalChange($event)"
+          >
+            <mat-option
+              *ngFor="let sucursal of listSucursal"
+              [value]="sucursal.sucId"
+            >
+              {{ sucursal.sucNombre }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+   
       <!-- <div class="col-md-4">
         <mat-form-field>
           <mat-label>Sucursales</mat-label>
@@ -63,12 +67,16 @@
       <table mat-table #table [dataSource]="sucursalProdStockList">
         <ng-container matColumnDef="spsSucId">
           <mat-header-cell *matHeaderCellDef> Sucursal</mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.sucursalNombre }} </mat-cell>
+          <mat-cell *matCellDef="let item">
+            {{ item.sucursalNombre }}
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="spsProId">
           <mat-header-cell *matHeaderCellDef> Producto </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.productoNombre }} </mat-cell>
+          <mat-cell *matCellDef="let item">
+            {{ item.productoNombre }}
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="spsStockMinimo">
@@ -96,7 +104,6 @@
             >
               <mat-icon>edit</mat-icon></button
             >&nbsp;
-         
           </mat-cell>
         </ng-container>
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

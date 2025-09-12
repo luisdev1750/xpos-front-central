@@ -1,88 +1,95 @@
 <nav aria-label="breadcrumb">
-   <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
-      <li class="breadcrumb-item active">
-         Catalogo de Perfiles
-      </li>
-   </ol>
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
+    <li class="breadcrumb-item active">Catalogo de Perfiles</li>
+  </ol>
 </nav>
 
 <div class="proin-main">
-   <mat-card class="proin-card">
-      <h2>Catalogo de Perfiles</h2>
-      <form #f="ngForm">
-         
-         <mat-form-field>
-            <mat-label>Clave:</mat-label>
-            <input matInput type="search" [(ngModel)]="filter.perId" id="perId"
-               name="perId">
-         </mat-form-field>
-         
-       
+  <mat-card class="proin-card">
+    <h2>Catalogo de Perfiles</h2>
+    <form #f="ngForm">
+      <mat-form-field>
+        <mat-label>Clave:</mat-label>
+        <input
+          matInput
+          type="search"
+          [(ngModel)]="filter.perId"
+          id="perId"
+          name="perId"
+        />
+      </mat-form-field>
 
-          <mat-form-field>
-            <mat-label>Activo:</mat-label>
-            <mat-select
-              [(ngModel)]="filter.perActivo"
-              id="marActivo"
-              name="marActivo"
-              (selectionChange)="onActivoChange()"
+      <mat-form-field>
+        <mat-label>Activo:</mat-label>
+        <mat-select
+          [(ngModel)]="filter.perActivo"
+          id="marActivo"
+          name="marActivo"
+          (selectionChange)="onActivoChange()"
+        >
+          <mat-option value="all">Todos</mat-option>
+          <mat-option value="true">Sí</mat-option>
+          <mat-option value="false">No</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button
+        mat-mini-fab
+        color="accent"
+        (click)="add()"
+        [disabled]="!f?.valid"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+    </form>
+    <div *ngIf="perfilList.length > 0">
+      <table mat-table #table [dataSource]="perfilList">
+        <ng-container matColumnDef="perId">
+          <mat-header-cell *matHeaderCellDef> Clave </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.perId }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="perNombre">
+          <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.perNombre }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="perClave">
+          <mat-header-cell *matHeaderCellDef> Código </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.perClave }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="perActivo">
+          <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.perActivo }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            <button
+              (click)="edit(item)"
+              mat-button
+              color="warn"
+              class="button-edit"
             >
-              <mat-option value="all">Todos</mat-option>
-              <mat-option value="true">Sí</mat-option>
-              <mat-option value="false">No</mat-option>
-            </mat-select>
-         </mat-form-field>
-         
-
-         <button mat-mini-fab color="accent" (click)="add()" [disabled]="!f?.valid">
-            <mat-icon>add</mat-icon>
-         </button>
-      </form>
-      <div *ngIf="perfilList.length > 0">
-         
-         <table mat-table #table [dataSource]="perfilList">
-            
-            <ng-container matColumnDef="perId">
-               <mat-header-cell *matHeaderCellDef>
-                  Clave
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.perId}} </mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="perNombre">
-               <mat-header-cell *matHeaderCellDef>
-                  Nombre
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.perNombre}} </mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="perClave">
-               <mat-header-cell *matHeaderCellDef>
-                  Código
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.perClave}} </mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="perActivo">
-               <mat-header-cell *matHeaderCellDef>
-                  Nombre
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.perActivo}} </mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="actions">
-               <mat-header-cell *matHeaderCellDef></mat-header-cell>
-               <mat-cell *matCellDef="let item">
-                  <button (click)="edit(item)" mat-button color="warn" class="button-edit">
-                     <mat-icon>edit</mat-icon>
-                  </button>&nbsp;
-            
-               </mat-cell>
-            </ng-container>
-            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-         </table>
-      </div>
-   </mat-card>
+              <mat-icon>edit</mat-icon></button
+            >&nbsp;
+            <button
+              (click)="changeRoute(item)"
+              mat-button
+              color="primary"
+              class="button-redirect"
+            >
+              <mat-icon>open_in_new</mat-icon>
+              <!-- También puedes usar: launch, exit_to_app, arrow_forward, link -->
+            </button>
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+      </table>
+    </div>
+  </mat-card>
 </div>

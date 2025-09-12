@@ -1,0 +1,62 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
+    <li class="breadcrumb-item active">Catalogo de Menú perfiles</li>
+  </ol>
+</nav>
+
+<div class="proin-main">
+  <mat-card class="proin-card">
+    <h2>Catalogo de Menú perfiles</h2>
+    <form #f="ngForm">
+      <mat-form-field>
+        <mat-label>Perfil</mat-label>
+        <mat-select
+          [(ngModel)]="filter.mepPerId"
+          name="perfil"
+          (selectionChange)="OnChangePerfil($event)"
+        >
+          <mat-option
+            *ngFor="let perfil of listPerfiles"
+            [value]="perfil.perId"
+          >
+            {{ perfil.perNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button
+        mat-mini-fab
+        color="accent"
+        (click)="add()"
+        [disabled]="!f?.valid"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+    </form>
+    <div *ngIf="menuPerfilList.length > 0">
+      <table mat-table #table [dataSource]="menuPerfilList">
+        <ng-container matColumnDef="mepPerId">
+          <mat-header-cell *matHeaderCellDef> Perfil </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.perfilNombre }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="mepMenId">
+          <mat-header-cell *matHeaderCellDef> Menú </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.menuNombre }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            <button (click)="delete(item)" mat-button color="warn">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+      </table>
+    </div>
+  </mat-card>
+</div>

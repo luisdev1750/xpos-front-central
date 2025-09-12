@@ -56,7 +56,10 @@ export class SucursalProdStockListComponent implements OnInit {
     this.subs?.unsubscribe();
   }
 
-  onSucursalChange(event: any) {}
+  onSucursalChange(event: any) {
+    this.filter.spsSucId = event.value;
+    this.search();
+  }
 
   loadCatalogs() {
     ////      const url = `${this.api}/${filter.sucId}/${filter.sucCiuId}/${filter.sucColId}/${filter.sucEmpId}`;
@@ -71,22 +74,7 @@ export class SucursalProdStockListComponent implements OnInit {
       }
     );
 
-    //  this.productoService
-    //    .find({
-    //      proId: '0',
-    //      proFamId: '0',
-    //      proPreId: '0',
-    //      proActivo: 'all',
-    //    })
-    //    .subscribe(
-    //      (result) => {
-    //        console.log(result);
-    //        this.listProducto = result;
-    //      },
-    //      (error) => {
-    //        this.toastr.error('Ha ocurrido un error', 'Error');
-    //      }
-    //    );
+   
   }
 
   /* Accesors */
@@ -132,7 +120,7 @@ export class SucursalProdStockListComponent implements OnInit {
 
   edit(ele: SucursalProdStock) {
     var temporalList: any[] = [];
-/////Creación nuevo elemento
+    /////Creación nuevo elemento
     if (!ele.spsSucId) {
       this.dialog.open(SucursalProdStockEditComponent, {
         data: {
@@ -149,7 +137,7 @@ export class SucursalProdStockListComponent implements OnInit {
       return;
     }
 
-////Actualización
+    ////Actualización
     this.sucursalProdStockService
 
       .findCatalog(ele.spsSucId ? ele.spsSucId : 0)
@@ -164,7 +152,7 @@ export class SucursalProdStockListComponent implements OnInit {
               sucursalProdStock: JSON.parse(JSON.stringify(ele)),
               listSucursal: this.listSucursal,
               listProducto: result,
-              isReadOnly: true, 
+              isReadOnly: true,
             },
             height: '500px',
             width: '700px',
