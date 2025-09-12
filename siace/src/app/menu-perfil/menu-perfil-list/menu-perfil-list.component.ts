@@ -20,11 +20,11 @@ import { FormControl } from '@angular/forms';
 export class MenuPerfilListComponent implements OnInit {
   displayedColumns = ['mepPerId', 'mepMenId', 'actions'];
   filter = new MenuPerfilFilter();
- perfilControl = new FormControl('0');
+  perfilControl = new FormControl('0');
   private subs!: Subscription;
   listPerfiles: any[] = [];
   /* Inicialización */
-   parentPerIdString: string = '0';
+  parentPerIdString: string = '0';
   constructor(
     private menuPerfilService: MenuPerfilService,
     private toastr: ToastrService,
@@ -32,9 +32,9 @@ export class MenuPerfilListComponent implements OnInit {
     private perfilService: PerfilService,
     private route: ActivatedRoute
   ) {
-   //  this.subs = this.menuPerfilService.getIsUpdated().subscribe(() => {
-   //    this.search();
-   //  });
+    //  this.subs = this.menuPerfilService.getIsUpdated().subscribe(() => {
+    //    this.search();
+    //  });
 
     this.filter.mepPerId = '0';
     this.filter.mepMenId = '0';
@@ -42,7 +42,7 @@ export class MenuPerfilListComponent implements OnInit {
 
   ngOnInit() {
     this.route.paramMap.subscribe((params) => {
-      const id = params.get('id'); 
+      const id = params.get('id');
       if (id) {
         this.filter.mepPerId = id;
         this.parentPerIdString = id;
@@ -50,14 +50,12 @@ export class MenuPerfilListComponent implements OnInit {
       this.search();
       this.loadCatalogs();
     });
-
   }
 
   ngOnDestroy(): void {
     this.subs?.unsubscribe();
   }
   loadCatalogs() {
- 
     this.perfilService
       .find({
         perId: '0',
@@ -132,7 +130,7 @@ export class MenuPerfilListComponent implements OnInit {
         menuPerfil: JSON.parse(JSON.stringify(ele)),
         listPerfiles: this.listPerfiles,
         PerfilIdParent: this.filter.mepPerId,
-        parentPerIdString: this.parentPerIdString
+        parentPerIdString: Number(this.parentPerIdString),
       },
       height: '500px',
       width: '700px',

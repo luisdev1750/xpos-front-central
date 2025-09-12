@@ -34,9 +34,10 @@ export class MenuPerfilEditComponent implements OnInit {
   ) {
     this.menuPerfil = data.menuPerfil;
     this.listPerfiles = data.listPerfiles;
-    if (data.PerfilIdParent != 0) {
-      this.menuPerfil.mepPerId = data.PerfilIdParent;
-    }
+ 
+   if(data.parentPerIdString){
+       this.menuPerfil.mepPerId = data.parentPerIdString;
+   }
   }
 
   ngOnInit() {
