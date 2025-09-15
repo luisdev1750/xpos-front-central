@@ -66,21 +66,17 @@ const routes: Routes = [
             (m) => m.ListaPrecioModule
           ),
       },
-        {
+      {
         path: 'perfil',
         loadChildren: () =>
-          import('./perfil/perfil.module').then(
-            (m) => m.PerfilModule
-          ),
+          import('./perfil/perfil.module').then((m) => m.PerfilModule),
       },
       {
         path: 'usuario',
         loadChildren: () =>
-          import('./usuario/usuario.module').then(
-            (m) => m.UsuarioModule
-          ),
+          import('./usuario/usuario.module').then((m) => m.UsuarioModule),
       },
-       {
+      {
         path: 'tasa-cuota',
         loadChildren: () =>
           import('./tasa-cuota/tasa-cuota.module').then(
@@ -94,12 +90,10 @@ const routes: Routes = [
             (m) => m.TipoPromocionModule
           ),
       },
-       {
+      {
         path: 'producto',
         loadChildren: () =>
-          import('./producto/producto.module').then(
-            (m) => m.ProductoModule
-          ),
+          import('./producto/producto.module').then((m) => m.ProductoModule),
       },
       {
         path: 'promocion-detalle',
@@ -108,33 +102,49 @@ const routes: Routes = [
             (m) => m.PromocionDetalleModule
           ),
       },
-        {
+      {
         path: 'sucursal-prod-stock',
         loadChildren: () =>
           import('./sucursal-prod-stock/sucursal-prod-stock.module').then(
             (m) => m.SucursalProdStockModule
           ),
-      }
-       ,
-        {
+      },
+      {
         path: 'menu-perfil',
         loadChildren: () =>
           import('./menu-perfil/menu-perfil.module').then(
             (m) => m.MenuPerfilModule
           ),
       },
-      // {tasa-cuota sucursal-prod-stock
-      //    path: 'cuestionario',
-      //    loadChildren: () => import('./cuestionario/cuestionario.module').then(m => m.CuestionarioModule),
-      //    canActivate: [AuthGuard]
-      // },
+      {
+        path: 'cuenta-bancaria',
+        loadChildren: () =>
+          import('./cuenta-bancaria/cuenta-bancaria.module').then(
+            (m) => m.CuentaBancariaModule
+          ),
+      },
+       {
+        path: 'formula-contable',
+        loadChildren: () =>
+          import('./formula-contable/formula-contable.module').then(
+            (m) => m.FormulaContableModule
+          ),
+      },
+      {
+        path: 'producto-imagen',
+        loadChildren: () =>
+          import('./producto-imagen/producto-imagen.module').then(
+            (m) => m.ProductoImagenModule
+          ),
+      },
+
+
       {
         path: 'emprendedor',
         loadChildren: () =>
           import('./emprendedor/emprendedor.module').then(
             (m) => m.EmprendedorModule
           ),
-        // canActivate: [AuthGuard]
       },
       {
         path: 'estadistica',

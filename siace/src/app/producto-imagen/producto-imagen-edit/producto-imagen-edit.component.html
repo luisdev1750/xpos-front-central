@@ -1,0 +1,47 @@
+<h2>Detalle del producto imagenes</h2>
+<form *ngIf="productoImagen" #editForm="ngForm" (ngSubmit)="save()" autocomplete="off">
+
+<div class="row">
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label>Clave</mat-label>
+         <input matInput [(ngModel)]="productoImagen.priId" id="priId" name="priId" placeholder="Clave" readonly>
+         
+         
+      </mat-form-field>
+   </div>
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="priNombre">Nombre</mat-label>
+         <input matInput [(ngModel)]="productoImagen.priNombre" id="priNombre" name="priNombre" placeholder="Nombre" required>
+         <mat-error *ngIf="productoImagen.priNombre==''">Nombre es requerido</mat-error>
+      </mat-form-field>
+   </div>
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="priProId">Producto</mat-label>
+         <input matInput type="number" [(ngModel)]="productoImagen.priProId" id="priProId" name="priProId" placeholder="Producto">
+         
+         <mat-error *ngIf="productoImagen.priProId==undefined">Producto es requerido</mat-error>
+      </mat-form-field>
+   </div>
+</div>
+<div class="row">
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="priTimId">Tipo imagen</mat-label>
+         <input matInput type="number" [(ngModel)]="productoImagen.priTimId" id="priTimId" name="priTimId" placeholder="Tipo imagen">
+         
+         <mat-error *ngIf="productoImagen.priTimId==undefined">Tipo imagen es requerido</mat-error>
+      </mat-form-field>
+   </div>
+</div>
+   <div class="button-row text-center" role="group">
+      <button type="submit" mat-raised-button color="primary" [disabled]="!editForm.form.valid">Guardar</button>
+      <button mat-button mat-dialog-close>Cancelar</button>
+  </div>
+</form>

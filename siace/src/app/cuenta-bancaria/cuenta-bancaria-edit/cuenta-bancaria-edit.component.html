@@ -1,0 +1,117 @@
+<h2>Detalle del cuenta bancaria</h2>
+<form
+  *ngIf="cuentaBancaria"
+  #editForm="ngForm"
+  (ngSubmit)="save()"
+  autocomplete="off"
+>
+  <div class="row">
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label>Clave</mat-label>
+        <input
+          matInput
+          [(ngModel)]="cuentaBancaria.cubId"
+          id="cubId"
+          name="cubId"
+          placeholder="Clave"
+          readonly
+        />
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label>Sucursal</mat-label>
+        <mat-select
+          [value]="cuentaBancaria.cubSucId"
+          (selectionChange)="OnSucursalChange($event)"
+        >
+          <mat-option
+            *ngFor="let sucursal of sucursalList"
+            [value]="sucursal.sucId"
+          >
+            {{ sucursal.sucNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label>Banco</mat-label>
+        <mat-select
+          [value]="cuentaBancaria.cubBanId"
+          (selectionChange)="OnBancoChange($event)"
+        >
+          <mat-option *ngFor="let banco of bancoList" [value]="banco.banId">
+            {{ banco.banNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label for="cubCuentaBancaria">Cuenta bancaria</mat-label>
+        <input
+          matInput
+          [(ngModel)]="cuentaBancaria.cubCuentaBancaria"
+          id="cubCuentaBancaria"
+          name="cubCuentaBancaria"
+          placeholder="Cuenta bancaria"
+          required
+        />
+        <mat-error *ngIf="cuentaBancaria.cubCuentaBancaria == ''"
+          >Cuenta bancaria es requerido</mat-error
+        >
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label>Activo:</mat-label>
+        <mat-select
+          [(ngModel)]="cuentaBancaria.cubActivo"
+          id="cubActivo"
+          name="cubActivo"
+        >
+          <mat-option [value]="true">Sí</mat-option>
+          <mat-option [value]="false">No</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-4">
+      <mat-form-field appearance="fill">
+        <mat-label for="cubFechaAlta">Fecha Alta</mat-label>
+        <input
+          matInput
+          [matDatepicker]="cubFechaAlta"
+          [(ngModel)]="cuentaBancaria.cubFechaAlta"
+          id="cubFechaAlta"
+          name="cubFechaAlta"
+          placeholder="Selecciona fecha alta"
+        />
+
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="cubFechaAlta"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #cubFechaAlta></mat-datepicker>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="button-row text-center" role="group">
+    <button
+      type="submit"
+      mat-raised-button
+      color="primary"
+      [disabled]="!editForm.form.valid"
+    >
+      Guardar
+    </button>
+    <button mat-button mat-dialog-close>Cancelar</button>
+  </div>
+</form>

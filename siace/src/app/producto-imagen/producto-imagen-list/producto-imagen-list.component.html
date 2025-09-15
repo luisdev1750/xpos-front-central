@@ -1,0 +1,86 @@
+<nav aria-label="breadcrumb">
+   <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
+      <li class="breadcrumb-item active">
+         Catalogo de Productos Imagenes
+      </li>
+   </ol>
+</nav>
+
+<div class="proin-main">
+   <mat-card class="proin-card">
+      <h2>Catalogo de Productos Imagenes</h2>
+      <form #f="ngForm">
+         
+         <mat-form-field>
+            <mat-label>Clave:</mat-label>
+            <input matInput type="search" [(ngModel)]="filter.priId" id="priId"
+               name="priId">
+         </mat-form-field>
+         
+         <mat-form-field>
+            <mat-label>Producto:</mat-label>
+            <input matInput type="search" [(ngModel)]="filter.priProId" id="priProId"
+               name="priProId">
+         </mat-form-field>
+         
+         <mat-form-field>
+            <mat-label>Tipo imagen:</mat-label>
+            <input matInput type="search" [(ngModel)]="filter.priTimId" id="priTimId"
+               name="priTimId">
+         </mat-form-field>
+         
+
+         <button mat-mini-fab color="accent" (click)="add()" [disabled]="!f?.valid">
+            <mat-icon>add</mat-icon>
+         </button>
+      </form>
+      <div *ngIf="productoImagenList.length > 0">
+         
+         <table mat-table #table [dataSource]="productoImagenList">
+            
+            <ng-container matColumnDef="priId">
+               <mat-header-cell *matHeaderCellDef>
+                  Clave
+               </mat-header-cell>
+               <mat-cell *matCellDef="let item"> {{item.priId}} </mat-cell>
+            </ng-container>
+            
+            <ng-container matColumnDef="priNombre">
+               <mat-header-cell *matHeaderCellDef>
+                  Nombre
+               </mat-header-cell>
+               <mat-cell *matCellDef="let item"> {{item.priNombre}} </mat-cell>
+            </ng-container>
+            
+            <ng-container matColumnDef="priProId">
+               <mat-header-cell *matHeaderCellDef>
+                  Producto
+               </mat-header-cell>
+               <mat-cell *matCellDef="let item"> {{item.priProId}} </mat-cell>
+            </ng-container>
+            
+            <ng-container matColumnDef="priTimId">
+               <mat-header-cell *matHeaderCellDef>
+                  Tipo imagen
+               </mat-header-cell>
+               <mat-cell *matCellDef="let item"> {{item.priTimId}} </mat-cell>
+            </ng-container>
+            
+            <ng-container matColumnDef="actions">
+               <mat-header-cell *matHeaderCellDef></mat-header-cell>
+               <mat-cell *matCellDef="let item">
+                  <button (click)="edit(item)" mat-button color="warn" class="button-edit">
+                     <mat-icon>edit</mat-icon>
+                  </button>&nbsp;
+                  <button (click)="delete(item)" mat-button color="warn">
+                     <mat-icon>delete</mat-icon>
+                  </button>
+               </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+         </table>
+      </div>
+   </mat-card>
+</div>

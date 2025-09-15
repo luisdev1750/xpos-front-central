@@ -87,7 +87,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       .pipe(finalize(() => (this.busy = false)))
       .subscribe(
         () => {
-          this.router.navigate(['/menu-perfil']);
+          this.router.navigate(['/producto-imagen']);
           return; 
           RouteValidator.isNextStep = true;
           let user: ApplicationUser = JSON.parse(localStorage.getItem("user")!)

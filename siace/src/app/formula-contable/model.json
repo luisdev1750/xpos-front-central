@@ -1,0 +1,54 @@
+{
+   "title": "FormulaContable",
+   "entity": "formulacontable",
+   "module": "Catalogo de Formulas Contables",
+   "singular": "fórmula contable",
+   "columns": 3,
+   "api": {
+      "url": "FormulasContables"
+   },
+   "filter": [
+      "focClave",
+      "focSucId",
+	   "FocId"
+   ],
+   "fields": [
+      {
+         "name": "focId",
+         "label": "Clave",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "focSucId",
+         "label": "Clave de Sucursal",
+         "isId": true,
+         "type": "number",
+         "required" : true
+      },
+      {
+         "name": "focFormula",
+         "label": "Fórmula",
+         "type": "string",
+         "required" : true
+      },
+      {
+         "name": "focClave",
+         "label": "Código",
+         "type": "string",
+         "required" : true
+      },
+      {
+         "name": "focNombre",
+         "label": "Nombre",
+         "type": "string",
+         "required" : true
+      },
+      {
+         "name": "focEstatusEdicion",
+         "label": "Estatus de Edición",
+         "type": "boolean"
+      }
+   ]
+}

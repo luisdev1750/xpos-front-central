@@ -1,0 +1,95 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
+    <li class="breadcrumb-item active">Catalogo de Formulas Contables</li>
+  </ol>
+</nav>
+
+<div class="proin-main">
+  <mat-card class="proin-card">
+    <h2>Catalogo de Formulas Contables</h2>
+    <form #f="ngForm">
+   
+
+      <mat-form-field>
+        <mat-label>Unidad de medida</mat-label>
+        <mat-select
+          [value]="filter.focSucId"
+          (selectionChange)="OnSucursalChange($event)"
+        >
+          <mat-option
+            *ngFor="let sucursal of listSucursales"
+            [value]="sucursal.sucId"
+          >
+            {{ sucursal.sucNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button
+        mat-mini-fab
+        color="accent"
+        (click)="add()"
+        [disabled]="!f?.valid"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+    </form>
+    <div *ngIf="formulaContableList.length > 0">
+      <table mat-table #table [dataSource]="formulaContableList">
+        <ng-container matColumnDef="focId">
+          <mat-header-cell *matHeaderCellDef> Clave </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.focId }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="focSucId">
+          <mat-header-cell *matHeaderCellDef>
+            Clave de Sucursal
+          </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.focSucName }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="focFormula">
+          <mat-header-cell *matHeaderCellDef> Fórmula </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.focFormula }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="focClave">
+          <mat-header-cell *matHeaderCellDef> Código </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.focClave }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="focNombre">
+          <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.focNombre }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="focEstatusEdicion">
+          <mat-header-cell *matHeaderCellDef>
+            Estatus de Edición
+          </mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            {{ item.focEstatusEdicion }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            <button
+              (click)="edit(item)"
+              mat-button
+              color="warn"
+              class="button-edit"
+            >
+              <mat-icon>edit</mat-icon></button
+            >&nbsp;
+          
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+      </table>
+    </div>
+  </mat-card>
+</div>

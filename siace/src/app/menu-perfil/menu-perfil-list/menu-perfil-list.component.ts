@@ -30,7 +30,7 @@ export class MenuPerfilListComponent implements OnInit {
     private toastr: ToastrService,
     public dialog: MatDialog,
     private perfilService: PerfilService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {
     //  this.subs = this.menuPerfilService.getIsUpdated().subscribe(() => {
     //    this.search();

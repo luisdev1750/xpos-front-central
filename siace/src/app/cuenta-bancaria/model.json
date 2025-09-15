@@ -1,0 +1,54 @@
+{
+   "title": "CuentaBancaria",
+   "entity": "cuentabancaria",
+   "module": "Catalogo de cuentas bancarias",
+   "singular": "cuenta bancaria",
+   "columns": 3,
+   "api": {
+      "url": "CuentasBancarias"
+   },
+   "filter": [
+      "cubBanId",
+      "cubSucId",
+	  "cubId"
+   ],
+   "fields": [
+      {
+         "name": "cubId",
+         "label": "Clave",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "cubSucId",
+         "label": "Sucursal",
+         "type": "number",
+         "required": true
+      },
+      {
+         "name": "cubBanId",
+         "label": "Banco",
+         "type": "boolean",
+         "required": true
+      },
+      {
+         "name": "cubCuentaBancaria",
+         "label": "Cuenta bancaria",
+         "type": "string",
+         "required": true
+      },
+      {
+         "name": "cubActivo",
+         "label": "Activo",
+         "type": "boolean",
+         "required": true
+      },
+      {
+         "name": "cubFechaAlta",
+         "label": "Fecha alta",
+         "type": "string",
+         "required": true,
+      }
+   ]
+}

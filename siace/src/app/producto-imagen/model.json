@@ -1,0 +1,42 @@
+{
+   "title": "ProductoImagen",
+   "entity": "productoimagen",
+   "module": "Catalogo de Productos Imagenes",
+   "singular": "producto imagenes",
+   "columns": 3,
+   "api": {
+      "url": "ProductosImagenes"
+   },
+   "filter": [
+      "priProId",
+      "priTimId",
+	  "priId"
+   ],
+   "fields": [
+      {
+         "name": "priId",
+         "label": "Clave",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "priNombre",
+         "label": "Nombre",
+         "type": "string",
+         "required": true
+      },
+      {
+         "name": "priProId",
+         "label": "Producto",
+         "type": "number",
+         "required": true
+      },
+      {
+         "name": "priTimId",
+         "label": "Tipo imagen",
+         "type": "number",
+         "required": true
+      }
+   ]
+}
