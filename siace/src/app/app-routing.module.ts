@@ -137,6 +137,13 @@ const routes: Routes = [
             (m) => m.ProductoImagenModule
           ),
       },
+      {
+        path: 'sucursal-producto',
+        loadChildren: () =>
+          import('./sucursal-producto/sucursal-producto.module').then(
+            (m) => m.SucursalProductoModule
+          ),
+      },
 
 
       {

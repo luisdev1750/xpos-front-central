@@ -1,0 +1,79 @@
+<nav aria-label="breadcrumb">
+   <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
+      <li class="breadcrumb-item active">
+         Catalogo de Productos por Sucursal
+      </li>
+   </ol>
+</nav>
+
+<div class="proin-main">
+   <mat-card class="proin-card">
+      <h2>Catalogo de Productos por Sucursal</h2>
+      <form #f="ngForm">
+         
+         <mat-form-field>
+            <mat-label>Clave de Sucursal:</mat-label>
+            <input matInput type="search" [(ngModel)]="filter.supSucId" id="supSucId"
+               name="supSucId">
+         </mat-form-field>
+         
+         <mat-form-field>
+            <mat-label>Clave de Producto:</mat-label>
+            <input matInput type="search" [(ngModel)]="filter.supProId" id="supProId"
+               name="supProId">
+         </mat-form-field>
+         
+         <mat-form-field>
+            <mat-label>Clave de Precio de Producto:</mat-label>
+            <input matInput type="search" [(ngModel)]="filter.supLprId" id="supLprId"
+               name="supLprId">
+         </mat-form-field>
+         
+
+         <button mat-mini-fab color="accent" (click)="add()" [disabled]="!f?.valid">
+            <mat-icon>add</mat-icon>
+         </button>
+      </form>
+      <div *ngIf="sucursalProductoList.length > 0">
+         
+         <table mat-table #table [dataSource]="sucursalProductoList">
+            
+            <ng-container matColumnDef="supSucId">
+               <mat-header-cell *matHeaderCellDef>
+                  Clave de Sucursal
+               </mat-header-cell>
+               <mat-cell *matCellDef="let item"> {{item.supSucId}} </mat-cell>
+            </ng-container>
+            
+            <ng-container matColumnDef="supProId">
+               <mat-header-cell *matHeaderCellDef>
+                  Clave de Producto
+               </mat-header-cell>
+               <mat-cell *matCellDef="let item"> {{item.supProId}} </mat-cell>
+            </ng-container>
+            
+            <ng-container matColumnDef="supLprId">
+               <mat-header-cell *matHeaderCellDef>
+                  Clave de Precio de Producto
+               </mat-header-cell>
+               <mat-cell *matCellDef="let item"> {{item.supLprId}} </mat-cell>
+            </ng-container>
+            
+            <ng-container matColumnDef="actions">
+               <mat-header-cell *matHeaderCellDef></mat-header-cell>
+               <mat-cell *matCellDef="let item">
+                  <button (click)="edit(item)" mat-button color="warn" class="button-edit">
+                     <mat-icon>edit</mat-icon>
+                  </button>&nbsp;
+                  <button (click)="delete(item)" mat-button color="warn">
+                     <mat-icon>delete</mat-icon>
+                  </button>
+               </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+         </table>
+      </div>
+   </mat-card>
+</div>

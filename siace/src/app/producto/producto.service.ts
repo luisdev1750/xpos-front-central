@@ -70,6 +70,14 @@ export class ProductoService extends GeneralService {
          headers: this.getHeaders()  // Usar headers con token
       });
    }
+
+   findByWord(word: string): Observable<any[]> {
+      const url = `${this.api}/search?q=${word}`;
+      return this.http.get<any[]>(url, {
+         headers: this.getHeaders()  // Usar headers con token
+      });
+   }
+
    load(filter: ProductoFilter): void {
       this.find(filter).subscribe({
          next: result => {

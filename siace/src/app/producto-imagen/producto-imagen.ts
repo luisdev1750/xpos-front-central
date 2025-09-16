@@ -3,4 +3,6 @@ export class ProductoImagen {
   priNombre!: string;
   priProId!: number;
   priTimId!: number;
+  priProName!: string;
+  priTimName!: string;
 }

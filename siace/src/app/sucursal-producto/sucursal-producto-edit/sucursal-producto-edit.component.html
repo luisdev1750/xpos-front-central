@@ -1,0 +1,37 @@
+<h2>Detalle del producto por sucursal</h2>
+<form *ngIf="sucursalProducto" #editForm="ngForm" (ngSubmit)="save()" autocomplete="off">
+
+<div class="row">
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label>Clave de Sucursal</mat-label>
+         <input matInput [(ngModel)]="sucursalProducto.supSucId" id="supSucId" name="supSucId" placeholder="Clave de Sucursal" readonly>
+         
+         
+      </mat-form-field>
+   </div>
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="supProId">Clave de Producto</mat-label>
+         <input matInput type="number" [(ngModel)]="sucursalProducto.supProId" id="supProId" name="supProId" placeholder="Clave de Producto">
+         
+         <mat-error *ngIf="sucursalProducto.supProId==undefined">Clave de Producto es requerido</mat-error>
+      </mat-form-field>
+   </div>
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="supLprId">Clave de Precio de Producto</mat-label>
+         <input matInput type="number" [(ngModel)]="sucursalProducto.supLprId" id="supLprId" name="supLprId" placeholder="Clave de Precio de Producto">
+         
+         <mat-error *ngIf="sucursalProducto.supLprId==undefined">Clave de Precio de Producto es requerido</mat-error>
+      </mat-form-field>
+   </div>
+</div>
+   <div class="button-row text-center" role="group">
+      <button type="submit" mat-raised-button color="primary" [disabled]="!editForm.form.valid">Guardar</button>
+      <button mat-button mat-dialog-close>Cancelar</button>
+  </div>
+</form>

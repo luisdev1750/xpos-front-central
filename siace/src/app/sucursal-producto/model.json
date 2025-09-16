@@ -1,0 +1,38 @@
+{
+   "title": "SucursalProducto",
+   "entity": "sucursalproducto",
+   "module": "Catalogo de Productos por Sucursal",
+   "singular": "producto por sucursal",
+   "columns": 3,
+   "api": {
+      "url": "SucursalesProductos"
+   },
+   "filter": [
+      "supLprId",
+      "supProId",
+	   "supSucId"
+   ],
+   "fields": [
+      {
+         "name": "supSucId",
+         "label": "Clave de Sucursal",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "supProId",
+         "label": "Clave de Producto",
+         "isId": true,
+         "type": "number",
+         "required" : true
+      },
+      {
+         "name": "supLprId",
+         "label": "Clave de Precio de Producto",
+         "isId": true,
+         "type": "number",
+         "required" : true
+      }
+   ]
+}

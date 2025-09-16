@@ -21,7 +21,7 @@ export class ProductoImagenEditComponent implements OnInit {
 
    id!: string;
    productoImagen!: ProductoImagen;
-
+   listTipoImagenes: any = [];
 
    /* Constructores */
    
@@ -29,21 +29,41 @@ export class ProductoImagenEditComponent implements OnInit {
       private dialogRef: MatDialogRef<ProductoImagenEditComponent>,
       private productoImagenService: ProductoImagenService,
 	   private toastr: ToastrService,
+
+      
       @Inject(MAT_DIALOG_DATA) public data: any) {
       this.productoImagen=data.productoImagen;
+
    }
 
 
    ngOnInit() {
+      this.loadCatalogs();
    }
 
+   loadCatalogs(){
+      this.productoImagenService.findTipoImagenes().subscribe({
+         next:  result => {
+            this.listTipoImagenes = result;
+            console.log(result);
+            
+         }
+         ,
+         error: err => {
+            this.toastr.error('Ha ocurrido un error', 'Error');
+         }
+      });
+   }
 
+   onProductoImagenChange(event: any){
+      this.productoImagen.priTimId=event.value;
+   }
    /*Métodos*/
    
    save() {
       this.productoImagenService.save(this.productoImagen).subscribe({
          next:  result => {
-            if (Number(result) > 0) {
+            if (result.priId !== undefined && result?.priId !== null && Number(result.priId) >= 0) {
                this.toastr.success('El producto imagenes ha sido guardado exitosamente', 'Transacción exitosa');
                this.productoImagenService.setIsUpdated(true);
                this.dialogRef.close();

@@ -23,7 +23,7 @@
    <div class="col-md-4">
       <mat-form-field>
          <mat-label for="priProId">Producto</mat-label>
-         <input matInput type="number" [(ngModel)]="productoImagen.priProId" id="priProId" name="priProId" placeholder="Producto">
+         <input matInput type="text" [(ngModel)]="productoImagen.priProName" id="priProName" name="priProName" placeholder="Producto" readonly>
          
          <mat-error *ngIf="productoImagen.priProId==undefined">Producto es requerido</mat-error>
       </mat-form-field>
@@ -31,14 +31,19 @@
 </div>
 <div class="row">
 
-   <div class="col-md-4">
+   
+ <div class="col-md-4">
       <mat-form-field>
-         <mat-label for="priTimId">Tipo imagen</mat-label>
-         <input matInput type="number" [(ngModel)]="productoImagen.priTimId" id="priTimId" name="priTimId" placeholder="Tipo imagen">
-         
-         <mat-error *ngIf="productoImagen.priTimId==undefined">Tipo imagen es requerido</mat-error>
+        <mat-label>Tipo de imagen</mat-label>
+        <mat-select [value]="productoImagen.priTimId" (selectionChange)="onProductoImagenChange($event)">
+          <mat-option *ngFor="let imagen of listTipoImagenes" 
+                      [value]="imagen.timId">
+            {{ imagen.timNombre }}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
-   </div>
+    </div>
+  
 </div>
    <div class="button-row text-center" role="group">
       <button type="submit" mat-raised-button color="primary" [disabled]="!editForm.form.valid">Guardar</button>

@@ -7,17 +7,14 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule, MatOption } from '@angular/material/core';
+import { MatNativeDateModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 
-import { ProductoImagenListComponent } from './producto-imagen-list/producto-imagen-list.component';
-import { ProductoImagenEditComponent } from './producto-imagen-edit/producto-imagen-edit.component';
-import { ProductoImagenService } from './producto-imagen.service';
-import { ProductoImagenRoutingModule } from './producto-imagen.routing.module';
-import { ProductoService } from '../producto/producto.service';
-import { ProductoImagenBusquedaComponent } from './producto-imagen-busqueda/producto-imagen-busqueda.component';
-import { MatSelect } from '@angular/material/select';
+import { SucursalProductoListComponent } from './sucursal-producto-list/sucursal-producto-list.component';
+import { SucursalProductoEditComponent } from './sucursal-producto-edit/sucursal-producto-edit.component';
+import { SucursalProductoService } from './sucursal-producto.service';
+import { SucursalProductoRoutingModule } from './sucursal-producto.routing.module';
 
 @NgModule({
   imports: [
@@ -32,16 +29,13 @@ import { MatSelect } from '@angular/material/select';
     MatNativeDateModule,
     MatDialogModule,
     MatCardModule,
-    ProductoImagenRoutingModule,
-    MatSelect, 
-    MatOption
+    SucursalProductoRoutingModule,
   ],
   declarations: [
-    ProductoImagenListComponent,
-    ProductoImagenEditComponent,
-    ProductoImagenBusquedaComponent
+    SucursalProductoListComponent,
+    SucursalProductoEditComponent
   ],
-  providers: [ProductoImagenService, ProductoService],
+  providers: [SucursalProductoService],
   exports: []
 })
-export class ProductoImagenModule { }
+export class SucursalProductoModule { }
