@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, MatOption } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 
@@ -15,6 +15,8 @@ import { SucursalProductoListComponent } from './sucursal-producto-list/sucursal
 import { SucursalProductoEditComponent } from './sucursal-producto-edit/sucursal-producto-edit.component';
 import { SucursalProductoService } from './sucursal-producto.service';
 import { SucursalProductoRoutingModule } from './sucursal-producto.routing.module';
+import { SucursalService } from '../sucursal/sucursal.service';
+import { MatSelect } from '@angular/material/select';
 
 @NgModule({
   imports: [
@@ -30,12 +32,14 @@ import { SucursalProductoRoutingModule } from './sucursal-producto.routing.modul
     MatDialogModule,
     MatCardModule,
     SucursalProductoRoutingModule,
+    MatSelect,
+    MatOption
   ],
   declarations: [
     SucursalProductoListComponent,
     SucursalProductoEditComponent
   ],
-  providers: [SucursalProductoService],
+  providers: [SucursalProductoService, SucursalService],
   exports: []
 })
 export class SucursalProductoModule { }

@@ -8,20 +8,21 @@ import { SucursalProductoEditComponent } from '../sucursal-producto-edit/sucursa
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../common/confirm-dialog/confirm-dialog.component';
 import { ToastrService } from 'ngx-toastr';
+import { SucursalService } from '../../sucursal/sucursal.service';
 
 @Component({
    selector: 'app-sucursal-producto',
    standalone: false,
    templateUrl: 'sucursal-producto-list.component.html',
    styles: [
-      'table { min-width: 600px }',
+      'table { }',
       '.mat-column-actions {flex: 0 0 10%;}'
    ]
 })
 export class SucursalProductoListComponent implements OnInit {
    displayedColumns = [ 'supSucId',  'supProId',  'supLprId',  'actions'];
    filter = new SucursalProductoFilter();
-
+   listSucursales : any = [];
    private subs!: Subscription;
 
    
@@ -30,24 +31,47 @@ export class SucursalProductoListComponent implements OnInit {
    constructor(
       private sucursalProductoService: SucursalProductoService,
       private toastr: ToastrService,
-      public dialog: MatDialog,) {
+      public dialog: MatDialog,
+      private sucursalService: SucursalService
+   ) {
       this.subs = this.sucursalProductoService.getIsUpdated().subscribe(() => {
          this.search();
       });
 
       this.filter.supSucId='0';
+      this.filter.supProId='0';
+      this.filter.supLprId='0';
    }
 
 
    ngOnInit() {
       this.search();
+      this.loadCatalogs();
    }
 
 
    ngOnDestroy(): void {
       this.subs?.unsubscribe();
    }
+   onSucursalChange(event: any){
+      this.filter.supSucId=event.value;
+      this.search();
+   }
 
+   loadCatalogs(){
+      this.sucursalService.findAll().subscribe({
+         next: (result) => {
+            // this.sucursalService.sucursalList = result;
+            console.log(result);
+            this.listSucursales = result;
+         },
+
+         error: (err) => {
+
+            this.toastr.error('Ha ocurrido un error', 'Error');
+         }
+      });
+   }
 
    /* Accesors */
 
