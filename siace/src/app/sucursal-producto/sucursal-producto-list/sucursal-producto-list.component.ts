@@ -119,7 +119,9 @@ export class SucursalProductoListComponent implements OnInit {
 
    edit(ele: SucursalProducto) {
       this.dialog.open(SucursalProductoEditComponent, {
-         data: {sucursalProducto:JSON.parse(JSON.stringify(ele))},
+         data: {sucursalProducto:JSON.parse(JSON.stringify(ele)),
+            listSucursales: this.listSucursales
+         },
          height: '500px',
          width: '700px',
          maxWidth: 'none',

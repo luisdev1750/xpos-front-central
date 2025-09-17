@@ -6,6 +6,7 @@ import { SucursalProductoService } from '../sucursal-producto.service';
 import { SucursalProducto } from '../sucursal-producto';
 import { map, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { ListaPrecioService } from '../../lista-precio/lista-precio.service';
 
 @Component({
    selector: 'app-sucursal-producto-edit',
@@ -21,22 +22,48 @@ export class SucursalProductoEditComponent implements OnInit {
 
    id!: string;
    sucursalProducto!: SucursalProducto;
-
-
+   listSucursales : any = [];
+   listListaPrecios : any = [];
    /* Constructores */
    
    constructor(
       private dialogRef: MatDialogRef<SucursalProductoEditComponent>,
       private sucursalProductoService: SucursalProductoService,
 	   private toastr: ToastrService,
+      private listaPrecioService: ListaPrecioService,
       @Inject(MAT_DIALOG_DATA) public data: any) {
       this.sucursalProducto=data.sucursalProducto;
+      this.listSucursales=data.listSucursales;
    }
 
 
    ngOnInit() {
+      this.loadCatalogs();
+   }
+   loadCatalogs(){
+      this.listaPrecioService.find({lprId:'0', lprActivo:'all', lprFechaVigencia:'all', lprFechaAlta:'all'})
+      .subscribe({
+         next: result => {
+            console.log(result);
+            this.listListaPrecios = result;
+         },
+         error: err => {
+            this.toastr.error('Ha ocurrido un error al cargar los catálogos', 'Error');
+         }
+      });
    }
 
+   onSucursalChange( event: any){   
+      this.sucursalProducto.supSucId=event.value;
+   }
+
+   onProductoChange( event: any){   
+      this.sucursalProducto.supProId=event.value;
+   }
+
+   onListaPrecioChange( event: any){   
+      this.sucursalProducto.supLprId=event.value;
+   }  
 
    /*Métodos*/
    

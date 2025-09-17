@@ -17,6 +17,7 @@ import { SucursalProductoService } from './sucursal-producto.service';
 import { SucursalProductoRoutingModule } from './sucursal-producto.routing.module';
 import { SucursalService } from '../sucursal/sucursal.service';
 import { MatSelect } from '@angular/material/select';
+import { ListaPrecioService } from '../lista-precio/lista-precio.service';
 
 @NgModule({
   imports: [
@@ -37,9 +38,10 @@ import { MatSelect } from '@angular/material/select';
   ],
   declarations: [
     SucursalProductoListComponent,
-    SucursalProductoEditComponent
+    SucursalProductoEditComponent,
+    
   ],
-  providers: [SucursalProductoService, SucursalService],
+  providers: [SucursalProductoService, SucursalService, ListaPrecioService],
   exports: []
 })
 export class SucursalProductoModule { }
