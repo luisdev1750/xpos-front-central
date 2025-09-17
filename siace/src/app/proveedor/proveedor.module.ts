@@ -11,15 +11,11 @@ import { MatNativeDateModule, MatOption } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 
-import { SucursalProductoListComponent } from './sucursal-producto-list/sucursal-producto-list.component';
-import { SucursalProductoEditComponent } from './sucursal-producto-edit/sucursal-producto-edit.component';
-import { SucursalProductoService } from './sucursal-producto.service';
-import { SucursalProductoRoutingModule } from './sucursal-producto.routing.module';
-import { SucursalService } from '../sucursal/sucursal.service';
+import { ProveedorListComponent } from './proveedor-list/proveedor-list.component';
+import { ProveedorEditComponent } from './proveedor-edit/proveedor-edit.component';
+import { ProveedorService } from './proveedor.service';
+import { ProveedorRoutingModule } from './proveedor.routing.module';
 import { MatSelect } from '@angular/material/select';
-import { ListaPrecioService } from '../lista-precio/lista-precio.service';
-import { SucursalProductoBusquedaComponent } from './sucursal-producto-busqueda/sucursal-producto-busqueda.component';
-import { ProductoService } from '../producto/producto.service';
 
 @NgModule({
   imports: [
@@ -34,16 +30,15 @@ import { ProductoService } from '../producto/producto.service';
     MatNativeDateModule,
     MatDialogModule,
     MatCardModule,
-    SucursalProductoRoutingModule,
+    ProveedorRoutingModule,
     MatSelect,
     MatOption
   ],
   declarations: [
-    SucursalProductoListComponent,
-    SucursalProductoEditComponent,
-    SucursalProductoBusquedaComponent
+    ProveedorListComponent,
+    ProveedorEditComponent
   ],
-  providers: [SucursalProductoService, SucursalService, ListaPrecioService, ProductoService],
+  providers: [ProveedorService],
   exports: []
 })
-export class SucursalProductoModule { }
+export class ProveedorModule { }

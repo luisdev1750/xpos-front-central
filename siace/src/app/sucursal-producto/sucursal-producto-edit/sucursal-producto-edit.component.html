@@ -12,7 +12,7 @@
         <mat-select
           [value]="sucursalProducto.supSucId"
           (selectionChange)="onSucursalChange($event)"
-          disabled
+           [disabled]="!isAdding"
         >
           <mat-option
             *ngFor="let sucursal of listSucursales"

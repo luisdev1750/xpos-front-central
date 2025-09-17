@@ -1,0 +1,67 @@
+<form #searchForm="ngForm" style="margin-bottom: 20px">
+  <mat-card style="padding: 4px">
+    <div style="display: flex; gap: 10px; align-items: center">
+      <mat-form-field style="flex: 1">
+        <mat-label>Buscar productos...</mat-label>
+        <input
+          matInput
+          type="search"
+          [(ngModel)]="searchText"
+          id="searchText"
+          name="searchText"
+          placeholder="Nombre, SKU, descripción..."
+          (keyup.enter)="searchProducts(searchText)"
+        />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="searchProducts(searchText)"
+        type="button"
+      >
+        <mat-icon>search</mat-icon>
+        Buscar
+      </button>
+      <button
+        mat-raised-button
+        color="accent"
+        (click)="clearSearch()"
+        type="button"
+        *ngIf="searchText && searchText.length > 0"
+      >
+        <mat-icon>clear</mat-icon>
+        Limpiar
+      </button>
+    </div>
+  </mat-card>
+</form>
+<div *ngIf="listProductosImagenes.length > 0">
+  <table mat-table #table [dataSource]="listProductosImagenes">
+    
+
+    <ng-container matColumnDef="priNombre">
+      <mat-header-cell *matHeaderCellDef> Producto</mat-header-cell>
+      <mat-cell *matCellDef="let item"> {{ item.priNombre }} </mat-cell>
+    </ng-container>
+
+
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-cell *matCellDef="let item">
+        <button
+          (click)="edit(item)"
+          mat-button
+          color="warn"
+          class = "button-row"
+        >
+          <mat-icon>edit</mat-icon></button
+        >&nbsp;
+   
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </table>
+</div>
+

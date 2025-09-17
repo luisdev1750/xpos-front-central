@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../common/confirm-dialog/confirm-dialog.component';
 import { ToastrService } from 'ngx-toastr';
 import { SucursalService } from '../../sucursal/sucursal.service';
+import { SucursalProductoBusquedaComponent } from '../sucursal-producto-busqueda/sucursal-producto-busqueda.component';
 
 @Component({
    selector: 'app-sucursal-producto',
@@ -64,6 +65,7 @@ export class SucursalProductoListComponent implements OnInit {
             // this.sucursalService.sucursalList = result;
             console.log(result);
             this.listSucursales = result;
+            
          },
 
          error: (err) => {
@@ -84,7 +86,16 @@ export class SucursalProductoListComponent implements OnInit {
 
    add() {
       let newSucursalProducto: SucursalProducto = new SucursalProducto();
-
+        this.dialog.open(SucursalProductoBusquedaComponent, {
+         data: {sucursalProducto:JSON.parse(JSON.stringify(newSucursalProducto)),
+            listSucursales: this.listSucursales
+         },
+         height: '500px',
+         width: '700px',
+         maxWidth: 'none',
+         disableClose : true
+      });
+      return;
       this.edit(newSucursalProducto);
    }
 
@@ -102,7 +113,7 @@ export class SucursalProductoListComponent implements OnInit {
 
             this.sucursalProductoService.delete(sucursalProducto).subscribe({
                next: (result) => {
-                  if (Number(result) > 0) {
+                  if (result.supProId !== undefined && result.supProId != null && Number(result.supProId) >= 0) {
                      this.toastr.success('El producto por sucursal ha sido eliminado exitosamente', 'Transacción exitosa');
                      this.sucursalProductoService.setIsUpdated(true);
                   }

@@ -1,0 +1,179 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
+    <li class="breadcrumb-item active">Catalogo de Proveedores</li>
+  </ol>
+</nav>
+
+<div class="proin-main">
+  <mat-card class="proin-card">
+    <h2>Catalogo de Proveedores</h2>
+    <form #f="ngForm">
+      <mat-form-field>
+        <mat-label>Clave:</mat-label>
+        <input
+          matInput
+          type="search"
+          [(ngModel)]="filter.pveId"
+          id="pveId"
+          name="pveId"
+        />
+      </mat-form-field>
+
+              <mat-form-field>
+          <mat-label>Activo:</mat-label>
+          <mat-select
+            [(ngModel)]="filter.pveActivo"
+            (selectionChange)="onChangeActivo($event)"
+            id="proActivo"
+            name="proActivo"
+          >
+        
+            <mat-option [value]="true">Sí</mat-option>
+            <mat-option [value]="false">No</mat-option>
+          </mat-select>
+        </mat-form-field>
+    
+
+      <mat-form-field>
+        <mat-label>Activo:</mat-label>
+        <input
+          matInput
+          type="search"
+          [(ngModel)]="filter.pveActivo"
+          id="pveActivo"
+          name="pveActivo"
+        />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Ciudad:</mat-label>
+        <mat-select
+          [value]="filter.pveCiuId"
+          (selectionChange)="onChangeCiudad($event)"
+        >
+          <mat-option
+            *ngFor="let ciudad of ciudadList"
+            [value]="ciudad.ciuMunId"
+          >
+            {{ ciudad.ciuNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Colonia:</mat-label>
+        <mat-select
+          [value]="filter.pveColId"
+          (selectionChange)="onColoniaChange($event)"
+        >
+          <mat-option
+            *ngFor="let colonia of coloniasList"
+            [value]="colonia.colId"
+          >
+            {{ colonia.colNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button
+        mat-mini-fab
+        color="accent"
+        (click)="add()"
+        [disabled]="!f?.valid"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+    </form>
+    <div *ngIf="proveedorList.length > 0">
+      <table mat-table #table [dataSource]="proveedorList">
+        <ng-container matColumnDef="pveId">
+          <mat-header-cell *matHeaderCellDef> Clave </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.pveId }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="pveNombre">
+          <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.pveNombre }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="pveActivo">
+          <mat-header-cell *matHeaderCellDef> Activo </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.pveActivo }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="pveCalle">
+          <mat-header-cell *matHeaderCellDef> Calle </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.pveCalle }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="pveNumeroExterior">
+          <mat-header-cell *matHeaderCellDef> Número Exterior </mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            {{ item.pveNumeroExterior }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="pveNumeroInterior">
+          <mat-header-cell *matHeaderCellDef> Número Interior </mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            {{ item.pveNumeroInterior }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="pveCiuId">
+          <mat-header-cell *matHeaderCellDef> Ciudad </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.pveCiuId }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="pveColId">
+          <mat-header-cell *matHeaderCellDef> Colonia </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.pveColId }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="pveTelefono">
+          <mat-header-cell *matHeaderCellDef> Teléfono </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.pveTelefono }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="pveCorreoElectronico">
+          <mat-header-cell *matHeaderCellDef> Email </mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            {{ item.pveCorreoElectronico }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="pveObservaciones">
+          <mat-header-cell *matHeaderCellDef> Observaciones </mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            {{ item.pveObservaciones }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="pveNumero">
+          <mat-header-cell *matHeaderCellDef> Número </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.pveNumero }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            <button
+              (click)="edit(item)"
+              mat-button
+              color="warn"
+              class="button-edit"
+            >
+              <mat-icon>edit</mat-icon></button
+            >&nbsp;
+            <button (click)="delete(item)" mat-button color="warn">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+      </table>
+    </div>
+  </mat-card>
+</div>

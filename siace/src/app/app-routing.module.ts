@@ -144,7 +144,14 @@ const routes: Routes = [
             (m) => m.SucursalProductoModule
           ),
       },
-
+       {
+        path: 'proveedor',
+        loadChildren: () =>
+          import('./proveedor/proveedor.module').then(
+            (m) => m.ProveedorModule
+          ),
+      },
+/*COMIENZA SIACE */
 
       {
         path: 'emprendedor',

@@ -24,6 +24,7 @@ export class SucursalProductoEditComponent implements OnInit {
    sucursalProducto!: SucursalProducto;
    listSucursales : any = [];
    listListaPrecios : any = [];
+   isAdding: boolean = false; 
    /* Constructores */
    
    constructor(
@@ -34,6 +35,8 @@ export class SucursalProductoEditComponent implements OnInit {
       @Inject(MAT_DIALOG_DATA) public data: any) {
       this.sucursalProducto=data.sucursalProducto;
       this.listSucursales=data.listSucursales;
+      this.isAdding = data.isAdding ? data.isAdding  : false; 
+      
    }
 
 
@@ -68,9 +71,11 @@ export class SucursalProductoEditComponent implements OnInit {
    /*Métodos*/
    
    save() {
+      
       this.sucursalProductoService.save(this.sucursalProducto).subscribe({
          next:  result => {
-            if (Number(result) > 0) {
+        
+            if (result.supProId !== undefined && result.supProId != null && Number(result.supProId) >= 0) {
                this.toastr.success('El producto por sucursal ha sido guardado exitosamente', 'Transacción exitosa');
                this.sucursalProductoService.setIsUpdated(true);
                this.dialogRef.close();
