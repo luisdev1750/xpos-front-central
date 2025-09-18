@@ -32,6 +32,8 @@ export class ProveedorEditComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.proveedor = data.proveedor;
+    console.log(this.proveedor);
+    
   }
 
   ngOnInit() {

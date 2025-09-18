@@ -100,8 +100,15 @@ export class ProveedorService extends GeneralService {
     });
   }
 
-  findColonias(ciuId: number): Observable<any[]>{
+  findColonias(ciuId: number): Observable<any[]> {
     const url = `${this.api}/getColonias/${ciuId}`;
+    return this.http.get<any[]>(url, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  getUbicacionCompletaByCiudad(ciuId: number): Observable<any[]> {
+    const url = `${this.api}/getUbicacionCompletaByCiudad/${ciuId}`;
     return this.http.get<any[]>(url, {
       headers: this.getHeaders(),
     });
