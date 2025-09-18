@@ -18,7 +18,7 @@ import { Proveedor } from '../proveedor';
 export class ProveedorEditComponent implements OnInit {
   id!: string;
   proveedor!: Proveedor;
-  
+
   // Listas para los combos en cascada
   estadosList: any = [];
   municipiosList: any = [];
@@ -33,7 +33,6 @@ export class ProveedorEditComponent implements OnInit {
   ) {
     this.proveedor = data.proveedor;
     console.log(this.proveedor);
-    
   }
 
   ngOnInit() {
@@ -42,6 +41,20 @@ export class ProveedorEditComponent implements OnInit {
   }
 
   loadCatalogs() {
+    ///Cargamos los datos de ubicación, todos,  pero aun faltan las listas de cada combobox
+    this.proveedorService
+      .getUbicacionCompletaByCiudad(Number(this.proveedor.pveCiuId))
+      .subscribe(
+        (res) => {
+          console.log('Respuesta');
+
+          console.log(res);
+          this.proveedor.pveCiuId = res.estado.estId; 
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
     // Cargar estados primero
     this.proveedorService.findAllEstados().subscribe(
       (res) => {
@@ -75,12 +88,12 @@ export class ProveedorEditComponent implements OnInit {
     this.proveedor.pveMunId = '';
     this.proveedor.pveCiuId = '';
     this.proveedor.pveColId = '';
-    
+
     // Limpiar listas dependientes
     this.municipiosList = [];
     this.ciudadesList = [];
     this.coloniasList = [];
-    
+
     if (event.value) {
       this.getMunicipios(Number(event.value));
     }
@@ -90,11 +103,11 @@ export class ProveedorEditComponent implements OnInit {
     this.proveedor.pveMunId = event.value;
     this.proveedor.pveCiuId = '';
     this.proveedor.pveColId = '';
-    
+
     // Limpiar listas dependientes
     this.ciudadesList = [];
     this.coloniasList = [];
-    
+
     if (event.value) {
       this.getCiudades(Number(event.value));
     }
@@ -103,10 +116,10 @@ export class ProveedorEditComponent implements OnInit {
   onCiudadChange(event: any) {
     this.proveedor.pveCiuId = event.value;
     this.proveedor.pveColId = '';
-    
+
     // Limpiar lista dependiente
     this.coloniasList = [];
-    
+
     if (event.value) {
       this.getColonias(Number(event.value));
     }

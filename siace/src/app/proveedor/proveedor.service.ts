@@ -107,7 +107,7 @@ export class ProveedorService extends GeneralService {
     });
   }
 
-  getUbicacionCompletaByCiudad(ciuId: number): Observable<any[]> {
+  getUbicacionCompletaByCiudad(ciuId: number): Observable<any> {
     const url = `${this.api}/getUbicacionCompletaByCiudad/${ciuId}`;
     return this.http.get<any[]>(url, {
       headers: this.getHeaders(),
