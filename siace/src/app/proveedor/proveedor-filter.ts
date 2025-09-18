@@ -3,4 +3,6 @@ export class ProveedorFilter {
   pveActivo = '';
   pveCiuId = '';
   pveColId = '';
+  pveEstId = '';
+  pveMunId = ''; 
 }

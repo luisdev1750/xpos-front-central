@@ -20,41 +20,56 @@
         />
       </mat-form-field>
 
-              <mat-form-field>
-          <mat-label>Activo:</mat-label>
-          <mat-select
-            [(ngModel)]="filter.pveActivo"
-            (selectionChange)="onChangeActivo($event)"
-            id="proActivo"
-            name="proActivo"
-          >
-        
-            <mat-option [value]="true">Sí</mat-option>
-            <mat-option [value]="false">No</mat-option>
-          </mat-select>
-        </mat-form-field>
-    
-
       <mat-form-field>
         <mat-label>Activo:</mat-label>
-        <input
-          matInput
-          type="search"
+        <mat-select
           [(ngModel)]="filter.pveActivo"
-          id="pveActivo"
-          name="pveActivo"
-        />
+          (selectionChange)="onChangeActivo($event)"
+          id="proActivo"
+          name="proActivo"
+        >
+          <mat-option [value]="all">Todos</mat-option>
+          <mat-option [value]="true">Sí</mat-option>
+          <mat-option [value]="false">No</mat-option>
+        </mat-select>
       </mat-form-field>
 
       <mat-form-field>
-        <mat-label>Ciudad:</mat-label>
+        <mat-label>Estado</mat-label>
         <mat-select
-          [value]="filter.pveCiuId"
-          (selectionChange)="onChangeCiudad($event)"
+          [value]="filter.pveEstId"
+          (selectionChange)="onEstadoChange($event)"
+        >
+          <mat-option *ngFor="let estado of estadosList" [value]="estado.estId">
+            {{ estado.estNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Municipio</mat-label>
+        <mat-select
+          [value]="filter.pveMunId"
+          (selectionChange)="onMunicipioChange($event)"
         >
           <mat-option
-            *ngFor="let ciudad of ciudadList"
-            [value]="ciudad.ciuMunId"
+            *ngFor="let municipio of municipiosList"
+            [value]="municipio.munId"
+          >
+            {{ municipio.munNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Ciudad</mat-label>
+        <mat-select
+          [value]="filter.pveCiuId"
+          (selectionChange)="onCiudadChange($event)"
+        >
+          <mat-option
+            *ngFor="let ciudad of ciudadesList"
+            [value]="ciudad.ciuId"
           >
             {{ ciudad.ciuNombre }}
           </mat-option>

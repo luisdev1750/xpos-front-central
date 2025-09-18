@@ -1,115 +1,246 @@
 <h2>Detalle del proveedor</h2>
-<form *ngIf="proveedor" #editForm="ngForm" (ngSubmit)="save()" autocomplete="off">
+<form
+  *ngIf="proveedor"
+  #editForm="ngForm"
+  (ngSubmit)="save()"
+  autocomplete="off"
+>
+  <div class="row">
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label>Clave</mat-label>
+        <input
+          matInput
+          [(ngModel)]="proveedor.pveId"
+          id="pveId"
+          name="pveId"
+          placeholder="Clave"
+          readonly
+        />
+      </mat-form-field>
+    </div>
 
-<div class="row">
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label for="pveNombre">Nombre</mat-label>
+        <input
+          matInput
+          [(ngModel)]="proveedor.pveNombre"
+          id="pveNombre"
+          name="pveNombre"
+          placeholder="Nombre"
+          required
+        />
+        <mat-error *ngIf="proveedor.pveNombre == ''"
+          >Nombre es requerido</mat-error
+        >
+      </mat-form-field>
+    </div>
 
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label>Activo:</mat-label>
+        <mat-select
+          [(ngModel)]="proveedor.pveActivo"
+          id="pveActivo"
+          name="pveActivo"
+        >
+          <mat-option [value]="true">Sí</mat-option>
+          <mat-option [value]="false">No</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label for="pveActivo">Activo</mat-label>
+        <input
+          matInput
+          [(ngModel)]="proveedor.pveActivo"
+          id="pveActivo"
+          name="pveActivo"
+          placeholder="Activo"
+        />
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label for="pveCalle">Calle</mat-label>
+        <input
+          matInput
+          [(ngModel)]="proveedor.pveCalle"
+          id="pveCalle"
+          name="pveCalle"
+          placeholder="Calle"
+          required
+        />
+        <mat-error *ngIf="proveedor.pveCalle == ''"
+          >Calle es requerido</mat-error
+        >
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label for="pveNumeroExterior">Número Exterior</mat-label>
+        <input
+          matInput
+          [(ngModel)]="proveedor.pveNumeroExterior"
+          id="pveNumeroExterior"
+          name="pveNumeroExterior"
+          placeholder="Número Exterior"
+          required
+        />
+        <mat-error *ngIf="proveedor.pveNumeroExterior == ''"
+          >Número Exterior es requerido</mat-error
+        >
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label for="pveNumeroInterior">Número Interior</mat-label>
+        <input
+          matInput
+          [(ngModel)]="proveedor.pveNumeroInterior"
+          id="pveNumeroInterior"
+          name="pveNumeroInterior"
+          placeholder="Número Interior"
+        />
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
    <div class="col-md-4">
       <mat-form-field>
-         <mat-label>Clave</mat-label>
-         <input matInput [(ngModel)]="proveedor.pveId" id="pveId" name="pveId" placeholder="Clave" readonly>
-         
-         
+        <mat-label>Ciudad:</mat-label>
+        <mat-select
+          [value]="proveedor.pveCiuId"
+          (selectionChange)="OnCiudadChange($event)"
+        >
+          <mat-option
+            *ngFor="let ciudad of ciudadList"
+            [value]="ciudad.ciuMunId"
+          >
+            {{ ciudad.ciuNombre }}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
-   </div>
-
-   <div class="col-md-4">
+    </div>
+    <div class="col-md-4">
       <mat-form-field>
-         <mat-label for="pveNombre">Nombre</mat-label>
-         <input matInput [(ngModel)]="proveedor.pveNombre" id="pveNombre" name="pveNombre" placeholder="Nombre" required>
-         <mat-error *ngIf="proveedor.pveNombre==''">Nombre es requerido</mat-error>
+        <mat-label for="pveCiuId">Ciudad</mat-label>
+        <input
+          matInput
+          [(ngModel)]="proveedor.pveCiuId"
+          id="pveCiuId"
+          name="pveCiuId"
+          placeholder="Ciudad"
+        />
       </mat-form-field>
-   </div>
-
-   <div class="col-md-4">
+    </div>
+    <div class="col-md-4">
       <mat-form-field>
-         <mat-label for="pveActivo">Activo</mat-label>
-         <input matInput [(ngModel)]="proveedor.pveActivo" id="pveActivo" name="pveActivo" placeholder="Activo" >
-         
+        <mat-label>Colonia:</mat-label>
+        <mat-select
+          [value]="proveedor.pveColId"
+          (selectionChange)="onColoniaChange($event)"
+        >
+          <mat-option
+            *ngFor="let colonia of coloniasList"
+            [value]="colonia.colId"
+          >
+            {{ colonia.colNombre }}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
-   </div>
-</div>
-<div class="row">
-
-   <div class="col-md-4">
+    </div>
+    <div class="col-md-4">
       <mat-form-field>
-         <mat-label for="pveCalle">Calle</mat-label>
-         <input matInput [(ngModel)]="proveedor.pveCalle" id="pveCalle" name="pveCalle" placeholder="Calle" required>
-         <mat-error *ngIf="proveedor.pveCalle==''">Calle es requerido</mat-error>
-      </mat-form-field>
-   </div>
+        <mat-label for="pveColId">Colonia</mat-label>
+        <input
+          matInput
+          type="number"
+          [(ngModel)]="proveedor.pveColId"
+          id="pveColId"
+          name="pveColId"
+          placeholder="Colonia"
+        />
 
-   <div class="col-md-4">
-      <mat-form-field>
-         <mat-label for="pveNumeroExterior">Número Exterior</mat-label>
-         <input matInput [(ngModel)]="proveedor.pveNumeroExterior" id="pveNumeroExterior" name="pveNumeroExterior" placeholder="Número Exterior" required>
-         <mat-error *ngIf="proveedor.pveNumeroExterior==''">Número Exterior es requerido</mat-error>
+        <mat-error *ngIf="proveedor.pveColId == undefined"
+          >Colonia es requerido</mat-error
+        >
       </mat-form-field>
-   </div>
+    </div>
 
-   <div class="col-md-4">
+    <div class="col-md-4">
       <mat-form-field>
-         <mat-label for="pveNumeroInterior">Número Interior</mat-label>
-         <input matInput [(ngModel)]="proveedor.pveNumeroInterior" id="pveNumeroInterior" name="pveNumeroInterior" placeholder="Número Interior" >
-         
-      </mat-form-field>
-   </div>
-</div>
-<div class="row">
+        <mat-label for="pveTelefono">Teléfono</mat-label>
+        <input
+          matInput
+          type="number"
+          [(ngModel)]="proveedor.pveTelefono"
+          id="pveTelefono"
+          name="pveTelefono"
+          placeholder="Teléfono"
+        />
 
-   <div class="col-md-4">
-      <mat-form-field>
-         <mat-label for="pveCiuId">Ciudad</mat-label>
-         <input matInput [(ngModel)]="proveedor.pveCiuId" id="pveCiuId" name="pveCiuId" placeholder="Ciudad" >
-         
+        <mat-error *ngIf="proveedor.pveTelefono == undefined"
+          >Teléfono es requerido</mat-error
+        >
       </mat-form-field>
-   </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label for="pveCorreoElectronico">Email</mat-label>
+        <input
+          matInput
+          [(ngModel)]="proveedor.pveCorreoElectronico"
+          id="pveCorreoElectronico"
+          name="pveCorreoElectronico"
+          placeholder="Email"
+        />
+      </mat-form-field>
+    </div>
 
-   <div class="col-md-4">
+    <div class="col-md-4">
       <mat-form-field>
-         <mat-label for="pveColId">Colonia</mat-label>
-         <input matInput type="number" [(ngModel)]="proveedor.pveColId" id="pveColId" name="pveColId" placeholder="Colonia">
-         
-         <mat-error *ngIf="proveedor.pveColId==undefined">Colonia es requerido</mat-error>
+        <mat-label for="pveObservaciones">Observaciones</mat-label>
+        <input
+          matInput
+          [(ngModel)]="proveedor.pveObservaciones"
+          id="pveObservaciones"
+          name="pveObservaciones"
+          placeholder="Observaciones"
+        />
       </mat-form-field>
-   </div>
+    </div>
 
-   <div class="col-md-4">
+    <div class="col-md-4">
       <mat-form-field>
-         <mat-label for="pveTelefono">Teléfono</mat-label>
-         <input matInput type="number" [(ngModel)]="proveedor.pveTelefono" id="pveTelefono" name="pveTelefono" placeholder="Teléfono">
-         
-         <mat-error *ngIf="proveedor.pveTelefono==undefined">Teléfono es requerido</mat-error>
+        <mat-label for="pveNumero">Número</mat-label>
+        <input
+          matInput
+          [(ngModel)]="proveedor.pveNumero"
+          id="pveNumero"
+          name="pveNumero"
+          placeholder="Número"
+        />
       </mat-form-field>
-   </div>
-</div>
-<div class="row">
-
-   <div class="col-md-4">
-      <mat-form-field>
-         <mat-label for="pveCorreoElectronico">Email</mat-label>
-         <input matInput [(ngModel)]="proveedor.pveCorreoElectronico" id="pveCorreoElectronico" name="pveCorreoElectronico" placeholder="Email" >
-         
-      </mat-form-field>
-   </div>
-
-   <div class="col-md-4">
-      <mat-form-field>
-         <mat-label for="pveObservaciones">Observaciones</mat-label>
-         <input matInput [(ngModel)]="proveedor.pveObservaciones" id="pveObservaciones" name="pveObservaciones" placeholder="Observaciones" >
-         
-      </mat-form-field>
-   </div>
-
-   <div class="col-md-4">
-      <mat-form-field>
-         <mat-label for="pveNumero">Número</mat-label>
-         <input matInput [(ngModel)]="proveedor.pveNumero" id="pveNumero" name="pveNumero" placeholder="Número" >
-         
-      </mat-form-field>
-   </div>
-</div>
-   <div class="button-row text-center" role="group">
-      <button type="submit" mat-raised-button color="primary" [disabled]="!editForm.form.valid">Guardar</button>
-      <button mat-button mat-dialog-close>Cancelar</button>
+    </div>
+  </div>
+  <div class="button-row text-center" role="group">
+    <button
+      type="submit"
+      mat-raised-button
+      color="primary"
+      [disabled]="!editForm.form.valid"
+    >
+      Guardar
+    </button>
+    <button mat-button mat-dialog-close>Cancelar</button>
   </div>
 </form>

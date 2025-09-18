@@ -31,11 +31,15 @@ export class ProveedorListComponent implements OnInit {
     'pveNumero',
     'actions',
   ];
+  all = 'all';
   filter = new ProveedorFilter();
   ciudadList: any = [];
   coloniasList: any = [];
+  estadosList: any = [];
+  municipiosList: any = [];
+  ciudadesList: any = [];
   private subs!: Subscription;
-  
+
   /* Inicialización */
 
   constructor(
@@ -61,9 +65,32 @@ export class ProveedorListComponent implements OnInit {
   ngOnDestroy(): void {
     this.subs?.unsubscribe();
   }
-  onChangeActivo(event: any){
-      this.filter.pveActivo = event.value;
-      this.search(); 
+  onChangeActivo(event: any) {
+    this.filter.pveActivo = event.value;
+    this.search();
+  }
+
+  onEstadoChange(event: any) {
+    this.filter.pveEstId = event.value;
+    this.filter.pveMunId = '0';
+    this.filter.pveCiuId = '0';
+    this.filter.pveColId = '0';
+
+    this.getMunicipios(Number(this.filter.pveEstId));
+     this.search();
+  }
+  onMunicipioChange(event: any) {
+    this.filter.pveMunId = event.value;
+    this.filter.pveCiuId = '0';
+    this.filter.pveColId = '0';
+    this.getCiudades(Number(this.filter.pveMunId));
+     this.search();
+  }
+  onCiudadChange(event: any) {
+    this.filter.pveCiuId = event.value;
+    this.filter.pveColId = '0';
+    this.getColonias(Number(this.filter.pveCiuId));
+    this.search();
   }
 
   loadCatalogs() {
@@ -78,8 +105,57 @@ export class ProveedorListComponent implements OnInit {
         console.log(error);
       }
     );
+
+    this.proveedorService.findAllEstados().subscribe(
+      (res) => {
+        console.log('ESTADOS: ');
+
+        console.log(res);
+        this.estadosList = res;
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 
+  getMunicipios(estId: number) {
+    this.proveedorService.findMunicipios(estId).subscribe(
+      (res) => {
+        console.log('Municipios estId:', estId);
+        console.log(res);
+
+        this.municipiosList = res;
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
+
+  getColonias(ciuId: number) {
+    this.proveedorService.findColonias(ciuId).subscribe(
+      (res) => {
+        console.log('Colonias encontradas:');
+        console.log(res);
+        this.coloniasList = res;
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
+
+  getCiudades(munId: number) {
+    this.proveedorService.findCiudades(munId).subscribe(
+      (res) => {
+        this.ciudadesList = res;
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
   /* Accesors */
 
   get proveedorList(): Proveedor[] {
@@ -96,17 +172,7 @@ export class ProveedorListComponent implements OnInit {
     this.filter.pveColId = event.value;
     this.search();
   }
-  getColonias(idColonia: string) {
-    this.proveedorService.findColonia(idColonia).subscribe(
-      (res) => {
-        console.log(res);
-        this.coloniasList = res;
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-  }
+
   add() {
     let newProveedor: Proveedor = new Proveedor();
 
@@ -141,6 +207,9 @@ export class ProveedorListComponent implements OnInit {
   }
 
   edit(ele: Proveedor) {
+    const provedorCurrent: Proveedor = {
+      ...ele,
+    };
     this.dialog.open(ProveedorEditComponent, {
       data: { proveedor: JSON.parse(JSON.stringify(ele)) },
       height: '500px',

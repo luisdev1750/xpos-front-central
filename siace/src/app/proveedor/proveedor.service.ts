@@ -48,7 +48,7 @@ export class ProveedorService extends GeneralService {
   find(filter: ProveedorFilter): Observable<Proveedor[]> {
     const url = `${this.api}/${filter.pveId}/${filter.pveActivo}/${filter.pveCiuId}/${filter.pveColId}`;
     return this.http.get<Proveedor[]>(url, {
-      headers: this.getHeaders(), 
+      headers: this.getHeaders(),
     });
   }
 
@@ -57,12 +57,12 @@ export class ProveedorService extends GeneralService {
     const params = { pveId: id };
     return this.http
       .get<Proveedor[]>(url, {
-        headers: this.getHeaders(), 
+        headers: this.getHeaders(),
       })
       .pipe(map((ele) => ele[0]));
   }
 
-   findColonia(idColonia: string): Observable<any[]> {
+  findColonia(idColonia: string): Observable<any[]> {
     const url = `${this.api}/getColonias/${idColonia}`;
 
     return this.http.get<any[]>(url, {
@@ -74,7 +74,36 @@ export class ProveedorService extends GeneralService {
     const url = `${this.api}/getAllCities`;
 
     return this.http.get<Proveedor[]>(url, {
-      headers: this.getHeaders(), 
+      headers: this.getHeaders(),
+    });
+  }
+
+  findAllEstados(): Observable<any[]> {
+    const url = `${this.api}/getAllEstados`;
+
+    return this.http.get<any[]>(url, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  findMunicipios(estId: number): Observable<any[]> {
+    const url = `${this.api}/getMunicipios/${estId}`;
+    return this.http.get<any[]>(url, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  findCiudades(munId: number): Observable<any[]> {
+    const url = `${this.api}/getCiudades/${munId}`;
+    return this.http.get<any[]>(url, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  findColonias(ciuId: number): Observable<any[]>{
+    const url = `${this.api}/getColonias/${ciuId}`;
+    return this.http.get<any[]>(url, {
+      headers: this.getHeaders(),
     });
   }
   load(filter: ProveedorFilter): void {

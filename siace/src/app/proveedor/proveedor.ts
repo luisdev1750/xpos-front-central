@@ -5,7 +5,7 @@ export class Proveedor {
   pveCalle!: string;
   pveNumeroExterior!: string;
   pveNumeroInterior!: string;
-  pveCiuId!: string;
+  pveCiuId!: string ;
   pveColId!: number;
   pveTelefono!: number;
   pveCorreoElectronico!: string;
