@@ -103,71 +103,78 @@
   </div>
 
   <!-- SECCIÓN DE UBICACIÓN CORREGIDA -->
-  <div class="row">
-    <div class="col-md-3">
-      <mat-form-field>
-        <mat-label>Estado</mat-label>
-        <mat-select
-          [value]="proveedor.pveEstId"
-          (selectionChange)="onEstadoChange($event)"
-          name="pveEstId"
-        >
-          <mat-option *ngFor="let estado of estadosList" [value]="estado.estId">
-            {{ estado.estNombre }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-
-    <div class="col-md-3">
-      <mat-form-field>
-        <mat-label>Municipio</mat-label>
-        <mat-select
-          [value]="proveedor.pveMunId"
-          (selectionChange)="onMunicipioChange($event)"
-          name="pveMunId"
-        >
-          <mat-option *ngFor="let municipio of municipiosList" [value]="municipio.munId">
-            {{ municipio.munNombre }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-
-    <div class="col-md-3">
-      <mat-form-field>
-        <mat-label>Ciudad</mat-label>
-        <mat-select
-          [value]="proveedor.pveCiuId"
-          (selectionChange)="onCiudadChange($event)"
-          name="pveCiuId"
-        >
-          <mat-option *ngFor="let ciudad of ciudadesList" [value]="ciudad.ciuId">
-            {{ ciudad.ciuNombre }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-
-    <div class="col-md-3">
-      <mat-form-field>
-        <mat-label>Colonia</mat-label>
-        <mat-select
-          [value]="proveedor.pveColId"
-          (selectionChange)="onColoniaChange($event)"
-          name="pveColId"
-          required
-        >
-          <mat-option *ngFor="let colonia of coloniasList" [value]="colonia.colId">
-            {{ colonia.colNombre }}
-          </mat-option>
-        </mat-select>
-        <mat-error *ngIf="proveedor.pveColId == undefined"
-          >Colonia es requerido</mat-error
-        >
-      </mat-form-field>
-    </div>
+<div class="row">
+  <div class="col-md-3">
+    <mat-form-field>
+      <mat-label>Estado</mat-label>
+      <mat-select
+        [(ngModel)]="proveedor.pveEstId"
+        (selectionChange)="onEstadoChange($event)"
+        name="pveEstId"
+        required
+      >
+        <mat-option *ngFor="let estado of estadosList" [value]="estado.estId">
+          {{ estado.estNombre }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="!proveedor.pveEstId">Estado es requerido</mat-error>
+    </mat-form-field>
   </div>
+
+  <div class="col-md-3">
+    <mat-form-field>
+      <mat-label>Municipio</mat-label>
+      <mat-select
+        [(ngModel)]="proveedor.pveMunId"
+        (selectionChange)="onMunicipioChange($event)"
+        name="pveMunId"
+        required
+        [disabled]="municipiosList.length === 0"
+      >
+        <mat-option *ngFor="let municipio of municipiosList" [value]="municipio.munId">
+          {{ municipio.munNombre }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="!proveedor.pveMunId">Municipio es requerido</mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="col-md-3">
+    <mat-form-field>
+      <mat-label>Ciudad</mat-label>
+      <mat-select
+        [(ngModel)]="proveedor.pveCiuId"
+        (selectionChange)="onCiudadChange($event)"
+        name="pveCiuId"
+        required
+        [disabled]="ciudadesList.length === 0"
+      >
+        <mat-option *ngFor="let ciudad of ciudadesList" [value]="ciudad.ciuId">
+          {{ ciudad.ciuNombre }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="!proveedor.pveCiuId">Ciudad es requerida</mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="col-md-3">
+    <mat-form-field>
+      <mat-label>Colonia</mat-label>
+      <mat-select
+        [(ngModel)]="proveedor.pveColId"
+        (selectionChange)="onColoniaChange($event)"
+        name="pveColId"
+        required
+        [disabled]="coloniasList.length === 0"
+      >
+        <mat-option *ngFor="let colonia of coloniasList" [value]="colonia.colId">
+          {{ colonia.colNombre }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="!proveedor.pveColId">Colonia es requerida</mat-error>
+    </mat-form-field>
+  </div>
+</div>
 
   <div class="row">
     <div class="col-md-4">

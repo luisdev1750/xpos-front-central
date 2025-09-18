@@ -25,6 +25,9 @@ export class ProveedorEditComponent implements OnInit {
   ciudadesList: any = [];
   coloniasList: any = [];
 
+  // Flag para controlar si estamos inicializando (evitar eventos en cascada)
+  isInitializing = true;
+
   constructor(
     private dialogRef: MatDialogRef<ProveedorEditComponent>,
     private proveedorService: ProveedorService,
@@ -32,58 +35,139 @@ export class ProveedorEditComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.proveedor = data.proveedor;
-    console.log(this.proveedor);
+    console.log('Proveedor inicial:', this.proveedor);
   }
 
-  ngOnInit() {
-    this.loadCatalogs();
-    this.initializeLocationData();
+  async ngOnInit() {
+    this.isInitializing = true;
+    
+    // Primero cargamos todos los estados
+    await this.loadEstados();
+    
+    // Si el proveedor tiene una ciudad, hacemos la ingeniería inversa
+    if (this.proveedor.pveCiuId) {
+      await this.initializeFromCiudad();
+    }
+    
+    this.isInitializing = false;
   }
 
-  loadCatalogs() {
-    ///Cargamos los datos de ubicación, todos,  pero aun faltan las listas de cada combobox
-    this.proveedorService
-      .getUbicacionCompletaByCiudad(Number(this.proveedor.pveCiuId))
-      .subscribe(
+  async loadEstados(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.proveedorService.findAllEstados().subscribe(
         (res) => {
-          console.log('Respuesta');
-
-          console.log(res);
-          this.proveedor.pveCiuId = res.estado.estId; 
+          this.estadosList = res;
+          console.log('Estados cargados:', this.estadosList);
+          resolve();
         },
         (error) => {
-          console.log(error);
+          console.error('Error cargando estados:', error);
+          reject(error);
         }
       );
-    // Cargar estados primero
-    this.proveedorService.findAllEstados().subscribe(
-      (res) => {
-        this.estadosList = res;
-        // Si el proveedor ya tiene un estado, cargar sus dependientes
-        if (this.proveedor.pveEstId) {
-          this.getMunicipios(Number(this.proveedor.pveEstId));
-        }
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+    });
   }
 
-  initializeLocationData() {
-    // Si estamos editando un proveedor existente, cargar la cadena de ubicación
-    if (this.proveedor.pveEstId && this.proveedor.pveMunId) {
-      this.getMunicipios(Number(this.proveedor.pveEstId));
+  async initializeFromCiudad(): Promise<void> {
+    try {
+      console.log('Iniciando ingeniería inversa para ciudad:', this.proveedor.pveCiuId);
+      
+      // Obtenemos la información completa de la jerarquía
+      const ubicacionCompleta = await this.getUbicacionCompleta(this.proveedor.pveCiuId);
+      
+      if (!ubicacionCompleta) {
+        console.error('No se pudo obtener la ubicación completa');
+        return;
+      }
+
+      console.log('Ubicación completa obtenida:', ubicacionCompleta);
+
+      // Asignamos los IDs faltantes al proveedor
+      this.proveedor.pveEstId = ubicacionCompleta.estado.estId;
+      this.proveedor.pveMunId = ubicacionCompleta.municipio.munId;
+      
+      // Cargamos las listas en cascada
+      await this.loadMunicipiosForEstado(ubicacionCompleta.estado.estId);
+      await this.loadCiudadesForMunicipio(ubicacionCompleta.municipio.munId);
+      await this.loadColoniasForCiudad(this.proveedor.pveCiuId);
+
+      console.log('Proveedor actualizado:', this.proveedor);
+      console.log('Listas cargadas - Municipios:', this.municipiosList.length, 
+                  'Ciudades:', this.ciudadesList.length, 
+                  'Colonias:', this.coloniasList.length);
+
+    } catch (error) {
+      console.error('Error en la inicialización desde ciudad:', error);
+      this.toastr.error('Error al cargar la información de ubicación', 'Error');
     }
-    if (this.proveedor.pveMunId && this.proveedor.pveCiuId) {
-      this.getCiudades(Number(this.proveedor.pveMunId));
-    }
-    if (this.proveedor.pveCiuId && this.proveedor.pveColId) {
-      this.getColonias(Number(this.proveedor.pveCiuId));
-    }
+  }
+
+  async getUbicacionCompleta(ciudadId: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.proveedorService.getUbicacionCompletaByCiudad(Number(ciudadId)).subscribe(
+        (res) => {
+          resolve(res);
+        },
+        (error) => {
+          reject(error);
+        }
+      );
+    });
+  }
+
+  async loadMunicipiosForEstado(estadoId: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.proveedorService.findMunicipios(Number(estadoId)).subscribe(
+        (res) => {
+          this.municipiosList = res;
+          console.log(`Municipios cargados para estado ${estadoId}:`, this.municipiosList);
+          resolve();
+        },
+        (error) => {
+          console.error('Error cargando municipios:', error);
+          reject(error);
+        }
+      );
+    });
+  }
+
+  async loadCiudadesForMunicipio(municipioId: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.proveedorService.findCiudades(Number(municipioId)).subscribe(
+        (res) => {
+          this.ciudadesList = res;
+          console.log(`Ciudades cargadas para municipio ${municipioId}:`, this.ciudadesList);
+          resolve();
+        },
+        (error) => {
+          console.error('Error cargando ciudades:', error);
+          reject(error);
+        }
+      );
+    });
+  }
+
+  async loadColoniasForCiudad(ciudadId: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.proveedorService.findColonias(Number(ciudadId)).subscribe(
+        (res) => {
+          this.coloniasList = res;
+          console.log(`Colonias cargadas para ciudad ${ciudadId}:`, this.coloniasList);
+          resolve();
+        },
+        (error) => {
+          console.error('Error cargando colonias:', error);
+          reject(error);
+        }
+      );
+    });
   }
 
   onEstadoChange(event: any) {
+    if (this.isInitializing) return;
+    
+    console.log('Estado cambiado:', event.value);
+    
     this.proveedor.pveEstId = event.value;
     this.proveedor.pveMunId = '';
     this.proveedor.pveCiuId = '';
@@ -100,6 +184,10 @@ export class ProveedorEditComponent implements OnInit {
   }
 
   onMunicipioChange(event: any) {
+    if (this.isInitializing) return;
+    
+    console.log('Municipio cambiado:', event.value);
+    
     this.proveedor.pveMunId = event.value;
     this.proveedor.pveCiuId = '';
     this.proveedor.pveColId = '';
@@ -114,6 +202,10 @@ export class ProveedorEditComponent implements OnInit {
   }
 
   onCiudadChange(event: any) {
+    if (this.isInitializing) return;
+    
+    console.log('Ciudad cambiada:', event.value);
+    
     this.proveedor.pveCiuId = event.value;
     this.proveedor.pveColId = '';
 
@@ -126,6 +218,9 @@ export class ProveedorEditComponent implements OnInit {
   }
 
   onColoniaChange(event: any) {
+    if (this.isInitializing) return;
+    
+    console.log('Colonia cambiada:', event.value);
     this.proveedor.pveColId = event.value;
   }
 
@@ -133,13 +228,10 @@ export class ProveedorEditComponent implements OnInit {
     this.proveedorService.findMunicipios(estId).subscribe(
       (res) => {
         this.municipiosList = res;
-        // Si el proveedor ya tenía un municipio seleccionado, cargar sus ciudades
-        if (this.proveedor.pveMunId) {
-          this.getCiudades(Number(this.proveedor.pveMunId));
-        }
+        console.log('Municipios obtenidos:', this.municipiosList);
       },
       (error) => {
-        console.log(error);
+        console.error('Error obteniendo municipios:', error);
       }
     );
   }
@@ -148,13 +240,10 @@ export class ProveedorEditComponent implements OnInit {
     this.proveedorService.findCiudades(munId).subscribe(
       (res) => {
         this.ciudadesList = res;
-        // Si el proveedor ya tenía una ciudad seleccionada, cargar sus colonias
-        if (this.proveedor.pveCiuId) {
-          this.getColonias(Number(this.proveedor.pveCiuId));
-        }
+        console.log('Ciudades obtenidas:', this.ciudadesList);
       },
       (error) => {
-        console.log(error);
+        console.error('Error obteniendo ciudades:', error);
       }
     );
   }
@@ -163,14 +252,17 @@ export class ProveedorEditComponent implements OnInit {
     this.proveedorService.findColonias(ciuId).subscribe(
       (res) => {
         this.coloniasList = res;
+        console.log('Colonias obtenidas:', this.coloniasList);
       },
       (error) => {
-        console.log(error);
+        console.error('Error obteniendo colonias:', error);
       }
     );
   }
 
   save() {
+    console.log('Guardando proveedor:', this.proveedor);
+    
     this.proveedorService.save(this.proveedor).subscribe({
       next: (result) => {
         if (Number(result) > 0) {
@@ -185,6 +277,7 @@ export class ProveedorEditComponent implements OnInit {
         }
       },
       error: (err) => {
+        console.error('Error guardando proveedor:', err);
         this.toastr.error('Ha ocurrido un error', 'Error');
       },
     });
