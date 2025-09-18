@@ -4,8 +4,6 @@ import { ToastrService } from 'ngx-toastr';
 
 import { ProveedorService } from '../proveedor.service';
 import { Proveedor } from '../proveedor';
-import { map, switchMap } from 'rxjs/operators';
-import { of } from 'rxjs';
 
 @Component({
   selector: 'app-proveedor-edit',
@@ -20,10 +18,12 @@ import { of } from 'rxjs';
 export class ProveedorEditComponent implements OnInit {
   id!: string;
   proveedor!: Proveedor;
-  ciudadList: any = [];
+  
+  // Listas para los combos en cascada
+  estadosList: any = [];
+  municipiosList: any = [];
+  ciudadesList: any = [];
   coloniasList: any = [];
-  ciudadId = 0;
-  /* Constructores */
 
   constructor(
     private dialogRef: MatDialogRef<ProveedorEditComponent>,
@@ -36,35 +36,17 @@ export class ProveedorEditComponent implements OnInit {
 
   ngOnInit() {
     this.loadCatalogs();
+    this.initializeLocationData();
   }
 
   loadCatalogs() {
-    this.proveedorService.findAllCities().subscribe(
+    // Cargar estados primero
+    this.proveedorService.findAllEstados().subscribe(
       (res) => {
-        this.ciudadList = res;
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-  }
-
-  OnCiudadChange(event: any) {
-    console.log('on change');
-
-    this.proveedor.pveCiuId = event.value;
-    this.getColonias(event.value);
-  }
-  onColoniaChange(event: any) {
-    this.proveedor.pveColId = event.value;
-  }
-  getColonias(idColonia: string) {
-    this.proveedorService.findColonia(idColonia).subscribe(
-      (res) => {
-        console.log(res);
-        this.coloniasList = res;
-        if (res.length > 0) {
-          this.ciudadId = res[0].colCiuId;
+        this.estadosList = res;
+        // Si el proveedor ya tiene un estado, cargar sus dependientes
+        if (this.proveedor.pveEstId) {
+          this.getMunicipios(Number(this.proveedor.pveEstId));
         }
       },
       (error) => {
@@ -72,14 +54,109 @@ export class ProveedorEditComponent implements OnInit {
       }
     );
   }
-  /*Métodos*/
+
+  initializeLocationData() {
+    // Si estamos editando un proveedor existente, cargar la cadena de ubicación
+    if (this.proveedor.pveEstId && this.proveedor.pveMunId) {
+      this.getMunicipios(Number(this.proveedor.pveEstId));
+    }
+    if (this.proveedor.pveMunId && this.proveedor.pveCiuId) {
+      this.getCiudades(Number(this.proveedor.pveMunId));
+    }
+    if (this.proveedor.pveCiuId && this.proveedor.pveColId) {
+      this.getColonias(Number(this.proveedor.pveCiuId));
+    }
+  }
+
+  onEstadoChange(event: any) {
+    this.proveedor.pveEstId = event.value;
+    this.proveedor.pveMunId = '';
+    this.proveedor.pveCiuId = '';
+    this.proveedor.pveColId = '';
+    
+    // Limpiar listas dependientes
+    this.municipiosList = [];
+    this.ciudadesList = [];
+    this.coloniasList = [];
+    
+    if (event.value) {
+      this.getMunicipios(Number(event.value));
+    }
+  }
+
+  onMunicipioChange(event: any) {
+    this.proveedor.pveMunId = event.value;
+    this.proveedor.pveCiuId = '';
+    this.proveedor.pveColId = '';
+    
+    // Limpiar listas dependientes
+    this.ciudadesList = [];
+    this.coloniasList = [];
+    
+    if (event.value) {
+      this.getCiudades(Number(event.value));
+    }
+  }
+
+  onCiudadChange(event: any) {
+    this.proveedor.pveCiuId = event.value;
+    this.proveedor.pveColId = '';
+    
+    // Limpiar lista dependiente
+    this.coloniasList = [];
+    
+    if (event.value) {
+      this.getColonias(Number(event.value));
+    }
+  }
+
+  onColoniaChange(event: any) {
+    this.proveedor.pveColId = event.value;
+  }
+
+  getMunicipios(estId: number) {
+    this.proveedorService.findMunicipios(estId).subscribe(
+      (res) => {
+        this.municipiosList = res;
+        // Si el proveedor ya tenía un municipio seleccionado, cargar sus ciudades
+        if (this.proveedor.pveMunId) {
+          this.getCiudades(Number(this.proveedor.pveMunId));
+        }
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
+
+  getCiudades(munId: number) {
+    this.proveedorService.findCiudades(munId).subscribe(
+      (res) => {
+        this.ciudadesList = res;
+        // Si el proveedor ya tenía una ciudad seleccionada, cargar sus colonias
+        if (this.proveedor.pveCiuId) {
+          this.getColonias(Number(this.proveedor.pveCiuId));
+        }
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
+
+  getColonias(ciuId: number) {
+    this.proveedorService.findColonias(ciuId).subscribe(
+      (res) => {
+        this.coloniasList = res;
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
 
   save() {
-    const provedorSaved: Proveedor = {
-      ...this.proveedor,
-      pveCiuId: this.ciudadId.toString(),
-    };
-    this.proveedorService.save(provedorSaved).subscribe({
+    this.proveedorService.save(this.proveedor).subscribe({
       next: (result) => {
         if (Number(result) > 0) {
           this.toastr.success(
@@ -88,7 +165,9 @@ export class ProveedorEditComponent implements OnInit {
           );
           this.proveedorService.setIsUpdated(true);
           this.dialogRef.close();
-        } else this.toastr.error('Ha ocurrido un error', 'Error');
+        } else {
+          this.toastr.error('Ha ocurrido un error', 'Error');
+        }
       },
       error: (err) => {
         this.toastr.error('Ha ocurrido un error', 'Error');

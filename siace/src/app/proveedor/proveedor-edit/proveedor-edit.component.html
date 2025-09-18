@@ -22,7 +22,7 @@
 
     <div class="col-md-4">
       <mat-form-field>
-        <mat-label for="pveNombre">Nombre</mat-label>
+        <mat-label>Nombre</mat-label>
         <input
           matInput
           [(ngModel)]="proveedor.pveNombre"
@@ -39,34 +39,24 @@
 
     <div class="col-md-4">
       <mat-form-field>
-        <mat-label>Activo:</mat-label>
+        <mat-label>Activo</mat-label>
         <mat-select
           [(ngModel)]="proveedor.pveActivo"
           id="pveActivo"
           name="pveActivo"
+          required
         >
           <mat-option [value]="true">Sí</mat-option>
           <mat-option [value]="false">No</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
-    <div class="col-md-4">
-      <mat-form-field>
-        <mat-label for="pveActivo">Activo</mat-label>
-        <input
-          matInput
-          [(ngModel)]="proveedor.pveActivo"
-          id="pveActivo"
-          name="pveActivo"
-          placeholder="Activo"
-        />
-      </mat-form-field>
-    </div>
   </div>
+
   <div class="row">
     <div class="col-md-4">
       <mat-form-field>
-        <mat-label for="pveCalle">Calle</mat-label>
+        <mat-label>Calle</mat-label>
         <input
           matInput
           [(ngModel)]="proveedor.pveCalle"
@@ -83,7 +73,7 @@
 
     <div class="col-md-4">
       <mat-form-field>
-        <mat-label for="pveNumeroExterior">Número Exterior</mat-label>
+        <mat-label>Número Exterior</mat-label>
         <input
           matInput
           [(ngModel)]="proveedor.pveNumeroExterior"
@@ -100,7 +90,7 @@
 
     <div class="col-md-4">
       <mat-form-field>
-        <mat-label for="pveNumeroInterior">Número Interior</mat-label>
+        <mat-label>Número Interior</mat-label>
         <input
           matInput
           [(ngModel)]="proveedor.pveNumeroInterior"
@@ -111,93 +101,98 @@
       </mat-form-field>
     </div>
   </div>
+
+  <!-- SECCIÓN DE UBICACIÓN CORREGIDA -->
   <div class="row">
-   <div class="col-md-4">
+    <div class="col-md-3">
       <mat-form-field>
-        <mat-label>Ciudad:</mat-label>
+        <mat-label>Estado</mat-label>
+        <mat-select
+          [value]="proveedor.pveEstId"
+          (selectionChange)="onEstadoChange($event)"
+          name="pveEstId"
+        >
+          <mat-option *ngFor="let estado of estadosList" [value]="estado.estId">
+            {{ estado.estNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-3">
+      <mat-form-field>
+        <mat-label>Municipio</mat-label>
+        <mat-select
+          [value]="proveedor.pveMunId"
+          (selectionChange)="onMunicipioChange($event)"
+          name="pveMunId"
+        >
+          <mat-option *ngFor="let municipio of municipiosList" [value]="municipio.munId">
+            {{ municipio.munNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-3">
+      <mat-form-field>
+        <mat-label>Ciudad</mat-label>
         <mat-select
           [value]="proveedor.pveCiuId"
-          (selectionChange)="OnCiudadChange($event)"
+          (selectionChange)="onCiudadChange($event)"
+          name="pveCiuId"
         >
-          <mat-option
-            *ngFor="let ciudad of ciudadList"
-            [value]="ciudad.ciuMunId"
-          >
+          <mat-option *ngFor="let ciudad of ciudadesList" [value]="ciudad.ciuId">
             {{ ciudad.ciuNombre }}
           </mat-option>
         </mat-select>
       </mat-form-field>
     </div>
-    <div class="col-md-4">
+
+    <div class="col-md-3">
       <mat-form-field>
-        <mat-label for="pveCiuId">Ciudad</mat-label>
-        <input
-          matInput
-          [(ngModel)]="proveedor.pveCiuId"
-          id="pveCiuId"
-          name="pveCiuId"
-          placeholder="Ciudad"
-        />
-      </mat-form-field>
-    </div>
-    <div class="col-md-4">
-      <mat-form-field>
-        <mat-label>Colonia:</mat-label>
+        <mat-label>Colonia</mat-label>
         <mat-select
           [value]="proveedor.pveColId"
           (selectionChange)="onColoniaChange($event)"
+          name="pveColId"
+          required
         >
-          <mat-option
-            *ngFor="let colonia of coloniasList"
-            [value]="colonia.colId"
-          >
+          <mat-option *ngFor="let colonia of coloniasList" [value]="colonia.colId">
             {{ colonia.colNombre }}
           </mat-option>
         </mat-select>
-      </mat-form-field>
-    </div>
-    <div class="col-md-4">
-      <mat-form-field>
-        <mat-label for="pveColId">Colonia</mat-label>
-        <input
-          matInput
-          type="number"
-          [(ngModel)]="proveedor.pveColId"
-          id="pveColId"
-          name="pveColId"
-          placeholder="Colonia"
-        />
-
         <mat-error *ngIf="proveedor.pveColId == undefined"
           >Colonia es requerido</mat-error
         >
       </mat-form-field>
     </div>
+  </div>
 
+  <div class="row">
     <div class="col-md-4">
       <mat-form-field>
-        <mat-label for="pveTelefono">Teléfono</mat-label>
+        <mat-label>Teléfono</mat-label>
         <input
           matInput
-          type="number"
+          type="tel"
           [(ngModel)]="proveedor.pveTelefono"
           id="pveTelefono"
           name="pveTelefono"
           placeholder="Teléfono"
         />
-
         <mat-error *ngIf="proveedor.pveTelefono == undefined"
           >Teléfono es requerido</mat-error
         >
       </mat-form-field>
     </div>
-  </div>
-  <div class="row">
+
     <div class="col-md-4">
       <mat-form-field>
-        <mat-label for="pveCorreoElectronico">Email</mat-label>
+        <mat-label>Email</mat-label>
         <input
           matInput
+          type="email"
           [(ngModel)]="proveedor.pveCorreoElectronico"
           id="pveCorreoElectronico"
           name="pveCorreoElectronico"
@@ -208,20 +203,7 @@
 
     <div class="col-md-4">
       <mat-form-field>
-        <mat-label for="pveObservaciones">Observaciones</mat-label>
-        <input
-          matInput
-          [(ngModel)]="proveedor.pveObservaciones"
-          id="pveObservaciones"
-          name="pveObservaciones"
-          placeholder="Observaciones"
-        />
-      </mat-form-field>
-    </div>
-
-    <div class="col-md-4">
-      <mat-form-field>
-        <mat-label for="pveNumero">Número</mat-label>
+        <mat-label>Número</mat-label>
         <input
           matInput
           [(ngModel)]="proveedor.pveNumero"
@@ -232,6 +214,23 @@
       </mat-form-field>
     </div>
   </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <mat-form-field>
+        <mat-label>Observaciones</mat-label>
+        <textarea
+          matInput
+          [(ngModel)]="proveedor.pveObservaciones"
+          id="pveObservaciones"
+          name="pveObservaciones"
+          placeholder="Observaciones"
+          rows="3"
+        ></textarea>
+      </mat-form-field>
+    </div>
+  </div>
+
   <div class="button-row text-center" role="group">
     <button
       type="submit"
