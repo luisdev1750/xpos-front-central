@@ -1,0 +1,62 @@
+<h2>Detalle del precio de producto</h2>
+<form *ngIf="productoPrecio" #editForm="ngForm" (ngSubmit)="save()" autocomplete="off">
+
+<div class="row">
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label>Clave</mat-label>
+         <input matInput [(ngModel)]="productoPrecio.prrProId" id="prrProId" name="prrProId" placeholder="Clave" readonly>
+         
+         
+      </mat-form-field>
+   </div>
+   <div class="col-md-4">
+      <mat-form-field>
+        <mat-label>Lista de precios</mat-label>
+        <mat-select [value]="productoPrecio.prrLprId"  (selectionChange)="OnListaPreciosChange($event)">
+          <mat-option *ngFor="let precio of listaPrecios" 
+                      [value]="precio.lprId">
+            {{ precio.lprNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="prrPrecio">Precio</mat-label>
+         <input matInput type="number" [(ngModel)]="productoPrecio.prrPrecio" id="prrPrecio" name="prrPrecio" placeholder="Precio">
+         
+         <mat-error *ngIf="productoPrecio.prrPrecio==undefined">Precio es requerido</mat-error>
+      </mat-form-field>
+   </div>
+</div>
+<div class="row">
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="prrFechaAlta">Fecha de Alta</mat-label>
+         <input matInput [matDatepicker]="picker_3" [(ngModel)]="productoPrecio.prrFechaAlta" id="prrFechaAlta" name="prrFechaAlta" placeholder="Fecha de Alta" required>
+         <mat-datepicker-toggle matSuffix [for]="picker_3"></mat-datepicker-toggle>
+         <mat-datepicker #picker_3></mat-datepicker>
+         
+         <mat-error *ngIf="productoPrecio.prrFechaAlta==undefined">Fecha de Alta es requerido</mat-error>
+      </mat-form-field>
+   </div>
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="prrReiId">Clave de Reglas de Impuestos</mat-label>
+         <input matInput type="number" [(ngModel)]="productoPrecio.prrReiId" id="prrReiId" name="prrReiId" placeholder="Clave de Reglas de Impuestos">
+         
+         
+      </mat-form-field>
+   </div>
+</div>
+   <div class="button-row text-center" role="group">
+      <button type="submit" mat-raised-button color="primary" [disabled]="!editForm.form.valid">Guardar</button>
+      <button mat-button mat-dialog-close>Cancelar</button>
+  </div>
+</form>

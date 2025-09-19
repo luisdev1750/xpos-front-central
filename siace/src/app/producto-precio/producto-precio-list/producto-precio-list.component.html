@@ -1,0 +1,88 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
+    <li class="breadcrumb-item active">Catalogo de Precios de Productos</li>
+  </ol>
+</nav>
+
+<div class="proin-main">
+  <mat-card class="proin-card">
+    <h2>Catalogo de Precios de Productos</h2>
+    <form #f="ngForm">
+      <mat-form-field>
+        <mat-label>Lista de Precios</mat-label>
+        <mat-select
+          [value]="filter.prrLprId"
+          (selectionChange)="OnListaPreciosChange($event)"
+        >
+          <mat-option
+            *ngFor="let precio of listaPrecios"
+            [value]="precio.lprId"
+          >
+            {{ precio.lprNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button
+        mat-mini-fab
+        color="accent"
+        (click)="add()"
+        [disabled]="!f?.valid"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+    </form>
+    <div *ngIf="productoPrecioList.length > 0">
+      <table mat-table #table [dataSource]="productoPrecioList">
+        <ng-container matColumnDef="prrProId">
+          <mat-header-cell *matHeaderCellDef> Producto </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.prrProName }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="prrLprId">
+          <mat-header-cell *matHeaderCellDef>
+            Lista de Precio
+          </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.prrLprName }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="prrPrecio">
+          <mat-header-cell *matHeaderCellDef> Precio </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.prrPrecio }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="prrFechaAlta">
+          <mat-header-cell *matHeaderCellDef> Fecha de Alta </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.prrFechaAlta }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="prrReiId">
+          <mat-header-cell *matHeaderCellDef>
+            Clave de Reglas de Impuestos
+          </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.prrReiId }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            <button
+              (click)="edit(item)"
+              mat-button
+              color="warn"
+              class="button-edit"
+            >
+              <mat-icon>edit</mat-icon></button
+            >&nbsp;
+            <button (click)="delete(item)" mat-button color="warn">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+      </table>
+    </div>
+  </mat-card>
+</div>

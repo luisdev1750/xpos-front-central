@@ -46,7 +46,7 @@ export class ProveedorService extends GeneralService {
   }
 
   find(filter: ProveedorFilter): Observable<Proveedor[]> {
-    const url = `${this.api}/${filter.pveId}/${filter.pveActivo}/${filter.pveCiuId}/${filter.pveColId}`;
+    const url = `${this.api}/${filter.pveId}/${filter.pveActivo}/${filter.pveEstId}/${filter.pveMunId}/${filter.pveCiuId}/${filter.pveColId}`;
     return this.http.get<Proveedor[]>(url, {
       headers: this.getHeaders(),
     });

@@ -1,0 +1,48 @@
+{
+   "title": "ProductoPrecio",
+   "entity": "productoprecio",
+   "module": "Catalogo de Precios de Productos",
+   "singular": "precio de producto",
+   "columns": 3,
+   "api": {
+      "url": "ProductosPrecios"
+   },
+   "filter": [
+      "prrReiId",
+      "prrLprId",
+	   "PrrProId"
+   ],
+   "fields": [
+      {
+         "name": "prrProId",
+         "label": "Clave",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "prrLprId",
+         "label": "Clave de Lista de Precios",
+         "isId": true,
+         "type": "number",
+         "required" : true
+      },
+      {
+         "name": "prrPrecio",
+         "label": "Precio",
+         "type": "number",
+         "required" : true
+      },
+      {
+         "name": "prrFechaAlta",
+         "label": "Fecha de Alta",
+         "type": "date",
+         "required" : true
+      },
+      {
+         "name": "prrReiId",
+         "label": "Clave de Reglas de Impuestos",
+         "type": "number"
+      }
+   ]
+}

@@ -151,6 +151,13 @@ const routes: Routes = [
             (m) => m.ProveedorModule
           ),
       },
+        {
+        path: 'producto-precio',
+        loadChildren: () =>
+          import('./producto-precio/producto-precio.module').then(
+            (m) => m.ProductoPrecioModule
+          ),
+      },
 /*COMIENZA SIACE */
 
       {

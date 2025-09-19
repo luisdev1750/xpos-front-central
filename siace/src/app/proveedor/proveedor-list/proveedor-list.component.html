@@ -138,12 +138,12 @@
 
         <ng-container matColumnDef="pveCiuId">
           <mat-header-cell *matHeaderCellDef> Ciudad </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.pveCiuId }} </mat-cell>
+          <mat-cell *matCellDef="let item"> {{ item.pveCiuNombre }} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="pveColId">
           <mat-header-cell *matHeaderCellDef> Colonia </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.pveColId }} </mat-cell>
+          <mat-cell *matCellDef="let item"> {{ item.pveColNombre }} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="pveTelefono">
@@ -181,9 +181,7 @@
             >
               <mat-icon>edit</mat-icon></button
             >&nbsp;
-            <button (click)="delete(item)" mat-button color="warn">
-              <mat-icon>delete</mat-icon>
-            </button>
+         
           </mat-cell>
         </ng-container>
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

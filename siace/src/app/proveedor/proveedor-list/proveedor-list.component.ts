@@ -55,6 +55,8 @@ export class ProveedorListComponent implements OnInit {
     this.filter.pveActivo = 'all';
     this.filter.pveCiuId = '0';
     this.filter.pveColId = '0';
+    this.filter.pveEstId = '0';
+    this.filter.pveMunId = '0'; 
   }
 
   ngOnInit() {
