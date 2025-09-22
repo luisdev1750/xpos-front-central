@@ -45,6 +45,7 @@
         <mat-select
           [value]="sucursalProducto.supLprId"
           (selectionChange)="onListaPrecioChange($event)"
+          panelClass="alternating-options"
         >
           <mat-option
             *ngFor="let listaPrecio of listListaPrecios"

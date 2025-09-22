@@ -1,0 +1,48 @@
+<h2>Detalle del producto por proveedor</h2>
+<form *ngIf="productoProveedor" #editForm="ngForm" (ngSubmit)="save()" autocomplete="off">
+
+<div class="row">
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label>Clave</mat-label>
+         <input matInput [(ngModel)]="productoProveedor.prvProId" id="prvProId" name="prvProId" placeholder="Clave" readonly>
+         
+         
+      </mat-form-field>
+   </div>
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="prvPveId">Clave de Proveedor</mat-label>
+         <input matInput type="number" [(ngModel)]="productoProveedor.prvPveId" id="prvPveId" name="prvPveId" placeholder="Clave de Proveedor">
+         
+         <mat-error *ngIf="productoProveedor.prvPveId==undefined">Clave de Proveedor es requerido</mat-error>
+      </mat-form-field>
+   </div>
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="prvUnmId">Clave de Unidades de Medida</mat-label>
+         <input matInput type="number" [(ngModel)]="productoProveedor.prvUnmId" id="prvUnmId" name="prvUnmId" placeholder="Clave de Unidades de Medida">
+         
+         
+      </mat-form-field>
+   </div>
+</div>
+<div class="row">
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="prvPrecio">Precio</mat-label>
+         <input matInput type="number" [(ngModel)]="productoProveedor.prvPrecio" id="prvPrecio" name="prvPrecio" placeholder="Precio">
+         
+         <mat-error *ngIf="productoProveedor.prvPrecio==undefined">Precio es requerido</mat-error>
+      </mat-form-field>
+   </div>
+</div>
+   <div class="button-row text-center" role="group">
+      <button type="submit" mat-raised-button color="primary" [disabled]="!editForm.form.valid">Guardar</button>
+      <button mat-button mat-dialog-close>Cancelar</button>
+  </div>
+</form>

@@ -76,6 +76,12 @@ export class ProductoService extends GeneralService {
     });
   }
 
+  findByWordGeneral(word: string): Observable<any[]> {
+    const url = `${this.api}/searchGeneral?q=${word}`;
+    return this.http.get<any[]>(url, {
+      headers: this.getHeaders(), // Usar headers con token
+    });
+  }
   findProductos(searchText: string) {
     const url = `${this.api}/productosPreciosProductos/?searchText=${searchText}`;
     return this.http.get<any[]>(url, {

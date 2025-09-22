@@ -73,6 +73,14 @@ export class ListaPrecioService extends GeneralService {
       .pipe(map((ele) => ele[0]));
   }
 
+  findListaFromProductosSucursal(idSucursal: number, idProducto: number){    
+    const url = `${this.api}/disponibles/${idProducto}/${idSucursal}`;
+
+    return this.http.get<ListaPrecio[]>(url, {
+      headers: this.getHeaders(), // Usar headers con token
+    });
+  }
+
   load(filter: ListaPrecioFilter): void {
     this.find(filter).subscribe({
       next: (result) => {

@@ -50,7 +50,7 @@ export class SucursalProductoBusquedaComponent implements OnInit {
   /*Métodos*/
 
   searchProducts(word: string) {
-    this.productoService.findByWord(word).subscribe({
+    this.productoService.findByWordGeneral(word).subscribe({
       next: (result) => {
         this.listProductosImagenes = result;
         console.log(result);

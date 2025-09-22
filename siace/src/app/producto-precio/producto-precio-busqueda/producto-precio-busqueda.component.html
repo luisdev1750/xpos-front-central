@@ -23,6 +23,7 @@
         <mat-icon>search</mat-icon>
         Buscar
       </button>
+
       <button
         mat-raised-button
         color="accent"
@@ -33,35 +34,33 @@
         <mat-icon>clear</mat-icon>
         Limpiar
       </button>
+      <button
+        mat-icon-button
+        mat-dialog-close
+        aria-label="Cerrar"
+        title="Cerrar (ESC)"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
     </div>
   </mat-card>
 </form>
 <div *ngIf="listProductosImagenes.length > 0">
   <table mat-table #table [dataSource]="listProductosImagenes">
-    
-
     <ng-container matColumnDef="priNombre">
       <mat-header-cell *matHeaderCellDef> Producto</mat-header-cell>
       <mat-cell *matCellDef="let item"> {{ item.proNombre }} </mat-cell>
     </ng-container>
 
-
     <ng-container matColumnDef="actions">
       <mat-header-cell *matHeaderCellDef></mat-header-cell>
       <mat-cell *matCellDef="let item">
-        <button
-          (click)="edit(item)"
-          mat-button
-          color="warn"
-          class = "button-row"
-        >
+        <button (click)="edit(item)" mat-button color="warn" class="button-row">
           <mat-icon>edit</mat-icon></button
         >&nbsp;
-   
       </mat-cell>
     </ng-container>
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
   </table>
 </div>
-

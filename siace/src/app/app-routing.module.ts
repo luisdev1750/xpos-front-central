@@ -158,6 +158,13 @@ const routes: Routes = [
             (m) => m.ProductoPrecioModule
           ),
       },
+       {
+        path: 'producto-proveedor',
+        loadChildren: () =>
+          import('./producto-proveedor/producto-proveedor.module').then(
+            (m) => m.ProductoProveedorModule
+          ),
+      },
 /*COMIENZA SIACE */
 
       {

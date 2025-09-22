@@ -1380,3 +1380,15 @@ input #file-upload-button{
   color: white;
   background-color: var(--accent-1) !important;
 }
+
+.alternating-options .mat-mdc-option:nth-child(even) {
+  background-color: #f8f9fa !important;
+}
+
+.alternating-options .mat-mdc-option:nth-child(odd) {
+  background-color: #ffffff !important;
+}
+
+.alternating-options .mat-mdc-option:hover {
+  background-color: #e3f2fd !important;
+}

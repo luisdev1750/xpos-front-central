@@ -1,0 +1,42 @@
+{
+   "title": "ProductoProveedor",
+   "entity": "productoproveedor",
+   "module": "Catalogo de Productos por Proveedor",
+   "singular": "producto por proveedor",
+   "columns": 3,
+   "api": {
+      "url": "ProductosProveedores"
+   },
+   "filter": [
+      "prvUnmId",
+      "prvPveId",
+      "prvProId"
+   ],
+   "fields": [
+      {
+         "name": "prvProId",
+         "label": "Clave",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "prvPveId",
+         "label": "Clave de Proveedor",
+         "isId": true,
+         "type": "number",
+         "required" : true
+      },
+      {
+         "name": "prvUnmId",
+         "label": "Clave de Unidades de Medida",
+         "type": "number"
+      },
+      {
+         "name": "prvPrecio",
+         "label": "Precio",
+         "type": "number",
+         "required" : true
+      }
+   ]
+}

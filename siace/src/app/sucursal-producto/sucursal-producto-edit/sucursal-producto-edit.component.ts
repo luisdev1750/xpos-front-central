@@ -9,82 +9,115 @@ import { of } from 'rxjs';
 import { ListaPrecioService } from '../../lista-precio/lista-precio.service';
 
 @Component({
-   selector: 'app-sucursal-producto-edit',
-   standalone: false,
-   templateUrl: './sucursal-producto-edit.component.html',
-   styles: [
-      'form { display: flex; flex-direction: column; min-width: 500px; }',
-      'form > * { width: 100% }',
-      '.mat-mdc-form-field {width: 100%;}'
-   ]
+  selector: 'app-sucursal-producto-edit',
+  standalone: false,
+  templateUrl: './sucursal-producto-edit.component.html',
+  styles: [
+    'form { display: flex; flex-direction: column; min-width: 500px; }',
+    'form > * { width: 100% }',
+    '.mat-mdc-form-field {width: 100%;}',
+  ],
 })
 export class SucursalProductoEditComponent implements OnInit {
+  id!: string;
+  sucursalProducto!: SucursalProducto;
+  listSucursales: any = [];
+  listListaPrecios: any = [];
+  isAdding: boolean = false;
+  /* Constructores */
 
-   id!: string;
-   sucursalProducto!: SucursalProducto;
-   listSucursales : any = [];
-   listListaPrecios : any = [];
-   isAdding: boolean = false; 
-   /* Constructores */
-   
-   constructor(
-      private dialogRef: MatDialogRef<SucursalProductoEditComponent>,
-      private sucursalProductoService: SucursalProductoService,
-	   private toastr: ToastrService,
-      private listaPrecioService: ListaPrecioService,
-      @Inject(MAT_DIALOG_DATA) public data: any) {
-      this.sucursalProducto=data.sucursalProducto;
-      this.listSucursales=data.listSucursales;
-      this.isAdding = data.isAdding ? data.isAdding  : false; 
-      
-   }
+  constructor(
+    private dialogRef: MatDialogRef<SucursalProductoEditComponent>,
+    private sucursalProductoService: SucursalProductoService,
+    private toastr: ToastrService,
+    private listaPrecioService: ListaPrecioService,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
+    this.sucursalProducto = data.sucursalProducto;
+    this.listSucursales = data.listSucursales;
+    this.isAdding = data.isAdding ? data.isAdding : false;
+  }
 
-
-   ngOnInit() {
-      this.loadCatalogs();
-   }
-   loadCatalogs(){
-      this.listaPrecioService.find({lprId:'0', lprActivo:'all', lprFechaVigencia:'all', lprFechaAlta:'all'})
-      .subscribe({
-         next: result => {
+  ngOnInit() {
+    this.loadCatalogs();
+  }
+  loadCatalogs() {
+    if (!this.isAdding) {
+      this.listaPrecioService
+        .find({
+          lprId: '0',
+          lprActivo: 'all',
+          lprFechaVigencia: 'all',
+          lprFechaAlta: 'all',
+        })
+        .subscribe({
+          next: (result) => {
             console.log(result);
             this.listListaPrecios = result;
-         },
-         error: err => {
-            this.toastr.error('Ha ocurrido un error al cargar los catálogos', 'Error');
-         }
-      });
-   }
+          },
+          error: (err) => {
+            this.toastr.error(
+              'Ha ocurrido un error al cargar los catálogos',
+              'Error'
+            );
+          },
+        });
+    }
+  }
 
-   onSucursalChange( event: any){   
-      this.sucursalProducto.supSucId=event.value;
-   }
+  onSucursalChange(event: any) {
+    this.sucursalProducto.supSucId = event.value;
+    if (this.sucursalProducto.supSucId) {
+      this.listaPrecioService
+        .findListaFromProductosSucursal(
+          this.sucursalProducto.supSucId,
+          this.sucursalProducto.supProId
+        )
+        .subscribe(
+          (res) => {
+            console.log('Respuesta de productos sucursal:');
+            console.log(res);
+              this.listListaPrecios = res;
+          },
+          (error) => {
+            console.log();
+            this.toastr.error(
+              'No se pudo encontrar lista de precios para la sucursal y producto seleccionados'
+            );
+          }
+        );
+    }
+  }
 
-   onProductoChange( event: any){   
-      this.sucursalProducto.supProId=event.value;
-   }
+  onProductoChange(event: any) {
+    this.sucursalProducto.supProId = event.value;
+  }
 
-   onListaPrecioChange( event: any){   
-      this.sucursalProducto.supLprId=event.value;
-   }  
+  onListaPrecioChange(event: any) {
+    this.sucursalProducto.supLprId = event.value;
+  }
 
-   /*Métodos*/
-   
-   save() {
-      
-      this.sucursalProductoService.save(this.sucursalProducto).subscribe({
-         next:  result => {
-        
-            if (result.supProId !== undefined && result.supProId != null && Number(result.supProId) >= 0) {
-               this.toastr.success('El producto por sucursal ha sido guardado exitosamente', 'Transacción exitosa');
-               this.sucursalProductoService.setIsUpdated(true);
-               this.dialogRef.close();
-            }
-            else this.toastr.error('Ha ocurrido un error', 'Error');
-         },
-         error: err => {
-            this.toastr.error('Ha ocurrido un error', 'Error');
-         }
-      });
-   }
+  /*Métodos*/
+
+  save() {
+    this.sucursalProductoService.save(this.sucursalProducto).subscribe({
+      next: (result) => {
+        if (
+          result.supProId !== undefined &&
+          result.supProId != null &&
+          Number(result.supProId) >= 0
+        ) {
+          this.toastr.success(
+            'El producto por sucursal ha sido guardado exitosamente',
+            'Transacción exitosa'
+          );
+          this.sucursalProductoService.setIsUpdated(true);
+          this.dialogRef.close();
+        } else this.toastr.error('Ha ocurrido un error', 'Error');
+      },
+      error: (err) => {
+        this.toastr.error('Ha ocurrido un error', 'Error');
+      },
+    });
+  }
 }
