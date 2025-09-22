@@ -35,8 +35,8 @@ export class ProductoPrecioService extends GeneralService {
       let params = new HttpParams();
       let url = '';
       if (entity.prrProId) {
-         url = `${this.api}/${entity.prrProId.toString()}`;
-         params = new HttpParams().set('ID', entity.prrProId.toString());
+         url = `${this.api}/${entity.prrProId.toString()}/${entity.prrLprId.toString()}`;
+
          return this.http.delete<ProductoPrecio>(url, {
             headers: this.getHeaders(), 
             params
@@ -53,6 +53,19 @@ export class ProductoPrecioService extends GeneralService {
       });
    }
    
+   findListPreciosExclude(proId: number): Observable<any[]> {
+      const url = `${this.api}/listaPrecio/${proId}`;
+      return this.http.get<any[]>(url, {
+         headers: this.getHeaders()  // Usar headers con token
+      });
+   }
+
+   findReglaImpuestos(): Observable<any[]> {
+      const url = `${this.api}/getReglaImpuestos`;
+      return this.http.get<any[]>(url, {
+         headers: this.getHeaders()  // Usar headers con token
+      });
+   }
    
    findById(id: string): Observable<ProductoPrecio> {
       const url = `${this.api}/${id}`;
@@ -77,11 +90,11 @@ export class ProductoPrecioService extends GeneralService {
    }
 
   
-   save(entity: ProductoPrecio): Observable<ProductoPrecio> {
+   save(entity: ProductoPrecio, isNew?: boolean): Observable<ProductoPrecio> {
       let url = `${this.api}`;
       const headers = this.getHeaders();  // Obtener headers con token
       
-      if (entity.prrProId) {
+      if (!isNew) {
          return this.http.put<ProductoPrecio>(url, entity, { headers });
       } else {
          return this.http.post<ProductoPrecio>(url, entity, { headers });

@@ -10,6 +10,7 @@ import { ConfirmDialogComponent } from '../../common/confirm-dialog/confirm-dial
 import { ToastrService } from 'ngx-toastr';
 import { ListaPrecioService } from '../../lista-precio/lista-precio.service';
 import { ListaPrecio } from '../../lista-precio/lista-precio';
+import { ProductoPrecioBusquedaComponent } from '../producto-precio-busqueda/producto-precio-busqueda.component';
 
 @Component({
   selector: 'app-producto-precio',
@@ -27,7 +28,9 @@ export class ProductoPrecioListComponent implements OnInit {
     'actions',
   ];
   filter = new ProductoPrecioFilter();
-  listaPrecios: ListaPrecio[]= [];
+  listaPrecios: ListaPrecio[] = [];
+  listImpuestos: any[] = [];
+  isAdding: boolean = false;
   private subs!: Subscription;
 
   /* Inicialización */
@@ -54,9 +57,13 @@ export class ProductoPrecioListComponent implements OnInit {
   ngOnDestroy(): void {
     this.subs?.unsubscribe();
   }
-  OnListaPreciosChange(event: any){
-   this.filter.prrLprId = event.value; 
-   this.search(); 
+  OnListaPreciosChange(event: any) {
+    this.filter.prrLprId = event.value;
+    this.search();
+  }
+  onImpuestoChange(event: any) {
+    this.filter.prrReiId = event.value;
+    this.search();
   }
   loadCatalogs() {
     this.listaPrecioService
@@ -75,6 +82,15 @@ export class ProductoPrecioListComponent implements OnInit {
           console.log(error);
         }
       );
+
+    this.productoPrecioService.findReglaImpuestos().subscribe(
+      (res) => {
+        this.listImpuestos = res;
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
   /* Accesors */
 
@@ -87,7 +103,7 @@ export class ProductoPrecioListComponent implements OnInit {
   add() {
     let newProductoPrecio: ProductoPrecio = new ProductoPrecio();
 
-    this.edit(newProductoPrecio);
+    this.edit(newProductoPrecio, true);
   }
 
   delete(productoPrecio: ProductoPrecio): void {
@@ -101,30 +117,56 @@ export class ProductoPrecioListComponent implements OnInit {
       if (result === true) {
         this.productoPrecioService.delete(productoPrecio).subscribe({
           next: (result) => {
-            if (Number(result) > 0) {
+            if (
+              result.prrLprId != undefined &&
+              result.prrLprId !== null &&
+              result.prrLprId > 0
+            ) {
               this.toastr.success(
                 'El precio de producto ha sido eliminado exitosamente',
                 'Transacción exitosa'
               );
               this.productoPrecioService.setIsUpdated(true);
-            } else this.toastr.error('Ha ocurrido un error', 'Error');
+            } else this.toastr.error('Ha ocurrido un error. Revise las relaciones.', 'Error');
           },
           error: (err) => {
-            this.toastr.error('Ha ocurrido un error', 'Error');
+            
+            console.log(err);
+            if(err.error.errorCode == -2){
+              this.toastr.error('No se puede eliminar porque tiene registros relacionados', 'Error');
+            }else{
+              this.toastr.error('Ha ocurrido un error', 'Error');
+            }
+            
           },
         });
       }
     });
   }
 
-  edit(ele: ProductoPrecio) {
-    this.dialog.open(ProductoPrecioEditComponent, {
-      data: { productoPrecio: JSON.parse(JSON.stringify(ele)) },
-      height: '500px',
-      width: '700px',
-      maxWidth: 'none',
-      disableClose: true,
-    });
+  edit(ele: ProductoPrecio, isNew?: boolean) {
+    if (isNew) {
+      this.dialog.open(ProductoPrecioBusquedaComponent, {
+        data: {
+          productoPrecio: JSON.parse(JSON.stringify(ele)),
+          isNew: isNew ?? false,
+        },
+        height: '500px',
+        width: '700px',
+        maxWidth: 'none',
+        disableClose: true,
+      });
+      return;
+    } else {
+      this.dialog.open(ProductoPrecioEditComponent, {
+        data: { productoPrecio: JSON.parse(JSON.stringify(ele)), isNew },
+        height: '500px',
+        width: '700px',
+        maxWidth: 'none',
+        disableClose: true,
+      });
+      return;
+    }
   }
 
   search(): void {

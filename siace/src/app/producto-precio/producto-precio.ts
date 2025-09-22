@@ -4,4 +4,5 @@ export class ProductoPrecio {
   prrPrecio!: number;
   prrFechaAlta!: Date;
   prrReiId!: number;
+  
 }

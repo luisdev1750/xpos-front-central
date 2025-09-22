@@ -17,6 +17,8 @@ import { ProductoPrecioService } from './producto-precio.service';
 import { ProductoPrecioRoutingModule } from './producto-precio.routing.module';
 import { ListaPrecioService } from '../lista-precio/lista-precio.service';
 import { MatSelect } from '@angular/material/select';
+import { ProductoPrecioBusquedaComponent } from './producto-precio-busqueda/producto-precio-busqueda.component';
+import { ProductoService } from '../producto/producto.service';
 
 @NgModule({
   imports: [
@@ -37,9 +39,10 @@ import { MatSelect } from '@angular/material/select';
   ],
   declarations: [
     ProductoPrecioListComponent,
-    ProductoPrecioEditComponent
+    ProductoPrecioEditComponent,
+    ProductoPrecioBusquedaComponent
   ],
-  providers: [ProductoPrecioService, ListaPrecioService],
+  providers: [ProductoPrecioService, ListaPrecioService, ProductoService],
   exports: []
 })
 export class ProductoPrecioModule { }

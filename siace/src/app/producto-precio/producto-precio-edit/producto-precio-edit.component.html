@@ -5,13 +5,22 @@
 
    <div class="col-md-4">
       <mat-form-field>
-         <mat-label>Clave</mat-label>
-         <input matInput [(ngModel)]="productoPrecio.prrProId" id="prrProId" name="prrProId" placeholder="Clave" readonly>
+         <mat-label>Producto</mat-label>
+         <input matInput [(ngModel)]="nameProducto" id="prrProId" name="prrProId" placeholder="Clave" readonly>
          
          
       </mat-form-field>
    </div>
-   <div class="col-md-4">
+
+      <div class="col-md-4" *ngIf="!isNew">
+      <mat-form-field>
+         <mat-label>Lista de precios</mat-label>
+         <input matInput [(ngModel)]="nameListaPrecio" id="prrProId" name="prrProId" placeholder="Clave" readonly>
+         
+         
+      </mat-form-field>
+   </div>
+   <div class="col-md-4" *ngIf="isNew">
       <mat-form-field>
         <mat-label>Lista de precios</mat-label>
         <mat-select [value]="productoPrecio.prrLprId"  (selectionChange)="OnListaPreciosChange($event)">
@@ -45,15 +54,20 @@
          <mat-error *ngIf="productoPrecio.prrFechaAlta==undefined">Fecha de Alta es requerido</mat-error>
       </mat-form-field>
    </div>
-
-   <div class="col-md-4">
+     <div class="col-md-4">
       <mat-form-field>
-         <mat-label for="prrReiId">Clave de Reglas de Impuestos</mat-label>
-         <input matInput type="number" [(ngModel)]="productoPrecio.prrReiId" id="prrReiId" name="prrReiId" placeholder="Clave de Reglas de Impuestos">
-         
-         
+        <mat-label>Regla de impuestos</mat-label>
+        <mat-select [value]="productoPrecio.prrReiId" (selectionChange)="OnListImpuestosChange($event)">
+          <mat-option *ngFor="let impuesto of listImpuestos" 
+                      [value]="impuesto.reiId">
+            {{ impuesto.reiNombre }}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
-   </div>
+    </div>
+
+
+   
 </div>
    <div class="button-row text-center" role="group">
       <button type="submit" mat-raised-button color="primary" [disabled]="!editForm.form.valid">Guardar</button>
