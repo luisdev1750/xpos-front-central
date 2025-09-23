@@ -3,46 +3,97 @@
 
 <div class="row">
 
-   <div class="col-md-4">
+   <div class="col-md-6">
       <mat-form-field>
          <mat-label>Producto</mat-label>
-         <input matInput [(ngModel)]="productoProveedor.prvProId" id="prvProId" name="prvProId" placeholder="Clave" readonly>
-         
-         
+         <input
+            type="text"
+            matInput
+            [formControl]="productoControl"
+            [matAutocomplete]="autoProducto"
+            placeholder="Buscar producto..."
+         />
+         <mat-autocomplete
+            #autoProducto="matAutocomplete"
+            [displayWith]="displayProductoFn"
+            (optionSelected)="onProductoSelected($event.option.value)"
+         >
+            <mat-option
+               *ngFor="let producto of filteredProductos | async"
+               [value]="producto"
+            >
+               <span><strong>{{ producto.proId }}</strong> - {{ producto.proNombre }}</span>
+               <br />
+               <small style="color: #666" *ngIf="producto.proDescripcion">{{ producto.proDescripcion }}</small>
+            </mat-option>
+         </mat-autocomplete>
       </mat-form-field>
    </div>
 
-   <div class="col-md-4">
+   <div class="col-md-6">
       <mat-form-field>
-         <mat-label for="prvPveId">Clave de Proveedor</mat-label>
-         <input matInput type="number" [(ngModel)]="productoProveedor.prvPveId" id="prvPveId" name="prvPveId" placeholder="Clave de Proveedor">
-         
-         <mat-error *ngIf="productoProveedor.prvPveId==undefined">Clave de Proveedor es requerido</mat-error>
-      </mat-form-field>
-   </div>
-
-   <div class="col-md-4">
-      <mat-form-field>
-         <mat-label for="prvUnmId">Clave de Unidades de Medida</mat-label>
-         <input matInput type="number" [(ngModel)]="productoProveedor.prvUnmId" id="prvUnmId" name="prvUnmId" placeholder="Clave de Unidades de Medida">
-         
-         
+         <mat-label>Proveedor</mat-label>
+         <input
+            type="text"
+            matInput
+            [formControl]="proveedorControl"
+            [matAutocomplete]="autoProveedor"
+            placeholder="Buscar proveedor..."
+         />
+         <mat-autocomplete
+            #autoProveedor="matAutocomplete"
+            [displayWith]="displayProveedorFn"
+            (optionSelected)="onProveedorSelected($event.option.value)"
+         >
+            <mat-option
+               *ngFor="let proveedor of filteredProveedores | async"
+               [value]="proveedor"
+            >
+               <span><strong>{{ proveedor.pveId }}</strong> - {{ proveedor.pveNombre }}</span>
+            </mat-option>
+         </mat-autocomplete>
+         <mat-error *ngIf="productoProveedor.prvPveId==undefined">Proveedor es requerido</mat-error>
       </mat-form-field>
    </div>
 </div>
-<div class="row">
 
-   <div class="col-md-4">
+<div class="row">
+   <div class="col-md-6">
+      <mat-form-field>
+         <mat-label>Unidad de medida</mat-label>
+         <mat-select
+            [value]="productoProveedor.prvUnmId"
+            (selectionChange)="onUnidadMedidaChange($event)"
+            name="prvUnmId"
+            ngModel
+         >
+            <mat-option
+               *ngFor="let unidad of unidadMedidaList"
+               [value]="unidad.unmId"
+            >
+               {{ unidad.unmNombre }}
+            </mat-option>
+         </mat-select>
+      </mat-form-field>
+   </div>
+
+   <div class="col-md-6">
       <mat-form-field>
          <mat-label for="prvPrecio">Precio</mat-label>
-         <input matInput type="number" [(ngModel)]="productoProveedor.prvPrecio" id="prvPrecio" name="prvPrecio" placeholder="Precio">
-         
+         <input matInput 
+                type="number" 
+                [(ngModel)]="productoProveedor.prvPrecio" 
+                id="prvPrecio" 
+                name="prvPrecio" 
+                placeholder="Precio"
+                required>
          <mat-error *ngIf="productoProveedor.prvPrecio==undefined">Precio es requerido</mat-error>
       </mat-form-field>
    </div>
 </div>
+
    <div class="button-row text-center" role="group">
       <button type="submit" mat-raised-button color="primary" [disabled]="!editForm.form.valid">Guardar</button>
       <button mat-button mat-dialog-close>Cancelar</button>
-  </div>
+   </div>
 </form>
