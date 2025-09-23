@@ -35,8 +35,7 @@ export class ProductoProveedorService extends GeneralService {
       let params = new HttpParams();
       let url = '';
       if (entity.prvProId) {
-         url = `${this.api}/${entity.prvProId.toString()}`;
-         params = new HttpParams().set('ID', entity.prvProId.toString());
+         url = `${this.api}/${entity.prvProId.toString()}/${entity.prvPveId.toString()}`;         
          return this.http.delete<ProductoProveedor>(url, {
             headers: this.getHeaders(), 
             params
@@ -80,8 +79,10 @@ export class ProductoProveedorService extends GeneralService {
    save(entity: ProductoProveedor): Observable<ProductoProveedor> {
       let url = `${this.api}`;
       const headers = this.getHeaders();  // Obtener headers con token
-      
-      if (entity.prvProId) {
+   
+      return this.http.post<ProductoProveedor>(url, entity, { headers });
+ 
+         if (entity.prvProId) {
          return this.http.put<ProductoProveedor>(url, entity, { headers });
       } else {
          return this.http.post<ProductoProveedor>(url, entity, { headers });

@@ -219,7 +219,7 @@ export class ProductoProveedorListComponent implements OnInit {
 
   add() {
     let newProductoProveedor: ProductoProveedor = new ProductoProveedor();
-    this.edit(newProductoProveedor);
+    this.edit(newProductoProveedor, false);
   }
 
   delete(productoProveedor: ProductoProveedor): void {
@@ -233,7 +233,7 @@ export class ProductoProveedorListComponent implements OnInit {
       if (result === true) {
         this.productoProveedorService.delete(productoProveedor).subscribe({
           next: (result) => {
-            if (Number(result) > 0) {
+            if (result.prvProId != undefined && result.prvProId !== null && result.prvProId > 0) {
               this.toastr.success(
                 'El producto por proveedor ha sido eliminado exitosamente',
                 'Transacción exitosa'
@@ -249,14 +249,25 @@ export class ProductoProveedorListComponent implements OnInit {
     });
   }
 
-  edit(ele: ProductoProveedor) {
-    this.dialog.open(ProductoProveedorEditComponent, {
-      data: { productoProveedor: JSON.parse(JSON.stringify(ele)) },
+  edit(ele: ProductoProveedor, isEditing: boolean) {
+   if(!isEditing){
+      this.dialog.open(ProductoProveedorEditComponent, {
+      data: { productoProveedor: JSON.parse(JSON.stringify(ele)), isEditing: false },
       height: '500px',
       width: '700px',
       maxWidth: 'none',
       disableClose: true,
     });
+   }else{
+      this.dialog.open(ProductoProveedorEditComponent, {
+      data: { productoProveedor: JSON.parse(JSON.stringify(ele)), isEditing: true},
+      height: '500px',
+      width: '700px',
+      maxWidth: 'none',
+      disableClose: true,
+    });
+   }
+    
   }
 
   search(): void {

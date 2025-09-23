@@ -37,7 +37,7 @@ export class ProductoProveedorEditComponent implements OnInit {
    // Observables filtrados
    filteredProveedores!: Observable<any[]>;
    filteredProductos!: Observable<any[]>;
-
+   isEditing: boolean = false;
    /* Constructores */
    
    constructor(
@@ -48,6 +48,7 @@ export class ProductoProveedorEditComponent implements OnInit {
       private productoService: ProductoService,
       @Inject(MAT_DIALOG_DATA) public data: any) {
       this.productoProveedor = data.productoProveedor;
+      this.isEditing = data.isEditing ?? false; 
    }
 
    ngOnInit() {
@@ -203,7 +204,7 @@ export class ProductoProveedorEditComponent implements OnInit {
    save() {
       this.productoProveedorService.save(this.productoProveedor).subscribe({
          next: result => {
-            if (Number(result) > 0) {
+            if (result.prvProId != null && result.prvProId !== undefined && result.prvProId > 0) {
                this.toastr.success('El producto por proveedor ha sido guardado exitosamente', 'Transacción exitosa');
                this.productoProveedorService.setIsUpdated(true);
                this.dialogRef.close();

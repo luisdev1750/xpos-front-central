@@ -12,6 +12,7 @@
             [formControl]="productoControl"
             [matAutocomplete]="autoProducto"
             placeholder="Buscar producto..."
+               [readonly]="isEditing"
          />
          <mat-autocomplete
             #autoProducto="matAutocomplete"
@@ -39,6 +40,7 @@
             [formControl]="proveedorControl"
             [matAutocomplete]="autoProveedor"
             placeholder="Buscar proveedor..."
+               [readonly]="isEditing"
          />
          <mat-autocomplete
             #autoProveedor="matAutocomplete"
@@ -65,7 +67,7 @@
             [value]="productoProveedor.prvUnmId"
             (selectionChange)="onUnidadMedidaChange($event)"
             name="prvUnmId"
-            ngModel
+      
          >
             <mat-option
                *ngFor="let unidad of unidadMedidaList"
