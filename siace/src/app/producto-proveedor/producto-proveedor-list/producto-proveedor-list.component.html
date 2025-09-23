@@ -1,86 +1,143 @@
 <nav aria-label="breadcrumb">
-   <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
-      <li class="breadcrumb-item active">
-         Catalogo de Productos por Proveedor
-      </li>
-   </ol>
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
+    <li class="breadcrumb-item active">Catalogo de Productos por Proveedor</li>
+  </ol>
 </nav>
 
 <div class="proin-main">
-   <mat-card class="proin-card">
-      <h2>Catalogo de Productos por Proveedor</h2>
-      <form #f="ngForm">
-         
-         <mat-form-field>
-            <mat-label>Clave:</mat-label>
-            <input matInput type="search" [(ngModel)]="filter.prvProId" id="prvProId"
-               name="prvProId">
-         </mat-form-field>
-         
-         <mat-form-field>
-            <mat-label>Clave de Proveedor:</mat-label>
-            <input matInput type="search" [(ngModel)]="filter.prvPveId" id="prvPveId"
-               name="prvPveId">
-         </mat-form-field>
-         
-         <mat-form-field>
-            <mat-label>Clave de Unidades de Medida:</mat-label>
-            <input matInput type="search" [(ngModel)]="filter.prvUnmId" id="prvUnmId"
-               name="prvUnmId">
-         </mat-form-field>
-         
+  <mat-card class="proin-card">
+    <h2>Catalogo de Productos por Proveedor</h2>
+    <form #f="ngForm">
+      <mat-form-field>
+        <mat-label>Clave:</mat-label>
+        <input
+          matInput
+          type="search"
+          [(ngModel)]="filter.prvProId"
+          id="prvProId"
+          name="prvProId"
+        />
+      </mat-form-field>
 
-         <button mat-mini-fab color="accent" (click)="add()" [disabled]="!f?.valid">
-            <mat-icon>add</mat-icon>
-         </button>
-      </form>
-      <div *ngIf="productoProveedorList.length > 0">
-         
-         <table mat-table #table [dataSource]="productoProveedorList">
-            
-            <ng-container matColumnDef="prvProId">
-               <mat-header-cell *matHeaderCellDef>
-                  Clave
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.prvProId}} </mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="prvPveId">
-               <mat-header-cell *matHeaderCellDef>
-                  Clave de Proveedor
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.prvPveId}} </mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="prvUnmId">
-               <mat-header-cell *matHeaderCellDef>
-                  Clave de Unidades de Medida
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.prvUnmId}} </mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="prvPrecio">
-               <mat-header-cell *matHeaderCellDef>
-                  Precio
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.prvPrecio}} </mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="actions">
-               <mat-header-cell *matHeaderCellDef></mat-header-cell>
-               <mat-cell *matCellDef="let item">
-                  <button (click)="edit(item)" mat-button color="warn" class="button-edit">
-                     <mat-icon>edit</mat-icon>
-                  </button>&nbsp;
-                  <button (click)="delete(item)" mat-button color="warn">
-                     <mat-icon>delete</mat-icon>
-                  </button>
-               </mat-cell>
-            </ng-container>
-            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-         </table>
-      </div>
-   </mat-card>
+      <mat-form-field>
+        <mat-label>Proveedor</mat-label>
+        <input
+          type="text"
+          matInput
+          [formControl]="proveedorControl"
+          [matAutocomplete]="autoProveedor"
+          placeholder="Buscar proveedor..."
+        />
+        <mat-autocomplete
+          #autoProveedor="matAutocomplete"
+          [displayWith]="displayProveedorFn"
+          (optionSelected)="onProveedorSelected($event.option.value)"
+        >
+          <mat-option
+            *ngFor="let proveedor of filteredProveedores | async"
+            [value]="proveedor"
+          >
+            <span
+              ><strong>{{ proveedor.pveId }}</strong> -
+              {{ proveedor.pveNombre }}</span
+            >
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Clave de Proveedor:</mat-label>
+        <input
+          matInput
+          type="search"
+          [(ngModel)]="filter.prvPveId"
+          id="prvPveId"
+          name="prvPveId"
+        />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Unidad de medida</mat-label>
+        <mat-select
+          [value]="filter.prvUnmId"
+          (selectionChange)="onUnidadMedidaChange($event)"
+        >
+          <mat-option
+            *ngFor="let unidad of listUnidades"
+            [value]="unidad.unmId"
+          >
+            {{ unidad.unmNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Clave de Unidades de Medida:</mat-label>
+        <input
+          matInput
+          type="search"
+          [(ngModel)]="filter.prvUnmId"
+          id="prvUnmId"
+          name="prvUnmId"
+        />
+      </mat-form-field>
+
+      <button
+        mat-mini-fab
+        color="accent"
+        (click)="add()"
+        [disabled]="!f?.valid"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+    </form>
+
+    <div *ngIf="productoProveedorList.length > 0">
+      <table mat-table #table [dataSource]="productoProveedorList">
+        <ng-container matColumnDef="prvProId">
+          <mat-header-cell *matHeaderCellDef> Clave </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.prvProId }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="prvPveId">
+          <mat-header-cell *matHeaderCellDef>
+            Clave de Proveedor
+          </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.prvPveId }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="prvUnmId">
+          <mat-header-cell *matHeaderCellDef>
+            Clave de Unidades de Medida
+          </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.prvUnmId }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="prvPrecio">
+          <mat-header-cell *matHeaderCellDef> Precio </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.prvPrecio }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            <button
+              (click)="edit(item)"
+              mat-button
+              color="warn"
+              class="button-edit"
+            >
+              <mat-icon>edit</mat-icon></button
+            >&nbsp;
+            <button (click)="delete(item)" mat-button color="warn">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+      </table>
+    </div>
+  </mat-card>
 </div>
