@@ -1,8 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { ProductoProveedorFilter } from '../producto-proveedor-filter';
 import { ProductoProveedorService } from '../producto-proveedor.service';
 import { ProductoProveedor } from '../producto-proveedor';
@@ -32,10 +35,13 @@ export class ProductoProveedorListComponent implements OnInit {
 
   private subs!: Subscription;
   listProvedores: any[] = [];
-  listUnidades: any[] = [];
-  // Nuevos controles para autocomplete
+  listProductos: any[] = [];
+  unidadMedidaList: any[] = [];
+  // Controles para autocomplete
   proveedorControl = new FormControl('');
+  productoControl = new FormControl('');
   filteredProveedores!: Observable<any[]>;
+  filteredProductos!: Observable<any[]>;
 
   /* Inicialización */
 
@@ -62,11 +68,21 @@ export class ProductoProveedorListComponent implements OnInit {
   }
 
   setupAutocomplete() {
+    // Autocomplete para proveedores
     this.filteredProveedores = this.proveedorControl.valueChanges.pipe(
       startWith(''),
       map((value) => {
         const filterValue = this._getFilterValue(value);
         return this._filterProveedores(filterValue);
+      })
+    );
+
+    // Autocomplete para productos
+    this.filteredProductos = this.productoControl.valueChanges.pipe(
+      startWith(''),
+      map((value) => {
+        const filterValue = this._getFilterValue(value);
+        return this._filterProductos(filterValue);
       })
     );
   }
@@ -75,8 +91,15 @@ export class ProductoProveedorListComponent implements OnInit {
     if (typeof value === 'string') {
       return value;
     }
-    if (value && typeof value === 'object' && value.pveNombre) {
-      return value.pveNombre;
+    if (value && typeof value === 'object') {
+      // Para proveedores
+      if (value.pveNombre) {
+        return value.pveNombre;
+      }
+      // Para productos (ajusta según los nombres de tus propiedades)
+      if (value.proNombre) {
+        return value.proNombre;
+      }
     }
     return '';
   }
@@ -90,13 +113,49 @@ export class ProductoProveedorListComponent implements OnInit {
     );
   }
 
+  private _filterProductos(value: string): any[] {
+    const filterValue = value.toLowerCase();
+    console.log('Filtrando productos con valor:', filterValue); // DEBUG
+    console.log('Lista de productos disponibles:', this.listProductos); // DEBUG
+
+    const filtered = this.listProductos.filter((producto) => {
+      // Primero veamos qué propiedades tiene cada producto
+      console.log('Producto:', producto, 'Propiedades:', Object.keys(producto)); // DEBUG
+
+      return (
+        (producto.proNombre &&
+          producto.proNombre.toLowerCase().includes(filterValue)) ||
+        (producto.proDescripcion &&
+          producto.proDescripcion.toLowerCase().includes(filterValue)) ||
+        producto.proId.toString().includes(filterValue)
+      );
+    });
+
+    console.log('Productos filtrados:', filtered); // DEBUG
+    return filtered;
+  }
+
   displayProveedorFn(proveedor: any): string {
     return proveedor && proveedor.pveNombre ? proveedor.pveNombre : '';
+  }
+
+  displayProductoFn(producto: any): string {
+    return producto && producto.proNombre ? producto.proNombre : '';
   }
 
   onProveedorSelected(proveedor: any) {
     if (proveedor) {
       this.filter.prvPveId = proveedor.pveId;
+      // Opcional: disparar búsqueda automáticamente
+      // this.search();
+    }
+  }
+
+  onProductoSelected(producto: any) {
+    if (producto) {
+      this.filter.prvProId = producto.proId;
+      // Opcional: disparar búsqueda automáticamente
+      // this.search();
     }
   }
 
@@ -107,7 +166,9 @@ export class ProductoProveedorListComponent implements OnInit {
   OnProvedorChange(event: any) {
     this.filter.prvProId = event.value;
   }
-
+  onUnidadMedidaChange(event: any) {
+   this.filter.prvUnmId = event.value; 
+  }
   loadCatalogs() {
     this.proveedorService
       .find({
@@ -124,38 +185,31 @@ export class ProductoProveedorListComponent implements OnInit {
         this.listProvedores = res;
       });
 
-   
+    this.productoService
+      .find({
+        proId: '0',
+        proFamId: '0',
+        proPreId: '0',
+        proActivo: 'all',
+      })
+      .subscribe(
+        (res) => {
+          this.listProductos = res;
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
 
     this.productoService.findByCatalogo('listar-unidades').subscribe(
-      (res) => {
-        console.log('Respuesta de busqueda');
-        this.listUnidades = res;
+      (result) => {
+        console.log(result);
+        this.unidadMedidaList = result;
       },
       (error) => {
-        console.log(error);
+        this.toastr.error('Ha ocurrido un error', 'Error');
       }
     );
-
-    /// const url = `${this.api}/${filter.proId}/${filter.proFamId}/${filter.proPreId}/${filter.proActivo}`;
-
-    this.productoService.find({
-      proId: '0',
-      proFamId: '0',
-      proPreId: '0',
-      proActivo: 'all'
-    }).subscribe((res)=>{
-      console.log("resultado de busqueda");
-      console.log(res);
-      
-      
-    }, (error)=>{
-      console.log(error);
-      
-    })
-  }
-
-  onUnidadMedidaChange(event: any) {
-    this.filter.prvUnmId = event.value;
   }
 
   /* Accesors */

@@ -9,6 +9,37 @@
   <mat-card class="proin-card">
     <h2>Catalogo de Productos por Proveedor</h2>
     <form #f="ngForm">
+      <!-- Autocomplete para Producto -->
+      <mat-form-field>
+        <mat-label>Producto</mat-label>
+        <input
+          type="text"
+          matInput
+          [formControl]="productoControl"
+          [matAutocomplete]="autoProducto"
+          placeholder="Buscar producto..."
+        />
+        <mat-autocomplete
+          #autoProducto="matAutocomplete"
+          [displayWith]="displayProductoFn"
+          (optionSelected)="onProductoSelected($event.option.value)"
+        >
+          <mat-option
+            *ngFor="let producto of filteredProductos | async"
+            [value]="producto"
+          >
+            <span
+              ><strong>{{ producto.proId }}</strong> -
+              {{ producto.proNombre }}</span
+            >
+            <br />
+            <small style="color: #666" *ngIf="producto.proDescripcion">{{
+              producto.proDescripcion
+            }}</small>
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
       <mat-form-field>
         <mat-label>Clave:</mat-label>
         <input
@@ -56,7 +87,6 @@
           name="prvPveId"
         />
       </mat-form-field>
-
       <mat-form-field>
         <mat-label>Unidad de medida</mat-label>
         <mat-select
@@ -64,14 +94,13 @@
           (selectionChange)="onUnidadMedidaChange($event)"
         >
           <mat-option
-            *ngFor="let unidad of listUnidades"
+            *ngFor="let unidad of unidadMedidaList"
             [value]="unidad.unmId"
           >
             {{ unidad.unmNombre }}
           </mat-option>
         </mat-select>
       </mat-form-field>
-
       <mat-form-field>
         <mat-label>Clave de Unidades de Medida:</mat-label>
         <input
