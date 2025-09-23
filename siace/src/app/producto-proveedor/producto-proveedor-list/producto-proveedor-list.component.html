@@ -40,16 +40,7 @@
         </mat-autocomplete>
       </mat-form-field>
 
-      <mat-form-field>
-        <mat-label>Clave:</mat-label>
-        <input
-          matInput
-          type="search"
-          [(ngModel)]="filter.prvProId"
-          id="prvProId"
-          name="prvProId"
-        />
-      </mat-form-field>
+   
 
       <mat-form-field>
         <mat-label>Proveedor</mat-label>
@@ -77,16 +68,7 @@
         </mat-autocomplete>
       </mat-form-field>
 
-      <mat-form-field>
-        <mat-label>Clave de Proveedor:</mat-label>
-        <input
-          matInput
-          type="search"
-          [(ngModel)]="filter.prvPveId"
-          id="prvPveId"
-          name="prvPveId"
-        />
-      </mat-form-field>
+     
       <mat-form-field>
         <mat-label>Unidad de medida</mat-label>
         <mat-select
@@ -101,16 +83,7 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-form-field>
-        <mat-label>Clave de Unidades de Medida:</mat-label>
-        <input
-          matInput
-          type="search"
-          [(ngModel)]="filter.prvUnmId"
-          id="prvUnmId"
-          name="prvUnmId"
-        />
-      </mat-form-field>
+    
 
       <button
         mat-mini-fab
@@ -125,22 +98,22 @@
     <div *ngIf="productoProveedorList.length > 0">
       <table mat-table #table [dataSource]="productoProveedorList">
         <ng-container matColumnDef="prvProId">
-          <mat-header-cell *matHeaderCellDef> Clave </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.prvProId }} </mat-cell>
+          <mat-header-cell *matHeaderCellDef> Producto </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.prvPrName }} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="prvPveId">
           <mat-header-cell *matHeaderCellDef>
-            Clave de Proveedor
+            Proveedor
           </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.prvPveId }} </mat-cell>
+          <mat-cell *matCellDef="let item"> {{ item.prvPveName }} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="prvUnmId">
           <mat-header-cell *matHeaderCellDef>
-            Clave de Unidades de Medida
+             Unidades de Medida
           </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.prvUnmId }} </mat-cell>
+          <mat-cell *matCellDef="let item"> {{ item.prvUnmName }} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="prvPrecio">

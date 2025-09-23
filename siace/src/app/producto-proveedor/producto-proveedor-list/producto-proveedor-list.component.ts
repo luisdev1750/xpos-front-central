@@ -92,11 +92,10 @@ export class ProductoProveedorListComponent implements OnInit {
       return value;
     }
     if (value && typeof value === 'object') {
-      // Para proveedores
-      if (value.pveNombre) {
+            if (value.pveNombre) {
         return value.pveNombre;
       }
-      // Para productos (ajusta según los nombres de tus propiedades)
+
       if (value.proNombre) {
         return value.proNombre;
       }
@@ -115,12 +114,9 @@ export class ProductoProveedorListComponent implements OnInit {
 
   private _filterProductos(value: string): any[] {
     const filterValue = value.toLowerCase();
-    console.log('Filtrando productos con valor:', filterValue); // DEBUG
-    console.log('Lista de productos disponibles:', this.listProductos); // DEBUG
 
     const filtered = this.listProductos.filter((producto) => {
-      // Primero veamos qué propiedades tiene cada producto
-      console.log('Producto:', producto, 'Propiedades:', Object.keys(producto)); // DEBUG
+     
 
       return (
         (producto.proNombre &&
@@ -146,16 +142,16 @@ export class ProductoProveedorListComponent implements OnInit {
   onProveedorSelected(proveedor: any) {
     if (proveedor) {
       this.filter.prvPveId = proveedor.pveId;
-      // Opcional: disparar búsqueda automáticamente
-      // this.search();
+     
+      this.search();
     }
   }
 
   onProductoSelected(producto: any) {
     if (producto) {
       this.filter.prvProId = producto.proId;
-      // Opcional: disparar búsqueda automáticamente
-      // this.search();
+      
+      this.search();
     }
   }
 
@@ -168,6 +164,7 @@ export class ProductoProveedorListComponent implements OnInit {
   }
   onUnidadMedidaChange(event: any) {
    this.filter.prvUnmId = event.value; 
+   this.search(); 
   }
   loadCatalogs() {
     this.proveedorService
