@@ -7,8 +7,6 @@
       <mat-form-field>
          <mat-label>Clave</mat-label>
          <input matInput [(ngModel)]="promocionObsequio.pobId" id="pobId" name="pobId" placeholder="Clave" readonly>
-         
-         
       </mat-form-field>
    </div>
 
@@ -16,7 +14,6 @@
       <mat-form-field>
          <mat-label for="pobPmoId">Promocion obsequio</mat-label>
          <input matInput type="number" [(ngModel)]="promocionObsequio.pobPmoId" id="pobPmoId" name="pobPmoId" placeholder="Promocion obsequio">
-         
          <mat-error *ngIf="promocionObsequio.pobPmoId==undefined">Promocion obsequio es requerido</mat-error>
       </mat-form-field>
    </div>
@@ -25,31 +22,50 @@
       <mat-form-field>
          <mat-label for="pobFamId">Familia</mat-label>
          <input matInput type="number" [(ngModel)]="promocionObsequio.pobFamId" id="pobFamId" name="pobFamId" placeholder="Familia">
-         
          <mat-error *ngIf="promocionObsequio.pobFamId==undefined">Familia es requerido</mat-error>
       </mat-form-field>
    </div>
 </div>
+
 <div class="row">
 
    <div class="col-md-4">
       <mat-form-field>
          <mat-label for="pobPreId">Presentaciones</mat-label>
          <input matInput type="number" [(ngModel)]="promocionObsequio.pobPreId" id="pobPreId" name="pobPreId" placeholder="Presentaciones">
-         
          <mat-error *ngIf="promocionObsequio.pobPreId==undefined">Presentaciones es requerido</mat-error>
       </mat-form-field>
    </div>
 
-   <div class="col-md-4">
+   <div class="col-md-8">
       <mat-form-field>
-         <mat-label for="pobProId">Producto</mat-label>
-         <input matInput type="number" [(ngModel)]="promocionObsequio.pobProId" id="pobProId" name="pobProId" placeholder="Producto">
-         
+         <mat-label>Producto</mat-label>
+         <input
+            type="text"
+            matInput
+            [formControl]="productoControl"
+            [matAutocomplete]="autoProducto"
+            placeholder="Buscar producto..."
+         />
+         <mat-autocomplete
+            #autoProducto="matAutocomplete"
+            [displayWith]="displayProductoFn"
+            (optionSelected)="onProductoSelected($event.option.value)"
+         >
+            <mat-option
+               *ngFor="let producto of filteredProductos | async"
+               [value]="producto"
+            >
+               <span><strong>{{ producto.proId }}</strong> - {{ producto.proNombre }}</span>
+               <br />
+               <small style="color: #666" *ngIf="producto.proDescripcion">{{ producto.proDescripcion }}</small>
+            </mat-option>
+         </mat-autocomplete>
          <mat-error *ngIf="promocionObsequio.pobProId==undefined">Producto es requerido</mat-error>
       </mat-form-field>
    </div>
 </div>
+
    <div class="button-row text-center" role="group">
       <button type="submit" mat-raised-button color="primary" [disabled]="!editForm.form.valid">Guardar</button>
       <button mat-button mat-dialog-close>Cancelar</button>
