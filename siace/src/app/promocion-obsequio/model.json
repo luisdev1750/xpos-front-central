@@ -1,0 +1,50 @@
+{
+   "title": "PromocionObsequio",
+   "entity": "promocionobsequio",
+   "module": "Catalogo de promociones obsequio",
+   "singular": "promoción obsequio",
+   "columns": 3,
+   "api": {
+      "url": "PromocionesObsequio"
+   },
+   "filter": [
+      "pobFamId",
+      "pobPreId",
+	  "pobProId",
+	  "pobPmoId",
+	  "pobId"
+   ],
+   "fields": [
+      {
+         "name": "pobId",
+         "label": "Clave",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "pobPmoId",
+         "label": "Promocion obsequio",
+         "type": "number",
+         "required": true
+      },
+      {
+         "name": "pobFamId",
+         "label": "Familia",
+         "type": "number",
+         "required": true
+      },
+      {
+         "name": "pobPreId",
+         "label": "Presentaciones",
+         "type": "number",
+         "required": true
+      },
+      {
+         "name": "pobProId",
+         "label": "Producto",
+         "type": "number",
+         "required": true
+      }
+   ]
+}

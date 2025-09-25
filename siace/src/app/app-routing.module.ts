@@ -165,6 +165,20 @@ const routes: Routes = [
             (m) => m.ProductoProveedorModule
           ),
       },
+        {
+        path: 'promocion',
+        loadChildren: () =>
+          import('./promocion/promocion.module').then(
+            (m) => m.PromocionModule
+          ),
+      },
+       {
+        path: 'promocion-obsequio',
+        loadChildren: () =>
+          import('./promocion-obsequio/promocion-obsequio.module').then(
+            (m) => m.PromocionObsequioModule
+          ),
+      },
 /*COMIENZA SIACE */
 
       {

@@ -1,0 +1,229 @@
+<h2>Detalle de la promoción</h2>
+<form
+  *ngIf="promocion"
+  #editForm="ngForm"
+  (ngSubmit)="save()"
+  autocomplete="off"
+>
+  <!-- Primera fila -->
+  <div class="row">
+    <div class="col-md-6">
+      <mat-form-field>
+        <mat-label>Clave</mat-label>
+        <input
+          matInput
+          [(ngModel)]="promocion.pmoId"
+          id="pmoId"
+          name="pmoId"
+          placeholder="Clave"
+          readonly
+        />
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-6">
+      <mat-form-field>
+        <mat-label>Nombre de la promoción</mat-label>
+        <input
+          matInput
+          [(ngModel)]="promocion.pmoNombre"
+          id="pmoNombre"
+          name="pmoNombre"
+          placeholder="Nombre de la promoción"
+        />
+        <mat-error *ngIf="promocion.pmoNombre == undefined">
+          Nombre de la promoción es requerido
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <!-- Segunda fila -->
+  <div class="row">
+    <div class="col-md-6">
+      <mat-form-field>
+        <mat-label>Tipos promociones</mat-label>
+        <mat-select
+          [value]="promocion.pmoTprId"
+          (selectionChange)="onTipoPromocionesChange($event)"
+        >
+          <mat-option
+            *ngFor="let tipoPromocion of listTiposPromocones"
+            [value]="tipoPromocion.tprId"
+          >
+            {{ tipoPromocion.tprNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-6">
+      <mat-form-field>
+        <mat-label>Sucursal</mat-label>
+        <mat-select
+          [value]="promocion.pmoSucId"
+          (selectionChange)="onSucursalChange($event)"
+        >
+          <mat-option
+            *ngFor="let sucursal of listSucursales"
+            [value]="sucursal.sucId"
+          >
+            {{ sucursal.sucNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <!-- Tercera fila -->
+  <div class="row">
+    <div class="col-md-6">
+      <mat-form-field>
+        <mat-label>Tipo de pago</mat-label>
+        <mat-select
+          [value]="promocion.pmoTpaId"
+          (selectionChange)="onTipoPagoChange($event)"
+        >
+          <mat-option
+            *ngFor="let tipoPago of listTipoPagos"
+            [value]="tipoPago.tpaId"
+          >
+            {{ tipoPago.tpaNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-6">
+      <mat-form-field>
+        <mat-label>Tipo de Subpago</mat-label>
+        <mat-select
+          [value]="promocion.pmoSpaId"
+          (selectionChange)="onSubpagoChange($event)"
+          [disabled]="!promocion.pmoTpaId || promocion.pmoTpaId === 0"
+        >
+          <mat-option
+            *ngFor="let subpago of listSubtipoPagos"
+            [value]="subpago.spaId"
+          >
+            {{ subpago.spaNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <!-- Cuarta fila - Fechas -->
+  <div class="row">
+    <div class="col-md-6">
+      <mat-form-field appearance="fill">
+        <mat-label for="pmoFechaInicio">Fecha de inicio</mat-label>
+        <input
+          matInput
+          [matDatepicker]="pmoFechaInicio"
+          [(ngModel)]="promocion.pmoFechaInicio"
+          id="pmoFechaInicio"
+          name="pmoFechaInicio"
+          placeholder="Selecciona fecha de inicio"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="pmoFechaInicio"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #pmoFechaInicio></mat-datepicker>
+        <mat-error *ngIf="promocion.pmoFechaInicio == undefined">
+          Fecha de inicio es requerida
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-6">
+      <mat-form-field appearance="fill">
+        <mat-label for="pmoFechaFin">Fecha de fin</mat-label>
+        <input
+          matInput
+          [matDatepicker]="pmoFechaFin"
+          [(ngModel)]="promocion.pmoFechaFin"
+          id="pmoFechaFin"
+          name="pmoFechaFin"
+          placeholder="Selecciona fecha de fin"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="pmoFechaFin"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #pmoFechaFin></mat-datepicker>
+        <mat-error *ngIf="promocion.pmoFechaFin == undefined">
+          Fecha de fin es requerida
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <!-- Quinta fila -->
+  <div class="row">
+    <div class="col-md-6">
+      <mat-form-field>
+        <mat-label>Obsequio único</mat-label>
+        <mat-select
+          [(ngModel)]="promocion.pmoObsequioUnico"
+          id="pmoObsequioUnico"
+          name="pmoObsequioUnico"
+        >
+          <mat-option [value]="true">Sí</mat-option>
+          <mat-option [value]="false">No</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-6">
+      <mat-form-field>
+        <mat-label for="pmoLimiteCantidad">Límite de cantidad</mat-label>
+        <input
+          matInput
+          type="number"
+          [(ngModel)]="promocion.pmoLimiteCantidad"
+          id="pmoLimiteCantidad"
+          name="pmoLimiteCantidad"
+          placeholder="Límite de cantidad"
+        />
+        <mat-error *ngIf="promocion.pmoLimiteCantidad == undefined">
+          Límite de cantidad es requerido
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <!-- Sexta fila - Política (campo ancho) -->
+  <div class="row">
+    <div class="col-md-12">
+      <mat-form-field>
+        <mat-label for="pmoPolitica">Política</mat-label>
+        <textarea
+          matInput
+          [(ngModel)]="promocion.pmoPolitica"
+          id="pmoPolitica"
+          name="pmoPolitica"
+          placeholder="Política"
+          rows="3"
+        ></textarea>
+        <mat-error *ngIf="promocion.pmoPolitica == undefined">
+          Política es requerida
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <!-- Botones -->
+  <div class="button-row text-center" role="group">
+    <button
+      type="submit"
+      mat-raised-button
+      color="primary"
+      [disabled]="!editForm.form.valid"
+    >
+      Guardar
+    </button>
+    <button mat-button mat-dialog-close>Cancelar</button>
+  </div>
+</form>

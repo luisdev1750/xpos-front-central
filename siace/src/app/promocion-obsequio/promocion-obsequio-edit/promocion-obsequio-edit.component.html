@@ -1,0 +1,57 @@
+<h2>Detalle del promoción obsequio</h2>
+<form *ngIf="promocionObsequio" #editForm="ngForm" (ngSubmit)="save()" autocomplete="off">
+
+<div class="row">
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label>Clave</mat-label>
+         <input matInput [(ngModel)]="promocionObsequio.pobId" id="pobId" name="pobId" placeholder="Clave" readonly>
+         
+         
+      </mat-form-field>
+   </div>
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="pobPmoId">Promocion obsequio</mat-label>
+         <input matInput type="number" [(ngModel)]="promocionObsequio.pobPmoId" id="pobPmoId" name="pobPmoId" placeholder="Promocion obsequio">
+         
+         <mat-error *ngIf="promocionObsequio.pobPmoId==undefined">Promocion obsequio es requerido</mat-error>
+      </mat-form-field>
+   </div>
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="pobFamId">Familia</mat-label>
+         <input matInput type="number" [(ngModel)]="promocionObsequio.pobFamId" id="pobFamId" name="pobFamId" placeholder="Familia">
+         
+         <mat-error *ngIf="promocionObsequio.pobFamId==undefined">Familia es requerido</mat-error>
+      </mat-form-field>
+   </div>
+</div>
+<div class="row">
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="pobPreId">Presentaciones</mat-label>
+         <input matInput type="number" [(ngModel)]="promocionObsequio.pobPreId" id="pobPreId" name="pobPreId" placeholder="Presentaciones">
+         
+         <mat-error *ngIf="promocionObsequio.pobPreId==undefined">Presentaciones es requerido</mat-error>
+      </mat-form-field>
+   </div>
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="pobProId">Producto</mat-label>
+         <input matInput type="number" [(ngModel)]="promocionObsequio.pobProId" id="pobProId" name="pobProId" placeholder="Producto">
+         
+         <mat-error *ngIf="promocionObsequio.pobProId==undefined">Producto es requerido</mat-error>
+      </mat-form-field>
+   </div>
+</div>
+   <div class="button-row text-center" role="group">
+      <button type="submit" mat-raised-button color="primary" [disabled]="!editForm.form.valid">Guardar</button>
+      <button mat-button mat-dialog-close>Cancelar</button>
+  </div>
+</form>

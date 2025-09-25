@@ -1,0 +1,149 @@
+<!-- Lista/Catálogo de Promociones -->
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
+    <li class="breadcrumb-item active">Catálogo de promociones</li>
+  </ol>
+</nav>
+
+<div class="proin-main">
+  <mat-card class="proin-card">
+    <h2>Catálogo de promociones</h2>
+    <form #f="ngForm">
+      <mat-form-field>
+        <mat-label>Clave:</mat-label>
+        <input
+          matInput
+          type="search"
+          [(ngModel)]="filter.pmoId"
+          id="pmoId"
+          name="pmoId"
+        />
+      </mat-form-field>
+
+      <button
+        mat-mini-fab
+        color="accent"
+        (click)="add()"
+        [disabled]="!f?.valid"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+    </form>
+    <div *ngIf="promocionList.length > 0">
+      <table mat-table #table [dataSource]="promocionList">
+        <ng-container matColumnDef="pmoId">
+          <mat-header-cell *matHeaderCellDef> Clave </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.pmoId }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="pmoNombre">
+          <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.pmoNombre }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="pmoFechaInicio">
+          <mat-header-cell *matHeaderCellDef> Fecha Inicio </mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            {{ item.pmoFechaInicio | date : "dd/MM/yyyy" }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="pmoFechaFin">
+          <mat-header-cell *matHeaderCellDef> Fecha Fin </mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            {{ item.pmoFechaFin | date : "dd/MM/yyyy" }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="pmoTprId">
+          <mat-header-cell *matHeaderCellDef> Tipo Promoción </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.pmoTprNombre }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="pmoTpaId">
+          <mat-header-cell *matHeaderCellDef> Tipo Pago </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.pmoTpaNombre }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="pmoSpaId">
+          <mat-header-cell *matHeaderCellDef> Tipo Subpago </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.pmoSpaNombre }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="pmoPolitica">
+          <mat-header-cell *matHeaderCellDef> Política </mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            <span [title]="item.pmoPolitica">
+              {{ item.pmoPolitica | slice : 0 : 50
+              }}{{ item.pmoPolitica?.length > 50 ? "..." : "" }}
+            </span>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="pmoObsequioUnico">
+          <mat-header-cell *matHeaderCellDef> Obsequio Único </mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            <mat-icon *ngIf="item.pmoObsequioUnico" color="primary"
+              >check_circle</mat-icon
+            >
+            <mat-icon *ngIf="!item.pmoObsequioUnico" color="warn"
+              >cancel</mat-icon
+            >
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="pmoLimiteCantidad">
+          <mat-header-cell *matHeaderCellDef> Límite Cantidad </mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            {{ item.pmoLimiteCantidad }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="pmoSucId">
+          <mat-header-cell *matHeaderCellDef> Sucursal </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.pmoSucNombre }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            <button
+              (click)="edit(item)"
+              mat-icon-button
+              color="primary"
+              matTooltip="Editar promoción"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button
+              (click)="delete(item)"
+              mat-icon-button
+              color="warn"
+              matTooltip="Eliminar promoción"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+            <button
+              *ngIf="item.pmoTprId == 1"
+              (click)="redirectToPromocionesObsequio(item)"
+              mat-icon-button
+              color="primary"
+              matTooltip="Editar promoción"
+            >
+              <mat-icon>navigation</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+      </table>
+    </div>
+
+    <div *ngIf="promocionList.length === 0" class="no-data">
+      <mat-icon>info</mat-icon>
+      <p>No se encontraron promociones</p>
+    </div>
+  </mat-card>
+</div>

@@ -1,0 +1,104 @@
+<nav aria-label="breadcrumb">
+   <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
+      <li class="breadcrumb-item active">
+         Catalogo de promociones obsequio
+      </li>
+   </ol>
+</nav>
+
+<div class="proin-main">
+   <mat-card class="proin-card">
+      <h2>Catalogo de promociones obsequio</h2>
+      <form #f="ngForm">
+         
+         <mat-form-field>
+            <mat-label>Clave:</mat-label>
+            <input matInput type="search" [(ngModel)]="filter.pobId" id="pobId"
+               name="pobId">
+         </mat-form-field>
+         
+         <mat-form-field>
+            <mat-label>Promocion :</mat-label>
+            <input matInput type="search" [(ngModel)]="filter.pobPmoId" id="pobPmoId"
+               name="pobPmoId">
+         </mat-form-field>
+         
+         <mat-form-field>
+            <mat-label>Familia:</mat-label>
+            <input matInput type="search" [(ngModel)]="filter.pobFamId" id="pobFamId"
+               name="pobFamId">
+         </mat-form-field>
+         
+         <mat-form-field>
+            <mat-label>Presentaciones:</mat-label>
+            <input matInput type="search" [(ngModel)]="filter.pobPreId" id="pobPreId"
+               name="pobPreId">
+         </mat-form-field>
+         
+         <mat-form-field>
+            <mat-label>Producto:</mat-label>
+            <input matInput type="search" [(ngModel)]="filter.pobProId" id="pobProId"
+               name="pobProId">
+         </mat-form-field>
+         
+
+         <button *ngIf = "fechaValida" mat-mini-fab color="accent" (click)="add()" [disabled]="!f?.valid">
+            <mat-icon>add</mat-icon>
+         </button>
+      </form>
+      <div *ngIf="promocionObsequioList.length > 0">
+         
+         <table mat-table #table [dataSource]="promocionObsequioList">
+            
+            <ng-container matColumnDef="pobId">
+               <mat-header-cell *matHeaderCellDef>
+                  Clave
+               </mat-header-cell>
+               <mat-cell *matCellDef="let item"> {{item.pobId}} </mat-cell>
+            </ng-container>
+            
+            <ng-container matColumnDef="pobPmoId">
+               <mat-header-cell *matHeaderCellDef>
+                  Promocion 
+               </mat-header-cell>
+               <mat-cell *matCellDef="let item"> {{item.pobPmoName}} </mat-cell>
+            </ng-container>
+            
+            <ng-container matColumnDef="pobFamId">
+               <mat-header-cell *matHeaderCellDef>
+                  Familia
+               </mat-header-cell>
+               <mat-cell *matCellDef="let item"> {{item.pobFamName}} </mat-cell>
+            </ng-container>
+            
+            <ng-container matColumnDef="pobPreId">
+               <mat-header-cell *matHeaderCellDef>
+                  Presentaciones
+               </mat-header-cell>
+               <mat-cell *matCellDef="let item"> {{item.pobPreName}} </mat-cell>
+            </ng-container>
+            
+            <ng-container matColumnDef="pobProId">
+               <mat-header-cell *matHeaderCellDef>
+                  Producto
+               </mat-header-cell>
+               <mat-cell *matCellDef="let item"> {{item.pobProName}} </mat-cell>
+            </ng-container>
+            
+            <ng-container matColumnDef="actions">
+               <mat-header-cell *matHeaderCellDef></mat-header-cell>
+               <mat-cell *matCellDef="let item">
+                  
+                 
+                  <button *ngIf="fechaValida" (click)="delete(item)" mat-button color="warn">
+                     <mat-icon>delete</mat-icon>
+                  </button>
+               </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+         </table>
+      </div>
+   </mat-card>
+</div>
