@@ -179,6 +179,13 @@ const routes: Routes = [
             (m) => m.PromocionObsequioModule
           ),
       },
+      {
+        path: 'promocion-detalle',
+        loadChildren: () =>
+          import('./promocion-detalle/promocion-detalle.module').then(
+            (m) => m.PromocionDetalleModule
+          ),
+      },
 /*COMIENZA SIACE */
 
       {

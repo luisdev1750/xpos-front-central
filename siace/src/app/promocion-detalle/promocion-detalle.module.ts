@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, MatOption } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 
@@ -18,6 +18,15 @@ import { PromocionDetalleRoutingModule } from './promocion-detalle.routing.modul
 import { TipoPromocionService } from '../tipo-promocion/tipo-promocion.service';
 import { ProductoService } from '../producto/producto.service';
 import { FamiliaService } from '../familia/familia.service';
+import { MatAutocomplete, MatAutocompleteModule } from '@angular/material/autocomplete';
+import { PresentacionService } from '../presentacion/presentacion.service';
+
+/*
+  MatAutocomplete,
+    MatOption,
+    ReactiveFormsModule,
+    MatAutocompleteModule
+*/
 
 @NgModule({
   imports: [
@@ -33,6 +42,11 @@ import { FamiliaService } from '../familia/familia.service';
     MatDialogModule,
     MatCardModule,
     PromocionDetalleRoutingModule,
+    MatAutocomplete,
+    MatOption,
+    ReactiveFormsModule,
+    MatAutocomplete, 
+    MatAutocompleteModule
   ],
   declarations: [PromocionDetalleListComponent, PromocionDetalleEditComponent],
   providers: [
@@ -40,6 +54,7 @@ import { FamiliaService } from '../familia/familia.service';
     TipoPromocionService,
     ProductoService,
     FamiliaService,
+    PresentacionService
   ],
   exports: [],
 })
