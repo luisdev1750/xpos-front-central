@@ -4,4 +4,5 @@ export class PromocionObsequio {
   pobFamId!: number;
   pobPreId!: number;
   pobProId!: number;
+  pobPmoSucId!: number; 
 }

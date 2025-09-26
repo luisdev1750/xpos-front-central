@@ -52,6 +52,15 @@ export class ProductoService extends GeneralService {
     });
   }
 
+  findProductsForPromocionesObsequios(pobPmoId: number, pobPmoSucId: number){
+    ///getProductosFromPromocionesObsequios/{pobPmoId}/{pobPmoSucId}
+    const url = `${this.api}/getProductosFromPromocionesObsequios/${pobPmoId}/${pobPmoSucId}`;
+
+    return this.http.get<Producto[]>(url, {
+      headers: this.getHeaders(), // Usar headers con token
+    });
+  }
+
   findById(id: string): Observable<Producto> {
     const url = `${this.api}/${id}`;
     const params = { proId: id };

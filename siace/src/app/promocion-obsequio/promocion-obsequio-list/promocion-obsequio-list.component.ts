@@ -105,7 +105,7 @@ export class PromocionObsequioListComponent implements OnInit {
       if (result === true) {
         this.promocionObsequioService.delete(promocionObsequio).subscribe({
           next: (result) => {
-            if (Number(result) > 0) {
+            if (result.pobPmoId != null && result.pobPmoId != undefined && result.pobPmoId > 0) {
               this.toastr.success(
                 'El promoción obsequio ha sido eliminado exitosamente',
                 'Transacción exitosa'
@@ -123,7 +123,10 @@ export class PromocionObsequioListComponent implements OnInit {
 
   edit(ele: PromocionObsequio) {
     this.dialog.open(PromocionObsequioEditComponent, {
-      data: { promocionObsequio: JSON.parse(JSON.stringify(ele)) },
+      data: { promocionObsequio: JSON.parse(JSON.stringify(ele)) ,
+         promocionId: this.promocionId,
+         sucursalId: this.sucursalId
+      },
       height: '500px',
       width: '700px',
       maxWidth: 'none',

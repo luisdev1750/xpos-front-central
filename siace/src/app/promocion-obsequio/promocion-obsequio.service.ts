@@ -34,9 +34,12 @@ export class PromocionObsequioService extends GeneralService {
    delete(entity: PromocionObsequio): Observable<PromocionObsequio> {
       let params = new HttpParams();
       let url = '';
-      if (entity.pobId) {
-         url = `${this.api}/${entity.pobId.toString()}`;
-         params = new HttpParams().set('ID', entity.pobId.toString());
+      console.log("borrando");
+         console.log(entity);
+         
+       if (entity.pobId) {
+         url = `${this.api}/${entity.pobId.toString()}/${entity.pobPmoSucId.toString()}`;
+
          return this.http.delete<PromocionObsequio>(url, {
             headers: this.getHeaders(), 
             params
@@ -68,6 +71,10 @@ export class PromocionObsequioService extends GeneralService {
    load(filter: PromocionObsequioFilter): void {
       this.find(filter).subscribe({
          next: result => {
+            console.log("lista");
+            console.log(result);
+            
+            
             this.promocionObsequioList = result;
          },
          error: err => {

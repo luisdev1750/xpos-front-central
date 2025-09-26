@@ -1,11 +1,4 @@
-<!-- Lista/Catálogo de Promociones -->
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
-    <li class="breadcrumb-item active">Catálogo de promociones</li>
-  </ol>
-</nav>
-
+<!-- SOLUCIÓN: Contenedor con scroll horizontal -->
 <div class="proin-main">
   <mat-card class="proin-card">
     <h2>Catálogo de promociones</h2>
@@ -30,8 +23,15 @@
         <mat-icon>add</mat-icon>
       </button>
     </form>
-    <div *ngIf="promocionList.length > 0">
-      <table mat-table #table [dataSource]="promocionList">
+
+    <!-- Contenedor con scroll horizontal -->
+    <div class="table-container" *ngIf="promocionList.length > 0">
+      <table
+        mat-table
+        #table
+        [dataSource]="promocionList"
+        class="full-width-table"
+      >
         <ng-container matColumnDef="pmoId">
           <mat-header-cell *matHeaderCellDef> Clave </mat-header-cell>
           <mat-cell *matCellDef="let item"> {{ item.pmoId }} </mat-cell>
@@ -75,8 +75,8 @@
           <mat-header-cell *matHeaderCellDef> Política </mat-header-cell>
           <mat-cell *matCellDef="let item">
             <span [title]="item.pmoPolitica">
-              {{ item.pmoPolitica | slice : 0 : 50
-              }}{{ item.pmoPolitica?.length > 50 ? "..." : "" }}
+              {{ item.pmoPolitica | slice : 0 : 30
+              }}{{ item.pmoPolitica?.length > 30 ? "..." : "" }}
             </span>
           </mat-cell>
         </ng-container>
@@ -94,7 +94,7 @@
         </ng-container>
 
         <ng-container matColumnDef="pmoLimiteCantidad">
-          <mat-header-cell *matHeaderCellDef> Límite Cantidad </mat-header-cell>
+          <mat-header-cell *matHeaderCellDef> Límite </mat-header-cell>
           <mat-cell *matCellDef="let item">
             {{ item.pmoLimiteCantidad }}
           </mat-cell>
@@ -129,7 +129,7 @@
               (click)="redirectToPromocionesObsequio(item)"
               mat-icon-button
               color="primary"
-              matTooltip="Editar promoción"
+              matTooltip="Gestionar obsequios"
             >
               <mat-icon>navigation</mat-icon>
             </button>
@@ -147,3 +147,38 @@
     </div>
   </mat-card>
 </div>
+
+<style>
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
+}
+
+.full-width-table {
+  width: 100%;
+  min-width: 95vw;
+}
+
+
+.mat-column-actions {
+  min-width: 150px !important;
+  width: 150px !important;
+  flex: 0 0 150px !important;
+}
+
+
+.mat-cell.mat-column-actions {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 4px !important;
+  flex-wrap: nowrap !important;
+}
+
+.mat-cell.mat-column-actions button {
+  flex-shrink: 0 !important;
+  min-width: 40px !important;
+}
+</style>

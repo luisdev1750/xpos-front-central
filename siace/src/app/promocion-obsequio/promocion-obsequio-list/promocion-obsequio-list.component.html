@@ -11,37 +11,7 @@
    <mat-card class="proin-card">
       <h2>Catalogo de promociones obsequio</h2>
       <form #f="ngForm">
-         
-         <mat-form-field>
-            <mat-label>Clave:</mat-label>
-            <input matInput type="search" [(ngModel)]="filter.pobId" id="pobId"
-               name="pobId">
-         </mat-form-field>
-         
-         <mat-form-field>
-            <mat-label>Promocion :</mat-label>
-            <input matInput type="search" [(ngModel)]="filter.pobPmoId" id="pobPmoId"
-               name="pobPmoId">
-         </mat-form-field>
-         
-         <mat-form-field>
-            <mat-label>Familia:</mat-label>
-            <input matInput type="search" [(ngModel)]="filter.pobFamId" id="pobFamId"
-               name="pobFamId">
-         </mat-form-field>
-         
-         <mat-form-field>
-            <mat-label>Presentaciones:</mat-label>
-            <input matInput type="search" [(ngModel)]="filter.pobPreId" id="pobPreId"
-               name="pobPreId">
-         </mat-form-field>
-         
-         <mat-form-field>
-            <mat-label>Producto:</mat-label>
-            <input matInput type="search" [(ngModel)]="filter.pobProId" id="pobProId"
-               name="pobProId">
-         </mat-form-field>
-         
+       
 
          <button *ngIf = "fechaValida" mat-mini-fab color="accent" (click)="add()" [disabled]="!f?.valid">
             <mat-icon>add</mat-icon>
