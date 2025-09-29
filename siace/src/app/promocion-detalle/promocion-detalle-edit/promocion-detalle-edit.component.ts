@@ -28,6 +28,7 @@ export class PromocionDetalleEditComponent implements OnInit {
   // Lista de productos para autocomplete
   listProductos: any[] = [];
   listFamilias: any[] = [];
+  listPresentaciones: any[] = [];
   // Controles para autocomplete de productos
   productoControl = new FormControl('');
   productoObsequioControl = new FormControl('');
@@ -36,6 +37,9 @@ export class PromocionDetalleEditComponent implements OnInit {
   filteredProductos!: Observable<any[]>;
   filteredProductosObsequio!: Observable<any[]>;
 
+  // Selecciones actuales para comboboxes
+  selectedFamilia: number | null = null;
+  selectedPresentacion: number | null = null;
   /* Constructores */
 
   constructor(
@@ -51,8 +55,9 @@ export class PromocionDetalleEditComponent implements OnInit {
   }
 
   ngOnInit() {
-   this.loadCatalogs();
+    this.loadCatalogs();
     this.loadProductos();
+    this.loadCatalogosIniciales();
   }
 
   loadProductos() {
@@ -65,7 +70,7 @@ export class PromocionDetalleEditComponent implements OnInit {
         proActivo: 'all',
       })
       .subscribe((res) => {
-        this.listProductos = res;
+        //   this.listProductos = res;
         console.log('Lista de productos final');
         console.log(this.listProductos);
 
@@ -75,27 +80,101 @@ export class PromocionDetalleEditComponent implements OnInit {
   }
 
   loadCatalogs() {
-    /*
-
-find(filter: FamiliaFilter): Observable<Familia[]> {
-      const url = `${this.api}/${filter.famId}/${filter.famSmaId}/${filter.famIdParent}`;
-*/
-
     this.familiaService
       .find({
         famId: '0',
         famSmaId: '0',
         famIdParent: '',
       })
-      .subscribe((res)=>{
-         console.log(res);
-         
-      }, (error)=>{
-         console.log(error);
-         
+      .subscribe(
+        (res) => {
+          console.log(res);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  }
+
+  // ===============================================
+  // EVENTOS DE COMBOBOXES INTERCONECTADOS
+  // ===============================================
+  onFamiliaChange(event: any) {
+    console.log('Familia Id: ', event);
+
+    //  this.selectedFamilia = familiaId;
+    this.promocionDetalle.prdFamId = event.value;
+
+    // Limpiar selecciones dependientes
+    //  this.selectedPresentacion = null;
+    //  this.promocionDetalle.prdPreId = null;
+    this.promocionDetalle.prdPreId = 0;
+
+    // Cargar productos y presentaciones de esta familia
+    this.promocionDetalleService
+      .getCatalogos(this.promocionDetalle.prdFamId, undefined, undefined)
+      .subscribe({
+        next: (data) => {
+          this.listPresentaciones = data.presentaciones;
+          // Aquí podrías filtrar los productos del autocomplete si quisieras
+          console.log(
+            'Familia seleccionada, presentaciones disponibles:',
+            data.presentaciones
+          );
+          this.listPresentaciones = data.presentaciones; 
+        },
+        error: (error) => {
+          console.error('Error al cargar datos por familia:', error);
+        },
       });
   }
 
+  onPresentacionChange(event: any){
+    this.promocionDetalle.prdPreId =  event.value; 
+    this.promocionDetalle.prdFamId= 0;
+
+
+
+  }
+  loadCatalogosIniciales() {
+    console.log('Catalogos iniciales');
+
+    this.promocionDetalleService.getCatalogosIniciales().subscribe({
+      next: (data) => {
+        console.log('Catalogos de catalogos iniciales:');
+        console.log(data);
+
+        this.listFamilias = data.familias;
+        this.listProductos = data.productos;
+        this.listPresentaciones = data.presentaciones;     
+        console.log('Catálogos iniciales cargados:', data);
+      
+        this.setInitialCatalogValues();
+      },
+      error: (error) => {
+        console.error('Error cargando catálogos:', error);
+        this.toastr.error('Error cargando catálogos', 'Error');
+      },
+    });
+  }
+
+  setInitialCatalogValues() {
+    // Si ya hay un producto seleccionado, cargar su familia y presentación
+    if (this.promocionDetalle.prdProId) {
+      this.promocionDetalleService
+        .getCatalogos(undefined, this.promocionDetalle.prdProId, undefined)
+        .subscribe((data) => {
+          if (data.familias.length > 0) {
+            this.selectedFamilia = data.familias[0].FamId;
+            this.promocionDetalle.prdFamId = this.selectedFamilia ?? 0;
+          }
+          if (data.presentaciones.length > 0) {
+            this.selectedPresentacion = data.presentaciones[0].PreId;
+            this.promocionDetalle.prdPreId = this.selectedPresentacion ?? 0;
+          }
+        });
+    }
+  }
   setupAutocomplete() {
     if (this.listProductos.length > 0) {
       // Autocomplete para producto principal

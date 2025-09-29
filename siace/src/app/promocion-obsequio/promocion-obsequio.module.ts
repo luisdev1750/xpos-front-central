@@ -17,6 +17,7 @@ import { PromocionObsequioService } from './promocion-obsequio.service';
 import { PromocionObsequioRoutingModule } from './promocion-obsequio.routing.module';
 import { MatAutocomplete, MatAutocompleteModule } from '@angular/material/autocomplete';
 import { ProductoService } from '../producto/producto.service';
+import { MatSelect } from '@angular/material/select';
 
 @NgModule({
   imports: [
@@ -35,7 +36,8 @@ import { ProductoService } from '../producto/producto.service';
     MatAutocomplete,
     MatOption,
     ReactiveFormsModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatSelect
   ],
   declarations: [
     PromocionObsequioListComponent,

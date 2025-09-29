@@ -47,6 +47,23 @@
 </div>
 
 <div class="row">
+     <div class="col-md-4">
+        <mat-form-field>
+          <mat-label>Familia</mat-label>
+          <mat-select
+            [value]="promocionDetalle.prdFamId"
+          (selectionChange)="onFamiliaChange($event)"
+          >
+            <mat-option
+              *ngFor="let familia of listFamilias"
+              [value]="familia.famId"
+                
+            >
+              {{ familia.famNombre }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
    <div class="col-md-4">
       <mat-form-field>
          <mat-label for="prdFamId">Familia</mat-label>
@@ -54,6 +71,17 @@
       </mat-form-field>
    </div>
 
+     <div class="col-md-4">
+      <mat-form-field>
+        <mat-label>Presentaciones</mat-label>
+        <mat-select [value]="promocionDetalle.prdPreId" (selectionChange)="onPresentacionChange($event)">
+          <mat-option *ngFor="let presentacion of listPresentaciones" 
+                      [value]="presentacion.preId">
+            {{ presentacion.preNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
    <div class="col-md-4">
       <mat-form-field>
          <mat-label for="prdPreId">Presentación</mat-label>

@@ -20,6 +20,7 @@ import { ProductoService } from '../producto/producto.service';
 import { FamiliaService } from '../familia/familia.service';
 import { MatAutocomplete, MatAutocompleteModule } from '@angular/material/autocomplete';
 import { PresentacionService } from '../presentacion/presentacion.service';
+import { MatSelect } from '@angular/material/select';
 
 /*
   MatAutocomplete,
@@ -46,7 +47,8 @@ import { PresentacionService } from '../presentacion/presentacion.service';
     MatOption,
     ReactiveFormsModule,
     MatAutocomplete, 
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatSelect
   ],
   declarations: [PromocionDetalleListComponent, PromocionDetalleEditComponent],
   providers: [

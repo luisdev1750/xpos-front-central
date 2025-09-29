@@ -37,7 +37,7 @@ export class PromocionDetalleListComponent implements OnInit {
   filter = new PromocionDetalleFilter();
 
   private subs!: Subscription;
-
+  familiaList: any[] = [];
   /* Inicialización */
 
   constructor(
@@ -73,6 +73,8 @@ export class PromocionDetalleListComponent implements OnInit {
       .subscribe(
         (result) => {
           //   this.promocionService.tipoPromocionList = result;
+          console.log("promocion");
+          
           console.log(result);
         },
         (error) => {
@@ -90,6 +92,8 @@ export class PromocionDetalleListComponent implements OnInit {
       .subscribe(
         (result) => {
           this.productoServie.productoList = result;
+             console.log("producto");
+          
           console.log(result);
         },
         (error) => {
@@ -105,7 +109,10 @@ export class PromocionDetalleListComponent implements OnInit {
       })
       .subscribe(
         (result) => {
-          this.familiaService.familiaList = result;
+          // this.familiaService.familiaList = result;
+          this.familiaList = result; 
+             console.log("familia");
+          
           console.log(result);
         },
         (error) => {

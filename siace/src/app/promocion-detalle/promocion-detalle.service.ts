@@ -6,71 +6,110 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { GeneralService } from '../common/general.service';
 import { map } from 'rxjs/operators';
 
-const headers = new HttpHeaders().set('Accept', 'application/json');
-
 @Injectable()
 export class PromocionDetalleService extends GeneralService {
-   promocionDetalleList: PromocionDetalle[] = [];
-   api = this.sUrl + 'PromocionesDetalles';
+  promocionDetalleList: PromocionDetalle[] = [];
+  api = this.sUrl + 'PromocionesDetalles';
 
+  /* Constructores*/
 
-   /* Constructores*/
-   
-   constructor(private http: HttpClient) {
-   	  super();
-   }
+  constructor(private http: HttpClient) {
+    super();
+  }
 
+  // Método para obtener headers con el token
+  private getHeaders(): HttpHeaders {
+    const token = localStorage.getItem('accessToken');
+    let headers = new HttpHeaders().set('Accept', 'application/json');
+    
+    if (token) {
+      headers = headers.set('Authorization', `Bearer ${token}`);
+    }
+    
+    return headers;
+  }
 
-   /* Métodos */
+  getCatalogos(
+    familiaId?: number,
+    productoId?: number,
+    presentacionId?: number
+  ): Observable<any> {
+    let params = new HttpParams();
 
-   delete(entity: PromocionDetalle): Observable<PromocionDetalle> {
-      let params = new HttpParams();
-      let url = '';
-      if (entity.prdId) {
-         url = `${this.api}/${entity.prdId.toString()}`;
-         params = new HttpParams().set('ID', entity.prdId.toString());
-         return this.http.delete<PromocionDetalle>(url, {headers, params});
-      }
-      return EMPTY;
-   }
-  
-  
-   find(filter: PromocionDetalleFilter): Observable<PromocionDetalle[]> {
-      const url = `${this.api}/${filter.prdId}/${filter.prdPmoId}/${filter.prdProId}/${filter.prdFamId}/${filter.prdPreId}`;
+    if (familiaId !== null && familiaId !== undefined) {
+      params = params.set('familiaId', familiaId.toString());
+    }
 
-      return this.http.get<PromocionDetalle[]>(url, {headers: headers});
-   }
-   
-   
-   findById(id: string): Observable<PromocionDetalle> {
-      const url = `${this.api}/${id}`;
-      const params = { prdId: id };
-      return this.http.get<PromocionDetalle[]>(url, {headers: headers}).pipe(
-         map(ele => ele[0])
-      );
-   }
+    if (productoId !== null && productoId !== undefined) {
+      params = params.set('productoId', productoId.toString());
+    }
 
+    if (presentacionId !== null && presentacionId !== undefined) {
+      params = params.set('presentacionId', presentacionId.toString());
+    }
 
-   load(filter: PromocionDetalleFilter): void {
-      this.find(filter).subscribe({
-         next: result => {
-            this.promocionDetalleList = result;
-         },
-         error: err => {
-            console.error('error cargando', err);
-         }
+    return this.http.get<any>(`${this.api}/catalogos`, {
+      headers: this.getHeaders(),  // Usar headers con token
+      params: params,
+    });
+  }
+
+  getCatalogosIniciales(): Observable<any> {
+    return this.getCatalogos(); // Sin parámetros = carga todo
+  }
+
+  /* Métodos */
+
+  delete(entity: PromocionDetalle): Observable<PromocionDetalle> {
+    let params = new HttpParams();
+    let url = '';
+    if (entity.prdId) {
+      url = `${this.api}/${entity.prdId.toString()}`;
+      params = new HttpParams().set('ID', entity.prdId.toString());
+      return this.http.delete<PromocionDetalle>(url, { 
+        headers: this.getHeaders(),  // Usar headers con token
+        params 
       });
-   }
+    }
+    return EMPTY;
+  }
 
-  
-   save(entity: PromocionDetalle): Observable<PromocionDetalle> {
-      let url = `${this.api}`;
-      if (entity.prdId) {
-         return this.http.put<PromocionDetalle>(url, entity, {headers:headers});
-      } else {
-         return this.http.post<PromocionDetalle>(url, entity, {headers:headers});
-      }
-   }
+  find(filter: PromocionDetalleFilter): Observable<PromocionDetalle[]> {
+    const url = `${this.api}/${filter.prdId}/${filter.prdPmoId}/${filter.prdProId}/${filter.prdFamId}/${filter.prdPreId}`;
+    return this.http.get<PromocionDetalle[]>(url, { 
+      headers: this.getHeaders()  // Usar headers con token
+    });
+  }
 
+  findById(id: string): Observable<PromocionDetalle> {
+    const url = `${this.api}/${id}`;
+    const params = { prdId: id };
+    return this.http
+      .get<PromocionDetalle[]>(url, { 
+        headers: this.getHeaders()  // Usar headers con token
+      })
+      .pipe(map((ele) => ele[0]));
+  }
+
+  load(filter: PromocionDetalleFilter): void {
+    this.find(filter).subscribe({
+      next: (result) => {
+        this.promocionDetalleList = result;
+      },
+      error: (err) => {
+        console.error('error cargando', err);
+      },
+    });
+  }
+
+  save(entity: PromocionDetalle): Observable<PromocionDetalle> {
+    let url = `${this.api}`;
+    const headers = this.getHeaders();  // Obtener headers con token
+    
+    if (entity.prdId) {
+      return this.http.put<PromocionDetalle>(url, entity, { headers });
+    } else {
+      return this.http.post<PromocionDetalle>(url, entity, { headers });
+    }
+  }
 }
-

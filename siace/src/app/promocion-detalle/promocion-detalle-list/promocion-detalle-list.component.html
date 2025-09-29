@@ -1,126 +1,152 @@
 <nav aria-label="breadcrumb">
-   <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
-      <li class="breadcrumb-item active">
-         Transacciones Promociones Detalles
-      </li>
-   </ol>
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
+    <li class="breadcrumb-item active">Transacciones Promociones Detalles</li>
+  </ol>
 </nav>
 
 <div class="proin-main">
-   <mat-card class="proin-card">
-      <h2>Transacciones Promociones Detalles</h2>
-      <form #f="ngForm">
-         
-         <mat-form-field>
-            <mat-label>Clave:</mat-label>
-            <input matInput type="search" [(ngModel)]="filter.prdId" id="prdId"
-               name="prdId">
-         </mat-form-field>
-         
-         <mat-form-field>
-            <mat-label>Promoción:</mat-label>
-            <input matInput type="search" [(ngModel)]="filter.prdPmoId" id="prdPmoId"
-               name="prdPmoId">
-         </mat-form-field>
-         
-         <mat-form-field>
-            <mat-label>Producto:</mat-label>
-            <input matInput type="search" [(ngModel)]="filter.prdProId" id="prdProId"
-               name="prdProId">
-         </mat-form-field>
-         
-         <mat-form-field>
-            <mat-label>Familia:</mat-label>
-            <input matInput type="search" [(ngModel)]="filter.prdFamId" id="prdFamId"
-               name="prdFamId">
-         </mat-form-field>
-         
-         <mat-form-field>
-            <mat-label>Presentación:</mat-label>
-            <input matInput type="search" [(ngModel)]="filter.prdPreId" id="prdPreId"
-               name="prdPreId">
-         </mat-form-field>
-         
+  <mat-card class="proin-card">
+    <h2>Transacciones Promociones Detalles</h2>
+    <form #f="ngForm">
+      <mat-form-field>
+        <mat-label>Clave:</mat-label>
+        <input
+          matInput
+          type="search"
+          [(ngModel)]="filter.prdId"
+          id="prdId"
+          name="prdId"
+        />
+      </mat-form-field>
 
-         <button mat-mini-fab color="accent" (click)="add()" [disabled]="!f?.valid">
-            <mat-icon>add</mat-icon>
-         </button>
-      </form>
-      <div *ngIf="promocionDetalleList.length > 0">
-         
-         <table mat-table #table [dataSource]="promocionDetalleList">
-            
-            <ng-container matColumnDef="prdId">
-               <mat-header-cell *matHeaderCellDef>
-                  Clave
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.prdId}} </mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="prdPmoId">
-               <mat-header-cell *matHeaderCellDef>
-                  Promoción
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.prdPmoId}} </mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="prdProId">
-               <mat-header-cell *matHeaderCellDef>
-                  Producto
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.prdProId}} </mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="prdFamId">
-               <mat-header-cell *matHeaderCellDef>
-                  Familia
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.prdFamId}} </mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="prdPreId">
-               <mat-header-cell *matHeaderCellDef>
-                  Presentación
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.prdPreId}} </mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="prdProcentajeDescuento">
-               <mat-header-cell *matHeaderCellDef>
-                  Porcentaje Descuento (%)
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.prdProcentajeDescuento}} </mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="prdNxmProdCompra">
-               <mat-header-cell *matHeaderCellDef>
-                  Productos a Comprar (NxM)
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.prdNxmProdCompra}} </mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="prdNxmProdObsequio">
-               <mat-header-cell *matHeaderCellDef>
-                  Productos de Obsequio (NxM)
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.prdNxmProdObsequio}} </mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="actions">
-               <mat-header-cell *matHeaderCellDef></mat-header-cell>
-               <mat-cell *matCellDef="let item">
-                  <button (click)="edit(item)" mat-button color="warn" class="button-edit">
-                     <mat-icon>edit</mat-icon>
-                  </button>&nbsp;
-                  <button (click)="delete(item)" mat-button color="warn">
-                     <mat-icon>delete</mat-icon>
-                  </button>
-               </mat-cell>
-            </ng-container>
-            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-         </table>
-      </div>
-   </mat-card>
+      <mat-form-field>
+        <mat-label>Promoción:</mat-label>
+        <input
+          matInput
+          type="search"
+          [(ngModel)]="filter.prdPmoId"
+          id="prdPmoId"
+          name="prdPmoId"
+        />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Familia:</mat-label>
+        <input
+          matInput
+          type="search"
+          [(ngModel)]="filter.prdFamId"
+          id="prdFamId"
+          name="prdFamId"
+        />
+      </mat-form-field>
+
+    
+
+      <mat-form-field>
+        <mat-label>Producto:</mat-label>
+        <input
+          matInput
+          type="search"
+          [(ngModel)]="filter.prdProId"
+          id="prdProId"
+          name="prdProId"
+        />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Presentación:</mat-label>
+        <input
+          matInput
+          type="search"
+          [(ngModel)]="filter.prdPreId"
+          id="prdPreId"
+          name="prdPreId"
+        />
+      </mat-form-field>
+
+      <button
+        mat-mini-fab
+        color="accent"
+        (click)="add()"
+        [disabled]="!f?.valid"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+    </form>
+    <div *ngIf="promocionDetalleList.length > 0">
+      <table mat-table #table [dataSource]="promocionDetalleList">
+        <ng-container matColumnDef="prdId">
+          <mat-header-cell *matHeaderCellDef> Clave </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.prdId }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="prdPmoId">
+          <mat-header-cell *matHeaderCellDef> Promoción </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.prdPmoId }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="prdProId">
+          <mat-header-cell *matHeaderCellDef> Producto </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.prdProId }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="prdFamId">
+          <mat-header-cell *matHeaderCellDef> Familia </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.prdFamId }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="prdPreId">
+          <mat-header-cell *matHeaderCellDef> Presentación </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.prdPreId }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="prdProcentajeDescuento">
+          <mat-header-cell *matHeaderCellDef>
+            Porcentaje Descuento (%)
+          </mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            {{ item.prdProcentajeDescuento }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="prdNxmProdCompra">
+          <mat-header-cell *matHeaderCellDef>
+            Productos a Comprar (NxM)
+          </mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            {{ item.prdNxmProdCompra }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="prdNxmProdObsequio">
+          <mat-header-cell *matHeaderCellDef>
+            Productos de Obsequio (NxM)
+          </mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            {{ item.prdNxmProdObsequio }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            <button
+              (click)="edit(item)"
+              mat-button
+              color="warn"
+              class="button-edit"
+            >
+              <mat-icon>edit</mat-icon></button
+            >&nbsp;
+            <button (click)="delete(item)" mat-button color="warn">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+      </table>
+    </div>
+  </mat-card>
 </div>
