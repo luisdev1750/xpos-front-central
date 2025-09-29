@@ -109,11 +109,18 @@ export class PromocionListComponent implements OnInit {
     },
   });
 }
+
+onNombreClick(item: any){
+console.log("nombre click");
+console.log(item); 
+
+}
   /* Accesors */
 
   get promocionList(): Promocion[] {
     return this.promocionService.promocionList;
   }
+
 
   /* Métodos */
 

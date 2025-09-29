@@ -38,9 +38,14 @@
         </ng-container>
 
         <ng-container matColumnDef="pmoNombre">
-          <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.pmoNombre }} </mat-cell>
-        </ng-container>
+  <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+  <mat-cell *matCellDef="let item">
+    <span class="clickable-text" (click)="onNombreClick(item)">
+      {{ item.pmoNombre }}
+    </span>
+  </mat-cell>
+</ng-container>
+
 
         <ng-container matColumnDef="pmoFechaInicio">
           <mat-header-cell *matHeaderCellDef> Fecha Inicio </mat-header-cell>
@@ -133,6 +138,16 @@
             >
               <mat-icon>navigation</mat-icon>
             </button>
+
+            <button
+              *ngIf="item.pmoTprId == 1"
+              (click)="redirectToPromocionesObsequio(item)"
+              mat-icon-button
+              color="primary"
+              matTooltip="Gestionar obsequios"
+            >
+              <mat-icon>navigation</mat-icon>
+            </button>
           </mat-cell>
         </ng-container>
 
@@ -181,4 +196,17 @@
   flex-shrink: 0 !important;
   min-width: 40px !important;
 }
+
+.clickable-text {
+  color: #1976d2;        /* azul Material, invita a click */
+  font-weight: 500;       /* un poco más destacado */
+  cursor: pointer;        /* indica que se puede presionar */
+  transition: color 0.2s; /* animación suave al hover */
+}
+
+.clickable-text:hover {
+  color: #0d47a1;         /* azul más intenso al pasar el mouse */
+  text-decoration: underline; /* opcional, refuerza que es interactivo */
+}
+
 </style>
