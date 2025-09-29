@@ -25,22 +25,26 @@ export class PromocionDetalleEditComponent implements OnInit {
   id!: string;
   promocionDetalle!: PromocionDetalle;
 
-  // Lista de productos para autocomplete
-  listProductos: any[] = [];
+  // Listas completas (backup inicial)
+  listFamiliasCompleta: any[] = [];
+  listProductosCompleta: any[] = [];
+  listPresentacionesCompleta: any[] = [];
+
+  // Listas filtradas para mostrar en los combos
   listFamilias: any[] = [];
+  listProductos: any[] = [];
   listPresentaciones: any[] = [];
-  // Controles para autocomplete de productos
+
+  // Controles
   productoControl = new FormControl('');
   productoObsequioControl = new FormControl('');
 
-  // Observables filtrados para productos
+  // Observables filtrados
   filteredProductos!: Observable<any[]>;
   filteredProductosObsequio!: Observable<any[]>;
 
-  // Selecciones actuales para comboboxes
-  selectedFamilia: number | null = null;
-  selectedPresentacion: number | null = null;
-  /* Constructores */
+  // Flag para evitar loops infinitos
+  private isUpdatingProgrammatically = false;
 
   constructor(
     private dialogRef: MatDialogRef<PromocionDetalleEditComponent>,
@@ -55,101 +59,34 @@ export class PromocionDetalleEditComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadCatalogs();
-    this.loadProductos();
     this.loadCatalogosIniciales();
   }
 
-  loadProductos() {
-    // Cargar productos
-    this.productoService
-      .find({
-        proId: '0',
-        proFamId: '0',
-        proPreId: '0',
-        proActivo: 'all',
-      })
-      .subscribe((res) => {
-        //   this.listProductos = res;
-        console.log('Lista de productos final');
-        console.log(this.listProductos);
-
-        this.setupAutocomplete();
-        this.setInitialValues();
-      });
-  }
-
-  loadCatalogs() {
-    this.familiaService
-      .find({
-        famId: '0',
-        famSmaId: '0',
-        famIdParent: '',
-      })
-      .subscribe(
-        (res) => {
-          console.log(res);
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-  }
-
   // ===============================================
-  // EVENTOS DE COMBOBOXES INTERCONECTADOS
+  // CARGA INICIAL
   // ===============================================
-  onFamiliaChange(event: any) {
-    console.log('Familia Id: ', event);
-
-    //  this.selectedFamilia = familiaId;
-    this.promocionDetalle.prdFamId = event.value;
-
-    // Limpiar selecciones dependientes
-    //  this.selectedPresentacion = null;
-    //  this.promocionDetalle.prdPreId = null;
-    this.promocionDetalle.prdPreId = 0;
-
-    // Cargar productos y presentaciones de esta familia
-    this.promocionDetalleService
-      .getCatalogos(this.promocionDetalle.prdFamId, undefined, undefined)
-      .subscribe({
-        next: (data) => {
-          this.listPresentaciones = data.presentaciones;
-          // Aquí podrías filtrar los productos del autocomplete si quisieras
-          console.log(
-            'Familia seleccionada, presentaciones disponibles:',
-            data.presentaciones
-          );
-          this.listPresentaciones = data.presentaciones; 
-        },
-        error: (error) => {
-          console.error('Error al cargar datos por familia:', error);
-        },
-      });
-  }
-
-  onPresentacionChange(event: any){
-    this.promocionDetalle.prdPreId =  event.value; 
-    this.promocionDetalle.prdFamId= 0;
-
-
-
-  }
   loadCatalogosIniciales() {
-    console.log('Catalogos iniciales');
+    console.log('Cargando catálogos iniciales...');
 
     this.promocionDetalleService.getCatalogosIniciales().subscribe({
       next: (data) => {
-        console.log('Catalogos de catalogos iniciales:');
-        console.log(data);
+        console.log('Catálogos recibidos:', data);
 
-        this.listFamilias = data.familias;
-        this.listProductos = data.productos;
-        this.listPresentaciones = data.presentaciones;     
-        console.log('Catálogos iniciales cargados:', data);
-      
-        this.setInitialCatalogValues();
+        // Guardar copias completas
+        this.listFamiliasCompleta = [...data.familias];
+        this.listProductosCompleta = [...data.productos];
+        this.listPresentacionesCompleta = [...data.presentaciones];
+
+        // Inicializar listas visibles
+        this.listFamilias = [...data.familias];
+        this.listProductos = [...data.productos];
+        this.listPresentaciones = [...data.presentaciones];
+
+        // Setup autocomplete
+        this.setupAutocomplete();
+
+        // Establecer valores iniciales si existen
+        this.setInitialValues();
       },
       error: (error) => {
         console.error('Error cargando catálogos:', error);
@@ -158,25 +95,266 @@ export class PromocionDetalleEditComponent implements OnInit {
     });
   }
 
-  setInitialCatalogValues() {
-    // Si ya hay un producto seleccionado, cargar su familia y presentación
-    if (this.promocionDetalle.prdProId) {
-      this.promocionDetalleService
-        .getCatalogos(undefined, this.promocionDetalle.prdProId, undefined)
-        .subscribe((data) => {
-          if (data.familias.length > 0) {
-            this.selectedFamilia = data.familias[0].FamId;
-            this.promocionDetalle.prdFamId = this.selectedFamilia ?? 0;
-          }
-          if (data.presentaciones.length > 0) {
-            this.selectedPresentacion = data.presentaciones[0].PreId;
-            this.promocionDetalle.prdPreId = this.selectedPresentacion ?? 0;
-          }
-        });
+  // ===============================================
+  // EVENTOS DE FAMILIA
+  // ===============================================
+  onFamiliaChange(event: any) {
+    if (this.isUpdatingProgrammatically) return;
+
+    const familiaId = event.value;
+    console.log('Familia seleccionada:', familiaId);
+
+    if (!familiaId || familiaId === 0) {
+      // Si se deselecciona familia, restaurar según presentación
+      this.promocionDetalle.prdFamId = 0;
+      this.resetToInitialState();
+      return;
+      if (
+        this.promocionDetalle.prdPreId &&
+        this.promocionDetalle.prdPreId > 0
+      ) {
+        this.onPresentacionChange({ value: this.promocionDetalle.prdPreId });
+      } else {
+        this.resetToInitialState();
+      }
+      return;
     }
+
+    this.promocionDetalle.prdFamId = familiaId;
+
+    // CASO: Si también hay presentación seleccionada, filtrar por AMBOS
+    if (this.promocionDetalle.prdPreId && this.promocionDetalle.prdPreId > 0) {
+      console.log('⚡ Filtrando por FAMILIA + PRESENTACIÓN');
+      this.listProductos = this.listProductosCompleta.filter(
+        (p) =>
+          p.proFamId === familiaId &&
+          p.proPreId === this.promocionDetalle.prdPreId
+      );
+    } else {
+      // CASO: Solo familia
+      console.log('📦 Filtrando solo por FAMILIA');
+      this.listProductos = this.listProductosCompleta.filter(
+        (p) => p.proFamId === familiaId
+      );
+    }
+
+    // Obtener presentaciones únicas de los productos de esta familia
+    const presentacionIds = [
+      ...new Set(this.listProductos.map((p) => p.proPreId)),
+    ];
+    this.listPresentaciones = this.listPresentacionesCompleta.filter((pr) =>
+      presentacionIds.includes(pr.preId)
+    );
+
+    // Si el producto actual no pertenece a esta familia, limpiarlo
+    if (
+      this.promocionDetalle.prdProId &&
+      !this.listProductos.some(
+        (p) => p.proId === this.promocionDetalle.prdProId
+      )
+    ) {
+      this.isUpdatingProgrammatically = true;
+      this.productoControl.reset();
+      this.promocionDetalle.prdProId = 0;
+      this.isUpdatingProgrammatically = false;
+    }
+
+    // Si la presentación actual no está en las disponibles, limpiarla
+    if (
+      this.promocionDetalle.prdPreId &&
+      !presentacionIds.includes(this.promocionDetalle.prdPreId)
+    ) {
+      this.promocionDetalle.prdPreId = 0;
+    }
+
+    // CRÍTICO: Forzar actualización del autocomplete
+    this.refreshAutocomplete();
+
+    console.log('Productos filtrados:', this.listProductos.length);
+    console.log('Presentaciones disponibles:', this.listPresentaciones.length);
   }
+
+  // ===============================================
+  // EVENTOS DE PRESENTACIÓN
+  // ===============================================
+  onPresentacionChange(event: any) {
+    if (this.isUpdatingProgrammatically) return;
+
+    const presentacionId = event.value;
+    console.log('Presentación seleccionada:', presentacionId);
+
+    if (!presentacionId || presentacionId === 0) {
+      // Si se deselecciona presentación, restaurar según familia
+
+      this.resetToInitialState();
+      return;
+
+      this.promocionDetalle.prdPreId = 0;
+      if (
+        this.promocionDetalle.prdFamId &&
+        this.promocionDetalle.prdFamId > 0
+      ) {
+        this.onFamiliaChange({ value: this.promocionDetalle.prdFamId });
+      } else {
+        this.resetToInitialState();
+      }
+      return;
+    }
+
+    this.promocionDetalle.prdPreId = presentacionId;
+
+    // CASO: Si también hay familia seleccionada, filtrar por AMBOS
+    if (this.promocionDetalle.prdFamId && this.promocionDetalle.prdFamId > 0) {
+      console.log('⚡ Filtrando por PRESENTACIÓN + FAMILIA');
+      this.listProductos = this.listProductosCompleta.filter(
+        (p) =>
+          p.proPreId === presentacionId &&
+          p.proFamId === this.promocionDetalle.prdFamId
+      );
+    } else {
+      // CASO: Solo presentación
+      console.log('📦 Filtrando solo por PRESENTACIÓN');
+      this.listProductos = this.listProductosCompleta.filter(
+        (p) => p.proPreId === presentacionId
+      );
+    }
+
+    // Obtener familias únicas de los productos con esta presentación
+    const familiaIds = [...new Set(this.listProductos.map((p) => p.proFamId))];
+    this.listFamilias = this.listFamiliasCompleta.filter((f) =>
+      familiaIds.includes(f.famId)
+    );
+
+    // Si el producto actual no tiene esta presentación, limpiarlo
+    if (
+      this.promocionDetalle.prdProId &&
+      !this.listProductos.some(
+        (p) => p.proId === this.promocionDetalle.prdProId
+      )
+    ) {
+      this.isUpdatingProgrammatically = true;
+      this.productoControl.reset();
+      this.promocionDetalle.prdProId = 0;
+      this.isUpdatingProgrammatically = false;
+    }
+
+    // Si la familia actual no está en las disponibles, limpiarla
+    if (
+      this.promocionDetalle.prdFamId &&
+      !familiaIds.includes(this.promocionDetalle.prdFamId)
+    ) {
+      this.promocionDetalle.prdFamId = 0;
+    }
+
+    // CRÍTICO: Forzar actualización del autocomplete
+    this.refreshAutocomplete();
+
+    console.log('Productos filtrados:', this.listProductos.length);
+    console.log('Familias disponibles:', this.listFamilias.length);
+  }
+
+  // ===============================================
+  // EVENTOS DE PRODUCTO (AUTOCOMPLETE)
+  // ===============================================
+  onProductoSelected(producto: any) {
+    if (this.isUpdatingProgrammatically) return;
+
+    console.log('Producto seleccionado:', producto);
+
+    if (!producto || !producto.proId) {
+      return;
+    }
+
+    this.isUpdatingProgrammatically = true;
+
+    // Actualizar el modelo
+    this.promocionDetalle.prdProId = producto.proId;
+    this.promocionDetalle.prdFamId = producto.proFamId;
+    this.promocionDetalle.prdPreId = producto.proPreId;
+
+    // Ajustar las listas según el producto seleccionado
+    // La familia debe mostrar solo la del producto
+    this.listFamilias = this.listFamiliasCompleta.filter(
+      (f) => f.famId === producto.proFamId
+    );
+
+    // La presentación debe mostrar solo la del producto
+    this.listPresentaciones = this.listPresentacionesCompleta.filter(
+      (pr) => pr.preId === producto.proPreId
+    );
+
+    // Los productos se filtran por la familia del producto seleccionado
+    this.listProductos = this.listProductosCompleta.filter(
+      (p) => p.proFamId === producto.proFamId
+    );
+
+    this.isUpdatingProgrammatically = false;
+
+    console.log('Familia auto-seleccionada:', producto.proFamId);
+    console.log('Presentación auto-seleccionada:', producto.proPreId);
+  }
+
+  // ===============================================
+  // EVENTO CUANDO SE LIMPIA EL AUTOCOMPLETE
+  // ===============================================
+  onProductoClear() {
+    console.log('Producto limpiado');
+
+    // Si hay familia o presentación seleccionada, mantener su contexto
+
+    this.resetToInitialState();
+
+    // if (this.promocionDetalle.prdFamId && this.promocionDetalle.prdFamId > 0) {
+    //   this.onFamiliaChange({ value: this.promocionDetalle.prdFamId });
+    // } else if (this.promocionDetalle.prdPreId && this.promocionDetalle.prdPreId > 0) {
+    //   this.onPresentacionChange({ value: this.promocionDetalle.prdPreId });
+    // } else {
+    //   // Si no hay nada seleccionado, restaurar todo
+    //   this.resetToInitialState();
+    // }
+
+    this.promocionDetalle.prdProId = 0;
+  }
+
+  // ===============================================
+  // RESET A ESTADO INICIAL
+  // ===============================================
+  resetToInitialState() {
+    console.log('Restaurando a estado inicial');
+
+    this.listFamilias = [...this.listFamiliasCompleta];
+    this.listProductos = [...this.listProductosCompleta];
+    this.listPresentaciones = [...this.listPresentacionesCompleta];
+
+    this.promocionDetalle.prdFamId = 0;
+    this.promocionDetalle.prdPreId = 0;
+    this.promocionDetalle.prdProId = 0;
+
+    this.isUpdatingProgrammatically = true;
+    this.productoControl.reset();
+    this.isUpdatingProgrammatically = false;
+
+    // CRÍTICO: Actualizar autocomplete
+    this.refreshAutocomplete();
+  }
+
+  // ===============================================
+  // REFRESCAR AUTOCOMPLETE (NUEVO MÉTODO)
+  // ===============================================
+  refreshAutocomplete() {
+    // Forzar re-emisión del valor actual para actualizar el filtrado
+    const currentValue = this.productoControl.value;
+    this.productoControl.setValue('');
+    setTimeout(() => {
+      this.productoControl.setValue(currentValue || '');
+    }, 0);
+  }
+
+  // ===============================================
+  // AUTOCOMPLETE SETUP
+  // ===============================================
   setupAutocomplete() {
-    if (this.listProductos.length > 0) {
+    if (this.listProductosCompleta.length > 0) {
       // Autocomplete para producto principal
       this.filteredProductos = this.productoControl.valueChanges.pipe(
         startWith(''),
@@ -192,32 +370,31 @@ export class PromocionDetalleEditComponent implements OnInit {
           startWith(''),
           map((value) => {
             const filterValue = this._getFilterValue(value);
-            return this._filterProductos(filterValue);
+            return this._filterProductosObsequio(filterValue);
           })
         );
     }
   }
 
   setInitialValues() {
-    // Establecer valor inicial para producto principal
-    if (this.promocionDetalle.prdProId && this.listProductos.length > 0) {
-      const producto = this.listProductos.find(
-        (p) => p.proId == this.promocionDetalle.prdProId
+    // Si hay producto seleccionado al abrir el diálogo
+    if (
+      this.promocionDetalle.prdProId &&
+      this.listProductosCompleta.length > 0
+    ) {
+      const producto = this.listProductosCompleta.find(
+        (p) => p.proId === this.promocionDetalle.prdProId
       );
+
       if (producto) {
+        this.isUpdatingProgrammatically = true;
         this.productoControl.setValue(producto);
+        this.isUpdatingProgrammatically = false;
+
+        // Simular selección de producto para ajustar listas
+        this.onProductoSelected(producto);
       }
     }
-
-    // Establecer valor inicial para producto obsequio si existe
-    // if (this.promocionDetalle.prdProObsequioId && this.listProductos.length > 0) {
-    //    const productoObsequio = this.listProductos.find(
-    //       (p) => p.proId == this.promocionDetalle.prdProObsequioId
-    //    );
-    //    if (productoObsequio) {
-    //       this.productoObsequioControl.setValue(productoObsequio);
-    //    }
-    // }
   }
 
   private _getFilterValue(value: any): string {
@@ -232,7 +409,22 @@ export class PromocionDetalleEditComponent implements OnInit {
 
   private _filterProductos(value: string): any[] {
     const filterValue = value.toLowerCase();
+    // Filtrar sobre la lista ACTUAL (ya filtrada por familia/presentación)
     return this.listProductos.filter((producto) => {
+      return (
+        (producto.proNombre &&
+          producto.proNombre.toLowerCase().includes(filterValue)) ||
+        (producto.proDescripcion &&
+          producto.proDescripcion.toLowerCase().includes(filterValue)) ||
+        producto.proId.toString().includes(filterValue)
+      );
+    });
+  }
+
+  private _filterProductosObsequio(value: string): any[] {
+    const filterValue = value.toLowerCase();
+    // Para obsequios, usar la lista completa
+    return this.listProductosCompleta.filter((producto) => {
       return (
         (producto.proNombre &&
           producto.proNombre.toLowerCase().includes(filterValue)) ||
@@ -247,30 +439,14 @@ export class PromocionDetalleEditComponent implements OnInit {
     return producto && producto.proNombre ? producto.proNombre : '';
   }
 
-  onProductoSelected(producto: any) {
-    console.log('Producto principal seleccionado');
-    console.log(producto);
-
-    if (producto) {
-      this.promocionDetalle.prdProId = producto.proId;
-      this.promocionDetalle.prdFamId = producto.proFamId;
-      this.promocionDetalle.prdPreId = producto.proPreId;
-    }
-  }
-
   onProductoObsequioSelected(producto: any) {
-    console.log('Producto obsequio seleccionado');
-    console.log(producto);
-
-    // if (producto) {
-    //    this.promocionDetalle.prdProObsequioId = producto.proId;
-    //    this.promocionDetalle.prdFamObsequioId = producto.proFamId;
-    //    this.promocionDetalle.prdPreObsequioId = producto.proPreId;
-    // }
+    console.log('Producto obsequio seleccionado:', producto);
+    // Implementar lógica para producto obsequio si es necesario
   }
 
-  /*Métodos*/
-
+  // ===============================================
+  // GUARDAR
+  // ===============================================
   save() {
     this.promocionDetalleService.save(this.promocionDetalle).subscribe({
       next: (result) => {
