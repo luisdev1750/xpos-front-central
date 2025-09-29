@@ -12,6 +12,9 @@ import { TipoPromocion } from '../../tipo-promocion/tipo-promocion';
 import { ProductoService } from '../../producto/producto.service';
 import { FamiliaService } from '../../familia/familia.service';
 import { TipoPromocionService } from '../../tipo-promocion/tipo-promocion.service';
+import { ActivatedRoute } from '@angular/router';
+import { PromocionService } from '../../promocion/promocion.service';
+import { Promocion } from '../../promocion/promocion';
 
 @Component({
   selector: 'app-promocion-detalle',
@@ -35,7 +38,10 @@ export class PromocionDetalleListComponent implements OnInit {
     'actions',
   ];
   filter = new PromocionDetalleFilter();
-
+  promocionId: string = '';
+  sucursalId: string = '';
+  tipoPromocionId: string = '';
+  promocionCurrent: Promocion = new Promocion();
   private subs!: Subscription;
   familiaList: any[] = [];
   /* Inicialización */
@@ -46,7 +52,9 @@ export class PromocionDetalleListComponent implements OnInit {
     public dialog: MatDialog,
     private promocionService: TipoPromocionService,
     private productoServie: ProductoService,
-    private familiaService: FamiliaService
+    private familiaService: FamiliaService,
+    private route: ActivatedRoute,
+    private promocionServiceController: PromocionService
   ) {
     this.subs = this.promocionDetalleService.getIsUpdated().subscribe(() => {
       this.search();
@@ -58,6 +66,27 @@ export class PromocionDetalleListComponent implements OnInit {
   ngOnInit() {
     this.search();
     this.loadCatalogs();
+    this.getParams();
+  }
+
+  getParams() {
+    this.route.params.subscribe((params) => {
+      this.promocionId = params['id'];
+      console.log('Id de promoción');
+      console.log(this.promocionId);
+    });
+
+    this.route.queryParams.subscribe((params) => {
+      this.tipoPromocionId = params['tipoPromocion'];
+      console.log('Tipo promoción:', this.sucursalId);
+    });
+
+    this.route.queryParams.subscribe((params) => {
+      this.sucursalId = params['sucursalId'];
+      console.log('Sucursal recibida:', this.sucursalId);
+    });
+
+  
   }
 
   ngOnDestroy(): void {
@@ -72,9 +101,9 @@ export class PromocionDetalleListComponent implements OnInit {
       })
       .subscribe(
         (result) => {
-          //   this.promocionService.tipoPromocionList = result;
-          console.log("promocion");
-          
+          console.log('Tipo de promociones lista: ');
+          this.promocionService.tipoPromocionList = result;
+
           console.log(result);
         },
         (error) => {
@@ -92,8 +121,8 @@ export class PromocionDetalleListComponent implements OnInit {
       .subscribe(
         (result) => {
           this.productoServie.productoList = result;
-             console.log("producto");
-          
+          console.log('producto');
+
           console.log(result);
         },
         (error) => {
@@ -110,9 +139,9 @@ export class PromocionDetalleListComponent implements OnInit {
       .subscribe(
         (result) => {
           // this.familiaService.familiaList = result;
-          this.familiaList = result; 
-             console.log("familia");
-          
+          this.familiaList = result;
+          console.log('familia');
+
           console.log(result);
         },
         (error) => {
@@ -163,7 +192,12 @@ export class PromocionDetalleListComponent implements OnInit {
 
   edit(ele: PromocionDetalle) {
     this.dialog.open(PromocionDetalleEditComponent, {
-      data: { promocionDetalle: JSON.parse(JSON.stringify(ele)) },
+      data: {
+        promocionDetalle: JSON.parse(JSON.stringify(ele)),
+        promocionId: this.promocionId,
+        tipoPromocionId: this.tipoPromocionId,
+        sucursalId: this.sucursalId,
+      },
       height: '500px',
       width: '700px',
       maxWidth: 'none',

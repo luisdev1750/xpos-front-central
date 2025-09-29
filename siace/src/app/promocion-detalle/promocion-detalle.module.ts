@@ -21,6 +21,8 @@ import { FamiliaService } from '../familia/familia.service';
 import { MatAutocomplete, MatAutocompleteModule } from '@angular/material/autocomplete';
 import { PresentacionService } from '../presentacion/presentacion.service';
 import { MatSelect } from '@angular/material/select';
+import { PromocionService } from '../promocion/promocion.service';
+import { PromocionObsequioService } from '../promocion-obsequio/promocion-obsequio.service';
 
 /*
   MatAutocomplete,
@@ -56,7 +58,9 @@ import { MatSelect } from '@angular/material/select';
     TipoPromocionService,
     ProductoService,
     FamiliaService,
-    PresentacionService
+    PresentacionService,
+    PromocionService,
+    PromocionObsequioService
   ],
   exports: [],
 })

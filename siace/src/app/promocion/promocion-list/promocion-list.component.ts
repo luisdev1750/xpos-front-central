@@ -114,6 +114,13 @@ onNombreClick(item: any){
 console.log("nombre click");
 console.log(item); 
 
+  this.router.navigate([`/promocion-detalle/${item.pmoId}`], {
+    queryParams: {
+      tipoPromocion: item.pmoTprId,
+      sucursalId: item.pmoSucId
+    },
+  });
+
 }
   /* Accesors */
 

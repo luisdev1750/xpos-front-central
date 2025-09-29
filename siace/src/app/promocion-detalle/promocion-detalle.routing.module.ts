@@ -10,7 +10,7 @@ export const PROMOCION_DETALLE_ROUTES: Routes = [
   },
   {
     path: ':id',
-    component: PromocionDetalleEditComponent
+    component: PromocionDetalleListComponent
   }
 ];
 

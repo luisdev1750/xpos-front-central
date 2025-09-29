@@ -1,23 +1,44 @@
 <h2>Detalle del detalle de promoción</h2>
-<form *ngIf="promocionDetalle" #editForm="ngForm" (ngSubmit)="save()" autocomplete="off">
-
+<form
+  *ngIf="promocionDetalle"
+  #editForm="ngForm"
+  (ngSubmit)="save()"
+  autocomplete="off"
+>
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-12">
+      <!-- Promoción Actual -->
       <mat-form-field>
-        <mat-label>Clave</mat-label>
-        <input matInput [(ngModel)]="promocionDetalle.prdId" id="prdId" name="prdId" placeholder="Clave" readonly>
+        <mat-label>Promoción Actual</mat-label>
+        <input
+          matInput
+          [(ngModel)]="promocionCurrent.pmoNombre"
+          id="promocionNombre"
+          name="promocionNombre"
+          placeholder="Promoción"
+          readonly
+        />
       </mat-form-field>
     </div>
-
-    <div class="col-md-4">
+    <div class="col-md-6">
       <mat-form-field>
-        <mat-label for="prdPmoId">Promoción</mat-label>
-        <input matInput type="number" [(ngModel)]="promocionDetalle.prdPmoId" id="prdPmoId" name="prdPmoId" placeholder="Promoción">
-        <mat-error *ngIf="promocionDetalle.prdPmoId==undefined">Promoción es requerido</mat-error>
+        <mat-label>Tipo de Promoción</mat-label>
+        <mat-select
+          [(ngModel)]="promocionCurrent.pmoTprId"
+          name="pmoTprId"
+          (selectionChange)="onPromocionIdChange($event)"
+        >
+          <mat-option
+            *ngFor="let tipoPromocion of tipoPromocionList"
+            [value]="tipoPromocion.tprId"
+          >
+            {{ tipoPromocion.tprNombre }}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
     </div>
-   <!-- COMBOBOX DE FAMILIA -->
-    <div class="col-md-4">
+    <div class="col-md-6">
+      <!-- Familia -->
       <mat-form-field>
         <mat-label>Familia</mat-label>
         <mat-select
@@ -34,13 +55,7 @@
         </mat-select>
       </mat-form-field>
     </div>
-  
-  </div>
-
-  <div class="row">
- 
-  <!-- AUTOCOMPLETE DE PRODUCTO CON BOTÓN DE LIMPIEZA -->
-    <div class="col-md-4">
+    <div class="col-md-12">
       <mat-form-field>
         <mat-label>Producto Principal</mat-label>
         <input
@@ -50,14 +65,14 @@
           [matAutocomplete]="autoProductoPrincipal"
           placeholder="Buscar producto..."
         />
-        <!-- BOTÓN PARA LIMPIAR EL AUTOCOMPLETE -->
-        <button 
-          *ngIf="productoControl.value" 
-          matSuffix 
-          mat-icon-button 
+        <button
+          *ngIf="productoControl.value"
+          matSuffix
+          mat-icon-button
           aria-label="Limpiar"
           type="button"
-          (click)="productoControl.reset(); onProductoClear()">
+          (click)="productoControl.reset(); onProductoClear()"
+        >
           <mat-icon>close</mat-icon>
         </button>
         <mat-autocomplete
@@ -69,26 +84,53 @@
             *ngFor="let producto of filteredProductos | async"
             [value]="producto"
           >
-            <span><strong>{{ producto.proId }}</strong> - {{ producto.proNombre }}</span>
+            <span>
+              <strong>{{ producto.proId }}</strong> - {{ producto.proNombre }}
+            </span>
             <br />
-            <small style="color: #666" *ngIf="producto.proDescripcion">{{ producto.proDescripcion }}</small>
+            <small style="color: #666" *ngIf="producto.proDescripcion">
+              {{ producto.proDescripcion }}
+            </small>
           </mat-option>
         </mat-autocomplete>
-        <mat-error *ngIf="promocionDetalle.prdProId == undefined">Producto es requerido</mat-error>
+        <mat-error *ngIf="promocionDetalle.prdProId == undefined">
+          Producto es requerido
+        </mat-error>
       </mat-form-field>
     </div>
- 
-    <!-- COMBOBOX DE PRESENTACIÓN -->
-    <div class="col-md-4">
+    <div class="col-md-6">
+      <!-- Clave -->
+
+      <!-- Promoción Actual -->
+
+      <!-- Tipo de Promoción -->
+
+      <!-- ID Promoción -->
+      <!-- <mat-form-field>
+        <mat-label>ID Promoción</mat-label>
+        <input
+          matInput
+          type="number"
+          [(ngModel)]="promocionDetalle.prdPmoId"
+          id="prdPmoId"
+          name="prdPmoId"
+          placeholder="ID Promoción"
+        />
+        <mat-error *ngIf="promocionDetalle.prdPmoId == undefined">
+          Promoción es requerido
+        </mat-error>
+      </mat-form-field> -->
+
+      <!-- Presentación -->
       <mat-form-field>
         <mat-label>Presentación</mat-label>
-        <mat-select 
-          [value]="promocionDetalle.prdPreId" 
+        <mat-select
+          [value]="promocionDetalle.prdPreId"
           (selectionChange)="onPresentacionChange($event)"
         >
           <mat-option [value]="0">-- Todas las Presentaciones --</mat-option>
-          <mat-option 
-            *ngFor="let presentacion of listPresentaciones" 
+          <mat-option
+            *ngFor="let presentacion of listPresentaciones"
             [value]="presentacion.preId"
           >
             {{ presentacion.preNombre }}
@@ -96,38 +138,73 @@
         </mat-select>
       </mat-form-field>
     </div>
-      <div class="col-md-4">
-      <mat-form-field>
-        <mat-label for="prdProcentajeDescuento">Porcentaje Descuento (%)</mat-label>
-        <input matInput type="number" [(ngModel)]="promocionDetalle.prdProcentajeDescuento" id="prdProcentajeDescuento" name="prdProcentajeDescuento" placeholder="Porcentaje Descuento (%)">
-      </mat-form-field>
+
+    <!-- COLUMNA DERECHA -->
+    <div class="col-md-6">
+      <!-- Producto Principal -->
+
+      <!-- Info de productos disponibles -->
+      <div style="display: flex; align-items: center; padding: 16px 0">
+        <mat-hint style="font-size: 14px; color: #666">
+          <mat-icon
+            style="vertical-align: middle; font-size: 18px; margin-right: 8px"
+          >
+            info
+          </mat-icon>
+          Productos disponibles: {{ listProductos.length }}
+        </mat-hint>
+      </div>
     </div>
   </div>
 
-  <div class="row">
- 
-
-  
-
-    <div class="col-md-4">
-      <mat-form-field>
-        <mat-label for="prdNxmProdCompra">Productos a Comprar (NxM)</mat-label>
-        <input matInput type="number" [(ngModel)]="promocionDetalle.prdNxmProdCompra" id="prdNxmProdCompra" name="prdNxmProdCompra" placeholder="Productos a Comprar (NxM)">
-      </mat-form-field>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-4">
-      <mat-form-field>
-        <mat-label for="prdNxmProdObsequio">Productos de Obsequio (NxM)</mat-label>
-        <input matInput type="number" [(ngModel)]="promocionDetalle.prdNxmProdObsequio" id="prdNxmProdObsequio" name="prdNxmProdObsequio" placeholder="Productos de Obsequio (NxM)">
-      </mat-form-field>
+  <!-- SECCIÓN DE CONFIGURACIÓN DE PROMOCIÓN -->
+  <div class="row" style="margin-top: 24px">
+    <div class="col-md-12">
+      <h3
+        style="
+          margin-bottom: 16px;
+          font-size: 16px;
+          font-weight: 500;
+          color: #666;
+        "
+      >
+        Promoción 
+      </h3>
     </div>
 
-    <!-- AUTOCOMPLETE DE PRODUCTO OBSEQUIO -->
-    <div class="col-md-4">
-      <mat-form-field>
+    <div class="col-md-12" *ngIf = "promocionCurrent.pmoTprId == 3">
+      <!-- Porcentaje de Descuento -->
+      <mat-form-field >
+        <mat-label>Descuento directo(%)</mat-label>
+        <input
+          matInput
+          type="number"
+          [(ngModel)]="promocionDetalle.prdPorcentajeDescuento"
+          id="prdProcentajeDescuento"
+          name="prdProcentajeDescuento"
+          placeholder="Porcentaje Descuento (%)"
+        />
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-12">
+      <!-- Productos a Comprar (NxM) -->
+      <mat-form-field *ngIf = "promocionCurrent.pmoTprId == 2">
+        <mat-label>Productos a Comprar (NxM)</mat-label>
+        <input
+          matInput
+          type="number"
+          [(ngModel)]="promocionDetalle.prdNxmProdCompra"
+          id="prdNxmProdCompra"
+          name="prdNxmProdCompra"
+          placeholder="Productos a Comprar"
+        />
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-12">
+      <!-- Producto Obsequio -->
+      <mat-form-field *ngIf = "promocionCurrent.pmoTprId == 1">
         <mat-label>Producto Obsequio</mat-label>
         <input
           type="text"
@@ -145,26 +222,29 @@
             *ngFor="let producto of filteredProductosObsequio | async"
             [value]="producto"
           >
-            <span><strong>{{ producto.proId }}</strong> - {{ producto.proNombre }}</span>
+            <span>
+              <strong>{{ producto.proId }}</strong> - {{ producto.proNombre }}
+            </span>
             <br />
-            <small style="color: #666" *ngIf="producto.proDescripcion">{{ producto.proDescripcion }}</small>
+            <small style="color: #666" *ngIf="producto.proDescripcion">
+              {{ producto.proDescripcion }}
+            </small>
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>
     </div>
-
-    <!-- INFO: CANTIDAD DE PRODUCTOS DISPONIBLES -->
-    <div class="col-md-4" style="display: flex; align-items: center;">
-      <mat-hint style="font-size: 12px; color: #666;">
-        <mat-icon style="vertical-align: middle; font-size: 16px;">info</mat-icon>
-        Productos disponibles: {{ listProductos.length }}
-      </mat-hint>
-    </div>
   </div>
 
-  <div class="button-row text-center" role="group">
-    <button type="submit" mat-raised-button color="primary" [disabled]="!editForm.form.valid">Guardar</button>
+  <!-- Botones de acción -->
+  <div class="button-row text-center" role="group" style="margin-top: 24px">
+    <button
+      type="submit"
+      mat-raised-button
+      color="primary"
+      [disabled]="!editForm.form.valid"
+    >
+      Guardar
+    </button>
     <button mat-button mat-dialog-close type="button">Cancelar</button>
   </div>
-
 </form>

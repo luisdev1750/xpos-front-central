@@ -10,6 +10,10 @@ import { PromocionDetalle } from '../promocion-detalle';
 import { ProductoService } from '../../producto/producto.service';
 import { FamiliaService } from '../../familia/familia.service';
 import { PresentacionService } from '../../presentacion/presentacion.service';
+import { PromocionService } from '../../promocion/promocion.service';
+import { TipoPromocionService } from '../../tipo-promocion/tipo-promocion.service';
+import { Promocion } from '../../promocion/promocion';
+import { PromocionObsequioService } from '../../promocion-obsequio/promocion-obsequio.service';
 
 @Component({
   selector: 'app-promocion-detalle-edit',
@@ -25,6 +29,13 @@ export class PromocionDetalleEditComponent implements OnInit {
   id!: string;
   promocionDetalle!: PromocionDetalle;
 
+  promocionId: string = '';
+  sucursalId: string = '';
+  tipoPromocionId;
+  tipoPromocionList: any[] = [];
+  promocionCurrent: Promocion = new Promocion();
+
+  productoObsequioSeleccionado: any = [];
   // Listas completas (backup inicial)
   listFamiliasCompleta: any[] = [];
   listProductosCompleta: any[] = [];
@@ -53,13 +64,62 @@ export class PromocionDetalleEditComponent implements OnInit {
     private productoService: ProductoService,
     private familiaService: FamiliaService,
     private presentacionService: PresentacionService,
+    private promocionService: TipoPromocionService,
+    private promocionServiceController: PromocionService,
+    private promocionObsequioService: PromocionObsequioService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.promocionDetalle = data.promocionDetalle;
+    this.promocionId = data.promocionId;
+    this.promocionDetalle.prdPmoId = data.promocionId;
+    this.tipoPromocionId = data.tipoPromocionId;
+    this.tipoPromocionId = data.tipoPromocionId;
+    this.sucursalId = data.sucursalId;
   }
 
   ngOnInit() {
     this.loadCatalogosIniciales();
+    this.loadInicialInfoCombobox();
+  }
+
+  loadInicialInfoCombobox() {
+    this.promocionService
+      .find({
+        tprId: '0',
+        tprActivo: 'all',
+      })
+      .subscribe(
+        (result) => {
+          console.log('Tipo de promociones listaa: ');
+          this.tipoPromocionList = result;
+
+          console.log(result);
+        },
+        (error) => {
+          this.toastr.error('Ha ocurrido un error', 'Error');
+        }
+      );
+
+    this.promocionServiceController
+      .find({
+        pmoId: this.promocionId,
+      })
+      .subscribe(
+        (res) => {
+          console.log('Promocion actual seleccionada:');
+          console.log(res);
+          if (res[0]) {
+            this.promocionCurrent = res[0];
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  }
+
+  onPromocionIdChange(event: any) {
+    this.promocionDetalle.prdPmoId = event.value;
   }
 
   // ===============================================
@@ -441,27 +501,138 @@ export class PromocionDetalleEditComponent implements OnInit {
 
   onProductoObsequioSelected(producto: any) {
     console.log('Producto obsequio seleccionado:', producto);
+
     // Implementar lógica para producto obsequio si es necesario
+
+    this.productoObsequioSeleccionado = producto;
   }
 
   // ===============================================
   // GUARDAR
   // ===============================================
   save() {
-    this.promocionDetalleService.save(this.promocionDetalle).subscribe({
+    // Validar que tengamos los datos necesarios
+    if (!this.promocionCurrent || !this.promocionDetalle) {
+      this.toastr.error('Faltan datos necesarios para guardar', 'Error');
+      return;
+    }
+
+    // Determinar el tipo de promoción
+    const tipoPromocion = this.promocionCurrent.pmoTprId;
+    const esPromocionObsequio = tipoPromocion === 1;
+    const esPromocionNxM = tipoPromocion === 2;
+    const esPromocionDescuento = tipoPromocion === 3;
+
+    // Construir el objeto de promoción detalle
+    const productoRequest: PromocionDetalle = {
+      prdId: this.promocionDetalle.prdId || 0,
+      prdPmoId: this.promocionCurrent.pmoId,
+      prdProId: this.promocionDetalle.prdProId,
+      prdFamId: this.promocionDetalle.prdFamId,
+      prdPreId: this.promocionDetalle.prdPreId,
+      prdNxmProdCompra: esPromocionNxM
+        ? this.promocionDetalle.prdNxmProdCompra
+        : null,
+      prdNxmProdObsequio: esPromocionNxM
+        ? this.promocionDetalle.prdNxmProdObsequio
+        : null,
+      prdPorcentajeDescuento: esPromocionDescuento
+        ? this.promocionDetalle.prdPorcentajeDescuento
+        : null,
+      prdPmoSucId: this.promocionCurrent.pmoSucId,
+    };
+
+    console.log('Guardando promoción detalle:', productoRequest);
+
+    // Guardar el detalle de promoción
+    this.promocionDetalleService.save(productoRequest).subscribe({
       next: (result) => {
-        if (Number(result) > 0) {
+        if (this.isValidResult(result)) {
           this.toastr.success(
             'El detalle de promoción ha sido guardado exitosamente',
             'Transacción exitosa'
           );
           this.promocionDetalleService.setIsUpdated(true);
-          this.dialogRef.close();
-        } else this.toastr.error('Ha ocurrido un error', 'Error');
+
+          // Si es promoción de obsequio, guardar también el producto obsequio
+          if (esPromocionObsequio && this.productoObsequioSeleccionado) {
+            this.guardarPromocionObsequio();
+          } else {
+            this.dialogRef.close();
+          }
+        } else {
+          this.toastr.error('Ha ocurrido un error al guardar', 'Error');
+        }
       },
       error: (err) => {
-        this.toastr.error('Ha ocurrido un error', 'Error');
+        console.error('Error guardando promoción detalle:', err);
+        this.toastr.error('Ha ocurrido un error al guardar', 'Error');
       },
     });
+  }
+
+  private guardarPromocionObsequio() {
+    if (!this.productoObsequioSeleccionado) {
+      this.toastr.warning(
+        'Debe seleccionar un producto obsequio',
+        'Advertencia'
+      );
+      this.dialogRef.close();
+      return;
+    }
+
+    const promocionObsequio = {
+      pobId: 0,
+      pobPmoId: Number(this.promocionId),
+      pobFamId: this.promocionDetalle.prdFamId,
+      pobPreId: this.promocionDetalle.prdPreId,
+      pobProId: this.productoObsequioSeleccionado.proId,
+      pobPmoSucId: Number(this.promocionCurrent.pmoSucId),
+    };
+
+    console.log('Guardando promoción obsequio:', promocionObsequio);
+
+    this.promocionObsequioService.save(promocionObsequio).subscribe({
+      next: (result) => {
+        if (this.isValidObsequioResult(result)) {
+          this.toastr.success(
+            'El producto obsequio ha sido guardado exitosamente',
+            'Transacción exitosa'
+          );
+          this.promocionObsequioService.setIsUpdated(true);
+          this.dialogRef.close();
+        } else {
+          this.toastr.error(
+            'Ha ocurrido un error al guardar el obsequio',
+            'Error'
+          );
+          this.dialogRef.close();
+        }
+      },
+      error: (err) => {
+        console.error('Error guardando promoción obsequio:', err);
+        this.toastr.error(
+          'Ha ocurrido un error al guardar el obsequio',
+          'Error'
+        );
+        this.dialogRef.close();
+      },
+    });
+  }
+
+  private isValidResult(result: any): boolean {
+    return (
+      result?.prdFamId != null &&
+      result?.prdFamId !== undefined &&
+      result?.prdFamId > 0
+    );
+  }
+
+  private isValidObsequioResult(result: any): boolean {
+    return (
+      result?.pobPmoId != null &&
+      result?.pobPmoId !== undefined &&
+      result?.pobPmoId > 0
+    );
   }
 }
