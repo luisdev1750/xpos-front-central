@@ -196,8 +196,7 @@
           (optionSelected)="onProductoObsequioSelected($event.option.value)"
         >
           <mat-option
-            *ngFor="let producto of filteredProductos | async"
-            [value]="producto"
+           *ngFor="let producto of filteredProductosObsequio | async" [value]="producto"
           >
             <span>
               <strong>{{ producto.proId }}</strong> - {{ producto.proNombre }}

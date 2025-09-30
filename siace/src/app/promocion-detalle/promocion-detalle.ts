@@ -8,5 +8,6 @@ export class PromocionDetalle {
   prdNxmProdCompra!: number | null;
   prdNxmProdObsequio!: number | null;
   prdPmoSucId!: number ;
-  prdPobId!: number | null; 
+  prdPobId!: number | null;   
+  prdPobProId!: number | null; 
 }

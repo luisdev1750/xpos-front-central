@@ -93,16 +93,18 @@ export class PromocionDetalleEditComponent implements OnInit {
     });
 
     // Cargar promoción actual
-    this.promocionServiceController.find({ pmoId: this.promocionId }).subscribe({
-      next: (res) => {
-        if (res[0]) {
-          this.promocionCurrent = res[0];
-        }
-      },
-      error: (error) => {
-        console.error('Error al cargar promoción:', error);
-      },
-    });
+    this.promocionServiceController
+      .find({ pmoId: this.promocionId })
+      .subscribe({
+        next: (res) => {
+          if (res[0]) {
+            this.promocionCurrent = res[0];
+          }
+        },
+        error: (error) => {
+          console.error('Error al cargar promoción:', error);
+        },
+      });
   }
 
   loadCatalogosIniciales() {
@@ -154,14 +156,20 @@ export class PromocionDetalleEditComponent implements OnInit {
     // Filtrar productos por familia (y presentación si existe)
     if (this.promocionDetalle.prdPreId && this.promocionDetalle.prdPreId > 0) {
       this.listProductos = this.listProductosCompleta.filter(
-        (p) => p.proFamId === familiaId && p.proPreId === this.promocionDetalle.prdPreId
+        (p) =>
+          p.proFamId === familiaId &&
+          p.proPreId === this.promocionDetalle.prdPreId
       );
     } else {
-      this.listProductos = this.listProductosCompleta.filter((p) => p.proFamId === familiaId);
+      this.listProductos = this.listProductosCompleta.filter(
+        (p) => p.proFamId === familiaId
+      );
     }
 
     // Obtener presentaciones únicas
-    const presentacionIds = [...new Set(this.listProductos.map((p) => p.proPreId))];
+    const presentacionIds = [
+      ...new Set(this.listProductos.map((p) => p.proPreId)),
+    ];
     this.listPresentaciones = this.listPresentacionesCompleta.filter((pr) =>
       presentacionIds.includes(pr.preId)
     );
@@ -169,7 +177,9 @@ export class PromocionDetalleEditComponent implements OnInit {
     // Limpiar producto si no pertenece a esta familia
     if (
       this.promocionDetalle.prdProId &&
-      !this.listProductos.some((p) => p.proId === this.promocionDetalle.prdProId)
+      !this.listProductos.some(
+        (p) => p.proId === this.promocionDetalle.prdProId
+      )
     ) {
       this.isUpdatingProgrammatically = true;
       this.productoControl.reset();
@@ -204,20 +214,28 @@ export class PromocionDetalleEditComponent implements OnInit {
     // Filtrar productos por presentación (y familia si existe)
     if (this.promocionDetalle.prdFamId && this.promocionDetalle.prdFamId > 0) {
       this.listProductos = this.listProductosCompleta.filter(
-        (p) => p.proPreId === presentacionId && p.proFamId === this.promocionDetalle.prdFamId
+        (p) =>
+          p.proPreId === presentacionId &&
+          p.proFamId === this.promocionDetalle.prdFamId
       );
     } else {
-      this.listProductos = this.listProductosCompleta.filter((p) => p.proPreId === presentacionId);
+      this.listProductos = this.listProductosCompleta.filter(
+        (p) => p.proPreId === presentacionId
+      );
     }
 
     // Obtener familias únicas
     const familiaIds = [...new Set(this.listProductos.map((p) => p.proFamId))];
-    this.listFamilias = this.listFamiliasCompleta.filter((f) => familiaIds.includes(f.famId));
+    this.listFamilias = this.listFamiliasCompleta.filter((f) =>
+      familiaIds.includes(f.famId)
+    );
 
     // Limpiar producto si no tiene esta presentación
     if (
       this.promocionDetalle.prdProId &&
-      !this.listProductos.some((p) => p.proId === this.promocionDetalle.prdProId)
+      !this.listProductos.some(
+        (p) => p.proId === this.promocionDetalle.prdProId
+      )
     ) {
       this.isUpdatingProgrammatically = true;
       this.productoControl.reset();
@@ -226,7 +244,10 @@ export class PromocionDetalleEditComponent implements OnInit {
     }
 
     // Limpiar familia si no está disponible
-    if (this.promocionDetalle.prdFamId && !familiaIds.includes(this.promocionDetalle.prdFamId)) {
+    if (
+      this.promocionDetalle.prdFamId &&
+      !familiaIds.includes(this.promocionDetalle.prdFamId)
+    ) {
       this.promocionDetalle.prdFamId = 0;
     }
 
@@ -245,11 +266,15 @@ export class PromocionDetalleEditComponent implements OnInit {
     this.promocionDetalle.prdPreId = producto.proPreId;
 
     // Ajustar las listas según el producto seleccionado
-    this.listFamilias = this.listFamiliasCompleta.filter((f) => f.famId === producto.proFamId);
+    this.listFamilias = this.listFamiliasCompleta.filter(
+      (f) => f.famId === producto.proFamId
+    );
     this.listPresentaciones = this.listPresentacionesCompleta.filter(
       (pr) => pr.preId === producto.proPreId
     );
-    this.listProductos = this.listProductosCompleta.filter((p) => p.proFamId === producto.proFamId);
+    this.listProductos = this.listProductosCompleta.filter(
+      (p) => p.proFamId === producto.proFamId
+    );
 
     this.isUpdatingProgrammatically = false;
   }
@@ -261,6 +286,8 @@ export class PromocionDetalleEditComponent implements OnInit {
 
   onProductoObsequioSelected(producto: any) {
     this.productoObsequioSeleccionado = producto;
+    this.promocionDetalle.prdPobProId = producto?.proId || 0;
+
   }
 
   // ===============================================
@@ -303,15 +330,21 @@ export class PromocionDetalleEditComponent implements OnInit {
     );
 
     // Autocomplete para producto obsequio
-    this.filteredProductosObsequio = this.productoObsequioControl.valueChanges.pipe(
-      startWith(''),
-      map((value) => this._filterProductosObsequio(this._getFilterValue(value)))
-    );
+    this.filteredProductosObsequio =
+      this.productoObsequioControl.valueChanges.pipe(
+        startWith(''),
+        map((value) =>
+          this._filterProductosObsequio(this._getFilterValue(value))
+        )
+      );
   }
 
   setInitialValues() {
     // Cargar producto principal si existe
-    if (this.promocionDetalle.prdProId && this.listProductosCompleta.length > 0) {
+    if (
+      this.promocionDetalle.prdProId &&
+      this.listProductosCompleta.length > 0
+    ) {
       const producto = this.listProductosCompleta.find(
         (p) => p.proId === this.promocionDetalle.prdProId
       );
@@ -339,7 +372,8 @@ export class PromocionDetalleEditComponent implements OnInit {
 
   private _getFilterValue(value: any): string {
     if (typeof value === 'string') return value;
-    if (value && typeof value === 'object' && value.proNombre) return value.proNombre;
+    if (value && typeof value === 'object' && value.proNombre)
+      return value.proNombre;
     return '';
   }
 
@@ -347,8 +381,10 @@ export class PromocionDetalleEditComponent implements OnInit {
     const filterValue = value.toLowerCase();
     return this.listProductos.filter(
       (producto) =>
-        (producto.proNombre && producto.proNombre.toLowerCase().includes(filterValue)) ||
-        (producto.proDescripcion && producto.proDescripcion.toLowerCase().includes(filterValue)) ||
+        (producto.proNombre &&
+          producto.proNombre.toLowerCase().includes(filterValue)) ||
+        (producto.proDescripcion &&
+          producto.proDescripcion.toLowerCase().includes(filterValue)) ||
         producto.proId.toString().includes(filterValue)
     );
   }
@@ -357,8 +393,10 @@ export class PromocionDetalleEditComponent implements OnInit {
     const filterValue = value.toLowerCase();
     return this.listProductosCompleta.filter(
       (producto) =>
-        (producto.proNombre && producto.proNombre.toLowerCase().includes(filterValue)) ||
-        (producto.proDescripcion && producto.proDescripcion.toLowerCase().includes(filterValue)) ||
+        (producto.proNombre &&
+          producto.proNombre.toLowerCase().includes(filterValue)) ||
+        (producto.proDescripcion &&
+          producto.proDescripcion.toLowerCase().includes(filterValue)) ||
         producto.proId.toString().includes(filterValue)
     );
   }
@@ -387,13 +425,18 @@ export class PromocionDetalleEditComponent implements OnInit {
       prdProId: this.promocionDetalle.prdProId,
       prdFamId: this.promocionDetalle.prdFamId,
       prdPreId: this.promocionDetalle.prdPreId,
-      prdNxmProdCompra: esPromocionNxM ? this.promocionDetalle.prdNxmProdCompra : null,
-      prdNxmProdObsequio: esPromocionNxM ? this.promocionDetalle.prdNxmProdObsequio : null,
+      prdNxmProdCompra: esPromocionNxM
+        ? this.promocionDetalle.prdNxmProdCompra
+        : null,
+      prdNxmProdObsequio: esPromocionNxM
+        ? this.promocionDetalle.prdNxmProdObsequio
+        : null,
       prdPorcentajeDescuento: esPromocionDescuento
         ? this.promocionDetalle.prdPorcentajeDescuento
         : null,
       prdPmoSucId: this.promocionCurrent.pmoSucId,
-      prdPobId: null, 
+      prdPobId: null,
+      prdPobProId: this.productoObsequioSeleccionado.proId,
     };
 
     this.promocionDetalleService.save(productoRequest).subscribe({
@@ -423,7 +466,10 @@ export class PromocionDetalleEditComponent implements OnInit {
 
   private guardarPromocionObsequio() {
     if (!this.productoObsequioSeleccionado) {
-      this.toastr.warning('Debe seleccionar un producto obsequio', 'Advertencia');
+      this.toastr.warning(
+        'Debe seleccionar un producto obsequio',
+        'Advertencia'
+      );
       this.dialogRef.close();
       return;
     }
@@ -437,7 +483,6 @@ export class PromocionDetalleEditComponent implements OnInit {
       pobPmoSucId: Number(this.promocionCurrent.pmoSucId),
     };
 
-
     this.promocionObsequioService.save(promocionObsequio).subscribe({
       next: (result) => {
         if (this.isValidObsequioResult(result)) {
@@ -446,25 +491,40 @@ export class PromocionDetalleEditComponent implements OnInit {
             'Transacción exitosa'
           );
           this.promocionObsequioService.setIsUpdated(true);
+           window.location.reload();
           this.dialogRef.close();
         } else {
-          this.toastr.error('Ha ocurrido un error al guardar el obsequio', 'Error');
+          this.toastr.error(
+            'Ha ocurrido un error al guardar el obsequio',
+            'Error'
+          );
           this.dialogRef.close();
         }
       },
       error: (err) => {
         console.error('Error guardando promoción obsequio:', err);
-        this.toastr.error('Ha ocurrido un error al guardar el obsequio', 'Error');
+        this.toastr.error(
+          'Ha ocurrido un error al guardar el obsequio',
+          'Error'
+        );
         this.dialogRef.close();
       },
     });
   }
 
   private isValidResult(result: any): boolean {
-    return result?.prdFamId != null && result?.prdFamId !== undefined && result?.prdFamId > 0;
+    return (
+      result?.prdFamId != null &&
+      result?.prdFamId !== undefined &&
+      result?.prdFamId > 0
+    );
   }
 
   private isValidObsequioResult(result: any): boolean {
-    return result?.pobPmoId != null && result?.pobPmoId !== undefined && result?.pobPmoId > 0;
+    return (
+      result?.pobPmoId != null &&
+      result?.pobPmoId !== undefined &&
+      result?.pobPmoId > 0
+    );
   }
 }

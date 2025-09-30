@@ -9,59 +9,9 @@
   <mat-card class="proin-card">
     <h2>Transacciones Promociones Detalles</h2>
     <form #f="ngForm">
-      <mat-form-field>
-        <mat-label>Clave:</mat-label>
-        <input
-          matInput
-          type="search"
-          [(ngModel)]="filter.prdId"
-          id="prdId"
-          name="prdId"
-        />
-      </mat-form-field>
+      
     
-      <mat-form-field>
-        <mat-label>Promoción:</mat-label>
-        <input
-          matInput
-          type="search"
-          [(ngModel)]="filter.prdPmoId"
-          id="prdPmoId"
-          name="prdPmoId"
-        />
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Familia:</mat-label>
-        <input
-          matInput
-          type="search"
-          [(ngModel)]="filter.prdFamId"
-          id="prdFamId"
-          name="prdFamId"
-        />
-      </mat-form-field>
-
-      <mat-form-field>
-        <mat-label>Producto:</mat-label>
-        <input
-          matInput
-          type="search"
-          [(ngModel)]="filter.prdProId"
-          id="prdProId"
-          name="prdProId"
-        />
-      </mat-form-field>
-
-      <mat-form-field>
-        <mat-label>Presentación:</mat-label>
-        <input
-          matInput
-          type="search"
-          [(ngModel)]="filter.prdPreId"
-          id="prdPreId"
-          name="prdPreId"
-        />
-      </mat-form-field>
+    
 
       <button
         mat-mini-fab
@@ -81,22 +31,22 @@
 
         <ng-container matColumnDef="prdPmoId">
           <mat-header-cell *matHeaderCellDef> Promoción </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.prdPmoId }} </mat-cell>
+          <mat-cell *matCellDef="let item"> {{ item.prdPmoName }} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="prdProId">
           <mat-header-cell *matHeaderCellDef> Producto </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.prdProId }} </mat-cell>
+          <mat-cell *matCellDef="let item"> {{ item.prdProName }} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="prdFamId">
           <mat-header-cell *matHeaderCellDef> Familia </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.prdFamId }} </mat-cell>
+          <mat-cell *matCellDef="let item"> {{ item.prdFamName }} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="prdPreId">
           <mat-header-cell *matHeaderCellDef> Presentación </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.prdPreId }} </mat-cell>
+          <mat-cell *matCellDef="let item"> {{ item.prdPreName }} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="prdProcentajeDescuento">

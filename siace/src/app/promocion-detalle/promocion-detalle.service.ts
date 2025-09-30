@@ -86,6 +86,7 @@ export class PromocionDetalleService extends GeneralService {
     return this.http.get<PromocionDetalle[]>(url, { 
       headers: this.getHeaders()  // Usar headers con token
     });
+    
   }
 
   findById(id: string): Observable<PromocionDetalle> {
