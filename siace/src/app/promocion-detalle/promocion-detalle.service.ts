@@ -75,7 +75,14 @@ export class PromocionDetalleService extends GeneralService {
   }
 
   find(filter: PromocionDetalleFilter): Observable<PromocionDetalle[]> {
-    const url = `${this.api}/${filter.prdId}/${filter.prdPmoId}/${filter.prdProId}/${filter.prdFamId}/${filter.prdPreId}`;
+    console.log("Cuerpo a enviar");
+    console.log(filter);
+    
+    
+    const url = `${this.api}/${filter.prdPmoId}`;
+    console.log("url");
+    console.log(url);
+        
     return this.http.get<PromocionDetalle[]>(url, { 
       headers: this.getHeaders()  // Usar headers con token
     });

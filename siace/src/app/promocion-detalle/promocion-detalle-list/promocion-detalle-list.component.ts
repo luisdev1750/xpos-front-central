@@ -21,7 +21,7 @@ import { Promocion } from '../../promocion/promocion';
   standalone: false,
   templateUrl: 'promocion-detalle-list.component.html',
   styles: [
-    'table { min-width: 600px }',
+    'table { }',
     '.mat-column-actions {flex: 0 0 10%;}',
   ],
 })
@@ -63,10 +63,12 @@ export class PromocionDetalleListComponent implements OnInit {
     this.filter.prdId = '0';
   }
 
-  ngOnInit() {
-    this.search();
+  async ngOnInit() {
+   
+
+    await this.getParams();
     this.loadCatalogs();
-    this.getParams();
+     this.search();
   }
 
   getParams() {
@@ -74,6 +76,7 @@ export class PromocionDetalleListComponent implements OnInit {
       this.promocionId = params['id'];
       console.log('Id de promoción');
       console.log(this.promocionId);
+      this.filter.prdPmoId = this.promocionId; 
     });
 
     this.route.queryParams.subscribe((params) => {
@@ -85,8 +88,6 @@ export class PromocionDetalleListComponent implements OnInit {
       this.sucursalId = params['sucursalId'];
       console.log('Sucursal recibida:', this.sucursalId);
     });
-
-  
   }
 
   ngOnDestroy(): void {
@@ -94,6 +95,28 @@ export class PromocionDetalleListComponent implements OnInit {
   }
 
   loadCatalogs() {
+    console.log('Promo id: :::::');
+    console.log(this.promocionId);
+
+    this.promocionDetalleService
+      .find({
+        prdId: '',
+        prdPmoId: this.promocionId,
+        prdProId: '',
+        prdFamId: '',
+        prdPreId: '',
+      })
+      .subscribe(
+        (res) => {
+          console.log('Info de la promoción:');
+          console.log(res);
+
+        },
+        (error) => {
+          console.log('error');
+          console.log(error);
+        }
+      );
     this.promocionService
       .find({
         tprId: '0',

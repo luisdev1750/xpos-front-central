@@ -98,30 +98,7 @@
         </mat-error>
       </mat-form-field>
     </div>
-    <div class="col-md-6">
-      <!-- Clave -->
-
-      <!-- Promoción Actual -->
-
-      <!-- Tipo de Promoción -->
-
-      <!-- ID Promoción -->
-      <!-- <mat-form-field>
-        <mat-label>ID Promoción</mat-label>
-        <input
-          matInput
-          type="number"
-          [(ngModel)]="promocionDetalle.prdPmoId"
-          id="prdPmoId"
-          name="prdPmoId"
-          placeholder="ID Promoción"
-        />
-        <mat-error *ngIf="promocionDetalle.prdPmoId == undefined">
-          Promoción es requerido
-        </mat-error>
-      </mat-form-field> -->
-
-      <!-- Presentación -->
+    <div class="col-md-6">    
       <mat-form-field>
         <mat-label>Presentación</mat-label>
         <mat-select
@@ -219,7 +196,7 @@
           (optionSelected)="onProductoObsequioSelected($event.option.value)"
         >
           <mat-option
-            *ngFor="let producto of filteredProductosObsequio | async"
+            *ngFor="let producto of filteredProductos | async"
             [value]="producto"
           >
             <span>
@@ -233,6 +210,8 @@
         </mat-autocomplete>
       </mat-form-field>
     </div>
+
+ 
   </div>
 
   <!-- Botones de acción -->
