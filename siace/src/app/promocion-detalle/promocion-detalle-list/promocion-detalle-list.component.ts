@@ -40,6 +40,7 @@ export class PromocionDetalleListComponent implements OnInit {
   filter = new PromocionDetalleFilter();
   promocionId: string = '';
   sucursalId: string = '';
+  fechaValida: boolean = false; 
   tipoPromocionId: string = '';
   promocionCurrent: Promocion = new Promocion();
   private subs!: Subscription;
@@ -87,6 +88,11 @@ export class PromocionDetalleListComponent implements OnInit {
     this.route.queryParams.subscribe((params) => {
       this.sucursalId = params['sucursalId'];
       console.log('Sucursal recibida:', this.sucursalId);
+    });
+
+      this.route.queryParams.subscribe((params) => {
+      this.fechaValida = params['fechaValida'] === 'true';
+      console.log('Fecha válida recibida:', this.fechaValida);
     });
   }
 

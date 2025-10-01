@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, MatOption } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 
@@ -15,6 +15,7 @@ import { SucursalListComponent } from './sucursal-list/sucursal-list.component';
 import { SucursalEditComponent } from './sucursal-edit/sucursal-edit.component';
 import { SucursalService } from './sucursal.service';
 import { SucursalRoutingModule } from './sucursal.routing.module';
+import { MatSelect } from '@angular/material/select';
 
 @NgModule({
   imports: [
@@ -30,6 +31,8 @@ import { SucursalRoutingModule } from './sucursal.routing.module';
     MatDialogModule,
     MatCardModule,
     SucursalRoutingModule,
+    MatSelect,
+    MatOption
   ],
   declarations: [
     SucursalListComponent,

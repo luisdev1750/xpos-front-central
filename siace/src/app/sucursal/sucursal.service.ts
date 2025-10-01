@@ -32,7 +32,7 @@ export class SucursalService extends GeneralService {
       let url = '';
       if (entity.sucId) {
          url = `${this.api}/${entity.sucId.toString()}`;
-         params = new HttpParams().set('ID', entity.sucId.toString());
+  
          return this.http.delete<Sucursal>(url, {
             headers: this.getHeaders(), 
             params
@@ -48,8 +48,16 @@ export class SucursalService extends GeneralService {
       });
    }
   
+
+   findAllCities(): Observable<any[]> {
+      const url = `${this.sUrl}Ciudad/listar`;
+      return this.http.get<any[]>(url, {
+         headers: this.getHeaders()  // Usar headers con token
+      });
+
+   }
    find(filter: SucursalFilter): Observable<Sucursal[]> {
-      const url = `${this.api}/${filter.sucId}/${filter.sucCiuId}/${filter.sucColId}/${filter.sucEmpId}`;
+      const url = `${this.api}/${filter.sucId}`;
       return this.http.get<Sucursal[]>(url, {
          headers: this.getHeaders()  // Usar headers con token
       });

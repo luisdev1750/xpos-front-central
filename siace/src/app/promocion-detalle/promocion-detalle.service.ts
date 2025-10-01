@@ -78,7 +78,6 @@ export class PromocionDetalleService extends GeneralService {
     console.log("Cuerpo a enviar");
     console.log(filter);
     
-    
     const url = `${this.api}/${filter.prdPmoId}`;
     console.log("url");
     console.log(url);
@@ -86,7 +85,6 @@ export class PromocionDetalleService extends GeneralService {
     return this.http.get<PromocionDetalle[]>(url, { 
       headers: this.getHeaders()  // Usar headers con token
     });
-    
   }
 
   findById(id: string): Observable<PromocionDetalle> {
@@ -119,5 +117,29 @@ export class PromocionDetalleService extends GeneralService {
     } else {
       return this.http.post<PromocionDetalle>(url, entity, { headers });
     }
+  }
+
+  // Métodos actualizados con headers
+  getByPromocionId(pmoId: number): Observable<any> {
+    return this.http.get(`${this.api}/by-promocion/${pmoId}`, {
+      headers: this.getHeaders()  // Usar headers con token
+    });
+  }
+
+  actualizarDetallesNxM(pmoId: number, cantidadCompra: number, cantidadObsequio: number): Observable<any> {
+    return this.http.put(`${this.api}/actualizar-nxm/${pmoId}`, {
+      cantidadCompra,
+      cantidadObsequio
+    }, {
+      headers: this.getHeaders()  // Usar headers con token
+    });
+  }
+
+  actualizarDetallesDescuento(pmoId: number, porcentajeDescuento: number): Observable<any> {
+    return this.http.put(`${this.api}/actualizar-descuento/${pmoId}`, {
+      porcentajeDescuento
+    }, {
+      headers: this.getHeaders()  // Usar headers con token
+    });
   }
 }

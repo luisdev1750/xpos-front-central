@@ -40,7 +40,7 @@
         <ng-container matColumnDef="pmoNombre">
           <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
           <mat-cell *matCellDef="let item">
-            <span class="clickable-text" (click)="onNombreClick(item)">
+            <span>
               {{ item.pmoNombre }}
             </span>
           </mat-cell>
@@ -128,19 +128,10 @@
             >
               <mat-icon>delete</mat-icon>
             </button>
-            <button
-              *ngIf="item.pmoTprId == 1"
-              (click)="redirectToPromocionesObsequio(item)"
-              mat-icon-button
-              color="primary"
-              matTooltip="Gestionar obsequios"
-            >
-              <mat-icon>navigation</mat-icon>
-            </button>
+          
 
             <button
-              *ngIf="item.pmoTprId == 1"
-              (click)="redirectToPromocionesObsequio(item)"
+              (click)="onNombreClick(item)"
               mat-icon-button
               color="primary"
               matTooltip="Gestionar obsequios"

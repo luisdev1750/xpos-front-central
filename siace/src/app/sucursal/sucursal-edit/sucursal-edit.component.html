@@ -75,6 +75,17 @@
 
    <div class="col-md-4">
       <mat-form-field>
+        <mat-label>Ciudad</mat-label>
+        <mat-select [value]="sucursal.sucCiuId" (selectionChange)="onCiudadChange($event)">
+          <mat-option *ngFor="let ciudad of listCitites" 
+                      [value]="ciudad.ciudId">
+            {{ ciudad.ciuNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+   <div class="col-md-4">
+      <mat-form-field>
          <mat-label for="sucCiuId">Ciudad</mat-label>
          <input matInput [(ngModel)]="sucursal.sucCiuId" id="sucCiuId" name="sucCiuId" placeholder="Ciudad" >
          

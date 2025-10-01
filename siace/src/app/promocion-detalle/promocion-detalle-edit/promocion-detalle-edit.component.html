@@ -135,7 +135,7 @@
   </div>
 
   <!-- SECCIÓN DE CONFIGURACIÓN DE PROMOCIÓN -->
-  <div class="row" style="margin-top: 24px">
+  <div class="row" style="margin-top: 24px" *ngIf = "promocionCurrent.pmoTprId == 1">
     <div class="col-md-12">
       <h3
         style="
@@ -149,7 +149,7 @@
       </h3>
     </div>
 
-    <div class="col-md-12" *ngIf = "promocionCurrent.pmoTprId == 3">
+    <div class="col-md-12" *ngIf = "false">
       <!-- Porcentaje de Descuento -->
       <mat-form-field >
         <mat-label>Descuento directo(%)</mat-label>
@@ -166,7 +166,7 @@
 
     <div class="col-md-12">
       <!-- Productos a Comprar (NxM) -->
-      <mat-form-field *ngIf = "promocionCurrent.pmoTprId == 2">
+      <mat-form-field *ngIf = "false">
         <mat-label>Productos a Comprar (NxM)</mat-label>
         <input
           matInput

@@ -23,6 +23,10 @@ import { PromocionObsequioService } from '../../promocion-obsequio/promocion-obs
   ],
 })
 export class PromocionDetalleEditComponent implements OnInit {
+  // ==========================================
+  // PROPIEDADES
+  // ==========================================
+  
   // Propiedades básicas
   promocionDetalle!: PromocionDetalle;
   promocionId: string = '';
@@ -56,6 +60,10 @@ export class PromocionDetalleEditComponent implements OnInit {
   // Flag para evitar loops infinitos
   private isUpdatingProgrammatically = false;
 
+  // ==========================================
+  // CONSTRUCTOR
+  // ==========================================
+  
   constructor(
     private dialogRef: MatDialogRef<PromocionDetalleEditComponent>,
     private promocionDetalleService: PromocionDetalleService,
@@ -73,14 +81,19 @@ export class PromocionDetalleEditComponent implements OnInit {
     this.prdPobProId = data.promocionDetalle?.prdPobProId || 0;
   }
 
+  // ==========================================
+  // LIFECYCLE HOOKS
+  // ==========================================
+  
   ngOnInit() {
     this.loadCatalogosIniciales();
     this.loadInicialInfoCombobox();
   }
 
-  // ===============================================
+  // ==========================================
   // CARGA INICIAL DE DATOS
-  // ===============================================
+  // ==========================================
+  
   loadInicialInfoCombobox() {
     // Cargar tipos de promoción
     this.promocionService.find({ tprId: '0', tprActivo: 'all' }).subscribe({
@@ -133,9 +146,10 @@ export class PromocionDetalleEditComponent implements OnInit {
     });
   }
 
-  // ===============================================
+  // ==========================================
   // EVENTOS DE CAMBIO
-  // ===============================================
+  // ==========================================
+  
   onPromocionIdChange(event: any) {
     this.promocionDetalle.prdPmoId = event.value;
   }
@@ -287,12 +301,16 @@ export class PromocionDetalleEditComponent implements OnInit {
   onProductoObsequioSelected(producto: any) {
     this.productoObsequioSeleccionado = producto;
     this.promocionDetalle.prdPobProId = producto?.proId || 0;
-
+    console.log("Producto seleccionado:");
+    console.log(producto);
+    this.productoObsequioSeleccionado.prdFamId = producto.proFamId;
+    this.productoObsequioSeleccionado.prdPreId = producto.proPreId;
   }
 
-  // ===============================================
+  // ==========================================
   // UTILIDADES
-  // ===============================================
+  // ==========================================
+  
   resetToInitialState() {
     this.listFamilias = [...this.listFamiliasCompleta];
     this.listProductos = [...this.listProductosCompleta];
@@ -317,9 +335,10 @@ export class PromocionDetalleEditComponent implements OnInit {
     }, 0);
   }
 
-  // ===============================================
+  // ==========================================
   // AUTOCOMPLETE
-  // ===============================================
+  // ==========================================
+  
   setupAutocomplete() {
     if (this.listProductosCompleta.length === 0) return;
 
@@ -366,6 +385,8 @@ export class PromocionDetalleEditComponent implements OnInit {
       if (productoObsequio) {
         this.productoObsequioControl.setValue(productoObsequio);
         this.productoObsequioSeleccionado = productoObsequio;
+        console.log("producto obsequio inicial");
+        console.log(productoObsequio);
       }
     }
   }
@@ -405,9 +426,10 @@ export class PromocionDetalleEditComponent implements OnInit {
     return producto && producto.proNombre ? producto.proNombre : '';
   }
 
-  // ===============================================
+  // ==========================================
   // GUARDAR
-  // ===============================================
+  // ==========================================
+  
   save() {
     if (!this.promocionCurrent || !this.promocionDetalle) {
       this.toastr.error('Faltan datos necesarios para guardar', 'Error');
@@ -419,24 +441,68 @@ export class PromocionDetalleEditComponent implements OnInit {
     const esPromocionNxM = tipoPromocion === 2;
     const esPromocionDescuento = tipoPromocion === 3;
 
+    // Extraer valores NxM del nombre de la promoción si es tipo NxM
+    let cantidadCompra = null;
+    let cantidadObsequio = null;
+    
+    if (esPromocionNxM) {
+      const regexPromocion = /(\d+)\s*x\s*(\d+)/i;
+      const match = this.promocionCurrent.pmoNombre.match(regexPromocion);
+      
+      if (!match) {
+        this.toastr.error(
+          'No se pudo extraer la información NxM del nombre de la promoción',
+          'Error en formato'
+        );
+        return;
+      }
+      
+      cantidadCompra = parseInt(match[1]);    // Primer número (N) - ej: 3 en "3x2"
+      const cantidadPagada = parseInt(match[2]);  // Segundo número (M) - ej: 2 en "3x2"
+      cantidadObsequio = cantidadCompra - cantidadPagada; // Calcular obsequio: 3-2=1
+      
+      console.log(`Promoción NxM detectada: ${cantidadCompra}x${cantidadPagada}`);
+      console.log(`prdNxmProdCompra: ${cantidadCompra}, prdNxmProdObsequio: ${cantidadObsequio}`);
+    }
+
+    // Extraer porcentaje de descuento del nombre de la promoción si es tipo Descuento
+    let porcentajeDescuento = null;
+    
+    if (esPromocionDescuento) {
+      const regexDescuento = /(\d+)\s*%/i;
+      const match = this.promocionCurrent.pmoNombre.match(regexDescuento);
+      
+      if (!match) {
+        this.toastr.error(
+          'No se pudo extraer el porcentaje de descuento del nombre de la promoción',
+          'Error en formato'
+        );
+        return;
+      }
+      
+      porcentajeDescuento = parseInt(match[1]); // ej: 70 en "Descuento 70%"
+      
+      console.log(`Promoción de descuento detectada: ${porcentajeDescuento}%`);
+      console.log(`prdPorcentajeDescuento: ${porcentajeDescuento}`);
+    }
+
+    console.log("producto de promoción detalle");
+    console.log(this.promocionDetalle); 
+    console.log("producto obsequio seleccionado en lista");
+    console.log(this.productoObsequioSeleccionado);
+  
     const productoRequest: PromocionDetalle = {
       prdId: this.promocionDetalle.prdId || 0,
       prdPmoId: this.promocionCurrent.pmoId,
-      prdProId: this.promocionDetalle.prdProId,
-      prdFamId: this.promocionDetalle.prdFamId,
-      prdPreId: this.promocionDetalle.prdPreId,
-      prdNxmProdCompra: esPromocionNxM
-        ? this.promocionDetalle.prdNxmProdCompra
-        : null,
-      prdNxmProdObsequio: esPromocionNxM
-        ? this.promocionDetalle.prdNxmProdObsequio
-        : null,
-      prdPorcentajeDescuento: esPromocionDescuento
-        ? this.promocionDetalle.prdPorcentajeDescuento
-        : null,
+      prdProId: this.promocionDetalle.prdProId != 0 ? this.promocionDetalle.prdProId: null ,
+      prdFamId: this.promocionDetalle.prdFamId != 0 ?this.promocionDetalle.prdFamId : null,
+      prdPreId: this.promocionDetalle.prdPreId != 0 ? this.promocionDetalle.prdPreId : null ,
+      prdNxmProdCompra: esPromocionNxM ? cantidadCompra : null,
+      prdNxmProdObsequio: esPromocionNxM ? cantidadObsequio : null,
+      prdPorcentajeDescuento: esPromocionDescuento ? porcentajeDescuento : null,
       prdPmoSucId: this.promocionCurrent.pmoSucId,
       prdPobId: null,
-      prdPobProId: this.productoObsequioSeleccionado.proId,
+      prdPobProId: this.productoObsequioSeleccionado?.proId ?? null,
     };
 
     this.promocionDetalleService.save(productoRequest).subscribe({
@@ -477,9 +543,9 @@ export class PromocionDetalleEditComponent implements OnInit {
     const promocionObsequio = {
       pobId: this.promocionDetalle.prdPobId || 0,
       pobPmoId: Number(this.promocionId),
-      pobFamId: this.promocionDetalle.prdFamId,
-      pobPreId: this.promocionDetalle.prdPreId,
-      pobProId: this.productoObsequioSeleccionado.proId,
+      pobFamId: this.productoObsequioSeleccionado.prdFamId ?? 0,
+      pobPreId:  this.productoObsequioSeleccionado.prdPreId ?? 0,
+      pobProId: this.productoObsequioSeleccionado.proId ?? 0,
       pobPmoSucId: Number(this.promocionCurrent.pmoSucId),
     };
 
@@ -491,7 +557,7 @@ export class PromocionDetalleEditComponent implements OnInit {
             'Transacción exitosa'
           );
           this.promocionObsequioService.setIsUpdated(true);
-           window.location.reload();
+          window.location.reload();
           this.dialogRef.close();
         } else {
           this.toastr.error(
@@ -512,6 +578,10 @@ export class PromocionDetalleEditComponent implements OnInit {
     });
   }
 
+  // ==========================================
+  // VALIDACIONES
+  // ==========================================
+  
   private isValidResult(result: any): boolean {
     return (
       result?.prdFamId != null &&

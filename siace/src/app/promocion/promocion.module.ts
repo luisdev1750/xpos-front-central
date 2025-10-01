@@ -22,6 +22,7 @@ import { TipoPromocionService } from '../tipo-promocion/tipo-promocion.service';
 import { TipoPagoService } from '../tipo-pago/tipo-pago.service';
 import { TipoSubpagoService } from '../tipo-subpago/tipo-subpago.service';
 import { MatSelect } from '@angular/material/select';
+import { PromocionDetalleService } from '../promocion-detalle/promocion-detalle.service';
 
 @NgModule({
   imports: [
@@ -44,7 +45,7 @@ import { MatSelect } from '@angular/material/select';
     PromocionListComponent,
     PromocionEditComponent
   ],
-  providers: [PromocionService, SucursalService, TipoPromocionService, TipoPagoService, TipoSubpagoService],
+  providers: [PromocionService, SucursalService, TipoPromocionService, TipoPagoService, TipoSubpagoService, PromocionDetalleService],
   exports: []
 })
 export class PromocionModule { }

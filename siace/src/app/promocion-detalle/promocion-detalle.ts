@@ -1,9 +1,9 @@
 export class PromocionDetalle {
   prdId!: number;
   prdPmoId!: number;
-  prdProId!: number;
-  prdFamId!: number;
-  prdPreId!: number;
+  prdProId!: number | null;
+  prdFamId!: number | null;
+  prdPreId!: number | null;
   prdPorcentajeDescuento!: number | null;
   prdNxmProdCompra!: number | null;
   prdNxmProdObsequio!: number | null;

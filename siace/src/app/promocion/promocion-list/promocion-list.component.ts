@@ -19,7 +19,10 @@ import { ActivatedRoute, Router } from '@angular/router';
   selector: 'app-promocion',
   standalone: false,
   templateUrl: 'promocion-list.component.html',
-  styles: ['table { max-width: 600px  }', '.mat-column-actions {flex: 0 0 10%;}'],
+  styles: [
+    'table { max-width: 600px  }',
+    '.mat-column-actions {flex: 0 0 10%;}',
+  ],
 })
 export class PromocionListComponent implements OnInit {
   // Columnas adaptadas para la entidad Promocion original
@@ -81,53 +84,67 @@ export class PromocionListComponent implements OnInit {
     );
   }
 
- redirectToPromocionesObsequio(item: any) {
-  console.log(item.pmoFechaFin); // "2022-01-01T00:00:00Z"
+  redirectToPromocionesObsequio(item: any) {
+    console.log(item.pmoFechaFin); // "2022-01-01T00:00:00Z"
 
-  // Obtener la fecha actual y establecerla al inicio del día (00:00:00)
-  const fechaActual = new Date();
-  fechaActual.setHours(0, 0, 0, 0);
+    // Obtener la fecha actual y establecerla al inicio del día (00:00:00)
+    const fechaActual = new Date();
+    fechaActual.setHours(0, 0, 0, 0);
 
-  // Convertir la fecha fin a objeto Date y establecerla al inicio del día (00:00:00)
-  const fechaFin = new Date(item.pmoFechaFin);
-  fechaFin.setHours(0, 0, 0, 0);
+    // Convertir la fecha fin a objeto Date y establecerla al inicio del día (00:00:00)
+    const fechaFin = new Date(item.pmoFechaFin);
+    fechaFin.setHours(0, 0, 0, 0);
 
-  // Comparar si la fecha actual es menor que la fecha fin (comparación de días)
-  const esFechaValida = fechaActual <= fechaFin;
+    // Comparar si la fecha actual es menor que la fecha fin (comparación de días)
+    const esFechaValida = fechaActual <= fechaFin;
 
-  console.log(item);
-  
-  console.log('Fecha actual (00:00):', fechaActual.toISOString());
-  console.log('Fecha fin (00:00):', fechaFin.toISOString());
-  console.log('Es fecha válida (fecha actual < fecha fin):', esFechaValida);
+    console.log(item);
 
-  // Navegar con la bandera como parámetro de consulta
-  this.router.navigate([`/promocion-obsequio/${item.pmoId}`], {
-    queryParams: {
-      fechaValida: esFechaValida,
-      sucursalId: item.pmoSucId
-    },
-  });
-}
+    console.log('Fecha actual (00:00):', fechaActual.toISOString());
+    console.log('Fecha fin (00:00):', fechaFin.toISOString());
+    console.log('Es fecha válida (fecha actual < fecha fin):', esFechaValida);
 
-onNombreClick(item: any){
-console.log("nombre click");
-console.log(item); 
+    // Navegar con la bandera como parámetro de consulta
+    this.router.navigate([`/promocion-obsequio/${item.pmoId}`], {
+      queryParams: {
+        fechaValida: esFechaValida,
+        sucursalId: item.pmoSucId,
+      },
+    });
+  }
 
-  this.router.navigate([`/promocion-detalle/${item.pmoId}`], {
-    queryParams: {
-      tipoPromocion: item.pmoTprId,
-      sucursalId: item.pmoSucId
-    },
-  });
+  onNombreClick(item: any) {
+    console.log('nombre click');
+    console.log(item);
+    // Obtener la fecha actual y establecerla al inicio del día (00:00:00)
+    const fechaActual = new Date();
+    fechaActual.setHours(0, 0, 0, 0);
 
-}
+    // Convertir la fecha fin a objeto Date y establecerla al inicio del día (00:00:00)
+    const fechaFin = new Date(item.pmoFechaFin);
+    fechaFin.setHours(0, 0, 0, 0);
+
+    // Comparar si la fecha actual es menor que la fecha fin (comparación de días)
+    const esFechaValida = fechaActual <= fechaFin;
+
+    console.log(item);
+
+    console.log('Fecha actual (00:00):', fechaActual.toISOString());
+    console.log('Fecha fin (00:00):', fechaFin.toISOString());
+    console.log('Es fecha válida (fecha actual < fecha fin):', esFechaValida);
+    this.router.navigate([`/promocion-detalle/${item.pmoId}`], {
+      queryParams: {
+        tipoPromocion: item.pmoTprId,
+        sucursalId: item.pmoSucId,
+        fechaValida: esFechaValida,
+      },
+    });
+  }
   /* Accesors */
 
   get promocionList(): Promocion[] {
     return this.promocionService.promocionList;
   }
-
 
   /* Métodos */
 
