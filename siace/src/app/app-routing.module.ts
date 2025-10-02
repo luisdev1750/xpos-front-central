@@ -186,6 +186,13 @@ const routes: Routes = [
             (m) => m.PromocionDetalleModule
           ),
       },
+       {
+        path: 'combo',
+        loadChildren: () =>
+          import('./combo/combo.module').then(
+            (m) => m.ComboModule
+          ),
+      },
 /*COMIENZA SIACE */
 
       {

@@ -1,0 +1,36 @@
+
+{
+   "title": "Banco",
+   "entity": "banco",
+   "module": "Catalogo de Bancos",
+   "singular": "banco",
+   "columns": 3,
+   "api": {
+      "url": "Bancos"
+   },
+   "filter": [
+      "banActivo",
+	  "banId"
+   ],
+   "fields": [
+      {
+         "name": "banId",
+         "label": "Clave",
+         "isId": true,
+         "readonly": true,
+         "type": "number"
+      },
+      {
+         "name": "banNombre",
+         "label": "Nombre",
+         "type": "string",
+         "required" : true
+      },
+      {
+         "name": "banActivo",
+         "label": "Activo",
+         "type": "boolean"
+      },
+ 
+   ]
+}

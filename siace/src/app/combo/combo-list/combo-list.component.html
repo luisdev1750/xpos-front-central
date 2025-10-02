@@ -1,0 +1,116 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
+    <li class="breadcrumb-item active">Catálogo de Combos</li>
+  </ol>
+</nav>
+
+<div class="proin-main">
+  <mat-card class="proin-card">
+    <h2>Catálogo de Combos</h2>
+    <form #f="ngForm">
+      <mat-form-field>
+        <mat-label>Sucursales</mat-label>
+        <mat-select [value]="filter.comboSucId" (selectionChange)="onSucursalChange($event)">
+          <mat-option value="0">Todas las sucursales</mat-option>
+          <mat-option *ngFor="let sucursal of listSucursales" 
+                      [value]="sucursal.sucId">
+            {{ sucursal.sucNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Activo:</mat-label>
+        <mat-select
+          [(ngModel)]="filter.comboActivo"
+          id="comboActivo"
+          name="comboActivo"
+          (selectionChange)="onActivoChange()"
+        >
+          <mat-option value="all">Todos</mat-option>
+          <mat-option value="true">Sí</mat-option>
+          <mat-option value="false">No</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button
+        mat-mini-fab
+        color="accent"
+        (click)="add()"
+        [disabled]="!f?.valid"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+    </form>
+
+    <div *ngIf="listCombos.length > 0">
+      <table mat-table [dataSource]="listCombos" class="mat-elevation-z2">
+        
+        <!-- Columna ID -->
+        <ng-container matColumnDef="comboId">
+          <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.comboId }} </mat-cell>
+        </ng-container>
+
+        <!-- Columna Nombre -->
+        <ng-container matColumnDef="comboNombre">
+          <mat-header-cell *matHeaderCellDef> Nombre del Combo </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.comboNombre }} </mat-cell>
+        </ng-container>
+
+        <!-- Columna Sucursal -->
+        <ng-container matColumnDef="sucursalId">
+          <mat-header-cell *matHeaderCellDef> Sucursal </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ getSucursalNombre(item.sucursalId) }} </mat-cell>
+        </ng-container>
+
+        <!-- Columna Precio -->
+        <ng-container matColumnDef="precioCombo">
+          <mat-header-cell *matHeaderCellDef> Precio </mat-header-cell>
+          <mat-cell *matCellDef="let item"> ${{ item.precioCombo | number:'1.2-2' }} </mat-cell>
+        </ng-container>
+
+        <!-- Columna Activo -->
+        <ng-container matColumnDef="comboActivo">
+          <mat-header-cell *matHeaderCellDef> Activo </mat-header-cell>
+          <mat-cell *matCellDef="let item"> 
+            <mat-icon *ngIf="item.comboActivo" color="primary">check_circle</mat-icon>
+            <mat-icon *ngIf="!item.comboActivo" color="warn">cancel</mat-icon>
+          </mat-cell>
+        </ng-container>
+
+        <!-- Columna Acciones -->
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            <button
+              (click)="edit(item)"
+              mat-icon-button
+              color="primary"
+              matTooltip="Editar"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button 
+              (click)="delete(item)" 
+              mat-icon-button 
+              color="warn"
+              matTooltip="Eliminar"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+
+        <!-- Definición de filas -->
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+      </table>
+    </div>
+
+    <div *ngIf="listCombos.length === 0" style="padding: 20px; text-align: center;">
+      <p>No se encontraron combos con los filtros seleccionados.</p>
+    </div>
+  </mat-card>
+</div>

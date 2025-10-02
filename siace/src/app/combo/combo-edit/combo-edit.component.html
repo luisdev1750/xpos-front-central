@@ -1,0 +1,274 @@
+<h2>Detalle del combo</h2>
+<form *ngIf="combo" #editForm="ngForm" (ngSubmit)="save()" autocomplete="off">
+  <div class="row">
+    <div class="col-md-6">
+      <mat-form-field>
+        <mat-label>Clave</mat-label>
+        <input
+          matInput
+          [(ngModel)]="combo.comboId"
+          id="banId"
+          name="banId"
+          placeholder="Clave"
+          readonly
+        />
+      </mat-form-field>
+    </div>
+    <div class="col-md-6">
+      <mat-form-field>
+        <mat-label for="comboNombre">Nombre de combo</mat-label>
+        <input
+          matInput
+          [(ngModel)]="combo.comboNombre"
+          id="comboNombre"
+          name="comboNombre"
+          placeholder="comboNombre"
+          required
+        />
+        <mat-error *ngIf="combo.banNombre == ''">Nombre es requerido</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-6">
+      <mat-form-field>
+        <mat-label for="precioCombo">Precio combo</mat-label>
+        <input
+          matInput
+          [(ngModel)]="combo.precioCombo"
+          id="precioCombo"
+          name="precioCombo"
+          placeholder="precioCombo"
+          required
+        />
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-6">
+      <mat-form-field>
+        <mat-label>Lista de precios</mat-label>
+        <mat-select
+          [value]="combo.listaPrecioId"
+          (selectionChange)="onListaPrecioChange($event)"
+        >
+          <mat-option *ngFor="let precio of listPrecios" [value]="precio.lprId">
+            {{ precio.lprNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+       <div class="col-md-6">
+      <mat-form-field>
+        <mat-label>Sucursal</mat-label>
+        <mat-select
+          [value]="combo.sucursalId"
+          (selectionChange)="onSucursalChange($event)"
+        >
+          <mat-option
+            *ngFor="let sucursal of listSucursal"
+            [value]="sucursal.sucId"
+          >
+            {{ sucursal.sucNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-6">
+      <mat-form-field>
+        <mat-label>Activo</mat-label>
+        <mat-select
+          [(ngModel)]="combo.comboActivo"
+          id="banActivo"
+          name="banActivo"
+          required
+        >
+          <mat-option [value]="true">Sí</mat-option>
+          <mat-option [value]="false">No</mat-option>
+        </mat-select>
+        <mat-error *ngIf="!combo.banActivo && combo.banActivo !== false"
+          >Activo es requerido</mat-error
+        >
+      </mat-form-field>
+    </div>
+  </div>
+
+  <!-- SECCIÓN BUSCADOR DE PRODUCTOS -->
+  <div class="row" style="margin-top: 24px; margin-bottom: 16px">
+    <div class="col-md-12">
+      <h3
+        style="
+          margin-bottom: 16px;
+          font-size: 16px;
+          font-weight: 500;
+          color: #666;
+        "
+      >
+        Agregar Productos al Combo
+      </h3>
+    </div>
+
+    <div class="col-md-10">
+      <mat-form-field>
+        <mat-label>Buscar Producto</mat-label>
+        <input
+          type="text"
+          matInput
+          [formControl]="productoControl"
+          [matAutocomplete]="autoProducto"
+          placeholder="Buscar por nombre, descripción, SKU o ID..."
+        />
+        <button
+          *ngIf="productoControl.value"
+          matSuffix
+          mat-icon-button
+          aria-label="Limpiar"
+          type="button"
+          (click)="onProductoClear()"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+        <mat-autocomplete
+          #autoProducto="matAutocomplete"
+          [displayWith]="displayProductoFn"
+          (optionSelected)="onProductoSelected($event.option.value)"
+        >
+          <mat-option
+            *ngFor="let producto of filteredProductos | async"
+            [value]="producto"
+          >
+            <span>
+              <strong>{{ producto.proId }}</strong> - {{ producto.proNombre }}
+            </span>
+            <br />
+            <small style="color: #666" *ngIf="producto.proDescripcion">
+              {{ producto.proDescripcion }}
+            </small>
+            <small
+              style="color: #999; margin-left: 8px"
+              *ngIf="producto.proSku"
+            >
+              SKU: {{ producto.proSku }}
+            </small>
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-2" style="display: flex; align-items: center">
+      <button
+        type="button"
+        mat-raised-button
+        color="accent"
+        (click)="agregarProducto()"
+        [disabled]="!productoSeleccionado"
+        style="width: 100%"
+      >
+        <mat-icon>add</mat-icon>
+        Agregar
+      </button>
+    </div>
+ 
+    <div class="col-md-12">
+      <mat-hint
+        style="font-size: 14px; color: #666; display: flex; align-items: center"
+      >
+        <mat-icon
+          style="vertical-align: middle; font-size: 18px; margin-right: 8px"
+        >
+          info
+        </mat-icon>
+        Productos disponibles: {{ listProductos.length }}
+      </mat-hint>
+    </div>
+  </div>
+
+  <!-- TABLA DE PRODUCTOS -->
+  <div
+    *ngIf="combo.productos && combo.productos.length > 0"
+    style="margin-top: 16px"
+  >
+    <h3
+      style="
+        margin-bottom: 16px;
+        font-size: 16px;
+        font-weight: 500;
+        color: #666;
+      "
+    >
+      Productos en el Combo ({{ combo.productos.length }})
+    </h3>
+    <table mat-table [dataSource]="combo.productos" class="mat-elevation-z2">
+      <!-- Columna Nombre -->
+      <ng-container matColumnDef="nombreProducto">
+        <mat-header-cell *matHeaderCellDef>
+          Nombre de producto
+        </mat-header-cell>
+        <mat-cell *matCellDef="let item"> {{ item.productoNombre }} </mat-cell>
+      </ng-container>
+
+      <!-- Columna Sucursal -->
+      <ng-container matColumnDef="productoSku">
+        <mat-header-cell *matHeaderCellDef> SKU </mat-header-cell>
+        <mat-cell *matCellDef="let item"> {{ item.productoSku }} </mat-cell>
+      </ng-container>
+
+      <!-- Columna Precio -->
+      <ng-container matColumnDef="productoActivo">
+        <mat-header-cell *matHeaderCellDef> Activo </mat-header-cell>
+        <mat-cell *matCellDef="let item">
+          <mat-icon *ngIf="item.productoActivo" style="color: green"
+            >check_circle</mat-icon
+          >
+          <mat-icon *ngIf="!item.productoActivo" style="color: red"
+            >cancel</mat-icon
+          >
+        </mat-cell>
+      </ng-container>
+
+      <!-- Columna Acciones -->
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
+        <mat-cell *matCellDef="let item">
+          <button
+            (click)="delete(item)"
+            mat-icon-button
+            color="warn"
+            matTooltip="Eliminar del combo"
+            type="button"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <!-- Definición de filas -->
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+    </table>
+  </div>
+
+  <!-- Mensaje cuando no hay productos -->
+  <div
+    *ngIf="!combo.productos || combo.productos.length === 0"
+    style="
+      margin-top: 16px;
+      padding: 24px;
+      text-align: center;
+      background-color: #f5f5f5;
+      border-radius: 4px;
+    "
+  >
+    <mat-icon style="font-size: 48px; height: 48px; width: 48px; color: #999"
+      >shopping_cart</mat-icon
+    >
+    <p style="margin-top: 16px; color: #666">
+      No hay productos en este combo. Usa el buscador para agregar productos.
+    </p>
+  </div>
+
+  <!-- Botones de acción -->
+  <div class="button-row text-center" role="group" style="margin-top: 24px">
+    <button type="submit" mat-raised-button color="primary">Guardar</button>
+    <button mat-button mat-dialog-close type="button">Cancelar</button>
+  </div>
+</form>
