@@ -1,0 +1,43 @@
+h2 {
+  font-size: 17px;
+}
+
+#idSuc,
+#idInd,
+select {
+  background-color: rgb(245, 245, 251); /* fondo */
+  color: black; /* texto */
+  border-radius: 0; /* esquinas redondeadas */
+  padding: 6px; /* espacio interno */
+  width: 20%; /* ancho fijo */
+}
+label {
+  margin-right: 8px; /* espacio a la derecha */
+  font-size: 0.8vw; /* tamaño de fuente */
+  color: #cf714f;
+}
+
+select {
+  font-size: 1vw; /* tamaño de fuente */
+  background-color: rgb(245, 245, 251); /* fondo */
+  width: 100%; /* ancho fijo */
+  font-family: Roboto, sans-serif; /* fuente */
+  border: 1px solid #ccc; /* borde */
+  border-radius: 5px; /* esquinas redondeadas */
+  padding: 8px; /* espacio interno */
+  box-sizing: border-box; /* incluye padding y border en el ancho */
+  transition: border-color 0.3s; /* transición suave para el borde */
+}
+
+select:hover {
+  border-color: #cf714f; /* cambia el color del borde al pasar el mouse */
+  select:focus {
+    border-color: #cf714f; /* cambia el color del borde al enfocar */
+  }
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: #f0f0f0;
+}
