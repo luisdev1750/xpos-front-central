@@ -20,6 +20,11 @@ const routes: Routes = [
         path: 'login',
         component: LoginComponent,
       },
+       {
+        path: 'menu',
+        loadChildren: () =>
+          import('./menu/menu.module').then((m) => m.MenuModule),
+      },
       {
         path: 'banco',
         loadChildren: () =>
@@ -201,137 +206,7 @@ const routes: Routes = [
             (m) => m.BannerModule
           ),
       },
-/*COMIENZA SIACE */
-
-      {
-        path: 'emprendedor',
-        loadChildren: () =>
-          import('./emprendedor/emprendedor.module').then(
-            (m) => m.EmprendedorModule
-          ),
-      },
-      {
-        path: 'estadistica',
-        loadChildren: () =>
-          import('./estadisticas/estadisticas.module').then(
-            (m) => m.EstadisticasModule
-          ),
-      },
-      {
-        path: 'estadistica',
-        loadChildren: () =>
-          import('./estadisticas/estadisticas.module').then(
-            (m) => m.EstadisticasModule
-          ),
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'nivel',
-        loadChildren: () =>
-          import('./nivel/nivel.module').then((m) => m.NivelModule),
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'permiso',
-        loadChildren: () =>
-          import('./permiso/permiso.module').then((m) => m.PermisoModule),
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'pilar',
-        loadChildren: () =>
-          import('./pilar/pilar.module').then((m) => m.PilarModule),
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'respuesta-a3',
-        loadChildren: () =>
-          import('./respuesta-a3/respuesta-a3.module').then(
-            (m) => m.RespuestaA3Module
-          ),
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'tipo-aspecto',
-        loadChildren: () =>
-          import('./tipo-aspecto/tipo-aspecto.module').then(
-            (m) => m.TipoAspectoModule
-          ),
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'tipo-sesion',
-        loadChildren: () =>
-          import('./tipo-sesion/tipo-sesion.module').then(
-            (m) => m.TipoSesionModule
-          ),
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'rol',
-        loadChildren: () =>
-          import('./role/role.module').then((m) => m.RoleModule),
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'usuario',
-        loadChildren: () =>
-          import('./usuario/usuario.module').then((m) => m.UsuarioModule),
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'cuestionario',
-        loadChildren: () =>
-          import('./cuestionario/cuestionario.module').then(
-            (m) => m.CuestionarioModule
-          ),
-      },
-      {
-        path: 'monitor',
-        loadChildren: () =>
-          import('./monitor/monitor.module').then((m) => m.MonitorModule),
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'auditoria',
-        loadChildren: () =>
-          import('./auditoria/auditoria.module').then((m) => m.AuditoriaModule),
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'formulario-cuestionario',
-        loadChildren: () =>
-          import('./cuestionario/cuestionario.module').then(
-            (m) => m.CuestionarioModule
-          ),
-      },
-
-      {
-        path: 'version',
-        loadChildren: () =>
-          import('./version/version.module').then((m) => m.VersionModule),
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'necesidad',
-        loadChildren: () =>
-          import('./necesidad/necesidad.module').then((m) => m.NecesidadModule),
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'nivel-estudio',
-        loadChildren: () =>
-          import('./nivel-estudio/nivel-estudio.module').then(
-            (m) => m.NivelEstudioModule
-          ),
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'giro',
-        loadChildren: () =>
-          import('./giro/giro.module').then((m) => m.GiroModule),
-        canActivate: [AuthGuard],
-      },
+/*COMIENZA SIACE */     
     ],
   },
   {

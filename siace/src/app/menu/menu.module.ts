@@ -7,17 +7,17 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule, MatOption } from '@angular/material/core';
+import { MatNativeDateModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
+import { MenuService } from './menu.service';
+import { MarcaRoutingModule } from './menu.routing.module';
 
-import { MenuPerfilListComponent } from './menu-perfil-list/menu-perfil-list.component';
-import { MenuPerfilEditComponent } from './menu-perfil-edit/menu-perfil-edit.component';
-import { MenuPerfilService } from './menu-perfil.service';
-import { MenuPerfilRoutingModule } from './menu-perfil.routing.module';
-import { PerfilService } from '../perfil/perfil.service';
-import { MatSelect } from '@angular/material/select';
-import { MenuListComponent } from '../menu/menu-list/menu-list.component';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
+import { MenuListComponent } from './menu-list/menu-list.component';
+import { MenuEditComponent } from './menu-edit/menu-edit.component';
+
 
 @NgModule({
   imports: [
@@ -32,16 +32,15 @@ import { MenuListComponent } from '../menu/menu-list/menu-list.component';
     MatNativeDateModule,
     MatDialogModule,
     MatCardModule,
-    MenuPerfilRoutingModule,
-    MatOption,
-    MatSelect
-    
+    MarcaRoutingModule,
+    MatSelectModule,
+    MatOptionModule
   ],
   declarations: [
-    MenuPerfilListComponent,
-    MenuPerfilEditComponent
+    MenuListComponent,
+    MenuEditComponent
   ],
-  providers: [MenuPerfilService, PerfilService],
+  providers: [MenuService],
   exports: []
 })
-export class MenuPerfilModule { }
+export class MenuModule { }

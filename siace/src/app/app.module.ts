@@ -55,6 +55,7 @@ import {
 import { NivelEstudioService } from './nivel-estudio/nivel-estudio.service';
 import { GiroService } from './giro/giro.service';
 import { NecesidadService } from './necesidad/necesidad.service';
+import { MenuModule } from './menu/menu.module';
 
 
 registerLocaleData(localeMx);
@@ -92,6 +93,7 @@ registerLocaleData(localeMx);
       //positionClass: 'toast-top-right',
       preventDuplicates: true,
     }),
+    MenuModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [

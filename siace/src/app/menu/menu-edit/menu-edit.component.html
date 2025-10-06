@@ -1,0 +1,40 @@
+<h2>Navbar</h2>
+<form *ngIf="marca" #editForm="ngForm" (ngSubmit)="save()" autocomplete="off">
+
+<div class="row">
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label>Clave</mat-label>
+         <input matInput [(ngModel)]="marca.marId" id="marId" name="marId" placeholder="Clave" readonly>
+         
+         
+      </mat-form-field>
+   </div>
+
+   <div class="col-md-4">
+      <mat-form-field>
+         <mat-label for="marNombre">Nombre</mat-label>
+         <input matInput [(ngModel)]="marca.marNombre" id="marNombre" name="marNombre" placeholder="Nombre" required>
+         <mat-error *ngIf="marca.marNombre==''">Nombre es requerido</mat-error>
+      </mat-form-field>
+   </div>
+
+    <div class="col-md-4">
+      <mat-form-field>
+         <mat-label>Activo</mat-label>
+         <mat-select [(ngModel)]="marca.marActivo" id="banActivo" name="banActivo" required>
+            <mat-option [value]="true">Sí</mat-option>
+            <mat-option [value]="false">No</mat-option>
+         </mat-select>
+         <mat-error *ngIf="!marca.marActivo && marca.marActivo !== false">Activo es requerido</mat-error>
+      </mat-form-field>
+   </div>
+
+
+</div>
+   <div class="button-row text-center" role="group">
+      <button type="submit" mat-raised-button color="primary" [disabled]="!editForm.form.valid">Guardar</button>
+      <button mat-button mat-dialog-close>Cancelar</button>
+  </div>
+</form>

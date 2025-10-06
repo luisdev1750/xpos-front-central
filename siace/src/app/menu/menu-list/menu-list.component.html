@@ -1,0 +1,541 @@
+<!-- menu.component.html -->
+<div class="menu-wrapper">
+  
+  <!-- Toggle Button - Siempre visible -->
+  <button class="menu-toggle" (click)="toggleMenu()" [class.menu-open]="isMenuOpen">
+    <span class="toggle-icon">{{ isMenuOpen ? '✕' : '☰' }}</span>
+  </button>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" [class.closed]="!isMenuOpen">
+    
+    <!-- Header del menú -->
+    <div class="sidebar-header">
+      <div class="logo-container">
+        <div class="logo-icon">X</div>
+        <span class="logo-text" *ngIf="isMenuOpen">XPOS</span>
+      </div>
+    </div>
+
+    <!-- Navegación -->
+    <nav class="sidebar-nav">
+      
+      <!-- Dashboard -->
+      <a routerLink="/" 
+         routerLinkActive="active" 
+         [routerLinkActiveOptions]="{exact: true}" 
+         class="nav-item"
+         (click)="onNavItemClick()">
+        <span class="nav-icon">📊</span>
+        <span class="nav-text" *ngIf="isMenuOpen">Dashboard</span>
+      </a>
+
+      <!-- Catálogos -->
+      <div class="nav-section">
+        <div class="nav-item nav-parent" (click)="toggleSection('catalogos')">
+          <span class="nav-icon">📦</span>
+          <span class="nav-text" *ngIf="isMenuOpen">Catálogos</span>
+          <span class="nav-arrow" *ngIf="isMenuOpen">
+            {{ expandedSections['catalogos'] ? '▼' : '▶' }}
+          </span>
+        </div>
+        <div class="nav-submenu" *ngIf="expandedSections['catalogos'] && isMenuOpen">
+          <a routerLink="/producto" routerLinkActive="active" class="nav-subitem" (click)="onNavItemClick()">Productos</a>
+          <a routerLink="/marca" routerLinkActive="active" class="nav-subitem" (click)="onNavItemClick()">Marcas</a>
+          <a routerLink="/submarca" routerLinkActive="active" class="nav-subitem" (click)="onNavItemClick()">Submarcas</a>
+          <a routerLink="/familia" routerLinkActive="active" class="nav-subitem" (click)="onNavItemClick()">Familias</a>
+          <a routerLink="/presentacion" routerLinkActive="active" class="nav-subitem" (click)="onNavItemClick()">Presentaciones</a>
+          <a routerLink="/banco" routerLinkActive="active" class="nav-subitem" (click)="onNavItemClick()">Bancos</a>
+          <a routerLink="/proveedor" routerLinkActive="active" class="nav-subitem" (click)="onNavItemClick()">Proveedores</a>
+        </div>
+      </div>
+
+      <!-- Sucursales -->
+      <div class="nav-section">
+        <div class="nav-item nav-parent" (click)="toggleSection('sucursales')">
+          <span class="nav-icon">🏢</span>
+          <span class="nav-text" *ngIf="isMenuOpen">Sucursales</span>
+          <span class="nav-arrow" *ngIf="isMenuOpen">
+            {{ expandedSections['sucursales'] ? '▼' : '▶' }}
+          </span>
+        </div>
+        <div class="nav-submenu" *ngIf="expandedSections['sucursales'] && isMenuOpen">
+          <a routerLink="/sucursal" routerLinkActive="active" class="nav-subitem" (click)="onNavItemClick()">Sucursales</a>
+          <a routerLink="/sucursal-configuracion" routerLinkActive="active" class="nav-subitem" (click)="onNavItemClick()">Configuración</a>
+          <a routerLink="/sucursal-producto" routerLinkActive="active" class="nav-subitem" (click)="onNavItemClick()">Productos Sucursal</a>
+          <a routerLink="/sucursal-prod-stock" routerLinkActive="active" class="nav-subitem" (click)="onNavItemClick()">Stock</a>
+        </div>
+      </div>
+
+      <!-- Precios y Promociones -->
+      <div class="nav-section">
+        <div class="nav-item nav-parent" (click)="toggleSection('precios')">
+          <span class="nav-icon">🏷️</span>
+          <span class="nav-text" *ngIf="isMenuOpen">Precios y Promociones</span>
+          <span class="nav-arrow" *ngIf="isMenuOpen">
+            {{ expandedSections['precios'] ? '▼' : '▶' }}
+          </span>
+        </div>
+        <div class="nav-submenu" *ngIf="expandedSections['precios'] && isMenuOpen">
+          <a routerLink="/lista-precio" routerLinkActive="active" class="nav-subitem" (click)="onNavItemClick()">Listas de Precio</a>
+          <a routerLink="/producto-precio" routerLinkActive="active" class="nav-subitem" (click)="onNavItemClick()">Precio Productos</a>
+          <a routerLink="/promocion" routerLinkActive="active" class="nav-subitem" (click)="onNavItemClick()">Promociones</a>
+          <a routerLink="/tipo-promocion" routerLinkActive="active" class="nav-subitem" (click)="onNavItemClick()">Tipos Promoción</a>
+          <a routerLink="/promocion-detalle" routerLinkActive="active" class="nav-subitem" (click)="onNavItemClick()">Detalle Promoción</a>
+          <a routerLink="/promocion-obsequio" routerLinkActive="active" class="nav-subitem" (click)="onNavItemClick()">Obsequios</a>
+          <a routerLink="/combo" routerLinkActive="active" class="nav-subitem" (click)="onNavItemClick()">Combos</a>
+        </div>
+      </div>
+
+      <!-- Finanzas -->
+      <div class="nav-section">
+        <div class="nav-item nav-parent" (click)="toggleSection('finanzas')">
+          <span class="nav-icon">💰</span>
+          <span class="nav-text" *ngIf="isMenuOpen">Finanzas</span>
+          <span class="nav-arrow" *ngIf="isMenuOpen">
+            {{ expandedSections['finanzas'] ? '▼' : '▶' }}
+          </span>
+        </div>
+        <div class="nav-submenu" *ngIf="expandedSections['finanzas'] && isMenuOpen">
+          <a routerLink="/cuenta-bancaria" routerLinkActive="active" class="nav-subitem" (click)="onNavItemClick()">Cuentas Bancarias</a>
+          <a routerLink="/tasa-cuota" routerLinkActive="active" class="nav-subitem" (click)="onNavItemClick()">Tasas y Cuotas</a>
+          <a routerLink="/formula-contable" routerLinkActive="active" class="nav-subitem" (click)="onNavItemClick()">Fórmulas Contables</a>
+        </div>
+      </div>
+
+      <!-- Administración -->
+      <div class="nav-section">
+        <div class="nav-item nav-parent" (click)="toggleSection('admin')">
+          <span class="nav-icon">👥</span>
+          <span class="nav-text" *ngIf="isMenuOpen">Administración</span>
+          <span class="nav-arrow" *ngIf="isMenuOpen">
+            {{ expandedSections['admin'] ? '▼' : '▶' }}
+          </span>
+        </div>
+        <div class="nav-submenu" *ngIf="expandedSections['admin'] && isMenuOpen">
+          <a routerLink="/usuario" routerLinkActive="active" class="nav-subitem" (click)="onNavItemClick()">Usuarios</a>
+          <a routerLink="/perfil" routerLinkActive="active" class="nav-subitem" (click)="onNavItemClick()">Perfiles</a>
+          <a routerLink="/menu-perfil" routerLinkActive="active" class="nav-subitem" (click)="onNavItemClick()">Menú por Perfil</a>
+        </div>
+      </div>
+
+      <!-- Multimedia -->
+      <div class="nav-section">
+        <div class="nav-item nav-parent" (click)="toggleSection('multimedia')">
+          <span class="nav-icon">🖼️</span>
+          <span class="nav-text" *ngIf="isMenuOpen">Multimedia</span>
+          <span class="nav-arrow" *ngIf="isMenuOpen">
+            {{ expandedSections['multimedia'] ? '▼' : '▶' }}
+          </span>
+        </div>
+        <div class="nav-submenu" *ngIf="expandedSections['multimedia'] && isMenuOpen">
+          <a routerLink="/producto-imagen" routerLinkActive="active" class="nav-subitem" (click)="onNavItemClick()">Imágenes Producto</a>
+          <a routerLink="/banner" routerLinkActive="active" class="nav-subitem" (click)="onNavItemClick()">Banners</a>
+        </div>
+      </div>
+
+      <!-- Relaciones -->
+      <a routerLink="/producto-proveedor" 
+         routerLinkActive="active" 
+         class="nav-item"
+         (click)="onNavItemClick()">
+        <span class="nav-icon">🔗</span>
+        <span class="nav-text" *ngIf="isMenuOpen">Producto-Proveedor</span>
+      </a>
+
+      <!-- Menú General -->
+      <a routerLink="/menu" 
+         routerLinkActive="active" 
+         class="nav-item"
+         (click)="onNavItemClick()">
+        <span class="nav-icon">📋</span>
+        <span class="nav-text" *ngIf="isMenuOpen">Menú</span>
+      </a>
+
+    </nav>
+
+    <!-- Footer del sidebar -->
+    <div class="sidebar-footer" *ngIf="isMenuOpen">
+      <div class="user-info">
+        <div class="user-avatar">U</div>
+        <div class="user-details">
+          <div class="user-name">Usuario</div>
+          <div class="user-role">Administrador</div>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- Overlay para cerrar en móvil -->
+  <div class="menu-overlay" *ngIf="isMenuOpen" (click)="toggleMenu()"></div>
+
+</div>
+
+<style>
+/* ==================== VARIABLES ==================== */
+:root {
+  --sidebar-width: 280px;
+  --sidebar-collapsed-width: 70px;
+  --primary-color: #4f46e5;
+  --primary-hover: #4338ca;
+  --bg-sidebar: #1e293b;
+  --bg-sidebar-light: #334155;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --border-color: #475569;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  --transition-speed: 0.3s;
+}
+
+/* ==================== MENU WRAPPER ==================== */
+.menu-wrapper {
+  position: relative;
+  z-index: 1000;
+}
+
+/* ==================== TOGGLE BUTTON ==================== */
+.menu-toggle {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1002;
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow);
+  transition: all var(--transition-speed) ease;
+}
+
+.menu-toggle:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 25px rgba(79, 70, 229, 0.5);
+}
+
+.menu-toggle:active {
+  transform: scale(0.95);
+}
+
+.menu-toggle.menu-open {
+  left: calc(var(--sidebar-width) - 70px);
+}
+
+.toggle-icon {
+  font-size: 24px;
+  font-weight: 300;
+  transition: transform var(--transition-speed) ease;
+}
+
+/* ==================== SIDEBAR ==================== */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--sidebar-width);
+  height: 100vh;
+  background: var(--bg-sidebar);
+  box-shadow: var(--shadow);
+  transition: transform var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sidebar.closed {
+  transform: translateX(-100%);
+}
+
+/* ==================== SIDEBAR HEADER ==================== */
+.sidebar-header {
+  padding: 25px 20px;
+  border-bottom: 1px solid var(--border-color);
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.logo-icon {
+  width: 45px;
+  height: 45px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.logo-text {
+  color: white;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  white-space: nowrap;
+}
+
+/* ==================== SIDEBAR NAV ==================== */
+.sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 20px 0;
+}
+
+.sidebar-nav::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar-nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 3px;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* ==================== NAV ITEMS ==================== */
+.nav-item {
+  display: flex;
+  align-items: center;
+  padding: 14px 20px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  position: relative;
+  margin: 2px 10px;
+  border-radius: 10px;
+  user-select: none;
+}
+
+.nav-item:hover {
+  background: var(--bg-sidebar-light);
+  color: var(--text-primary);
+  transform: translateX(5px);
+}
+
+.nav-item.active {
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  color: white;
+  transform: translateX(0);
+}
+
+.nav-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 70%;
+  background: white;
+  border-radius: 0 4px 4px 0;
+}
+
+.nav-icon {
+  font-size: 22px;
+  min-width: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.nav-text {
+  margin-left: 15px;
+  font-size: 15px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.nav-arrow {
+  margin-left: auto;
+  font-size: 12px;
+  transition: transform 0.2s ease;
+}
+
+/* ==================== NAV SECTIONS ==================== */
+.nav-section {
+  margin: 5px 0;
+}
+
+.nav-parent {
+  font-weight: 600;
+}
+
+.nav-submenu {
+  margin-left: 45px;
+  margin-top: 5px;
+  border-left: 2px solid var(--border-color);
+  padding-left: 10px;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+  }
+}
+
+.nav-subitem {
+  display: block;
+  padding: 10px 15px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 14px;
+  border-radius: 8px;
+  margin: 3px 0;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.nav-subitem:hover {
+  background: var(--bg-sidebar-light);
+  color: var(--text-primary);
+  transform: translateX(3px);
+}
+
+.nav-subitem.active {
+  background: rgba(79, 70, 229, 0.2);
+  color: var(--primary-color);
+  font-weight: 600;
+  border-left: 3px solid var(--primary-color);
+  padding-left: 12px;
+}
+
+/* ==================== SIDEBAR FOOTER ==================== */
+.sidebar-footer {
+  padding: 20px;
+  border-top: 1px solid var(--border-color);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #10b981, #059669);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.user-details {
+  overflow: hidden;
+}
+
+.user-name {
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-role {
+  color: var(--text-secondary);
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ==================== OVERLAY ==================== */
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 768px) {
+  .menu-toggle.menu-open {
+    left: calc(var(--sidebar-width) - 70px);
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+  }
+}
+
+@media (min-width: 769px) {
+  .menu-overlay {
+    display: none;
+  }
+  
+  .menu-toggle.menu-open {
+    left: calc(var(--sidebar-width) - 70px);
+  }
+  
+  .sidebar.closed {
+    transform: translateX(0);
+    width: var(--sidebar-collapsed-width);
+  }
+  
+  .sidebar.closed .nav-text,
+  .sidebar.closed .nav-arrow,
+  .sidebar.closed .logo-text,
+  .sidebar.closed .sidebar-footer {
+    display: none;
+  }
+  
+  .sidebar.closed .nav-submenu {
+    display: none;
+  }
+}
+
+/* Asegurar que el contenido principal no se superponga */
+@media (min-width: 769px) {
+  :host {
+    display: block;
+  }
+}
+</style>
