@@ -14,6 +14,7 @@ import { MatCardModule } from '@angular/material/card';
 import { BannerListComponent } from './banner-list/banner-list.component';
 import { BannerEditComponent } from './banner-edit/banner-edit.component';
 import { BannerService } from './banner.service';
+import { SucursalService } from '../sucursal/sucursal.service';
 import { BannerRoutingModule } from './banner-routing.module';
 
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -45,7 +46,7 @@ import { MatOptionModule } from '@angular/material/core';
     BannerListComponent,
     BannerEditComponent
   ],
-  providers: [BannerService],
+  providers: [BannerService, SucursalService],
   exports: []
 })
 export class BannerModule { }

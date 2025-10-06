@@ -5,6 +5,7 @@ import { EMPTY, Observable, switchMap  } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { GeneralService } from '../common/general.service';
 import { map } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +14,8 @@ export class BannerService extends GeneralService {
    bannerList: Banner[] = [];
       api = this.sUrl + 'SucursalesBanner';
    
-      constructor(private http: HttpClient) {
-         super();
+      constructor(private http: HttpClient, private toastr: ToastrService) {
+         super();  
       }
    
       // Método para obtener headers con el token
@@ -52,6 +53,8 @@ export class BannerService extends GeneralService {
             },
             error: err => {
                console.error('error cargando', err);
+               this.toastr.info(err.error, 'Información');
+               this.bannerList = [];
             }
          });
       }

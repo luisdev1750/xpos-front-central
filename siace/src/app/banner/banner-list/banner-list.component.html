@@ -13,15 +13,16 @@
       <mat-form-field>
         <mat-label>Sucursal:</mat-label>
         <mat-select
-          [(ngModel)]="filter.sucursal"
+          [(ngModel)]="filter.subSucId"
           id="sucursal"
           name="sucursal"
           (selectionChange)="onSucursalChange()"
         >
-          <mat-option value="">Todos</mat-option>
-          <mat-option value="1">Suc 1</mat-option>
-          <mat-option value="2">Suc 2</mat-option>
-          <mat-option value="3">Suc 3</mat-option>
+          <mat-option value="0">Todas las sucursales</mat-option>
+          <mat-option *ngFor="let sucursal of listSucursales" 
+                      [value]="sucursal.sucId">
+            {{ sucursal.sucNombre }}
+          </mat-option>
         </mat-select>
       </mat-form-field>
 
@@ -29,7 +30,7 @@
       <mat-form-field>
         <mat-label>Activo:</mat-label>
         <mat-select
-          [(ngModel)]="filter.activo"
+          [(ngModel)]="filter.subActivo"
           id="activo"
           name="activo"
           (selectionChange)="onActivoChange()"
