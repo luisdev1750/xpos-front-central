@@ -1,0 +1,90 @@
+<h2>Detalle del banco</h2>
+<form *ngIf="banner" #editForm="ngForm" (ngSubmit)="save()" autocomplete="off">
+  <div class="row">
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label>Identidicador</mat-label>
+        <input
+          matInput
+          [(ngModel)]="banner.subId"
+          id="banId"
+          name="banId"
+          placeholder="Identificador"
+          readonly
+        />
+      </mat-form-field>
+    </div>
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label for="banNombre">Nombre de imágen</mat-label>
+        <input
+          matInput
+          [(ngModel)]="banner.subNombre"
+          id="banNombre"
+          name="banNombre"
+          placeholder="Nombre"
+          required
+        />
+        <mat-error *ngIf="banner.subNombre">Nombre es requerido</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label for="banNombre">Orden</mat-label>
+        <input
+          matInput
+          [(ngModel)]="banner.subOrden"
+          id="banOrden"
+          name="banOrden"
+          placeholder="Orden"
+          required
+        />
+        <mat-error *ngIf="banner.subActivo">Orden es requerido</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label for="banNombre">Sucursal</mat-label>
+        <input
+          matInput
+          [(ngModel)]="banner.subSucId"
+          id="banSucursal"
+          name="banSucursal"
+          placeholder="Sucursal"
+          required
+        />
+        <mat-error *ngIf="banner.subSucId">La sucursal es requerida</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label>Activo</mat-label>
+        <mat-select
+          [(ngModel)]="banner.subActivo"
+          id="banActivo"
+          name="banActivo"
+          required
+        >
+          <mat-option [value]="true">Sí</mat-option>
+          <mat-option [value]="false">No</mat-option>
+        </mat-select>
+        <mat-error *ngIf="!banner.subActivo">Activo es requerido</mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="button-row text-center" role="group">
+    <button
+      type="submit"
+      mat-raised-button
+      color="primary"
+      [disabled]="!editForm.form.valid"
+    >
+      Guardar</button
+    >&nbsp;&nbsp;
+    <button mat-button mat-dialog-close>Cancelar</button>
+  </div>
+</form>

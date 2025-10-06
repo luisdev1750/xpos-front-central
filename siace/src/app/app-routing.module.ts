@@ -193,6 +193,14 @@ const routes: Routes = [
             (m) => m.ComboModule
           ),
       },
+      // BANNER MODULE
+      {
+        path: 'banner',
+        loadChildren: () =>
+          import('./banner/banner.module').then(
+            (m) => m.BannerModule
+          ),
+      },
 /*COMIENZA SIACE */
 
       {

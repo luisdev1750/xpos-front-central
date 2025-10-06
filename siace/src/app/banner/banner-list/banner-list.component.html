@@ -1,0 +1,104 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
+    <li class="breadcrumb-item active">Catálogo de Banners</li>
+  </ol>
+</nav>
+
+<div class="proin-main">
+  <mat-card class="proin-card">
+    <h2>Catálogo de Banners</h2>
+    <form #f="ngForm">
+      <!-- Filtro de Sucursal -->
+      <mat-form-field>
+        <mat-label>Sucursal:</mat-label>
+        <mat-select
+          [(ngModel)]="filter.sucursal"
+          id="sucursal"
+          name="sucursal"
+          (selectionChange)="onSucursalChange()"
+        >
+          <mat-option value="">Todos</mat-option>
+          <mat-option value="1">Suc 1</mat-option>
+          <mat-option value="2">Suc 2</mat-option>
+          <mat-option value="3">Suc 3</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Filtro de Activo -->
+      <mat-form-field>
+        <mat-label>Activo:</mat-label>
+        <mat-select
+          [(ngModel)]="filter.activo"
+          id="activo"
+          name="activo"
+          (selectionChange)="onActivoChange()"
+        >
+          <mat-option value="">Todos</mat-option>
+          <mat-option value="true">Sí</mat-option>
+          <mat-option value="false">No</mat-option>
+        </mat-select>
+      </mat-form-field>
+      &nbsp;&nbsp;
+      <!-- Botón agregar -->
+      <button
+        mat-mini-fab
+        color="accent"
+        (click)="add()"
+        [disabled]="!f?.valid"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+    </form>
+
+    <!-- Tabla de Banners -->
+    <div *ngIf="bannerList.length > 0">
+      <table mat-table #table [dataSource]="bannerList">
+        <ng-container matColumnDef="id">
+          <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.subId }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="sucursal">
+          <mat-header-cell *matHeaderCellDef> Sucursal </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.subSucId }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="nombre">
+          <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.subNombre }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="orden">
+          <mat-header-cell *matHeaderCellDef> Orden </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.subOrden }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="activo">
+          <mat-header-cell *matHeaderCellDef> Activo </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.subActivo }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            <button
+              (click)="edit(item)"
+              mat-button
+              color="warn"
+              class="button-edit"
+            >
+              <mat-icon>edit</mat-icon></button
+            >&nbsp;
+            <button (click)="delete(item)" mat-button color="warn">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+      </table>
+    </div>
+  </mat-card>
+</div>
