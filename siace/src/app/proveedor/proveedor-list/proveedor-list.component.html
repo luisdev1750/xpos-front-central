@@ -9,16 +9,7 @@
   <mat-card class="proin-card">
     <h2>Catalogo de Proveedores</h2>
     <form #f="ngForm">
-      <mat-form-field>
-        <mat-label>Clave:</mat-label>
-        <input
-          matInput
-          type="search"
-          [(ngModel)]="filter.pveId"
-          id="pveId"
-          name="pveId"
-        />
-      </mat-form-field>
+    
 
       <mat-form-field>
         <mat-label>Activo:</mat-label>
@@ -40,6 +31,7 @@
           [value]="filter.pveEstId"
           (selectionChange)="onEstadoChange($event)"
         >
+            <mat-option value="0">Todos los estados</mat-option>
           <mat-option *ngFor="let estado of estadosList" [value]="estado.estId">
             {{ estado.estNombre }}
           </mat-option>

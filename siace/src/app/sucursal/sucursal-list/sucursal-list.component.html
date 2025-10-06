@@ -1,9 +1,7 @@
 <nav aria-label="breadcrumb">
    <ol class="breadcrumb">
       <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
-      <li class="breadcrumb-item active">
-         Catalogo de Sucursales
-      </li>
+      <li class="breadcrumb-item active">Catalogo de Sucursales</li>
    </ol>
 </nav>
 
@@ -13,114 +11,116 @@
       <form #f="ngForm">
          
          <mat-form-field>
-            <mat-label>ID:</mat-label>
-            <input matInput type="search" [(ngModel)]="filter.sucId" id="sucId"
-               name="sucId">
-         </mat-form-field>
-         
-         
-         <mat-form-field>
-            <mat-label>Ciudad:</mat-label>
-            <input matInput type="search" [(ngModel)]="filter.sucCiuId" id="sucCiuId"
-               name="sucCiuId">
-         </mat-form-field>
-         
-         <mat-form-field>
-            <mat-label>Ciudad:</mat-label>
-            <input matInput type="search" [(ngModel)]="filter.sucColId" id="sucColId"
-               name="sucColId">
-         </mat-form-field>
-         
-         <mat-form-field>
             <mat-label>Empresa:</mat-label>
-            <input matInput type="search" [(ngModel)]="filter.sucEmpId" id="sucEmpId"
-               name="sucEmpId">
+            <mat-select
+               [(ngModel)]="filter.sucEmpId"
+               (selectionChange)="onEmpresaChange($event)"
+               name="sucEmpId"
+            >
+               <mat-option value="0">Todas las empresas</mat-option>
+               <mat-option *ngFor="let empresa of empresasList" [value]="empresa.empId">
+                  {{ empresa.empNombre }}
+               </mat-option>
+            </mat-select>
          </mat-form-field>
-         
+
+         <mat-form-field>
+            <mat-label>Estado:</mat-label>
+            <mat-select
+               [value]="filter.sucEstId"
+               (selectionChange)="onEstadoChange($event)"
+               name="sucEstId"
+            >
+               <mat-option value="0">Todos los estados</mat-option>
+               <mat-option *ngFor="let estado of estadosList" [value]="estado.estId">
+                  {{ estado.estNombre }}
+               </mat-option>
+            </mat-select>
+         </mat-form-field>
+
+         <mat-form-field>
+            <mat-label>Municipio:</mat-label>
+            <mat-select
+               [value]="filter.sucMunId"
+               (selectionChange)="onMunicipioChange($event)"
+               name="sucMunId"
+            >
+               <mat-option value="0">Todos los municipios</mat-option>
+               <mat-option *ngFor="let municipio of municipiosList" [value]="municipio.munId">
+                  {{ municipio.munNombre }}
+               </mat-option>
+            </mat-select>
+         </mat-form-field>
+
+         <mat-form-field>
+            <mat-label>Ciudad:</mat-label>
+            <mat-select
+               [value]="filter.sucCiuId"
+               (selectionChange)="onCiudadChange($event)"
+               name="sucCiuId"
+            >
+               <mat-option value="0">Todas las ciudades</mat-option>
+               <mat-option *ngFor="let ciudad of ciudadesList" [value]="ciudad.ciuId">
+                  {{ ciudad.ciuNombre }}
+               </mat-option>
+            </mat-select>
+         </mat-form-field>
+
+         <mat-form-field>
+            <mat-label>Colonia:</mat-label>
+            <mat-select
+               [value]="filter.sucColId"
+               (selectionChange)="onColoniaChange($event)"
+               name="sucColId"
+            >
+               <mat-option value="0">Todas las colonias</mat-option>
+               <mat-option *ngFor="let colonia of coloniasList" [value]="colonia.colId">
+                  {{ colonia.colNombre }}
+               </mat-option>
+            </mat-select>
+         </mat-form-field>
 
          <button mat-mini-fab color="accent" (click)="add()" [disabled]="!f?.valid">
             <mat-icon>add</mat-icon>
          </button>
       </form>
+      
       <div *ngIf="sucursalList.length > 0">
-         
          <table mat-table #table [dataSource]="sucursalList">
             
             <ng-container matColumnDef="sucId">
-               <mat-header-cell *matHeaderCellDef>
-                  ID
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.sucId}} </mat-cell>
+               <mat-header-cell *matHeaderCellDef>ID</mat-header-cell>
+               <mat-cell *matCellDef="let item">{{ item.sucId }}</mat-cell>
             </ng-container>
             
             <ng-container matColumnDef="sucNombre">
-               <mat-header-cell *matHeaderCellDef>
-                  Nombre
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.sucNombre}} </mat-cell>
+               <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
+               <mat-cell *matCellDef="let item">{{ item.sucNombre }}</mat-cell>
             </ng-container>
             
             <ng-container matColumnDef="sucNumero">
-               <mat-header-cell *matHeaderCellDef>
-                  Número
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.sucNumero}} </mat-cell>
+               <mat-header-cell *matHeaderCellDef>Número</mat-header-cell>
+               <mat-cell *matCellDef="let item">{{ item.sucNumero }}</mat-cell>
             </ng-container>
             
             <ng-container matColumnDef="sucCalle">
-               <mat-header-cell *matHeaderCellDef>
-                  Calle
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.sucCalle}} </mat-cell>
+               <mat-header-cell *matHeaderCellDef>Calle</mat-header-cell>
+               <mat-cell *matCellDef="let item">{{ item.sucCalle }}</mat-cell>
             </ng-container>
             
-            <ng-container matColumnDef="sucNumeroExterior">
-               <mat-header-cell *matHeaderCellDef>
-                  Número Exterior
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.sucNumeroExterior}} </mat-cell>
+            <ng-container matColumnDef="sucCiuNombre">
+               <mat-header-cell *matHeaderCellDef>Ciudad</mat-header-cell>
+               <mat-cell *matCellDef="let item">{{ item.sucCiuName }}</mat-cell>
             </ng-container>
             
-            <ng-container matColumnDef="sucNumeroInterior">
-               <mat-header-cell *matHeaderCellDef>
-                  Número Interior
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.sucNumeroInterior}} </mat-cell>
+            <ng-container matColumnDef="sucColNombre">
+               <mat-header-cell *matHeaderCellDef>Colonia</mat-header-cell>
+               <mat-cell *matCellDef="let item">{{ item.sucColName }}</mat-cell>
             </ng-container>
             
-            <ng-container matColumnDef="sucLatitud">
-               <mat-header-cell *matHeaderCellDef>
-                  Latitud
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.sucLatitud}} </mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="sucLongitud">
-               <mat-header-cell *matHeaderCellDef>
-                  Longitud
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.sucLongitud}} </mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="sucCiuId">
-               <mat-header-cell *matHeaderCellDef>
-                  Ciudad
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.sucCiuId}} </mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="sucColId">
-               <mat-header-cell *matHeaderCellDef>
-                  Ciudad
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.sucColId}} </mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="sucEmpId">
-               <mat-header-cell *matHeaderCellDef>
-                  Empresa
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.sucEmpId}} </mat-cell>
+            <ng-container matColumnDef="sucEmpNombre">
+               <mat-header-cell *matHeaderCellDef>Empresa</mat-header-cell>
+               <mat-cell *matCellDef="let item">{{ item.sucEmpNombre }}</mat-cell>
             </ng-container>
             
             <ng-container matColumnDef="actions">
@@ -134,6 +134,7 @@
                   </button>
                </mat-cell>
             </ng-container>
+            
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
             <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
          </table>

@@ -45,7 +45,7 @@ export class PromocionService extends GeneralService {
   }
 
   find(filter: PromocionFilter): Observable<Promocion[]> {
-    const url = `${this.api}/${filter.pmoId}`;
+    const url = `${this.api}/${filter.pmoId}/${filter.pmoTpr}/${filter.pmoSucId}`;
     return this.http.get<Promocion[]>(url, {
       headers: this.getHeaders(), // Usar headers con token
     });

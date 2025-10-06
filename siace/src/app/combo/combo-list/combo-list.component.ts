@@ -58,6 +58,8 @@ export class ComboListComponent implements OnInit, OnDestroy {
     this.search();
   }
 
+
+
   loadCatalogs() {
     // Cargar sucursales
     this.sucursalSerivice
@@ -66,6 +68,8 @@ export class ComboListComponent implements OnInit, OnDestroy {
         sucCiuId: '0',
         sucColId: '0',
         sucEmpId: '0',
+        sucEstId: '0',
+        sucMunId: '0'
       })
       .subscribe(
         (res) => {

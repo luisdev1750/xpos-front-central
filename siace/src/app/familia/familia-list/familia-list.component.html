@@ -10,23 +10,13 @@
     <h2>Catalogo de Familias</h2>
     <form #f="ngForm">
       <div class="row align-items-center">
-        <div class="col-md-2">
-          <mat-form-field>
-            <mat-label>Clave:</mat-label>
-            <input
-              matInput
-              type="search"
-              [(ngModel)]="filter.famId"
-              id="famId"
-              name="famId"
-            />
-          </mat-form-field>
-        </div>
+      
 
         <div class="col-md-2">
           <mat-form-field>
             <mat-label>Submarca</mat-label>
-              <mat-select (selectionChange)="onSubmarcaChange($event)">
+            <mat-select (selectionChange)="onSubmarcaChange($event)">
+              <mat-option value="0">Todas las submarcas</mat-option>
               <mat-option
                 *ngFor="let submarca of submarcasListsFilter"
                 [value]="submarca.smaId"
@@ -37,21 +27,19 @@
           </mat-form-field>
         </div>
 
-     
-
-
         <div class="col-md-3">
           <mat-form-field>
             <mat-label>Familia Padre:</mat-label>
-            
-              <mat-select (selectionChange)="onFamiliaPadreChange($event)">
-                <mat-option
-                  *ngFor="let familia of familiasListFilter"
-                  [value]="familia.famId"
-                >
-                  {{ familia.famNombre }}
-                </mat-option>
-              </mat-select>
+
+            <mat-select (selectionChange)="onFamiliaPadreChange($event)">
+              <mat-option value="0">Todas las familias</mat-option>
+              <mat-option
+                *ngFor="let familia of familiasListFilter"
+                [value]="familia.famId"
+              >
+                {{ familia.famNombre }}
+              </mat-option>
+            </mat-select>
           </mat-form-field>
         </div>
 
@@ -82,7 +70,9 @@
 
         <ng-container matColumnDef="famIdParent">
           <mat-header-cell *matHeaderCellDef> Familia Padre </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.famParentNombre }} </mat-cell>
+          <mat-cell *matCellDef="let item">
+            {{ item.famParentNombre }}
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="famNombre">

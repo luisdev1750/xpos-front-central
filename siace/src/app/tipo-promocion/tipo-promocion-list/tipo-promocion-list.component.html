@@ -1,24 +1,15 @@
 <nav aria-label="breadcrumb">
-   <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
-      <li class="breadcrumb-item active">
-         Catalogo de Tipos de Promociones
-      </li>
-   </ol>
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
+    <li class="breadcrumb-item active">Catalogo de Tipos de Promociones</li>
+  </ol>
 </nav>
 
 <div class="proin-main">
-   <mat-card class="proin-card">
-      <h2>Catalogo de Tipos de Promociones</h2>
-      <form #f="ngForm">
-         
-         <mat-form-field>
-            <mat-label>Clave:</mat-label>
-            <input matInput type="search" [(ngModel)]="filter.tprId" id="tprId"
-               name="tprId">
-         </mat-form-field>
-
-              <mat-form-field>
+  <mat-card class="proin-card">
+    <h2>Catalogo de Tipos de Promociones</h2>
+    <form #f="ngForm">
+      <mat-form-field>
         <mat-label>Activo:</mat-label>
         <mat-select
           [(ngModel)]="filter.tprActivo"
@@ -31,58 +22,54 @@
           <mat-option value="false">No</mat-option>
         </mat-select>
       </mat-form-field>
-         
-      
-         
 
-         <button mat-mini-fab color="accent" (click)="add()" [disabled]="!f?.valid">
-            <mat-icon>add</mat-icon>
-         </button>
-      </form>
-      <div *ngIf="tipoPromocionList.length > 0">
-         
-         <table mat-table #table [dataSource]="tipoPromocionList">
-            
-            <ng-container matColumnDef="tprId">
-               <mat-header-cell *matHeaderCellDef>
-                  Clave
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.tprId}} </mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="tprNombre">
-               <mat-header-cell *matHeaderCellDef>
-                  Nombre
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.tprNombre}} </mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="tprActivo">
-               <mat-header-cell *matHeaderCellDef>
-                  Activo
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.tprActivo}} </mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="tprClave">
-               <mat-header-cell *matHeaderCellDef>
-                  Código
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.tprClave}} </mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="actions">
-               <mat-header-cell *matHeaderCellDef></mat-header-cell>
-               <mat-cell *matCellDef="let item">
-                  <button (click)="edit(item)" mat-button color="warn" class="button-edit">
-                     <mat-icon>edit</mat-icon>
-                  </button>&nbsp;
-                  
-               </mat-cell>
-            </ng-container>
-            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-         </table>
-      </div>
-   </mat-card>
+      <button
+        mat-mini-fab
+        color="accent"
+        (click)="add()"
+        [disabled]="!f?.valid"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+    </form>
+    <div *ngIf="tipoPromocionList.length > 0">
+      <table mat-table #table [dataSource]="tipoPromocionList">
+        <ng-container matColumnDef="tprId">
+          <mat-header-cell *matHeaderCellDef> Clave </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.tprId }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tprNombre">
+          <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.tprNombre }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tprActivo">
+          <mat-header-cell *matHeaderCellDef> Activo </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.tprActivo }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tprClave">
+          <mat-header-cell *matHeaderCellDef> Código </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.tprClave }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            <button
+              (click)="edit(item)"
+              mat-button
+              color="warn"
+              class="button-edit"
+            >
+              <mat-icon>edit</mat-icon></button
+            >&nbsp;
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+      </table>
+    </div>
+  </mat-card>
 </div>

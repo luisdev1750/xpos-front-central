@@ -64,8 +64,8 @@ export class PromocionDetalleService extends GeneralService {
     let params = new HttpParams();
     let url = '';
     if (entity.prdId) {
-      url = `${this.api}/${entity.prdId.toString()}`;
-      params = new HttpParams().set('ID', entity.prdId.toString());
+      url = `${this.api}/${entity.prdId.toString()}/${entity.prdPmoSucId}`;
+    
       return this.http.delete<PromocionDetalle>(url, { 
         headers: this.getHeaders(),  // Usar headers con token
         params 

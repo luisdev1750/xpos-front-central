@@ -3,4 +3,6 @@ export class SucursalFilter {
   sucCiuId = '';
   sucColId = '';
   sucEmpId = '';
+  sucEstId = ''; 
+  sucMunId = ''; 
 }

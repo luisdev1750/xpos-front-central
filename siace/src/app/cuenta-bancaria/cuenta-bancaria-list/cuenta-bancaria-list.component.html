@@ -9,16 +9,7 @@
   <mat-card class="proin-card">
     <h2>Catalogo de cuentas bancarias</h2>
     <form #f="ngForm">
-      <mat-form-field>
-        <mat-label>Clave:</mat-label>
-        <input
-          matInput
-          type="search"
-          [(ngModel)]="filter.cubId"
-          id="cubId"
-          name="cubId"
-        />
-      </mat-form-field>
+
 
       <mat-form-field>
         <mat-label>Sucursal</mat-label>
@@ -26,6 +17,7 @@
           [value]="filter.cubSucId"
           (selectionChange)="OnSucursalChange($event)"
         >
+         <mat-option value="0">Todas las sucursales</mat-option>
           <mat-option
             *ngFor="let sucursal of sucursalList"
             [value]="sucursal.sucId"
@@ -41,6 +33,7 @@
           [value]="filter.cubBanId"
           (selectionChange)="OnBancoChange($event)"
         >
+         <mat-option value="0">Todos los bancos</mat-option>
           <mat-option *ngFor="let banco of bancoList" [value]="banco.banId">
             {{ banco.banNombre }}
           </mat-option>

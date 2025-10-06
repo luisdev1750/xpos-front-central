@@ -3,15 +3,28 @@
   <mat-card class="proin-card">
     <h2>Catálogo de promociones</h2>
     <form #f="ngForm">
+      
       <mat-form-field>
-        <mat-label>Clave:</mat-label>
-        <input
-          matInput
-          type="search"
-          [(ngModel)]="filter.pmoId"
-          id="pmoId"
-          name="pmoId"
-        />
+        <mat-label>Tipo promocion</mat-label>
+        <mat-select [value]="filter.pmoTpr" (selectionChange)="onTipoPromocionChange($event)">
+              <mat-option value="0">Todas las promociones</mat-option>
+          <mat-option *ngFor="let tipoPromocion of listTipoPromocion" 
+                      [value]="tipoPromocion.tprId">
+            {{ tipoPromocion.tprNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    
+
+      <mat-form-field>
+        <mat-label>Sucursales</mat-label>
+        <mat-select [value]="filter.pmoSucId" (selectionChange)="onSucursalChange($event)">
+          <mat-option value="0">Todas las sucursales</mat-option>
+          <mat-option *ngFor="let sucursal of listSucursales" 
+                      [value]="sucursal.sucId">
+            {{ sucursal.sucNombre}}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
 
       <button

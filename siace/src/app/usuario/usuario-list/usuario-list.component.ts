@@ -19,7 +19,7 @@ import { MatSelectModule } from '@angular/material/select';
   standalone: false,
   templateUrl: 'usuario-list.component.html',
   styles: [
-    'table { min-width: 600px }',
+    'table { }',
     '.mat-column-actions {flex: 0 0 10%;}',
   ],
 })

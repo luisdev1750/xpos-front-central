@@ -107,7 +107,7 @@ export class PromocionDetalleEditComponent implements OnInit {
 
     // Cargar promoción actual
     this.promocionServiceController
-      .find({ pmoId: this.promocionId })
+      .find({ pmoId: this.promocionId, pmoTpr: '0', pmoSucId : '0' })
       .subscribe({
         next: (res) => {
           if (res[0]) {

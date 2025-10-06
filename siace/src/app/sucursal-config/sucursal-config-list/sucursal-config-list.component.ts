@@ -8,29 +8,32 @@ import { SucursalConfigEditComponent } from '../sucursal-config-edit/sucursal-co
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../common/confirm-dialog/confirm-dialog.component';
 import { ToastrService } from 'ngx-toastr';
+import { SucursalService } from '../../sucursal/sucursal.service';
 
 @Component({
    selector: 'app-sucursal-config',
    standalone: false,
    templateUrl: 'sucursal-config-list.component.html',
    styles: [
-      'table { min-width: 600px }',
+      'table {  }',
       '.mat-column-actions {flex: 0 0 10%;}'
    ]
 })
 export class SucursalConfigListComponent implements OnInit {
-   displayedColumns = [ 'scoId',  'scoSucId',  'scoHost',  'scoTokenUser',  'scoTokenPassword',  'actions'];
+   displayedColumns = [  'scoSucId',  'scoHost',  'scoTokenUser',  'scoTokenPassword',  'actions'];
    filter = new SucursalConfigFilter();
 
    private subs!: Subscription;
-
+   listSucursales: any[] = [];
    
     /* Inicialización */
 
    constructor(
       private sucursalConfigService: SucursalConfigService,
       private toastr: ToastrService,
-      public dialog: MatDialog,) {
+      public dialog: MatDialog,
+      private sucursalService: SucursalService
+   ) {
       this.subs = this.sucursalConfigService.getIsUpdated().subscribe(() => {
          this.search();
       });
@@ -40,6 +43,7 @@ export class SucursalConfigListComponent implements OnInit {
 
 
    ngOnInit() {
+      this.loadCatalogs(); 
       this.search();
    }
 
@@ -47,7 +51,23 @@ export class SucursalConfigListComponent implements OnInit {
    ngOnDestroy(): void {
       this.subs?.unsubscribe();
    }
-
+   
+   onSucursalChange(event:any){
+      this.filter.scoSucId = event.value;
+      this.search();  
+   }
+   loadCatalogs(){
+      this.sucursalService.findAll().subscribe((res)=>{
+         console.log("all sucursales");
+         console.log(res);
+         this.listSucursales = res; 
+         
+         
+      }, (error)=>{
+         console.log(error);
+         
+      })
+   }
 
    /* Accesors */
 
@@ -74,11 +94,10 @@ export class SucursalConfigListComponent implements OnInit {
          }
       });
       confirmDialog.afterClosed().subscribe(result => {
-         if (result === true) {
-
+        
             this.sucursalConfigService.delete(sucursalConfig).subscribe({
                next: (result) => {
-                  if (Number(result) > 0) {
+                  if (Number(result.scoId) > 0) {
                      this.toastr.success('El configuración de sucursal ha sido eliminado exitosamente', 'Transacción exitosa');
                      this.sucursalConfigService.setIsUpdated(true);
                   }
@@ -88,7 +107,7 @@ export class SucursalConfigListComponent implements OnInit {
                   this.toastr.error('Ha ocurrido un error', 'Error');
                }
             });
-         }
+         
       });
    }
 

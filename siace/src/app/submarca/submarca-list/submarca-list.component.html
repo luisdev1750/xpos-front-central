@@ -9,22 +9,14 @@
   <mat-card class="proin-card">
     <h2>Catalogo de Submarcas</h2>
     <form #f="ngForm">
-      <mat-form-field>
-        <mat-label>Clave:</mat-label>
-        <input
-          matInput
-          type="search"
-          [(ngModel)]="filter.smaId"
-          id="smaId"
-          name="smaId"
-        />
-      </mat-form-field>
+    
 
       <mat-form-field>
         <mat-label>Marca</mat-label>
         <mat-select
         (selectionChange)="OnMarcaChange($event)"
         >
+         <mat-option value="0">Todas las marcas</mat-option>
           <mat-option
             *ngFor="let marca of marcaListsFilter"
             [value]="marca.marId"

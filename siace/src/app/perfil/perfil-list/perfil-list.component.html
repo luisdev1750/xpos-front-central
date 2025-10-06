@@ -9,16 +9,7 @@
   <mat-card class="proin-card">
     <h2>Catalogo de Perfiles</h2>
     <form #f="ngForm">
-      <mat-form-field>
-        <mat-label>Clave:</mat-label>
-        <input
-          matInput
-          type="search"
-          [(ngModel)]="filter.perId"
-          id="perId"
-          name="perId"
-        />
-      </mat-form-field>
+    
 
       <mat-form-field>
         <mat-label>Activo:</mat-label>
@@ -61,7 +52,7 @@
         </ng-container>
 
         <ng-container matColumnDef="perActivo">
-          <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+          <mat-header-cell *matHeaderCellDef> Activo </mat-header-cell>
           <mat-cell *matCellDef="let item"> {{ item.perActivo }} </mat-cell>
         </ng-container>
 

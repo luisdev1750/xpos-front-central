@@ -41,7 +41,8 @@ export class PromocionListComponent implements OnInit {
     'actions',
   ];
   filter = new PromocionFilter();
-
+  listTipoPromocion : any[] = [];
+  listSucursales : any[] = []; 
   private subs!: Subscription;
 
   /* Inicialización */
@@ -51,7 +52,7 @@ export class PromocionListComponent implements OnInit {
     private toastr: ToastrService,
     public dialog: MatDialog,
     private sucursalService: SucursalService,
-    private tipoPromocion: TipoPromocionService,
+    private tipoPromocionService: TipoPromocionService,
     private tipoPagosService: TipoPagoService,
     private tipoSubpagoService: TipoSubpagoService,
     private router: Router
@@ -61,6 +62,8 @@ export class PromocionListComponent implements OnInit {
     });
 
     this.filter.pmoId = '0';
+    this.filter.pmoSucId = '0';
+    this.filter.pmoTpr = '0'; 
   }
 
   ngOnInit() {
@@ -77,13 +80,30 @@ export class PromocionListComponent implements OnInit {
       (res) => {
         console.log('Response');
         console.log(res);
+        this.listSucursales = res; 
       },
       (error) => {
         console.log(error);
       }
     );
-  }
 
+    this.tipoPromocionService.find({
+      tprId: '0',
+      tprActivo: 'all',
+    }).subscribe((res)=>{
+      console.log("Res tipo promoción service");
+      console.log(res);
+      this.listTipoPromocion = res;
+    })
+  }
+  onTipoPromocionChange(event: any){
+    this.filter.pmoTpr = event.value; 
+    this.search(); 
+  }
+  onSucursalChange(event: any){
+    this.filter.pmoSucId = event.value;
+    this.search(); 
+  };
   redirectToPromocionesObsequio(item: any) {
     console.log(item.pmoFechaFin); // "2022-01-01T00:00:00Z"
 

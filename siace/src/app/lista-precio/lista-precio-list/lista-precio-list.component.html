@@ -9,16 +9,7 @@
   <mat-card class="proin-card">
     <h2>Catalogo de Lista Precios</h2>
     <form #f="ngForm">
-      <mat-form-field>
-        <mat-label>Clave:</mat-label>
-        <input
-          matInput
-          type="search"
-          [(ngModel)]="filter.lprId"
-          id="lprId"
-          name="lprId"
-        />
-      </mat-form-field>
+ 
 
        
          <mat-form-field>
@@ -40,7 +31,7 @@
             <input matInput type="search" [(ngModel)]="filter.lprFechaVigencia" id="lprFechaVigencia"
                name="lprFechaVigencia">
          </mat-form-field> -->
-      <mat-form-field appearance="fill">
+      <!-- <mat-form-field appearance="fill">
         <mat-label for="fechaVigencia">Fecha Vigencia</mat-label>
         <input
           matInput
@@ -57,7 +48,7 @@
           [for]="pickerVigencia"
         ></mat-datepicker-toggle>
         <mat-datepicker #pickerVigencia></mat-datepicker>
-      </mat-form-field>
+      </mat-form-field> -->
 
       <mat-form-field appearance="fill">
         <mat-label for="fechaAlta">Fecha Alta</mat-label>
@@ -110,13 +101,13 @@
             Fecha de vigencia
           </mat-header-cell>
           <mat-cell *matCellDef="let item">
-            {{ item.lprFechaVigencia }}
+            {{ item.lprFechaVigencia | date : "dd/MM/yyyy HH:mm"  }}
           </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="lprFechaAlta">
           <mat-header-cell *matHeaderCellDef> Fecha Alta </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.lprFechaAlta }} </mat-cell>
+          <mat-cell *matCellDef="let item"> {{ item.lprFechaAlta | date : "dd/MM/yyyy HH:mm" }} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="actions">

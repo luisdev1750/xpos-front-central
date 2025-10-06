@@ -1,52 +1,157 @@
-<h2>Detalle del producto imagenes</h2>
-<form *ngIf="productoImagen" #editForm="ngForm" (ngSubmit)="save()" autocomplete="off">
+<h2>{{ isEditing ? "Editar" : "Nueva" }} Imagen de Producto</h2>
 
-<div class="row">
-
-   <div class="col-md-4">
+<form
+  *ngIf="productoImagen"
+  #editForm="ngForm"
+  (ngSubmit)="save()"
+  autocomplete="off"
+>
+  <div class="row">
+    <div class="col-md-6">
       <mat-form-field>
-         <mat-label>Clave</mat-label>
-         <input matInput [(ngModel)]="productoImagen.priId" id="priId" name="priId" placeholder="Clave" readonly>
-         
-         
+        <mat-label>Clave</mat-label>
+        <input
+          matInput
+          [(ngModel)]="productoImagen.priId"
+          id="priId"
+          name="priId"
+          placeholder="Clave"
+          readonly
+        />
       </mat-form-field>
-   </div>
+    </div>
 
-   <div class="col-md-4">
+    <div class="col-md-6">
       <mat-form-field>
-         <mat-label for="priNombre">Nombre</mat-label>
-         <input matInput [(ngModel)]="productoImagen.priNombre" id="priNombre" name="priNombre" placeholder="Nombre" required>
-         <mat-error *ngIf="productoImagen.priNombre==''">Nombre es requerido</mat-error>
+        <mat-label for="priProId">Producto</mat-label>
+        <input
+          matInput
+          type="text"
+          [(ngModel)]="productoImagen.priProName"
+          id="priProName"
+          name="priProName"
+          placeholder="Producto"
+          readonly
+        />
+        <mat-error *ngIf="!productoImagen.priProId"
+          >Producto es requerido</mat-error
+        >
       </mat-form-field>
-   </div>
+    </div>
+  </div>
 
-   <div class="col-md-4">
-      <mat-form-field>
-         <mat-label for="priProId">Producto</mat-label>
-         <input matInput type="text" [(ngModel)]="productoImagen.priProName" id="priProName" name="priProName" placeholder="Producto" readonly>
-         
-         <mat-error *ngIf="productoImagen.priProId==undefined">Producto es requerido</mat-error>
-      </mat-form-field>
-   </div>
-</div>
-<div class="row">
-
-   
- <div class="col-md-4">
+  <div class="row">
+    <div class="col-md-6">
       <mat-form-field>
         <mat-label>Tipo de imagen</mat-label>
-        <mat-select [value]="productoImagen.priTimId" (selectionChange)="onProductoImagenChange($event)">
-          <mat-option *ngFor="let imagen of listTipoImagenes" 
-                      [value]="imagen.timId">
+        <mat-select
+          [value]="productoImagen.priTimId"
+          (selectionChange)="onProductoImagenChange($event)"
+          required
+        >
+          <mat-option
+            *ngFor="let imagen of listTipoImagenes"
+            [value]="imagen.timId"
+          >
             {{ imagen.timNombre }}
           </mat-option>
         </mat-select>
+        <mat-error *ngIf="!productoImagen.priTimId"
+          >Tipo de imagen es requerido</mat-error
+        >
       </mat-form-field>
     </div>
-  
-</div>
-   <div class="button-row text-center" role="group">
-      <button type="submit" mat-raised-button color="primary" [disabled]="!editForm.form.valid">Guardar</button>
-      <button mat-button mat-dialog-close>Cancelar</button>
+
+    <div class="col-md-6">
+      <mat-form-field *ngIf="isEditing">
+        <mat-label>Nombre del archivo actual</mat-label>
+        <input
+          matInput
+          [(ngModel)]="productoImagen.priNombre"
+          id="priNombre"
+          name="priNombre"
+          placeholder="Nombre del archivo"
+          readonly
+        />
+      </mat-form-field>
+    </div>
+  </div>
+
+  <!-- Sección de carga de imagen -->
+  <div class="row">
+    <div class="col-md-12">
+      <div class="file-input-wrapper">
+        <label style="display: block; margin-bottom: 8px; font-weight: 500">
+          {{ isEditing ? "Cambiar imagen (opcional)" : "Seleccionar imagen" }}
+          <span *ngIf="!isEditing" style="color: red">*</span>
+        </label>
+
+        <input
+          type="file"
+          (change)="onFileSelected($event)"
+          accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+          #fileInput
+          style="display: none"
+        />
+
+        <button
+          type="button"
+          mat-raised-button
+          color="accent"
+          (click)="fileInput.click()"
+        >
+          <mat-icon>cloud_upload</mat-icon>
+          {{ selectedFile ? "Cambiar archivo" : "Seleccionar archivo" }}
+        </button>
+
+        <button
+          *ngIf="selectedFile"
+          type="button"
+          mat-button
+          color="warn"
+          (click)="clearImage()"
+        >
+          <mat-icon>clear</mat-icon>
+          Limpiar
+        </button>
+
+        <div *ngIf="selectedFile" style="margin-top: 8px; color: #666">
+          <mat-icon style="vertical-align: middle; font-size: 18px"
+            >attachment</mat-icon
+          >
+          {{ selectedFile.name }} ({{
+            (selectedFile.size / 1024).toFixed(2)
+          }}
+          KB)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Vista previa de la imagen -->
+  <div class="row" *ngIf="imagePreview">
+    <div class="col-md-12">
+      <mat-card style="padding: 15px; margin: 15px 0">
+        <mat-card-title>Vista previa</mat-card-title>
+        <img [src]="imagePreview" alt="Vista previa" class="image-preview" />
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Botones de acción -->
+  <div class="button-row text-center" role="group" style="margin-top: 20px">
+    <button
+      type="submit"
+      mat-raised-button
+      color="primary"
+      [disabled]="!editForm.form.valid || (!isEditing && !selectedFile)"
+    >
+      <mat-icon>save</mat-icon>
+      {{ isEditing ? "Actualizar" : "Guardar" }}
+    </button>
+    <button type="button" mat-button (click)="cancel()">
+      <mat-icon>cancel</mat-icon>
+      Cancelar
+    </button>
   </div>
 </form>

@@ -15,6 +15,7 @@
           [value]="filter.prrLprId"
           (selectionChange)="OnListaPreciosChange($event)"
         >
+            <mat-option value="0">Todas las listas de precios</mat-option>
           <mat-option
             *ngFor="let precio of listaPrecios"
             [value]="precio.lprId"

@@ -49,10 +49,7 @@ find(filter: SubmarcaFilter): Observable<Submarca[]> {
   
   let url = `${this.api}/${smaId}/${smaMarId}/${filter.smaActivo}`;
   
-  // Solo agregar si es true o false, nunca 0
-  if (filter.smaActivo === 'true' || filter.smaActivo === 'false') {
-    url += `/${filter.smaActivo}`;
-  }
+
   
   return this.http.get<Submarca[]>(url, {
     headers: this.getHeaders()

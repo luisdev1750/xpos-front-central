@@ -812,9 +812,9 @@ mat-sidenav-container  .mdc-list-item.list-item-active span {
 /*Actividades A3*/
 
 :root {
-  --button-color: #F35858;
-  --mat-tab-color-active: #B54828;
-  --mat-tab-color: #B98168;
+  --button-color: #ff7f00;
+  --mat-tab-color-active: #24599B;
+  --mat-tab-color: #ff7f00;
 
   --mat-tab-header-active-hover-indicator-color: #B54828 !important;
 
@@ -828,6 +828,16 @@ mat-sidenav-container  .mdc-list-item.list-item-active span {
   --foreground: #9a412a;
 
 }
+.mat-mdc-header-row {
+  color: white !important; 
+}
+.mat-mdc-option .mdc-list-item__primary-text {
+  color: #333D51 !important; 
+}
+.mat-mdc-icon-button .mat-mdc-button-touch-target{
+  color: #ff7f00 !important;
+}
+
 
 .mat-mdc-tab-nav-bar {
   --mat-tab-header-active-hover-indicator-color: var(--mat-tab-color-active) !important;
@@ -1335,19 +1345,7 @@ input #file-upload-button{
 }*/
 
 /*Toastr personalizacion*/
-.toast-success {
-  background-color: #B54828 !important;
-}
 
-.toast-warning{
-  background-color: var(--mat-cell-content) !important;
-  color: var(--toolbar-color) !important;
-
-}
-
-.toast-error {
-  background-color: var(--button-color) !important;
-}
 
 
 .actividades-edit{
@@ -1392,3 +1390,4 @@ input #file-upload-button{
 .alternating-options .mat-mdc-option:hover {
   background-color: #e3f2fd !important;
 }
+

@@ -17,6 +17,7 @@
             [value]="filter.spsSucId"
             (selectionChange)="onSucursalChange($event)"
           >
+           <mat-option value="0">Todas las sucursales</mat-option>
             <mat-option
               *ngFor="let sucursal of listSucursal"
               [value]="sucursal.sucId"

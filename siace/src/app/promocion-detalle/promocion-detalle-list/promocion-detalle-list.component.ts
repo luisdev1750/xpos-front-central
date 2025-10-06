@@ -20,10 +20,7 @@ import { Promocion } from '../../promocion/promocion';
   selector: 'app-promocion-detalle',
   standalone: false,
   templateUrl: 'promocion-detalle-list.component.html',
-  styles: [
-    'table { }',
-    '.mat-column-actions {flex: 0 0 10%;}',
-  ],
+  styles: ['table { }', '.mat-column-actions {flex: 0 0 10%;}'],
 })
 export class PromocionDetalleListComponent implements OnInit {
   displayedColumns = [
@@ -40,7 +37,7 @@ export class PromocionDetalleListComponent implements OnInit {
   filter = new PromocionDetalleFilter();
   promocionId: string = '';
   sucursalId: string = '';
-  fechaValida: boolean = false; 
+  fechaValida: boolean = false;
   tipoPromocionId: string = '';
   promocionCurrent: Promocion = new Promocion();
   private subs!: Subscription;
@@ -65,11 +62,9 @@ export class PromocionDetalleListComponent implements OnInit {
   }
 
   async ngOnInit() {
-   
-
     await this.getParams();
     this.loadCatalogs();
-     this.search();
+    this.search();
   }
 
   getParams() {
@@ -77,7 +72,7 @@ export class PromocionDetalleListComponent implements OnInit {
       this.promocionId = params['id'];
       console.log('Id de promoción');
       console.log(this.promocionId);
-      this.filter.prdPmoId = this.promocionId; 
+      this.filter.prdPmoId = this.promocionId;
     });
 
     this.route.queryParams.subscribe((params) => {
@@ -90,7 +85,7 @@ export class PromocionDetalleListComponent implements OnInit {
       console.log('Sucursal recibida:', this.sucursalId);
     });
 
-      this.route.queryParams.subscribe((params) => {
+    this.route.queryParams.subscribe((params) => {
       this.fechaValida = params['fechaValida'] === 'true';
       console.log('Fecha válida recibida:', this.fechaValida);
     });
@@ -116,7 +111,6 @@ export class PromocionDetalleListComponent implements OnInit {
         (res) => {
           console.log('Info de la promoción:');
           console.log(res);
-
         },
         (error) => {
           console.log('error');
@@ -200,10 +194,13 @@ export class PromocionDetalleListComponent implements OnInit {
       },
     });
     confirmDialog.afterClosed().subscribe((result) => {
-      if (result === true) {
+      console.log('res de dialog');
+      console.log(result);
+
+      if (result) {
         this.promocionDetalleService.delete(promocionDetalle).subscribe({
           next: (result) => {
-            if (Number(result) > 0) {
+            if (result.prdId > 0) {
               this.toastr.success(
                 'El detalle de promoción ha sido eliminado exitosamente',
                 'Transacción exitosa'

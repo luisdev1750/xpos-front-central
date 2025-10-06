@@ -182,11 +182,21 @@ export class ProductoListComponent implements OnInit, OnDestroy {
         message: '¿Está seguro de eliminar el producto?',
       },
     });
+
+    const productoDelete: Producto = {
+      ...producto,
+      proActivo: false,
+    };
+
     confirmDialog.afterClosed().subscribe((result) => {
       if (result === true) {
-        this.productoService.delete(producto).subscribe({
+        this.productoService.save(productoDelete).subscribe({
           next: (result) => {
-            if (Number(result) > 0) {
+            if (
+              result?.proId !== undefined &&
+              result?.proId !== null &&
+              Number(result.proId) >= 0
+            ) {
               this.toastr.success(
                 'El producto ha sido eliminado exitosamente',
                 'Transacción exitosa'
@@ -198,6 +208,20 @@ export class ProductoListComponent implements OnInit, OnDestroy {
             this.toastr.error('Ha ocurrido un error', 'Error');
           },
         });
+        // this.productoService.delete(producto).subscribe({
+        //   next: (result) => {
+        //     if (Number(result) > 0) {
+        //       this.toastr.success(
+        //         'El producto ha sido eliminado exitosamente',
+        //         'Transacción exitosa'
+        //       );
+        //       this.productoService.setIsUpdated(true);
+        //     } else this.toastr.error('Ha ocurrido un error', 'Error');
+        //   },
+        //   error: (err) => {
+        //     this.toastr.error('Ha ocurrido un error', 'Error');
+        //   },
+        // });
       }
     });
   }
@@ -208,7 +232,7 @@ export class ProductoListComponent implements OnInit, OnDestroy {
         producto: JSON.parse(JSON.stringify(ele)),
         familiaList: this.familiaList,
         presentacionList: this.presentacionList,
-         unidadMedidaList: this.unidadMedidaList,
+        unidadMedidaList: this.unidadMedidaList,
       },
       height: '500px',
       width: '700px',

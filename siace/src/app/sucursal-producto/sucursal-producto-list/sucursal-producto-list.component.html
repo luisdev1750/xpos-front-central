@@ -15,6 +15,7 @@
           [value]="filter.supSucId"
           (selectionChange)="onSucursalChange($event)"
         >
+          <mat-option value="0">Todas las sucursales</mat-option>
           <mat-option
             *ngFor="let sucursal of listSucursales"
             [value]="sucursal.sucId"
@@ -36,28 +37,24 @@
     <div *ngIf="sucursalProductoList.length > 0">
       <table mat-table #table [dataSource]="sucursalProductoList">
         <ng-container matColumnDef="supSucId">
-          <mat-header-cell *matHeaderCellDef>
-            Sucursal
-          </mat-header-cell>
+          <mat-header-cell *matHeaderCellDef> Sucursal </mat-header-cell>
           <mat-cell *matCellDef="let item">
             {{ item.supSucursalNombre }}
           </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="supProId">
-          <mat-header-cell *matHeaderCellDef>
-            Producto
-          </mat-header-cell>
+          <mat-header-cell *matHeaderCellDef> Producto </mat-header-cell>
           <mat-cell *matCellDef="let item">
             {{ item.supProductoNombre }}
           </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="supLprId">
-          <mat-header-cell *matHeaderCellDef>
-            Lista de Precio
-          </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.supListaPrecioNombre  }} </mat-cell>
+          <mat-header-cell *matHeaderCellDef> Lista de Precio </mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            {{ item.supListaPrecioNombre }}
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="actions">

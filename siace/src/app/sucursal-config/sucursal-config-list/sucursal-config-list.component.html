@@ -11,18 +11,20 @@
    <mat-card class="proin-card">
       <h2>Catalogo de Configuración de Sucursales</h2>
       <form #f="ngForm">
-         
-         <mat-form-field>
-            <mat-label>Clave:</mat-label>
-            <input matInput type="search" [(ngModel)]="filter.scoId" id="scoId"
-               name="scoId">
-         </mat-form-field>
-         
-         <mat-form-field>
-            <mat-label>Clave de Sucursal:</mat-label>
-            <input matInput type="search" [(ngModel)]="filter.scoSucId" id="scoSucId"
-               name="scoSucId">
-         </mat-form-field>
+       
+      
+      <mat-form-field>
+        <mat-label>Sucursal</mat-label>
+        <mat-select [value]="filter.scoSucId" (selectionChange)="onSucursalChange($event)">
+          <mat-option value="0">Todas las sucursales</mat-option>
+          <mat-option *ngFor="let sucursal of listSucursales" 
+                      [value]="sucursal.sucId">
+            {{ sucursal.sucNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+   
+       
          
 
          <button mat-mini-fab color="accent" (click)="add()" [disabled]="!f?.valid">
@@ -33,18 +35,13 @@
          
          <table mat-table #table [dataSource]="sucursalConfigList">
             
-            <ng-container matColumnDef="scoId">
-               <mat-header-cell *matHeaderCellDef>
-                  Clave
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.scoId}} </mat-cell>
-            </ng-container>
+         
             
             <ng-container matColumnDef="scoSucId">
                <mat-header-cell *matHeaderCellDef>
-                  Clave de Sucursal
+                  Sucursal
                </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.scoSucId}} </mat-cell>
+               <mat-cell *matCellDef="let item"> {{item.scoSucNombre}} </mat-cell>
             </ng-container>
             
             <ng-container matColumnDef="scoHost">

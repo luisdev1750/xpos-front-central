@@ -1,5 +1,5 @@
-import { Sucursal } from './sucursal';
-import { SucursalFilter } from './sucursal-filter';
+import { Empresa } from './empresa';
+import { EmpresaFilter } from './empresa-filter';
 import { Injectable } from '@angular/core';
 import { EMPTY, Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
@@ -7,9 +7,9 @@ import { GeneralService } from '../common/general.service';
 import { map } from 'rxjs/operators';
 
 @Injectable()
-export class SucursalService extends GeneralService {
-   sucursalList: Sucursal[] = [];
-   api = this.sUrl + 'Sucursales';
+export class EmpresaService extends GeneralService {
+   empresaList: Empresa[] = [];
+   api = this.sUrl + 'Empresa';
 
    constructor(private http: HttpClient) {
       super();
@@ -27,13 +27,12 @@ export class SucursalService extends GeneralService {
       return headers;
    }
 
-   delete(entity: Sucursal): Observable<Sucursal> {
+   delete(entity: Empresa): Observable<Empresa> {
       let params = new HttpParams();
       let url = '';
-      if (entity.sucId) {
-         url = `${this.api}/${entity.sucId.toString()}`;
-  
-         return this.http.delete<Sucursal>(url, {
+      if (entity.empId) {
+         url = `${this.api}/${entity.empId.toString()}`;
+         return this.http.delete<Empresa>(url, {
             headers: this.getHeaders(), 
             params
          });
@@ -41,42 +40,34 @@ export class SucursalService extends GeneralService {
       return EMPTY;
    }
 
-   findAll(): Observable<Sucursal[]> {
+   findAll(): Observable<Empresa[]> {
       const url = `${this.api}/listar`;
-      return this.http.get<Sucursal[]>(url, {
+      return this.http.get<Empresa[]>(url, {
          headers: this.getHeaders()  // Usar headers con token
       });
    }
-  
 
-   findAllCities(): Observable<any[]> {
-      const url = `${this.sUrl}Ciudad/listar`;
-      return this.http.get<any[]>(url, {
-         headers: this.getHeaders()  // Usar headers con token
-      });
-
-   }
-   find(filter: SucursalFilter): Observable<Sucursal[]> {
-      const url = `${this.api}/${filter.sucId}/${filter.sucEmpId}/${filter.sucEstId}/${filter.sucMunId}/${filter.sucCiuId}/${filter.sucColId}`;
-      return this.http.get<Sucursal[]>(url, {
+   find(filter: EmpresaFilter): Observable<Empresa[]> {
+      const url = `${this.api}/${filter.empId}`;
+      return this.http.get<Empresa[]>(url, {
          headers: this.getHeaders()  // Usar headers con token
       });
    }
    
-   findById(id: string): Observable<Sucursal> {
+   findById(id: string): Observable<Empresa> {
       const url = `${this.api}/${id}`;
-      const params = { sucId: id };
-      return this.http.get<Sucursal[]>(url, {
+      const params = { empId: id };
+      return this.http.get<Empresa[]>(url, {
          headers: this.getHeaders()  // Usar headers con token
       }).pipe(
          map(ele => ele[0])
       );
    }
 
-   load(filter: SucursalFilter): void {
+   load(filter: EmpresaFilter): void {
       this.find(filter).subscribe({
          next: result => {
-            this.sucursalList = result;
+            this.empresaList = result;
          },
          error: err => {
             console.error('error cargando', err);
@@ -84,14 +75,14 @@ export class SucursalService extends GeneralService {
       });
    }
 
-   save(entity: Sucursal): Observable<Sucursal> {
+   save(entity: Empresa): Observable<Empresa> {
       let url = `${this.api}`;
       const headers = this.getHeaders();  // Obtener headers con token
       
-      if (entity.sucId) {
-         return this.http.put<Sucursal>(url, entity, { headers });
+      if (entity.empId) {
+         return this.http.put<Empresa>(url, entity, { headers });
       } else {
-         return this.http.post<Sucursal>(url, entity, { headers });
+         return this.http.post<Empresa>(url, entity, { headers });
       }
    }
 }

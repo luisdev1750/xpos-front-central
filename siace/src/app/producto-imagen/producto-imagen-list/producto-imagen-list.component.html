@@ -16,6 +16,7 @@
           [value]="filter.priTimId"
           (selectionChange)="onTipoImagenChange($event)"
         >
+         <mat-option value="0">Todos los tipos de imagenes</mat-option>
           <mat-option
             *ngFor="let imagen of listTipoImagenes"
             [value]="imagen.timId"
@@ -32,7 +33,7 @@
         [disabled]="!f?.valid"
       >
         <mat-icon>add</mat-icon>
-      </button>
+      </button> 
     </form>
     <form #searchForm="ngForm" style="margin-bottom: 20px">
       <mat-card style="padding: 4px">
@@ -105,8 +106,11 @@
             >
               <mat-icon>edit</mat-icon></button
             >&nbsp;
-        
+           <button (click)="delete(item)" mat-button color="warn">
+              <mat-icon>delete</mat-icon>
+            </button>
           </mat-cell>
+          
         </ng-container>
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>

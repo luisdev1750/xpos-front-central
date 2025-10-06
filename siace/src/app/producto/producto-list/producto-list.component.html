@@ -9,19 +9,11 @@
   <mat-card class="proin-card">
     <h2>Catalogo de Productos</h2>
     <form #f="ngForm">
-      <mat-form-field>
-        <mat-label>ID:</mat-label>
-        <input
-          matInput
-          type="search"
-          [(ngModel)]="filter.proId"
-          id="proId"
-          name="proId"
-        />
-      </mat-form-field>
+     
       <mat-form-field>
         <mat-label>Familia</mat-label>
         <mat-select (selectionChange)="OnFamiliaChange($event)">
+           <mat-option value="0">Todas las familias</mat-option>
           <mat-option
             *ngFor="let familia of familiaList"
             [value]="familia.famId"
@@ -34,6 +26,7 @@
       <mat-form-field>
         <mat-label>Presentacion</mat-label>
         <mat-select (selectionChange)="OnPresentacionChange($event)">
+             <mat-option value="0">Todas las presentaciones</mat-option>
           <mat-option
             *ngFor="let presentacion of presentacionList"
             [value]="presentacion.preId"

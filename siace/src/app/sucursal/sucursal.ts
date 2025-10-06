@@ -10,4 +10,6 @@ export class Sucursal {
   sucCiuId!: string;
   sucColId!: string;
   sucEmpId!: string;
+  sucEstId!: string;
+  sucMunId!: string; 
 }

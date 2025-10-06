@@ -11,15 +11,18 @@
          
       </mat-form-field>
    </div>
-
-   <div class="col-md-4">
+  <div class="col-md-4">
       <mat-form-field>
-         <mat-label for="scoSucId">Clave de Sucursal</mat-label>
-         <input matInput type="number" [(ngModel)]="sucursalConfig.scoSucId" id="scoSucId" name="scoSucId" placeholder="Clave de Sucursal">
-         
-         <mat-error *ngIf="sucursalConfig.scoSucId==undefined">Clave de Sucursal es requerido</mat-error>
+        <mat-label>Sucursal</mat-label>
+        <mat-select [value]="sucursalConfig.scoSucId" (selectionChange)="onSucursalChange($event)">
+          <mat-option *ngFor="let sucursal of listSucursales" 
+                      [value]="sucursal.sucId">
+            {{ sucursal.sucNombre }}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
-   </div>
+    </div>
+  
 
    <div class="col-md-4">
       <mat-form-field>

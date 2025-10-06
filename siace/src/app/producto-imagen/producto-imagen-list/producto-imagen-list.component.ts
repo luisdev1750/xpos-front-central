@@ -123,7 +123,7 @@ export class ProductoImagenListComponent implements OnInit {
       if (result === true) {
         this.productoImagenService.delete(productoImagen).subscribe({
           next: (result) => {
-            if (Number(result) > 0) {
+            if (result.priId > 0) {
               this.toastr.success(
                 'El producto imagenes ha sido eliminado exitosamente',
                 'Transacción exitosa'
