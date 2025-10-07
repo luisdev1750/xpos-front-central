@@ -7,24 +7,16 @@ const routes: Routes = [
   //{path:'', redirectTo: '\login', pathMatch: 'full'},
   {
     path: '',
-    children: [
-      {
-        path: '',
-        loadChildren: () =>
-          import('./estadisticas/estadisticas.module').then(
-            (m) => m.EstadisticasModule
-          ),
-        canActivate: [AuthGuard],
-      },
+    children: [      
       {
         path: 'login',
         component: LoginComponent,
       },
-       {
-        path: 'menu',
-        loadChildren: () =>
-          import('./menu/menu.module').then((m) => m.MenuModule),
-      },
+      //  {
+      //   path: 'menu',
+      //   loadChildren: () =>
+      //     import('./menu/menu.module').then((m) => m.MenuModule),
+      // },
       {
         path: 'banco',
         loadChildren: () =>
