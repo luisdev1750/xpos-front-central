@@ -64,21 +64,21 @@
   </div>
 
   <div class="col-md-5" *ngIf="selectedFile">
-      <mat-form-field>
-        <mat-label>Nombre de Imágen</mat-label>
-        <input
-          matInput
-          [(ngModel)]="banner.subNombre"
-          id="banNombre"
-          name="banNombre"
-          placeholder="Nombre de Imágen"
-          readonly
-        />
-      </mat-form-field>
-    </div>
+    <mat-form-field>
+      <mat-label>Nombre de Imágen</mat-label>
+      <input
+        matInput
+        [(ngModel)]="banner.subNombre"
+        id="banNombre"
+        name="banNombre"
+        placeholder="Nombre de Imágen"
+        readonly
+      />
+    </mat-form-field>
+  </div>
 
   <!-- Sección de carga de imagen -->
-  <div class="container" style="margin-top: 16px; margin-bottom: 5%;">
+  <div class="container" style="margin-top: 16px; margin-bottom: 5%">
     <div class="col-md-12">
       <div class="file-input-wrapper">
         <label style="display: block; margin-bottom: 8px; font-weight: 500">
@@ -130,7 +130,12 @@
       <div class="col-md-12">
         <mat-card style="padding: 15px; margin: 15px 0; text-align: left">
           <mat-card-title>Vista previa</mat-card-title>
-          <img [src]="imagePreview" alt="Vista previa" class="image-preview" style="border-radius: 6px;"/>
+          <img
+            [src]="imagePreview"
+            alt="Vista previa"
+            class="image-preview"
+            style="border-radius: 6px"
+          />
         </mat-card>
       </div>
     </div>
