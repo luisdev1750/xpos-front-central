@@ -15,8 +15,8 @@ import { ToastrService } from 'ngx-toastr';
   standalone: false,
   templateUrl: './banner-list.component.html',
   styles: [
-    'table { min-width: 700px }',
-    '.mat-column-actions {flex: 0 0 20%;}',
+    'table { min-width: 800px }',
+    '.mat-column-actions {flex: 0 15% 20%;}',
   ],
 })
 export class BannerListComponent implements OnInit {
@@ -107,7 +107,7 @@ export class BannerListComponent implements OnInit {
         sucColId: '0',
         sucEmpId: '0',
         sucEstId: '0',
-        sucMunId: '0'
+        sucMunId: '0',
       })
       .subscribe(
         (res) => {
