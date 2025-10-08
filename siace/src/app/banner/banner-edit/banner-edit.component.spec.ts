@@ -8,10 +8,9 @@ describe('BannerEditComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [BannerEditComponent]
-    })
-    .compileComponents();
-    
+      declarations: [BannerEditComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(BannerEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

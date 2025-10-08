@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -14,12 +14,15 @@ import { MatCardModule } from '@angular/material/card';
 import { BannerListComponent } from './banner-list/banner-list.component';
 import { BannerEditComponent } from './banner-edit/banner-edit.component';
 import { BannerService } from './banner.service';
+import { SucursalService } from '../sucursal/sucursal.service';
 import { BannerRoutingModule } from './banner-routing.module';
 
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
+
+import { MatAutocomplete, MatAutocompleteModule } from '@angular/material/autocomplete';
 
 
 @NgModule({
@@ -38,14 +41,17 @@ import { MatOptionModule } from '@angular/material/core';
     BannerRoutingModule,
        MatSlideToggleModule,
        MatSelectModule ,
-       MatOptionModule
+       MatOptionModule,
+       MatAutocomplete,
+       MatAutocompleteModule,
+       ReactiveFormsModule
 
   ],
   declarations: [
     BannerListComponent,
     BannerEditComponent
   ],
-  providers: [BannerService],
+  providers: [BannerService, SucursalService],
   exports: []
 })
 export class BannerModule { }

@@ -1,7 +1,9 @@
-<h2>Detalle del banco</h2>
+<div class="container">
+  <h2>Detalle del Banner</h2>
+</div>
 <form *ngIf="banner" #editForm="ngForm" (ngSubmit)="save()" autocomplete="off">
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
       <mat-form-field>
         <mat-label>Identidicador</mat-label>
         <input
@@ -14,24 +16,9 @@
         />
       </mat-form-field>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-6">
       <mat-form-field>
-        <mat-label for="banNombre">Nombre de imágen</mat-label>
-        <input
-          matInput
-          [(ngModel)]="banner.subNombre"
-          id="banNombre"
-          name="banNombre"
-          placeholder="Nombre"
-          required
-        />
-        <mat-error *ngIf="banner.subNombre">Nombre es requerido</mat-error>
-      </mat-form-field>
-    </div>
-
-    <div class="col-md-4">
-      <mat-form-field>
-        <mat-label for="banNombre">Orden</mat-label>
+        <mat-label for="banOrden">Orden</mat-label>
         <input
           matInput
           [(ngModel)]="banner.subOrden"
@@ -44,22 +31,22 @@
       </mat-form-field>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-6">
       <mat-form-field>
-        <mat-label for="banNombre">Sucursal</mat-label>
-        <input
-          matInput
-          [(ngModel)]="banner.subSucId"
-          id="banSucursal"
-          name="banSucursal"
-          placeholder="Sucursal"
-          required
-        />
-        <mat-error *ngIf="banner.subSucId">La sucursal es requerida</mat-error>
+        <mat-label>Sucursal:</mat-label>
+        <mat-select [(ngModel)]="banner.subSucId" id="sucursal" name="sucursal">
+          <mat-option value="0">Todas las sucursales</mat-option>
+          <mat-option
+            *ngFor="let sucursal of listSucursales"
+            [value]="sucursal.sucId"
+          >
+            {{ sucursal.sucNombre }}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-6">
       <mat-form-field>
         <mat-label>Activo</mat-label>
         <mat-select
@@ -73,6 +60,84 @@
         </mat-select>
         <mat-error *ngIf="!banner.subActivo">Activo es requerido</mat-error>
       </mat-form-field>
+    </div>
+  </div>
+
+  <div class="col-md-5" *ngIf="selectedFile">
+    <mat-form-field>
+      <mat-label>Nombre de Imágen</mat-label>
+      <input
+        matInput
+        [(ngModel)]="banner.subNombre"
+        id="banNombre"
+        name="banNombre"
+        placeholder="Nombre de Imágen"
+        readonly
+      />
+    </mat-form-field>
+  </div>
+
+  <!-- Sección de carga de imagen -->
+  <div class="container" style="margin-top: 16px; margin-bottom: 5%">
+    <div class="col-md-12">
+      <div class="file-input-wrapper">
+        <label style="display: block; margin-bottom: 8px; font-weight: 500">
+          {{ isEditing ? "Cambiar imagen (opcional)" : "Seleccionar imagen" }}
+          <span *ngIf="!isEditing" style="color: red">*</span>
+        </label>
+
+        <input
+          type="file"
+          (change)="onFileSelected($event)"
+          accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+          #fileInput
+          style="display: none"
+        />
+
+        <button
+          type="button"
+          mat-raised-button
+          color="accent"
+          (click)="fileInput.click()"
+        >
+          <mat-icon>cloud_upload</mat-icon>
+          {{ selectedFile ? "Cambiar archivo" : "Seleccionar archivo" }}
+        </button>
+
+        <button
+          *ngIf="selectedFile"
+          type="button"
+          mat-button
+          color="warn"
+          (click)="clearImage()"
+        >
+          <mat-icon>clear</mat-icon>
+          Limpiar
+        </button>
+
+        <div *ngIf="selectedFile" style="margin-top: 8px; color: #666">
+          <mat-icon style="vertical-align: middle; font-size: 18px"
+            >attachment</mat-icon
+          >
+          {{ selectedFile.name }} ({{ (selectedFile.size / 1024).toFixed(2) }}
+          KB)
+        </div>
+      </div>
+    </div>
+
+    <!-- Vista previa de la imagen -->
+    <div class="row" *ngIf="imagePreview">
+      <div class="col-md-12">
+        <mat-card style="padding: 15px; margin: 15px 0; text-align: left">
+          <mat-card-title>Vista previa</mat-card-title>
+          <img
+            [src]="imagePreview"
+            alt="Vista previa"
+            class="image-preview"
+            style="border-radius: 6px"
+          />
+        </mat-card>
+      </div>
     </div>
   </div>
 

@@ -17,10 +17,17 @@ describe('BannerListComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [BannerListComponent],
-      imports: [FormsModule, HttpClientTestingModule, RouterTestingModule, MatFormFieldModule, MatIconModule, MatInputModule, NoopAnimationsModule],
-    })
-    .compileComponents();
-    
+      imports: [
+        FormsModule,
+        HttpClientTestingModule,
+        RouterTestingModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        NoopAnimationsModule,
+      ],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(BannerListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

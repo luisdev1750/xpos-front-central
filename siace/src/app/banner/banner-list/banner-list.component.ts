@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { BannerFilter } from '../banner-filter';
 import { BannerService } from '../banner.service';
+import { SucursalService } from '../../sucursal/sucursal.service';
 import { Banner } from '../banner';
 import { BannerEditComponent } from '../banner-edit/banner-edit.component';
 
@@ -14,26 +15,31 @@ import { ToastrService } from 'ngx-toastr';
   standalone: false,
   templateUrl: './banner-list.component.html',
   styles: [
-    'table { min-width: 700px }',
-    '.mat-column-actions {flex: 0 0 20%;}',
+    'table { min-width: 800px }',
+    '.mat-column-actions {flex: 0 15% 20%;}',
   ],
 })
 export class BannerListComponent implements OnInit {
   displayedColumns = ['id', 'sucursal', 'nombre', 'orden', 'activo', 'actions'];
-  filter: any = { sucursal: '0', activo: '' };
+  filter = new BannerFilter();
+  listSucursales: any[] = [];
   private subs!: Subscription;
 
   constructor(
     private bannerService: BannerService,
     private toastr: ToastrService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private sucursalSerivice: SucursalService
   ) {
     this.subs = this.bannerService.getIsUpdated().subscribe(() => {
       this.search();
     });
+    this.filter.subSucId = '0';
+    this.filter.subActivo = '';
   }
 
   ngOnInit(): void {
+    this.loadCatalogs();
     this.search();
   }
 
@@ -81,18 +87,37 @@ export class BannerListComponent implements OnInit {
   }
 
   onActivoChange(): void {
-    this.searchById();
+    this.search();
   }
 
   onSucursalChange(): void {
-    this.searchById();
-  }
-
-  searchById(): void {
-    this.bannerService.load(this.filter);
+    this.search();
   }
 
   search(): void {
-    this.bannerService.loads();
+    this.bannerService.load(this.filter);
+  }
+
+  loadCatalogs() {
+    // Cargar sucursales
+    this.sucursalSerivice
+      .find({
+        sucId: '0',
+        sucCiuId: '0',
+        sucColId: '0',
+        sucEmpId: '0',
+        sucEstId: '0',
+        sucMunId: '0',
+      })
+      .subscribe(
+        (res) => {
+          console.log('Sucursales cargadas:', res);
+          this.listSucursales = res;
+        },
+        (error) => {
+          console.log('Error al cargar sucursales:', error);
+          this.toastr.error('Error al cargar sucursales', 'Error');
+        }
+      );
   }
 }
