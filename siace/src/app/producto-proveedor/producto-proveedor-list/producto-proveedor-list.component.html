@@ -1,9 +1,3 @@
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
-    <li class="breadcrumb-item active">Catalogo de Productos por Proveedor</li>
-  </ol>
-</nav>
 
 <div class="proin-main">
   <mat-card class="proin-card">
@@ -99,14 +93,14 @@
       <table mat-table #table [dataSource]="productoProveedorList">
         <ng-container matColumnDef="prvProId">
           <mat-header-cell *matHeaderCellDef> Producto </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.prvPrName }} </mat-cell>
+          <mat-cell style="display: inline !important; text-align: left !important;" *matCellDef="let item"> {{ item.prvPrName }} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="prvPveId">
           <mat-header-cell *matHeaderCellDef>
             Proveedor
           </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.prvPveName }} </mat-cell>
+          <mat-cell  *matCellDef="let item"> {{ item.prvPveName }} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="prvUnmId">
@@ -118,7 +112,7 @@
 
         <ng-container matColumnDef="prvPrecio">
           <mat-header-cell *matHeaderCellDef> Precio </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.prvPrecio }} </mat-cell>
+          <mat-cell style = "justify-content: right !important;" *matCellDef="let item"> {{ item.prvPrecio }} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="actions">

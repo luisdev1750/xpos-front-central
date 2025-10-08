@@ -1,305 +1,159 @@
 <h2>Detalle del producto</h2>
-<form
-  *ngIf="producto"
-  #editForm="ngForm"
-  (ngSubmit)="save()"
-  autocomplete="off"
->
-  <div class="row">
-    <div class="col-md-4">
-      <mat-form-field>
-        <mat-label>ID</mat-label>
-        <input
-          matInput
-          [(ngModel)]="producto.proId"
-          id="proId"
-          name="proId"
-          placeholder="ID"
-          readonly
-        />
-      </mat-form-field>
-    </div>
+<form *ngIf="producto" #editForm="ngForm" (ngSubmit)="save()" autocomplete="off">
 
-    <div class="col-md-4">
+  <!-- ROW 1 -->
+  <div class="row">
+    <div class="col-md-6">
       <mat-form-field>
         <mat-label for="proNombre">Nombre</mat-label>
-        <input
-          matInput
-          [(ngModel)]="producto.proNombre"
-          id="proNombre"
-          name="proNombre"
-          placeholder="Nombre"
-          required
-        />
-        <mat-error *ngIf="producto.proNombre == ''"
-          >Nombre es requerido</mat-error
-        >
+        <input matInput [(ngModel)]="producto.proNombre" id="proNombre" name="proNombre" placeholder="Nombre" required />
+        <mat-error *ngIf="producto.proNombre == ''">Nombre es requerido</mat-error>
       </mat-form-field>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-6">
       <mat-form-field>
         <mat-label for="proNombreCorto">Nombre Corto</mat-label>
-        <input
-          matInput
-          [(ngModel)]="producto.proNombreCorto"
-          id="proNombreCorto"
-          name="proNombreCorto"
-          placeholder="Nombre Corto"
-        />
+        <input matInput [(ngModel)]="producto.proNombreCorto" id="proNombreCorto" name="proNombreCorto" placeholder="Nombre Corto" />
       </mat-form-field>
     </div>
   </div>
+
+  <!-- ROW 2 -->
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
       <mat-form-field>
         <mat-label for="proSku">SKU</mat-label>
-        <input
-          matInput
-          [(ngModel)]="producto.proSku"
-          id="proSku"
-          name="proSku"
-          placeholder="SKU"
-          required
-        />
+        <input matInput [(ngModel)]="producto.proSku" id="proSku" name="proSku" placeholder="SKU" required />
         <mat-error *ngIf="producto.proSku == ''">SKU es requerido</mat-error>
       </mat-form-field>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-6">
       <mat-form-field>
         <mat-label for="proCodigoBarras">Código de Barras</mat-label>
-        <input
-          matInput
-          [(ngModel)]="producto.proCodigoBarras"
-          id="proCodigoBarras"
-          name="proCodigoBarras"
-          placeholder="Código de Barras"
-        />
-      </mat-form-field>
-    </div>
-    <div class="col-md-4">
-      <mat-form-field>
-        <mat-label>Familia </mat-label>
-        <mat-select
-          [value]="producto.proFamId"
-          (selectionChange)="onFamiliaChange($event)"
-        >
-          <mat-option
-            *ngFor="let familia of familiaList"
-            [value]="familia.famId"
-          >
-            {{ familia.famNombre }}
-          </mat-option>
-        </mat-select>
+        <input matInput [(ngModel)]="producto.proCodigoBarras" id="proCodigoBarras" name="proCodigoBarras" placeholder="Código de Barras" />
       </mat-form-field>
     </div>
   </div>
+
+  <!-- ROW 3 -->
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
+      <mat-form-field>
+        <mat-label>Familia</mat-label>
+        <mat-select [value]="producto.proFamId" (selectionChange)="onFamiliaChange($event)">
+          <mat-option *ngFor="let familia of familiaList" [value]="familia.famId">{{ familia.famNombre }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-6">
       <mat-form-field>
         <mat-label>Presentación</mat-label>
-        <mat-select
-          [value]="producto.proPreId"
-          (selectionChange)="onPresentacionChange($event)"
-        >
-          <mat-option
-            *ngFor="let presentacion of presentacionList"
-            [value]="presentacion.preId"
-          >
-            {{ presentacion.preNombre }}
-          </mat-option>
+        <mat-select [value]="producto.proPreId" (selectionChange)="onPresentacionChange($event)">
+          <mat-option *ngFor="let presentacion of presentacionList" [value]="presentacion.preId">{{ presentacion.preNombre }}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
+  </div>
 
-    <div class="col-md-4">
+  <!-- ROW 4 -->
+  <div class="row">
+    <div class="col-md-6">
       <mat-form-field>
         <mat-label>Unidad de medida</mat-label>
-        <mat-select
-          [value]="producto.proUnmId"
-          (selectionChange)="onUnidadMedidaChange($event)"
-        >
-          <mat-option
-            *ngFor="let unidad of unidadMedidaList"
-            [value]="unidad.unmId"
-          >
-            {{ unidad.unmNombre }}
-          </mat-option>
+        <mat-select [value]="producto.proUnmId" (selectionChange)="onUnidadMedidaChange($event)">
+          <mat-option *ngFor="let unidad of unidadMedidaList" [value]="unidad.unmId">{{ unidad.unmNombre }}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-6">
       <mat-form-field>
-        <mat-label for="proDescripcionFabricante"
-          >Descripción Fabricante</mat-label
-        >
-        <input
-          matInput
-          [(ngModel)]="producto.proDescripcionFabricante"
-          id="proDescripcionFabricante"
-          name="proDescripcionFabricante"
-          placeholder="Descripción Fabricante"
-        />
+        <mat-label for="proDescripcionFabricante">Descripción Fabricante</mat-label>
+        <input matInput [(ngModel)]="producto.proDescripcionFabricante" id="proDescripcionFabricante" name="proDescripcionFabricante" placeholder="Descripción Fabricante" />
       </mat-form-field>
     </div>
   </div>
+
+  <!-- ROW 5 -->
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
       <mat-form-field>
         <mat-label for="proRecomendacionUso">Recomendación de Uso</mat-label>
-        <input
-          matInput
-          [(ngModel)]="producto.proRecomendacionUso"
-          id="proRecomendacionUso"
-          name="proRecomendacionUso"
-          placeholder="Recomendación de Uso"
-        />
+        <input matInput [(ngModel)]="producto.proRecomendacionUso" id="proRecomendacionUso" name="proRecomendacionUso" placeholder="Recomendación de Uso" />
       </mat-form-field>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-6">
       <mat-form-field>
         <mat-label for="proAlto">Alto</mat-label>
-        <input
-          matInput
-          [(ngModel)]="producto.proAlto"
-          id="proAlto"
-          name="proAlto"
-          placeholder="Alto"
-        />
+        <input matInput [(ngModel)]="producto.proAlto" id="proAlto" name="proAlto" placeholder="Alto" />
       </mat-form-field>
     </div>
+  </div>
 
-    <div class="col-md-4">
+  <!-- ROW 6 -->
+  <div class="row">
+    <div class="col-md-6">
       <mat-form-field>
         <mat-label for="proLongitud">Longitud</mat-label>
-        <input
-          matInput
-          [(ngModel)]="producto.proLongitud"
-          id="proLongitud"
-          name="proLongitud"
-          placeholder="Longitud"
-        />
+        <input matInput [(ngModel)]="producto.proLongitud" id="proLongitud" name="proLongitud" placeholder="Longitud" />
       </mat-form-field>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-md-4">
+
+    <div class="col-md-6">
       <mat-form-field>
         <mat-label for="proAncho">Ancho</mat-label>
-        <input
-          matInput
-          [(ngModel)]="producto.proAncho"
-          id="proAncho"
-          name="proAncho"
-          placeholder="Ancho"
-        />
+        <input matInput [(ngModel)]="producto.proAncho" id="proAncho" name="proAncho" placeholder="Ancho" />
       </mat-form-field>
     </div>
+  </div>
 
-    <div class="col-md-4">
+  <!-- ROW 7 -->
+  <div class="row">
+    <div class="col-md-6">
       <mat-form-field>
         <mat-label for="proPeso">Peso</mat-label>
-        <input
-          matInput
-          [(ngModel)]="producto.proPeso"
-          id="proPeso"
-          name="proPeso"
-          placeholder="Peso"
-        />
+        <input matInput [(ngModel)]="producto.proPeso" id="proPeso" name="proPeso" placeholder="Peso" />
       </mat-form-field>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-6">
       <mat-form-field>
         <mat-label for="proClaveProdServ">Clave Prod/Serv</mat-label>
-        <input
-          matInput
-          [(ngModel)]="producto.proClaveProdServ"
-          id="proClaveProdServ"
-          name="proClaveProdServ"
-          placeholder="Clave Prod/Serv"
-        />
+        <input matInput [(ngModel)]="producto.proClaveProdServ" id="proClaveProdServ" name="proClaveProdServ" placeholder="Clave Prod/Serv" />
       </mat-form-field>
     </div>
   </div>
+
+  <!-- ROW 8 -->
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
       <mat-form-field>
         <mat-label>Permite Devolución:</mat-label>
-        <mat-select
-          [(ngModel)]="producto.proDevolucion"
-          id="proDevolucion"
-          name="proDevolucion"
-        >
+        <mat-select [(ngModel)]="producto.proDevolucion" id="proDevolucion" name="proDevolucion">
           <mat-option [value]="true">Sí</mat-option>
           <mat-option [value]="false">No</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-6">
       <mat-form-field>
         <mat-label>Activo:</mat-label>
-        <mat-select
-          [(ngModel)]="producto.proActivo"
-          id="proActivo"
-          name="proActivo"
-        >
+        <mat-select [(ngModel)]="producto.proActivo" id="proActivo" name="proActivo">
           <mat-option [value]="true">Sí</mat-option>
           <mat-option [value]="false">No</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
-
-    <div class="col-md-4">
-      <mat-form-field appearance="fill">
-        <mat-label for="proFechaAlta">Fecha Alta</mat-label>
-        <input
-          matInput
-          [matDatepicker]="pickerAlta"
-          [(ngModel)]="producto.proFechaAlta"
-          id="proFechaAlta"
-          name="proFechaAlta"
-          placeholder="Selecciona fecha alta"
-        />
-
-        <mat-datepicker-toggle matSuffix [for]="pickerAlta">
-        </mat-datepicker-toggle>
-        <mat-datepicker #pickerAlta></mat-datepicker>
-      </mat-form-field>
-    </div>
   </div>
-  <div class="row">
-    <div class="col-md-4">
-      <mat-form-field appearance="fill">
-        <mat-label for="proFechaModificacion">Fecha Modificación</mat-label>
-        <input
-          matInput
-          [matDatepicker]="pickerModificacion"
-          [(ngModel)]="producto.proFechaModificacion"
-          id="proFechaModificacion"
-          name="proFechaModificacion"
-          placeholder="Selecciona fecha modificación"
-        />
 
-        <mat-datepicker-toggle matSuffix [for]="pickerModificacion">
-        </mat-datepicker-toggle>
-        <mat-datepicker #pickerModificacion></mat-datepicker>
-      </mat-form-field>
-    </div>
-  </div>
-  <div class="button-row text-center" role="group">
-    <button
-      type="submit"
-      mat-raised-button
-      color="primary"
-      [disabled]="!editForm.form.valid"
-    >
-      Guardar
-    </button>
+  <!-- BOTONES -->
+  <div class="button-row text-center" role="group" style="margin-top: 20px;">
+    <button type="submit" mat-raised-button color="primary" [disabled]="!editForm.form.valid" style="margin-right: 10px;">Guardar</button>
     <button mat-button mat-dialog-close>Cancelar</button>
   </div>
 </form>

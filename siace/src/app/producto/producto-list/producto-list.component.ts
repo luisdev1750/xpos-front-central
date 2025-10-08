@@ -20,26 +20,19 @@ import { MatTableDataSource } from '@angular/material/table';
   templateUrl: 'producto-list.component.html',
   styles: [
     'table { min-width: 600px }',
-    '.mat-column-actions {flex: 0 0 10%;}',
+    '.mat-column-actions {}',
   ],
 })
 export class ProductoListComponent implements OnInit, OnDestroy {
   displayedColumns = [
-    'proId',
+ 
     'proNombre',
-    'proNombreCorto',
+  
     'proSku',
     'proCodigoBarras',
     'proFamId',
     'proPreId',
-    'proUnmId',
-    'proDescripcionFabricante',
-    'proRecomendacionUso',
-    'proAlto',
-    'proLongitud',
-    'proAncho',
-    'proPeso',
-    'proClaveProdServ',
+    'proUnmId',    
     'proDevolucion',
     'proActivo',
     'proFechaAlta',

@@ -1,20 +1,7 @@
 <h2>Detalle del perfil</h2>
 <form *ngIf="perfil" #editForm="ngForm" (ngSubmit)="save()" autocomplete="off">
-
-<div class="row">
-
-   <div class="col-md-4">
-      <mat-form-field>
-         <mat-label>Clave</mat-label>
-         <input matInput [(ngModel)]="perfil.perId" id="perId" name="perId" placeholder="Clave" readonly>
-         
-         
-      </mat-form-field>
-   </div>
-
-
-
-    <div class="col-md-4">
+  <div class="row">
+    <div class="col-md-6">
       <mat-form-field>
         <mat-label>Activo</mat-label>
         <mat-select
@@ -29,26 +16,43 @@
       </mat-form-field>
     </div>
 
-   <div class="col-md-4">
+    <div class="col-md-6">
       <mat-form-field>
-         <mat-label for="perClave">Código</mat-label>
-         <input matInput [(ngModel)]="perfil.perClave" id="perClave" name="perClave" placeholder="Código" required>
-         <mat-error *ngIf="perfil.perClave==''">Código es requerido</mat-error>
+        <mat-label for="perClave">Código</mat-label>
+        <input
+          matInput
+          [(ngModel)]="perfil.perClave"
+          id="perClave"
+          name="perClave"
+          placeholder="Código"
+          required
+        />
+        <mat-error *ngIf="perfil.perClave == ''">Código es requerido</mat-error>
       </mat-form-field>
-   </div>
-</div>
-<div class="row">
+    </div>
 
-   <div class="col-md-4">
+    <div class="col-md-6">
       <mat-form-field>
-         <mat-label for="perActivo">Nombre</mat-label>
-         <input matInput [(ngModel)]="perfil.perNombre" id="perActivo" name="perActivo" placeholder="Nombre" >
-         
+        <mat-label for="perActivo">Nombre</mat-label>
+        <input
+          matInput
+          [(ngModel)]="perfil.perNombre"
+          id="perActivo"
+          name="perActivo"
+          placeholder="Nombre"
+        />
       </mat-form-field>
-   </div>
-</div>
-   <div class="button-row text-center" role="group">
-      <button type="submit" mat-raised-button color="primary" [disabled]="!editForm.form.valid">Guardar</button>
-      <button mat-button mat-dialog-close>Cancelar</button>
+    </div>
+  </div>
+  <div class="button-row text-center" role="group">
+    <button
+      type="submit"
+      mat-raised-button
+      color="primary"
+      [disabled]="!editForm.form.valid"
+    >
+      Guardar
+    </button>
+    <button mat-button mat-dialog-close>Cancelar</button>
   </div>
 </form>

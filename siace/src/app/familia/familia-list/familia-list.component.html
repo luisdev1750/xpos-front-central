@@ -1,17 +1,10 @@
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
-    <li class="breadcrumb-item active">Catalogo de Familias</li>
-  </ol>
-</nav>
+
 
 <div class="proin-main">
   <mat-card class="proin-card">
     <h2>Catalogo de Familias</h2>
     <form #f="ngForm">
       <div class="row align-items-center">
-      
-
         <div class="col-md-2">
           <mat-form-field>
             <mat-label>Submarca</mat-label>
@@ -27,7 +20,7 @@
           </mat-form-field>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-2">
           <mat-form-field>
             <mat-label>Familia Padre:</mat-label>
 
@@ -58,40 +51,49 @@
 
     <div *ngIf="familiaList.length > 0">
       <table mat-table #table [dataSource]="familiaList">
-        <ng-container matColumnDef="famId">
-          <mat-header-cell *matHeaderCellDef> Clave </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.famId }} </mat-cell>
-        </ng-container>
-
         <ng-container matColumnDef="famSmaId">
           <mat-header-cell *matHeaderCellDef> Submarca </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.famSubNombre }} </mat-cell>
+          <mat-cell class="cell-angular" *matCellDef="let item">
+            {{ item.famSubNombre }}
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="famIdParent">
           <mat-header-cell *matHeaderCellDef> Familia Padre </mat-header-cell>
-          <mat-cell *matCellDef="let item">
+          <mat-cell class="cell-angular" *matCellDef="let item">
             {{ item.famParentNombre }}
           </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="famNombre">
           <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.famNombre }} </mat-cell>
+          <mat-cell class="cell-angular" *matCellDef="let item">
+            {{ item.famNombre }}
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="famSku">
           <mat-header-cell *matHeaderCellDef> SKU </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.famSku }} </mat-cell>
+          <mat-cell class="clave" *matCellDef="let item">
+            {{ item.famSku }}
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="famActivo">
-          <mat-header-cell *matHeaderCellDef> Activo </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.famActivo }} </mat-cell>
+          <mat-header-cell *matHeaderCellDef>
+            Activo
+          </mat-header-cell>
+          <mat-cell *matCellDef="let item" style="justify-content: center;">
+            <mat-icon *ngIf="item.famActivo" color="primary"
+              >check_circle</mat-icon
+            >
+            <mat-icon *ngIf="!item.famActivo" color="warn">cancel</mat-icon>
+          </mat-cell>
         </ng-container>
 
+
         <ng-container matColumnDef="actions">
-          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
           <mat-cell *matCellDef="let item">
             <button
               (click)="edit(item)"

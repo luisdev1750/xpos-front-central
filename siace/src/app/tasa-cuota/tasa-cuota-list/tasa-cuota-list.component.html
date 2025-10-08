@@ -1,20 +1,12 @@
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
-    <li class="breadcrumb-item active">Catalogo de Tasas o Cuotas</li>
-  </ol>
-</nav>
 
 <div class="proin-main">
   <mat-card class="proin-card">
     <h2>Catalogo de Tasas o Cuotas</h2>
     <form #f="ngForm">
-      
-
       <mat-form-field>
         <mat-label>Clave de impuestos</mat-label>
         <mat-select (selectionChange)="OnMarcaChange($event)">
-           <mat-option value="0">Todos los tipos de impuestos</mat-option>
+          <mat-option value="0">Todos los tipos de impuestos</mat-option>
           <mat-option
             *ngFor="let impuesto of listImpuestosFilter"
             [value]="impuesto.impId"
@@ -27,7 +19,6 @@
       <mat-form-field>
         <mat-label>Clave de tipo de factores</mat-label>
         <mat-select (selectionChange)="OnFactorChange($event)">
-          
           <mat-option value="0">Todos los factores</mat-option>
           <mat-option
             *ngFor="let factor of listTiposFactoresFilter"
@@ -51,7 +42,6 @@
           <mat-option value="false">No</mat-option>
         </mat-select>
       </mat-form-field>
-     
 
       <button
         mat-mini-fab
@@ -64,11 +54,7 @@
     </form>
     <div *ngIf="tasaCuotaList.length > 0">
       <table mat-table #table [dataSource]="tasaCuotaList">
-        <ng-container matColumnDef="tocId">
-          <mat-header-cell *matHeaderCellDef> Clave </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.tocId }} </mat-cell>
-        </ng-container>
-
+        
         <ng-container matColumnDef="tocTasaocuota">
           <mat-header-cell *matHeaderCellDef> Tasa o Cuota </mat-header-cell>
           <mat-cell *matCellDef="let item"> {{ item.tocTasaocuota }} </mat-cell>
@@ -90,17 +76,32 @@
 
         <ng-container matColumnDef="tocTraslado">
           <mat-header-cell *matHeaderCellDef> Traslado </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.tocTraslado }} </mat-cell>
+          <mat-cell *matCellDef="let item" style="justify-content: center">
+            <mat-icon *ngIf="item.tocTraslado" color="primary"
+              >check_circle</mat-icon
+            >
+            <mat-icon *ngIf="!item.tocTraslado" color="warn">cancel</mat-icon>
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="tocRetencion">
           <mat-header-cell *matHeaderCellDef> Retención </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.tocRetencion }} </mat-cell>
+          <mat-cell *matCellDef="let item" style="justify-content: center">
+            <mat-icon *ngIf="item.tocRetencion" color="primary"
+              >check_circle</mat-icon
+            >
+            <mat-icon *ngIf="!item.tocRetencion" color="warn">cancel</mat-icon>
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="tocActivo">
           <mat-header-cell *matHeaderCellDef> Activo </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.tocActivo }} </mat-cell>
+          <mat-cell *matCellDef="let item" style="justify-content: center">
+            <mat-icon *ngIf="item.tocActivo" color="primary"
+              >check_circle</mat-icon
+            >
+            <mat-icon *ngIf="!item.tocActivo" color="warn">cancel</mat-icon>
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="actions">
@@ -112,8 +113,8 @@
               color="warn"
               class="button-edit"
             >
-              <mat-icon>edit</mat-icon></button
-            >
+              <mat-icon>edit</mat-icon>
+            </button>
           </mat-cell>
         </ng-container>
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

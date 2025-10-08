@@ -21,7 +21,7 @@ import { BancoService } from '../../banco/banco.service';
    ]
 })
 export class CuentaBancariaListComponent implements OnInit {
-   displayedColumns = [ 'cubId',  'cubSucId',  'cubBanId',  'cubCuentaBancaria',  'cubActivo',  'cubFechaAlta',  'actions'];
+   displayedColumns = [  'cubBanId','cubSucId',    'cubCuentaBancaria',  'cubActivo',  'cubFechaAlta',  'actions'];
    filter = new CuentaBancariaFilter();
    sucursalList: any[] = [];
    bancoList: any[] = []

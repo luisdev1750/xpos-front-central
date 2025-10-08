@@ -17,7 +17,7 @@ import { Router } from '@angular/router';
   styles: ['table {}', '.mat-column-actions {flex: 0 0 10%;}'],
 })
 export class PerfilListComponent implements OnInit {
-  displayedColumns = ['perId', 'perNombre', 'perClave', 'perActivo', 'actions'];
+  displayedColumns = [ 'perNombre', 'perClave', 'perActivo', 'actions'];
   filter = new PerfilFilter();
 
   private subs!: Subscription;

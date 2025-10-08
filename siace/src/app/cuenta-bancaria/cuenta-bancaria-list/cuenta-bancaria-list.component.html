@@ -1,23 +1,15 @@
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
-    <li class="breadcrumb-item active">Catalogo de cuentas bancarias</li>
-  </ol>
-</nav>
 
 <div class="proin-main">
   <mat-card class="proin-card">
     <h2>Catalogo de cuentas bancarias</h2>
     <form #f="ngForm">
-
-
       <mat-form-field>
         <mat-label>Sucursal</mat-label>
         <mat-select
           [value]="filter.cubSucId"
           (selectionChange)="OnSucursalChange($event)"
         >
-         <mat-option value="0">Todas las sucursales</mat-option>
+          <mat-option value="0">Todas las sucursales</mat-option>
           <mat-option
             *ngFor="let sucursal of sucursalList"
             [value]="sucursal.sucId"
@@ -33,7 +25,7 @@
           [value]="filter.cubBanId"
           (selectionChange)="OnBancoChange($event)"
         >
-         <mat-option value="0">Todos los bancos</mat-option>
+          <mat-option value="0">Todos los bancos</mat-option>
           <mat-option *ngFor="let banco of bancoList" [value]="banco.banId">
             {{ banco.banNombre }}
           </mat-option>
@@ -51,11 +43,6 @@
     </form>
     <div *ngIf="cuentaBancariaList.length > 0">
       <table mat-table #table [dataSource]="cuentaBancariaList">
-        <ng-container matColumnDef="cubId">
-          <mat-header-cell *matHeaderCellDef> Clave </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.cubId }} </mat-cell>
-        </ng-container>
-
         <ng-container matColumnDef="cubSucId">
           <mat-header-cell *matHeaderCellDef> Sucursal </mat-header-cell>
           <mat-cell *matCellDef="let item"> {{ item.cubSucName }} </mat-cell>
@@ -68,23 +55,35 @@
 
         <ng-container matColumnDef="cubCuentaBancaria">
           <mat-header-cell *matHeaderCellDef> Cuenta bancaria </mat-header-cell>
-          <mat-cell *matCellDef="let item">
+          <mat-cell style = "justify-content: right !important;" *matCellDef="let item">
             {{ item.cubCuentaBancaria }}
           </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="cubActivo">
           <mat-header-cell *matHeaderCellDef> Activo </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.cubActivo ? "Sí": "No" }} </mat-cell>
+          <mat-cell *matCellDef="let item" style="justify-content: center">
+            <mat-icon *ngIf="item.cubActivo" color="primary"
+              >check_circle</mat-icon
+            >
+            <mat-icon *ngIf="!item.cubActivo" color="warn">cancel</mat-icon>
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="cubFechaAlta">
           <mat-header-cell *matHeaderCellDef> Fecha alta </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.cubFechaAlta }} </mat-cell>
+          <mat-cell
+            style="justify-content: center !important"
+            *matCellDef="let item"
+          >
+            {{ item.cubFechaAlta | date : "dd/MM/yyyy HH:mm" }}
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="actions">
-          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-header-cell *matHeaderCellDef>
+            Acciones
+          </mat-header-cell>
           <mat-cell *matCellDef="let item">
             <button
               (click)="edit(item)"
@@ -94,7 +93,6 @@
             >
               <mat-icon>edit</mat-icon></button
             >&nbsp;
-      
           </mat-cell>
         </ng-container>
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

@@ -1391,3 +1391,82 @@ input #file-upload-button{
   background-color: #e3f2fd !important;
 }
 
+.button-row button {
+  margin: 0 8px !important;
+}
+
+.table-responsive {
+  overflow-x: auto;
+  width: 100%;
+}
+
+/*  estilos tablas*/
+mat-header-cell{
+    justify-content: center !important;
+}
+
+mat-header-cell, mat-cell {
+  min-width: 120px !important;
+  padding: 0 16px !important;
+  text-align: center !important;
+  
+}
+
+/* Columnas más pequeñas como ID */
+mat-header-cell:first-child, mat-cell:first-child {
+  min-width: 60px !important;
+}
+
+/* Columnas más anchas como Nombre */
+mat-header-cell:nth-child(2), mat-cell:nth-child(2) {
+  min-width: 200px !important;
+
+}
+
+.cell-angular{
+
+  text-align: left !important;
+}
+
+.clave{
+  text-align: center !important;
+}
+
+.mail-class{
+  min-width: 200px !important;
+}
+
+.number-class{
+  text-align: right !important;
+}
+
+
+.custom-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain; /* mantiene proporción sin recortar */
+  vertical-align: middle;
+  opacity: 0.87; /* similar al mat-icon por defecto */
+  transition: opacity 0.2s ease-in-out;
+}
+
+.custom-icon:hover {
+  opacity: 1; /* ligero efecto al pasar el mouse */
+}
+
+
+/* Ajuste para el contenido debajo de la topbar */
+
+
+/* O más específico */
+app-root > * {
+  padding-top: calc(3.5rem );
+}
+body{
+  background-color: white;
+}
+
+
+.mat-mdc-dialog-surface .mdc-dialog__surface{
+  border: red solid 1px !important; 
+}

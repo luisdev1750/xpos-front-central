@@ -21,7 +21,7 @@ import { SucursalProductoBusquedaComponent } from '../sucursal-producto-busqueda
    ]
 })
 export class SucursalProductoListComponent implements OnInit {
-   displayedColumns = [ 'supSucId',  'supProId',  'supLprId',  'actions'];
+   displayedColumns = [ 'supProId','supSucId',  'supLprId',  'actions'];
    filter = new SucursalProductoFilter();
    listSucursales : any = [];
    private subs!: Subscription;

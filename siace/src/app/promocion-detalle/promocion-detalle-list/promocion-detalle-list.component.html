@@ -1,9 +1,3 @@
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
-    <li class="breadcrumb-item active">Transacciones Promociones Detalles</li>
-  </ol>
-</nav>
 
 <div class="proin-main">
   <mat-card class="proin-card">
@@ -21,10 +15,7 @@
     </form>
     <div *ngIf="promocionDetalleList.length > 0">
       <table mat-table #table [dataSource]="promocionDetalleList">
-        <ng-container matColumnDef="prdId">
-          <mat-header-cell *matHeaderCellDef> Clave </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.prdId }} </mat-cell>
-        </ng-container>
+        
 
         <ng-container matColumnDef="prdPmoId">
           <mat-header-cell *matHeaderCellDef> Promoción </mat-header-cell>
@@ -33,12 +24,12 @@
 
         <ng-container matColumnDef="prdProId">
           <mat-header-cell *matHeaderCellDef> Producto </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.prdProName }} </mat-cell>
+          <mat-cell class = "cell-angular" *matCellDef="let item"> {{ item.prdProName }} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="prdFamId">
           <mat-header-cell *matHeaderCellDef> Familia </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.prdFamName }} </mat-cell>
+          <mat-cell class = "cell-angular" *matCellDef="let item"> {{ item.prdFamName }} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="prdPreId">

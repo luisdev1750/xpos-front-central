@@ -1,9 +1,3 @@
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
-    <li class="breadcrumb-item active">Catalogo de Tipos de Promociones</li>
-  </ol>
-</nav>
 
 <div class="proin-main">
   <mat-card class="proin-card">
@@ -34,28 +28,32 @@
     </form>
     <div *ngIf="tipoPromocionList.length > 0">
       <table mat-table #table [dataSource]="tipoPromocionList">
-        <ng-container matColumnDef="tprId">
-          <mat-header-cell *matHeaderCellDef> Clave </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.tprId }} </mat-cell>
-        </ng-container>
-
         <ng-container matColumnDef="tprNombre">
           <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.tprNombre }} </mat-cell>
+          <mat-cell class = "cell-angular"  *matCellDef="let item"> {{ item.tprNombre }} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="tprActivo">
-          <mat-header-cell *matHeaderCellDef> Activo </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.tprActivo }} </mat-cell>
+          <mat-header-cell *matHeaderCellDef>
+            Permite devolución
+          </mat-header-cell>
+          <mat-cell *matCellDef="let item" style="justify-content: center">
+            <mat-icon *ngIf="item.tprActivo" color="primary"
+              >check_circle</mat-icon
+            >
+            <mat-icon *ngIf="!item.tprActivo" color="warn">cancel</mat-icon>
+          </mat-cell>
         </ng-container>
 
+      
+
         <ng-container matColumnDef="tprClave">
-          <mat-header-cell *matHeaderCellDef> Código </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.tprClave }} </mat-cell>
+          <mat-header-cell *matHeaderCellDef> Clave </mat-header-cell>
+          <mat-cell class = "cell-angular"  *matCellDef="let item"> {{ item.tprClave }} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="actions">
-          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
           <mat-cell *matCellDef="let item">
             <button
               (click)="edit(item)"

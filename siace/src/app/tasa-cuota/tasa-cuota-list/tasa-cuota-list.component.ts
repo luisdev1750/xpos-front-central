@@ -17,7 +17,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class TasaCuotaListComponent implements OnInit {
   displayedColumns = [
-    'tocId',
+    
     'tocTasaocuota',
     'tocImpId',
     'tocTfaId',

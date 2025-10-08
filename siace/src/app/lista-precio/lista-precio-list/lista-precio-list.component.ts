@@ -20,7 +20,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class ListaPrecioListComponent implements OnInit {
   displayedColumns = [
-    'lprId',
+
     'lprNombre',
     'lprActivo',
     'lprFechaVigencia',

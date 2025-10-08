@@ -27,7 +27,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class PromocionListComponent implements OnInit {
   // Columnas adaptadas para la entidad Promocion original
   displayedColumns = [
-    'pmoId',
+
     'pmoNombre',
     'pmoFechaInicio',
     'pmoFechaFin',

@@ -24,7 +24,7 @@ import { Promocion } from '../../promocion/promocion';
 })
 export class PromocionDetalleListComponent implements OnInit {
   displayedColumns = [
-    'prdId',
+  
     'prdPmoId',
     'prdProId',
     'prdFamId',

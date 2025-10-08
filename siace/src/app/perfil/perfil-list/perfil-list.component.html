@@ -1,9 +1,3 @@
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
-    <li class="breadcrumb-item active">Catalogo de Perfiles</li>
-  </ol>
-</nav>
 
 <div class="proin-main">
   <mat-card class="proin-card">
@@ -36,10 +30,7 @@
     </form>
     <div *ngIf="perfilList.length > 0">
       <table mat-table #table [dataSource]="perfilList">
-        <ng-container matColumnDef="perId">
-          <mat-header-cell *matHeaderCellDef> Clave </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.perId }} </mat-cell>
-        </ng-container>
+        
 
         <ng-container matColumnDef="perNombre">
           <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
@@ -51,10 +42,19 @@
           <mat-cell *matCellDef="let item"> {{ item.perClave }} </mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="perActivo">
-          <mat-header-cell *matHeaderCellDef> Activo </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.perActivo }} </mat-cell>
+             <ng-container matColumnDef="perActivo">
+          <mat-header-cell *matHeaderCellDef>
+            Permite devolución
+          </mat-header-cell>
+          <mat-cell *matCellDef="let item" 
+			 style="justify-content: center;">
+            <mat-icon *ngIf="item.perActivo" color="primary"
+              >check_circle</mat-icon
+            >
+            <mat-icon *ngIf="!item.perActivo" color="warn">cancel</mat-icon>
+          </mat-cell>
         </ng-container>
+          
 
         <ng-container matColumnDef="actions">
           <mat-header-cell *matHeaderCellDef></mat-header-cell>

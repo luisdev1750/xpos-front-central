@@ -4,19 +4,19 @@ import { AuthGuardService as AuthGuard } from './auth/auth-guard';
 import { LoginComponent } from './login/login.component';
 
 const routes: Routes = [
-  //{path:'', redirectTo: '\login', pathMatch: 'full'},
   {
     path: '',
-    children: [      
+    children: [
+      {
+        path: '',
+        redirectTo: 'login',
+        pathMatch: 'full',
+      },
       {
         path: 'login',
         component: LoginComponent,
       },
-      //  {
-      //   path: 'menu',
-      //   loadChildren: () =>
-      //     import('./menu/menu.module').then((m) => m.MenuModule),
-      // },
+
       {
         path: 'banco',
         loadChildren: () =>
@@ -120,7 +120,7 @@ const routes: Routes = [
             (m) => m.CuentaBancariaModule
           ),
       },
-       {
+      {
         path: 'formula-contable',
         loadChildren: () =>
           import('./formula-contable/formula-contable.module').then(
@@ -141,12 +141,10 @@ const routes: Routes = [
             (m) => m.SucursalProductoModule
           ),
       },
-       {
+      {
         path: 'proveedor',
         loadChildren: () =>
-          import('./proveedor/proveedor.module').then(
-            (m) => m.ProveedorModule
-          ),
+          import('./proveedor/proveedor.module').then((m) => m.ProveedorModule),
       },
       {
         path: 'producto-precio',
@@ -155,21 +153,19 @@ const routes: Routes = [
             (m) => m.ProductoPrecioModule
           ),
       },
-       {
+      {
         path: 'producto-proveedor',
         loadChildren: () =>
           import('./producto-proveedor/producto-proveedor.module').then(
             (m) => m.ProductoProveedorModule
           ),
       },
-        {
+      {
         path: 'promocion',
         loadChildren: () =>
-          import('./promocion/promocion.module').then(
-            (m) => m.PromocionModule
-          ),
+          import('./promocion/promocion.module').then((m) => m.PromocionModule),
       },
-       {
+      {
         path: 'promocion-obsequio',
         loadChildren: () =>
           import('./promocion-obsequio/promocion-obsequio.module').then(
@@ -183,22 +179,18 @@ const routes: Routes = [
             (m) => m.PromocionDetalleModule
           ),
       },
-       {
+      {
         path: 'combo',
         loadChildren: () =>
-          import('./combo/combo.module').then(
-            (m) => m.ComboModule
-          ),
+          import('./combo/combo.module').then((m) => m.ComboModule),
       },
       // BANNER MODULE
       {
         path: 'banner',
         loadChildren: () =>
-          import('./banner/banner.module').then(
-            (m) => m.BannerModule
-          ),
+          import('./banner/banner.module').then((m) => m.BannerModule),
       },
-/*COMIENZA SIACE */     
+      /*COMIENZA SIACE */
     ],
   },
   {

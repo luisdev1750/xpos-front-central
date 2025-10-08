@@ -19,10 +19,10 @@ import { Submarca } from '../../submarca/submarca';
 })
 export class FamiliaListComponent implements OnInit {
   displayedColumns = [
-    'famId',
+    'famNombre',
     'famSmaId',
     'famIdParent',
-    'famNombre',
+
     'famSku',
     'famActivo',
     'actions',
@@ -58,16 +58,16 @@ export class FamiliaListComponent implements OnInit {
   }
 
   // Para Submarca
-onSubmarcaChange(event: any) {
-  this.filter.famSmaId = event.value; // Actualiza el filtro
-  this.search(); // Ejecuta la búsqueda
-}
+  onSubmarcaChange(event: any) {
+    this.filter.famSmaId = event.value; // Actualiza el filtro
+    this.search(); // Ejecuta la búsqueda
+  }
 
-// Para Familia Padre
-onFamiliaPadreChange(event: any) {
-  this.filter.famIdParent = event.value; // Actualiza el filtro
-  this.search(); // Ejecuta la búsqueda
-}
+  // Para Familia Padre
+  onFamiliaPadreChange(event: any) {
+    this.filter.famIdParent = event.value; // Actualiza el filtro
+    this.search(); // Ejecuta la búsqueda
+  }
 
   onFamiliaChange(event: any) {
     console.log('Familia seleccionada:', event.value);
@@ -82,7 +82,7 @@ onFamiliaPadreChange(event: any) {
           console.log('Submarcas cargadas:', result);
           // Aquí puedes manejar la lista de submarcas si es necesario
           this.submarcasListsFilter = result;
-            this.submarcasLists = result;
+          this.submarcasLists = result;
         },
         error: (err) => {
           this.toastr.error('Error al cargar las submarcas', 'Error');
@@ -154,7 +154,11 @@ onFamiliaPadreChange(event: any) {
 
   edit(ele: Familia) {
     this.dialog.open(FamiliaEditComponent, {
-      data: { familia: JSON.parse(JSON.stringify(ele)), submarcasListsFilter: this.submarcasListsFilter, familiasListFilter: this.familiasListFilter },
+      data: {
+        familia: JSON.parse(JSON.stringify(ele)),
+        submarcasListsFilter: this.submarcasListsFilter,
+        familiasListFilter: this.familiasListFilter,
+      },
       height: '500px',
       width: '700px',
       maxWidth: 'none',

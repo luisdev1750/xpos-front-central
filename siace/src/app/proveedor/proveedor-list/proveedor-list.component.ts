@@ -17,7 +17,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class ProveedorListComponent implements OnInit {
   displayedColumns = [
-    'pveId',
+    
     'pveNombre',
     'pveActivo',
     'pveCalle',

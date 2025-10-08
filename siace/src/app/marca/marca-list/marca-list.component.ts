@@ -19,7 +19,7 @@ import { ToastrService } from 'ngx-toastr';
    ]
 })
 export class MarcaListComponent implements OnInit {
-   displayedColumns = [ 'marId',  'marNombre',  'marActivo',  'actions'];
+   displayedColumns = [  'marNombre',  'marActivo',  'actions'];
    filter = new MarcaFilter();
 
    private subs!: Subscription;

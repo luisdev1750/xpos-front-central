@@ -1,9 +1,3 @@
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
-    <li class="breadcrumb-item active">Catalogo de Productos por Sucursal</li>
-  </ol>
-</nav>
 
 <div class="proin-main">
   <mat-card class="proin-card">
@@ -38,27 +32,27 @@
       <table mat-table #table [dataSource]="sucursalProductoList">
         <ng-container matColumnDef="supSucId">
           <mat-header-cell *matHeaderCellDef> Sucursal </mat-header-cell>
-          <mat-cell *matCellDef="let item">
+          <mat-cell class = "cell-angular" *matCellDef="let item">
             {{ item.supSucursalNombre }}
           </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="supProId">
           <mat-header-cell *matHeaderCellDef> Producto </mat-header-cell>
-          <mat-cell *matCellDef="let item">
+          <mat-cell  class = "cell-angular" *matCellDef="let item">
             {{ item.supProductoNombre }}
           </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="supLprId">
           <mat-header-cell *matHeaderCellDef> Lista de Precio </mat-header-cell>
-          <mat-cell *matCellDef="let item">
+          <mat-cell class = "cell-angular" *matCellDef="let item">
             {{ item.supListaPrecioNombre }}
           </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="actions">
-          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
           <mat-cell *matCellDef="let item">
             <button
               (click)="edit(item)"

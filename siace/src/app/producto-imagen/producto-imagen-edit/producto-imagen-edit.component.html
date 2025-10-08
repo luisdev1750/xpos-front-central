@@ -9,20 +9,6 @@
   <div class="row">
     <div class="col-md-6">
       <mat-form-field>
-        <mat-label>Clave</mat-label>
-        <input
-          matInput
-          [(ngModel)]="productoImagen.priId"
-          id="priId"
-          name="priId"
-          placeholder="Clave"
-          readonly
-        />
-      </mat-form-field>
-    </div>
-
-    <div class="col-md-6">
-      <mat-form-field>
         <mat-label for="priProId">Producto</mat-label>
         <input
           matInput
@@ -38,9 +24,7 @@
         >
       </mat-form-field>
     </div>
-  </div>
 
-  <div class="row">
     <div class="col-md-6">
       <mat-form-field>
         <mat-label>Tipo de imagen</mat-label>
@@ -119,9 +103,7 @@
           <mat-icon style="vertical-align: middle; font-size: 18px"
             >attachment</mat-icon
           >
-          {{ selectedFile.name }} ({{
-            (selectedFile.size / 1024).toFixed(2)
-          }}
+          {{ selectedFile.name }} ({{ (selectedFile.size / 1024).toFixed(2) }}
           KB)
         </div>
       </div>

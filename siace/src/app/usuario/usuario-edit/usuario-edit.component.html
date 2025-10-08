@@ -1,21 +1,9 @@
 <h2>Detalle del usuario</h2>
 <form *ngIf="usuario" #editForm="ngForm" (ngSubmit)="save()" autocomplete="off">
   <div class="row">
-    <div class="col-md-4">
-      <mat-form-field>
-        <mat-label>Clave</mat-label>
-        <input
-          matInput
-          [(ngModel)]="usuario.usuId"
-          id="usuId"
-          name="usuId"
-          placeholder="Clave"
-          readonly
-        />
-      </mat-form-field>
-    </div>
 
-    <div class="col-md-4">
+
+    <div class="col-md-6">
       <mat-form-field>
         <mat-label for="usuNombre">Nombre Completo</mat-label>
         <input
@@ -32,7 +20,7 @@
       </mat-form-field>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-6">
       <mat-form-field>
         <mat-label for="usuUser">Usuario</mat-label>
         <input
@@ -48,9 +36,8 @@
         >
       </mat-form-field>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-md-4">
+
+    <div class="col-md-6">
       <mat-form-field>
         <mat-label for="usuPassword">Contraseña</mat-label>
         <input
@@ -67,7 +54,7 @@
       </mat-form-field>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-6">
       <mat-form-field>
         <mat-label for="usuCorreoElectronico">Correo Electrónico</mat-label>
         <input
@@ -84,12 +71,12 @@
       </mat-form-field>
     </div>
 
-    <div class="col-md-4">
-        <mat-form-field>
+    <div class="col-md-6">
+      <mat-form-field>
         <mat-label>Perfil</mat-label>
         <mat-select
-         (selectionChange)="onPerfilChange($event)"
-         [value] = "usuario.usuPerId"
+          (selectionChange)="onPerfilChange($event)"
+          [value]="usuario.usuPerId"
         >
           <mat-option
             *ngFor="let perfil of perfilListsFilter"
@@ -99,16 +86,14 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-    
     </div>
-  </div>
-  <div class="row">
-    <div class="col-md-4">
+
+    <div class="col-md-6">
       <mat-form-field>
         <mat-label>Sucursal</mat-label>
         <mat-select
-         (selectionChange)="onSucursalChange($event)"
-         [value] = "usuario.usuSucId"
+          (selectionChange)="onSucursalChange($event)"
+          [value]="usuario.usuSucId"
         >
           <mat-option
             *ngFor="let sucursal of sucursalListsFilter"
@@ -118,12 +103,9 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-
-
-
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-6">
       <mat-form-field appearance="fill">
         <mat-label for="fechaVigencia">Fecha Alta</mat-label>
         <input
@@ -143,7 +125,7 @@
       </mat-form-field>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-6">
       <mat-form-field appearance="fill">
         <mat-label for="fechaVigencia">Fecha Modificación</mat-label>
         <input
@@ -162,27 +144,21 @@
         <mat-datepicker #pickerModificacion></mat-datepicker>
       </mat-form-field>
     </div>
-  </div>
-  <div class="row">
 
-   <div class="col-md-4">
-     <mat-form-field>
+    <div class="col-md-6">
+      <mat-form-field>
         <mat-label>Activo</mat-label>
         <mat-select
           id="banActivo"
           name="banActivo"
           [(ngModel)]="usuario.usuActivo"
           (selectionChange)="onActivoChange($event)"
-          
         >
           <mat-option [value]="true">Sí</mat-option>
           <mat-option [value]="false">No</mat-option>
         </mat-select>
-
-
       </mat-form-field>
-   </div>
-
+    </div>
   </div>
   <div class="button-row text-center" role="group">
     <button

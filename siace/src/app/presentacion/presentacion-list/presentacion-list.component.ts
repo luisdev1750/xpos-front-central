@@ -14,12 +14,12 @@ import { ToastrService } from 'ngx-toastr';
    standalone: false,
    templateUrl: 'presentacion-list.component.html',
    styles: [
-      'table { }',
+      'table { min-width: 600px}',
       '.mat-column-actions {flex: 0 0 10%;}'
    ]
 })
 export class PresentacionListComponent implements OnInit {
-   displayedColumns = [ 'preId',  'preNombre',  'preActivo',  'actions'];
+   displayedColumns = [ 'preNombre',  'preActivo',  'actions'];
    filter = new PresentacionFilter();
 
    private subs!: Subscription;

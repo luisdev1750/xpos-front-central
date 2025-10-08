@@ -1,7 +1,7 @@
 import { ProductoImagen } from './producto-imagen';
 import { ProductoImagenFilter } from './producto-imagen-filter';
 import { Injectable } from '@angular/core';
-import { EMPTY, Observable } from 'rxjs';
+import { EMPTY, Observable, Subject } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { GeneralService } from '../common/general.service';
 import { map } from 'rxjs/operators';
@@ -10,11 +10,13 @@ import { map } from 'rxjs/operators';
 export class ProductoImagenService extends GeneralService {
   productoImagenList: ProductoImagen[] = [];
   api = this.sUrl + 'ProductosImagenes';
+  private isUpdatedSubject = new Subject<boolean>();
 
   constructor(private http: HttpClient) {
     super();
   }
 
+ 
   // Método para obtener headers con el token (sin Content-Type para FormData)
   private getHeaders(includeContentType: boolean = true): HttpHeaders {
     const token = localStorage.getItem('accessToken');
@@ -36,7 +38,6 @@ export class ProductoImagenService extends GeneralService {
     let url = '';
     if (entity.priId) {
       url = `${this.api}/${entity.priId.toString()}`;
-      // params = new HttpParams().set('ID', entity.priId.toString());
       return this.http.delete<any>(url, {
         headers: this.getHeaders(),
         params,
@@ -45,12 +46,18 @@ export class ProductoImagenService extends GeneralService {
     return EMPTY;
   }
 
-  getImagen(fileName: string): Observable<Blob> {
-    const url = `${this.api}/imagen/${fileName}`;
+  // ACTUALIZADO: Obtener imagen con priProId
+  getImagen(priProId: number, fileName: string): Observable<Blob> {
+    const url = `${this.api}/imagen/${priProId}/${fileName}`;
     return this.http.get(url, {
       headers: this.getHeaders(),
       responseType: 'blob',
     });
+  }
+
+ 
+  getImageUrl(priProId: number, fileName: string): string {
+    return `${this.api}/imagen/${priProId}/${fileName}`;
   }
 
   find(filter: ProductoImagenFilter): Observable<ProductoImagen[]> {
@@ -103,7 +110,6 @@ export class ProductoImagenService extends GeneralService {
     formData.append('imagen', imagen);
 
     const url = `${this.api}`;
-    // No incluir Content-Type, el navegador lo establece automáticamente con el boundary
     return this.http.post<any>(url, formData, {
       headers: this.getHeaders(false),
     });
@@ -126,7 +132,6 @@ export class ProductoImagenService extends GeneralService {
     }
 
     const url = `${this.api}`;
-    // No incluir Content-Type, el navegador lo establece automáticamente con el boundary
     return this.http.put<any>(url, formData, {
       headers: this.getHeaders(false),
     });

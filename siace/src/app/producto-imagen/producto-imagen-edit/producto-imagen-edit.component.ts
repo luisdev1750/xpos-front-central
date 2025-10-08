@@ -33,8 +33,8 @@ export class ProductoImagenEditComponent implements OnInit {
       this.isEditing = this.productoImagen.priId > 0;
       
       // Si estamos editando y existe una imagen, cargar la vista previa
-      if (this.isEditing && this.productoImagen.priNombre) {
-         this.loadImagePreview(this.productoImagen.priNombre);
+      if (this.isEditing && this.productoImagen.priNombre && this.productoImagen.priProId) {
+         this.loadImagePreview(this.productoImagen.priProId, this.productoImagen.priNombre);
       }
    }
 
@@ -42,9 +42,9 @@ export class ProductoImagenEditComponent implements OnInit {
       this.loadCatalogs();
    }
 
-   // Cargar imagen existente usando getImagen
-   loadImagePreview(fileName: string) {
-      this.productoImagenService.getImagen(fileName).subscribe({
+   // Cargar imagen existente usando getImagen - ACTUALIZADO con priProId
+   loadImagePreview(priProId: number, fileName: string) {
+      this.productoImagenService.getImagen(priProId, fileName).subscribe({
          next: (blob: Blob) => {
             const reader = new FileReader();
             reader.onload = (e: any) => {
@@ -110,8 +110,8 @@ export class ProductoImagenEditComponent implements OnInit {
          this.imagePreview = null;
       } else {
          // Restaurar la imagen original si estamos editando
-         if (this.productoImagen.priNombre) {
-            this.loadImagePreview(this.productoImagen.priNombre);
+         if (this.productoImagen.priNombre && this.productoImagen.priProId) {
+            this.loadImagePreview(this.productoImagen.priProId, this.productoImagen.priNombre);
          }
       }
    }
@@ -142,7 +142,7 @@ export class ProductoImagenEditComponent implements OnInit {
                   : 'La imagen del producto ha sido guardada exitosamente';
                this.toastr.success(mensaje, 'Transacción exitosa');
                this.productoImagenService.setIsUpdated(true);
-                 window.location.reload();
+               window.location.reload();
                this.dialogRef.close(result);
             } else {
                this.toastr.error('Ha ocurrido un error al guardar', 'Error');

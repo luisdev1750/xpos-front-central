@@ -1,20 +1,10 @@
-<nav aria-label="breadcrumb">
-   <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
-      <li class="breadcrumb-item active">
-         Catalogo de Presentaciones
-      </li>
-   </ol>
-</nav>
+
 
 <div class="proin-main">
-   <mat-card class="proin-card">
-      <h2>Catalogo de Presentaciones</h2>
-      <form #f="ngForm">
-         
-   
-     
-         <mat-form-field>
+  <mat-card class="proin-card">
+    <h2>Catalogo de Presentaciones</h2>
+    <form #f="ngForm">
+      <mat-form-field>
         <mat-label>Activo:</mat-label>
         <mat-select
           [(ngModel)]="filter.preActivo"
@@ -28,47 +18,50 @@
         </mat-select>
       </mat-form-field>
 
-         <button mat-mini-fab color="accent" (click)="add()" [disabled]="!f?.valid">
-            <mat-icon>add</mat-icon>
-         </button>
-      </form>
-      <div *ngIf="presentacionList.length > 0">
-         
-         <table mat-table #table [dataSource]="presentacionList">
-            
-            <ng-container matColumnDef="preId">
-               <mat-header-cell *matHeaderCellDef>
-                  Clave
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.preId}} </mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="preNombre">
-               <mat-header-cell *matHeaderCellDef>
-                  Nombre
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.preNombre}} </mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="preActivo">
-               <mat-header-cell *matHeaderCellDef>
-                  Activo
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.preActivo}} </mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="actions">
-               <mat-header-cell *matHeaderCellDef></mat-header-cell>
-               <mat-cell *matCellDef="let item">
-                  <button (click)="edit(item)" mat-button color="warn" class="button-edit">
-                     <mat-icon>edit</mat-icon>
-                  </button>&nbsp;
-               
-               </mat-cell>
-            </ng-container>
-            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-         </table>
-      </div>
-   </mat-card>
+      <button
+        mat-mini-fab
+        color="accent"
+        (click)="add()"
+        [disabled]="!f?.valid"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+    </form>
+    <div *ngIf="presentacionList.length > 0">
+      <table mat-table #table [dataSource]="presentacionList">
+        <ng-container matColumnDef="preNombre">
+          <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+          <mat-cell class = "cell-angular" *matCellDef="let item"> {{ item.preNombre }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="preActivo">
+          <mat-header-cell *matHeaderCellDef>
+            Permite devolución
+          </mat-header-cell>
+          <mat-cell *matCellDef="let item" style="justify-content: center;">
+            <mat-icon *ngIf="item.preActivo" color="primary"
+              >check_circle</mat-icon
+            >
+            <mat-icon *ngIf="!item.preActivo" color="warn">cancel</mat-icon>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            <button
+              (click)="edit(item)"
+              mat-button
+              color="warn"
+              class="button-edit"
+            >
+              <mat-icon>edit</mat-icon></button
+            >&nbsp;
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+      </table>
+    </div>
+  </mat-card>
 </div>

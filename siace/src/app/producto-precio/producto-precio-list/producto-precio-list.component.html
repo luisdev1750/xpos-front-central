@@ -1,9 +1,4 @@
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
-    <li class="breadcrumb-item active">Catalogo de Precios de Productos</li>
-  </ol>
-</nav>
+
 
 <div class="proin-main">
   <mat-card class="proin-card">
@@ -38,24 +33,26 @@
       <table mat-table #table [dataSource]="productoPrecioList">
         <ng-container matColumnDef="prrProId">
           <mat-header-cell *matHeaderCellDef> Producto </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.prrProName }} </mat-cell>
+          <mat-cell class="cell-angular" *matCellDef="let item"> {{ item.prrProName }} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="prrLprId">
           <mat-header-cell *matHeaderCellDef>
             Lista de Precio
           </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.prrLprName }} </mat-cell>
+          <mat-cell class = "cell-angular" *matCellDef="let item"> {{ item.prrLprName }} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="prrPrecio">
           <mat-header-cell *matHeaderCellDef> Precio </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.prrPrecio }} </mat-cell>
+          <mat-cell style = "justify-content: right !important;" *matCellDef="let item"> {{ item.prrPrecio }} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="prrFechaAlta">
           <mat-header-cell *matHeaderCellDef> Fecha de Alta </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.prrFechaAlta }} </mat-cell>
+          <mat-cell style = "justify-content: center;" *matCellDef="let item">             
+                 {{ item.prrFechaAlta| date : "dd/MM/yyyy HH:mm" }}
+            </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="prrReiId">
@@ -68,7 +65,7 @@
         
 
         <ng-container matColumnDef="actions">
-          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
           <mat-cell *matCellDef="let item">
             <button
               (click)="edit(item)"

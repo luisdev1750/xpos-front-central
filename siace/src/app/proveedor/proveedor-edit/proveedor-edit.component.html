@@ -6,21 +6,9 @@
   autocomplete="off"
 >
   <div class="row">
-    <div class="col-md-4">
-      <mat-form-field>
-        <mat-label>Clave</mat-label>
-        <input
-          matInput
-          [(ngModel)]="proveedor.pveId"
-          id="pveId"
-          name="pveId"
-          placeholder="Clave"
-          readonly
-        />
-      </mat-form-field>
-    </div>
+ 
 
-    <div class="col-md-4">
+    <div class="col-md-6">
       <mat-form-field>
         <mat-label>Nombre</mat-label>
         <input
@@ -37,7 +25,7 @@
       </mat-form-field>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-6">
       <mat-form-field>
         <mat-label>Activo</mat-label>
         <mat-select
@@ -51,10 +39,10 @@
         </mat-select>
       </mat-form-field>
     </div>
-  </div>
 
-  <div class="row">
-    <div class="col-md-4">
+
+
+    <div class="col-md-6">
       <mat-form-field>
         <mat-label>Calle</mat-label>
         <input
@@ -71,7 +59,7 @@
       </mat-form-field>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-6">
       <mat-form-field>
         <mat-label>Número Exterior</mat-label>
         <input
@@ -88,7 +76,7 @@
       </mat-form-field>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-6">
       <mat-form-field>
         <mat-label>Número Interior</mat-label>
         <input
@@ -100,11 +88,11 @@
         />
       </mat-form-field>
     </div>
-  </div>
+
 
   <!-- SECCIÓN DE UBICACIÓN CORREGIDA -->
-<div class="row">
-  <div class="col-md-3">
+
+  <div class="col-md-6">
     <mat-form-field>
       <mat-label>Estado</mat-label>
       <mat-select
@@ -121,7 +109,7 @@
     </mat-form-field>
   </div>
 
-  <div class="col-md-3">
+  <div class="col-md-6">
     <mat-form-field>
       <mat-label>Municipio</mat-label>
       <mat-select
@@ -139,7 +127,7 @@
     </mat-form-field>
   </div>
 
-  <div class="col-md-3">
+  <div class="col-md-6">
     <mat-form-field>
       <mat-label>Ciudad</mat-label>
       <mat-select
@@ -157,7 +145,7 @@
     </mat-form-field>
   </div>
 
-  <div class="col-md-3">
+  <div class="col-md-6">
     <mat-form-field>
       <mat-label>Colonia</mat-label>
       <mat-select
@@ -174,10 +162,9 @@
       <mat-error *ngIf="!proveedor.pveColId">Colonia es requerida</mat-error>
     </mat-form-field>
   </div>
-</div>
 
-  <div class="row">
-    <div class="col-md-4">
+
+    <div class="col-md-6">
       <mat-form-field>
         <mat-label>Teléfono</mat-label>
         <input
@@ -194,7 +181,7 @@
       </mat-form-field>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-6">
       <mat-form-field>
         <mat-label>Email</mat-label>
         <input
@@ -208,7 +195,7 @@
       </mat-form-field>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-6">
       <mat-form-field>
         <mat-label>Número</mat-label>
         <input
@@ -220,9 +207,9 @@
         />
       </mat-form-field>
     </div>
-  </div>
 
-  <div class="row">
+
+
     <div class="col-md-12">
       <mat-form-field>
         <mat-label>Observaciones</mat-label>
@@ -236,8 +223,8 @@
         ></textarea>
       </mat-form-field>
     </div>
-  </div>
 
+</div>
   <div class="button-row text-center" role="group">
     <button
       type="submit"

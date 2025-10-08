@@ -25,7 +25,7 @@ import { MatSelectModule } from '@angular/material/select';
 })
 export class UsuarioListComponent implements OnInit {
   displayedColumns = [
-    'usuId',
+
     'usuNombre',
     'usuUser',
     'usuPassword',

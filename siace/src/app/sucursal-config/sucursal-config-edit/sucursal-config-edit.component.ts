@@ -60,6 +60,7 @@ export class SucursalConfigEditComponent implements OnInit {
    
      save() {
       this.sucursalConfigService.save(this.sucursalConfig).subscribe({
+         
          next: result => {
             // Validación similar al BancoEditComponent
             if (result?.scoId !== undefined && result?.scoId !== null && Number(result.scoId) >= 0) {

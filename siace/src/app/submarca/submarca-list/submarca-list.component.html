@@ -1,9 +1,4 @@
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
-    <li class="breadcrumb-item active">Catalogo de Submarcas</li>
-  </ol>
-</nav>
+
 
 <div class="proin-main">
   <mat-card class="proin-card">
@@ -36,6 +31,7 @@
           id="banActivo"
           name="banActivo"    
          (ngModelChange)="onActivoModelChange($event)"
+         
 
         >
         <mat-option [value]="all">Todos</mat-option>
@@ -57,10 +53,7 @@
     </form>
     <div *ngIf="submarcaList.length > 0">
       <table mat-table #table [dataSource]="submarcaList">
-        <ng-container matColumnDef="smaId">
-          <mat-header-cell *matHeaderCellDef> Clave </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.smaId }} </mat-cell>
-        </ng-container>
+     
 
         <ng-container matColumnDef="smaMarId">
           <mat-header-cell *matHeaderCellDef> Marca </mat-header-cell>
@@ -72,13 +65,20 @@
           <mat-cell *matCellDef="let item"> {{ item.smaNombre }} </mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="smaActivo">
-          <mat-header-cell *matHeaderCellDef> Activo </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.smaActivo }} </mat-cell>
+         <ng-container matColumnDef="smaActivo">
+          <mat-header-cell *matHeaderCellDef>
+            Activo
+          </mat-header-cell>
+          <mat-cell *matCellDef="let item" style="justify-content: center;">
+            <mat-icon *ngIf="item.smaActivo" color="primary"
+              >check_circle</mat-icon
+            >
+            <mat-icon *ngIf="!item.smaActivo" color="warn">cancel</mat-icon>
+          </mat-cell>
         </ng-container>
-
+        
         <ng-container matColumnDef="actions">
-          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
           <mat-cell *matCellDef="let item">
             <button
               (click)="edit(item)"

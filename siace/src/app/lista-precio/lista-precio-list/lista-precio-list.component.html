@@ -1,9 +1,4 @@
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
-    <li class="breadcrumb-item active">Catalogo de Lista Precios</li>
-  </ol>
-</nav>
+
 
 <div class="proin-main">
   <mat-card class="proin-card">
@@ -26,30 +21,7 @@
             </mat-select>
          </mat-form-field>
 
-      <!-- <mat-form-field>
-            <mat-label>Fecha de vigencia:</mat-label>
-            <input matInput type="search" [(ngModel)]="filter.lprFechaVigencia" id="lprFechaVigencia"
-               name="lprFechaVigencia">
-         </mat-form-field> -->
-      <!-- <mat-form-field appearance="fill">
-        <mat-label for="fechaVigencia">Fecha Vigencia</mat-label>
-        <input
-          matInput
-          [matDatepicker]="pickerVigencia"
-          [(ngModel)]="filter.lprFechaVigencia"
-          id="fechaVigencia"
-          name="fechaVigencia"
-          (dateChange)="onFechaAltaChange($event)"
-          placeholder="Selecciona fecha vigencia"
-        />
-
-        <mat-datepicker-toggle
-          matSuffix
-          [for]="pickerVigencia"
-        ></mat-datepicker-toggle>
-        <mat-datepicker #pickerVigencia></mat-datepicker>
-      </mat-form-field> -->
-
+  
       <mat-form-field appearance="fill">
         <mat-label for="fechaAlta">Fecha Alta</mat-label>
         <input
@@ -81,37 +53,41 @@
     </form>
     <div *ngIf="listaPrecioList.length > 0">
       <table mat-table #table [dataSource]="listaPrecioList">
-        <ng-container matColumnDef="lprId">
-          <mat-header-cell *matHeaderCellDef> Clave </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.lprId }} </mat-cell>
-        </ng-container>
+     
 
         <ng-container matColumnDef="lprNombre">
           <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.lprNombre }} </mat-cell>
+          <mat-cell class = "cell-angular" *matCellDef="let item"> {{ item.lprNombre }} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="lprActivo">
-          <mat-header-cell *matHeaderCellDef> Activo </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.lprActivo }} </mat-cell>
-        </ng-container>
+          <mat-header-cell *matHeaderCellDef>
+            Activo
+          </mat-header-cell>
+          <mat-cell *matCellDef="let item" style="justify-content: center;">
+            <mat-icon *ngIf="item.lprActivo" color="primary"
+              >check_circle</mat-icon
+            >
+            <mat-icon *ngIf="!item.lprActivo" color="warn">cancel</mat-icon>
+          </mat-cell>
+        </ng-container>		  
 
         <ng-container matColumnDef="lprFechaVigencia">
           <mat-header-cell *matHeaderCellDef>
             Fecha de vigencia
           </mat-header-cell>
-          <mat-cell *matCellDef="let item">
+          <mat-cell style="justify-content: center;" *matCellDef="let item" class = "clave">
             {{ item.lprFechaVigencia | date : "dd/MM/yyyy HH:mm"  }}
           </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="lprFechaAlta">
           <mat-header-cell *matHeaderCellDef> Fecha Alta </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.lprFechaAlta | date : "dd/MM/yyyy HH:mm" }} </mat-cell>
+          <mat-cell style="justify-content: center;" *matCellDef="let item" > {{ item.lprFechaAlta | date : "dd/MM/yyyy HH:mm" }} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="actions">
-          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
           <mat-cell *matCellDef="let item">
             <button
               (click)="edit(item)"

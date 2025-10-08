@@ -1,11 +1,4 @@
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
-    <li class="breadcrumb-item active">
-      Catalogo de Sucursales Productos Stock
-    </li>
-  </ol>
-</nav>
+
 
 <div class="proin-main">
   <mat-card class="proin-card">
@@ -75,27 +68,27 @@
 
         <ng-container matColumnDef="spsProId">
           <mat-header-cell *matHeaderCellDef> Producto </mat-header-cell>
-          <mat-cell *matCellDef="let item">
+          <mat-cell class="cell-angular"  *matCellDef="let item">
             {{ item.productoNombre }}
           </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="spsStockMinimo">
           <mat-header-cell *matHeaderCellDef> Stock minimo </mat-header-cell>
-          <mat-cell *matCellDef="let item">
+          <mat-cell style="display: flex; justify-content: right;" class  = "number-class" *matCellDef="let item">
             {{ item.spsStockMinimo }}
           </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="spsStockMaximo">
           <mat-header-cell *matHeaderCellDef> Stock maximo </mat-header-cell>
-          <mat-cell *matCellDef="let item">
+          <mat-cell style="display: flex; justify-content: right;" class  = "number-class" *matCellDef="let item">
             {{ item.spsStockMaximo }}
           </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="actions">
-          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
           <mat-cell *matCellDef="let item">
             <button
               (click)="edit(item)"

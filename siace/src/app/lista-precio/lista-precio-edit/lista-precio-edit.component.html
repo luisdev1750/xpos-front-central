@@ -6,21 +6,9 @@
   autocomplete="off"
 >
   <div class="row">
-    <div class="col-md-4">
-      <mat-form-field>
-        <mat-label>Clave</mat-label>
-        <input
-          matInput
-          [(ngModel)]="listaPrecio.lprId"
-          id="lprId"
-          name="lprId"
-          placeholder="Clave"
-          readonly
-        />
-      </mat-form-field>
-    </div>
 
-    <div class="col-md-4">
+
+    <div class="col-md-6">
       <mat-form-field>
         <mat-label for="lprNombre">Nombre</mat-label>
         <input
@@ -37,15 +25,8 @@
       </mat-form-field>
     </div>
 
-    <!-- <div class="col-md-4">
-      
-      <mat-form-field>
-         <mat-label for="lprActivo">Activo</mat-label>
-         <input matInput [(ngModel)]="listaPrecio.lprActivo" id="lprActivo" name="lprActivo" placeholder="Activo" >
-         
-      </mat-form-field>
-   </div> -->
-    <div class="col-md-4">
+  
+    <div class="col-md-6">
       <mat-form-field>
         <mat-label>Activo</mat-label>
         <mat-select
@@ -59,9 +40,9 @@
         </mat-select>
       </mat-form-field>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-md-4">
+  
+
+    <div class="col-md-6">
 
 
       <mat-form-field appearance="fill">
@@ -83,7 +64,7 @@
       </mat-form-field>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-6">
   
       <mat-form-field appearance="fill">
         <mat-label>Fecha Alta</mat-label>

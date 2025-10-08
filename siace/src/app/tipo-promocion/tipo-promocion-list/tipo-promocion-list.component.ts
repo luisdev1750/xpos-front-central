@@ -16,7 +16,7 @@ import { ToastrService } from 'ngx-toastr';
   styles: ['table { }', '.mat-column-actions {flex: 0 0 10%;}'],
 })
 export class TipoPromocionListComponent implements OnInit {
-  displayedColumns = ['tprId', 'tprNombre', 'tprActivo', 'tprClave', 'actions'];
+  displayedColumns = [ 'tprNombre', 'tprActivo', 'tprClave', 'actions'];
   filter = new TipoPromocionFilter();
 
   private subs!: Subscription;

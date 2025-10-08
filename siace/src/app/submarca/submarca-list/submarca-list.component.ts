@@ -15,10 +15,10 @@ import { Marca } from '../../marca/marca';
   selector: 'app-submarca',
   standalone: false,
   templateUrl: 'submarca-list.component.html',
-  styles: ['table {  }', '.mat-column-actions {flex: 0 0 10%;}'],
+  styles: ['table {min-width: 700px  }', '.mat-column-actions {flex: 0 0 10%;}'],
 })
 export class SubmarcaListComponent implements OnInit {
-  displayedColumns = ['smaId', 'smaMarId', 'smaNombre', 'smaActivo', 'actions'];
+  displayedColumns = [ 'smaNombre','smaMarId', 'smaActivo', 'actions'];
   filter = new SubmarcaFilter();
   marcaListsFilter: Marca[] = [];
   private subs!: Subscription;

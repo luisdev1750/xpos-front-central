@@ -1,77 +1,70 @@
-<nav aria-label="breadcrumb">
-   <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
-      <li class="breadcrumb-item active">
-         Catalogo de Marcas
-      </li>
-   </ol>
-</nav>
-
 <div class="proin-main">
-   <mat-card class="proin-card">
-      <h2>Catalogo de Marcas</h2>
-      <form #f="ngForm">
-         
-      
-         
-            <mat-form-field>
-            <mat-label>Activo:</mat-label>
-            <mat-select
-              [(ngModel)]="filter.marActivo"
-              id="marActivo"
-              name="marActivo"
-              (selectionChange)="onActivoChange()"
-            >
-              <mat-option value="">Todos</mat-option>
-              <mat-option value="true">Sí</mat-option>
-              <mat-option value="false">No</mat-option>
-            </mat-select>
-         </mat-form-field>
-         
+  <mat-card class="proin-card">
+    <h2>Catalogo de Marcas</h2>
+    <form #f="ngForm">
+      <mat-form-field>
+        <mat-label>Activo:</mat-label>
+        <mat-select
+          [(ngModel)]="filter.marActivo"
+          id="marActivo"
+          name="marActivo"
+          (selectionChange)="onActivoChange()"
+        >
+          <mat-option value="">Todos</mat-option>
+          <mat-option value="true">Sí</mat-option>
+          <mat-option value="false">No</mat-option>
+        </mat-select>
+      </mat-form-field>
 
-         <button mat-mini-fab color="accent" (click)="add()" [disabled]="!f?.valid">
-            <mat-icon>add</mat-icon>
-         </button>
-      </form>
-      <div *ngIf="marcaList.length > 0">
-         
-         <table mat-table #table [dataSource]="marcaList">
-            
-            <ng-container matColumnDef="marId">
-               <mat-header-cell *matHeaderCellDef>
-                  Clave
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.marId}} </mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="marNombre">
-               <mat-header-cell *matHeaderCellDef>
-                  Nombre
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.marNombre}} </mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="marActivo">
-               <mat-header-cell *matHeaderCellDef>
-                  Activo
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.marActivo}} </mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="actions">
-               <mat-header-cell *matHeaderCellDef></mat-header-cell>
-               <mat-cell *matCellDef="let item">
-                  <button (click)="edit(item)" mat-button color="warn" class="button-edit">
-                     <mat-icon>edit</mat-icon>
-                  </button>&nbsp;
-                  <button (click)="delete(item)" mat-button color="warn">
-                     <mat-icon>delete</mat-icon>
-                  </button>
-               </mat-cell>
-            </ng-container>
-            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-         </table>
-      </div>
-   </mat-card>
+      <button
+        mat-mini-fab
+        color="accent"
+        (click)="add()"
+        [disabled]="!f?.valid"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+    </form>
+    <div *ngIf="marcaList.length > 0">
+      <table mat-table #table [dataSource]="marcaList">
+        <ng-container matColumnDef="marNombre">
+          <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.marNombre }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="marActivo">
+          <mat-header-cell style="text-align: center !important;" *matHeaderCellDef>
+            Activo
+          </mat-header-cell>
+          <mat-cell *matCellDef="let item" style="justify-content: center">
+            <mat-icon *ngIf="item.marActivo" color="primary"
+              >check_circle</mat-icon
+            >
+            <mat-icon *ngIf="!item.marActivo" color="warn">cancel</mat-icon>
+          </mat-cell>
+        </ng-container>
+
+    
+
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            <button
+              (click)="edit(item)"
+              mat-button
+              color="warn"
+              class="button-edit"
+            >
+              <mat-icon>edit</mat-icon></button
+            >&nbsp;
+            <button (click)="delete(item)" mat-button color="warn">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+      </table>
+    </div>
+  </mat-card>
 </div>

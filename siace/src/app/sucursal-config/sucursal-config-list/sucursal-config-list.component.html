@@ -1,11 +1,4 @@
-<nav aria-label="breadcrumb">
-   <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
-      <li class="breadcrumb-item active">
-         Catalogo de Configuración de Sucursales
-      </li>
-   </ol>
-</nav>
+
 
 <div class="proin-main">
    <mat-card class="proin-card">
@@ -41,14 +34,14 @@
                <mat-header-cell *matHeaderCellDef>
                   Sucursal
                </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.scoSucNombre}} </mat-cell>
+               <mat-cell class = "cell-angular" *matCellDef="let item"> {{item.scoSucNombre}} </mat-cell>
             </ng-container>
             
             <ng-container matColumnDef="scoHost">
                <mat-header-cell *matHeaderCellDef>
                   Host
                </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.scoHost}} </mat-cell>
+               <mat-cell class = "cell-angular" *matCellDef="let item"> {{item.scoHost}} </mat-cell>
             </ng-container>
             
             <ng-container matColumnDef="scoTokenUser">
@@ -62,11 +55,11 @@
                <mat-header-cell *matHeaderCellDef>
                   Token de contraseña
                </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.scoTokenPassword}} </mat-cell>
+               <mat-cell class = "cell-angular" *matCellDef="let item"> {{item.scoTokenPassword}} </mat-cell>
             </ng-container>
             
             <ng-container matColumnDef="actions">
-               <mat-header-cell *matHeaderCellDef></mat-header-cell>
+               <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
                <mat-cell *matCellDef="let item">
                   <button (click)="edit(item)" mat-button color="warn" class="button-edit">
                      <mat-icon>edit</mat-icon>

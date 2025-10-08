@@ -18,7 +18,7 @@ import { ComboFilter } from '../combo-filter';
   ],
 })
 export class ComboListComponent implements OnInit, OnDestroy {
-  displayedColumns = ['comboId', 'comboNombre', 'sucursalId', 'precioCombo', 'comboActivo', 'actions'];
+  displayedColumns = [ 'comboNombre', 'sucursalId', 'precioCombo', 'comboActivo', 'actions'];
   
   filter = new ComboFilter();
 

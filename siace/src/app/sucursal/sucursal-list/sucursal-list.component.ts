@@ -19,7 +19,6 @@ import { EmpresaService } from '../../empresa/empresa.service';
 })
 export class SucursalListComponent implements OnInit, OnDestroy {
   displayedColumns = [
-    'sucId',
     'sucNombre',
     'sucNumero',
     'sucCalle',

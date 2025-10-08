@@ -1,23 +1,27 @@
 <loading-dialog></loading-dialog>
 
-<!-- Menu lateral integrado -->
+<!-- Menu wrapper con topbar -->
 <div class="menu-wrapper">
   
-  <!-- Toggle Button - Siempre visible -->
-  <button class="menu-toggle" (click)="toggleMenu()" [class.menu-open]="isMenuOpen">
-    <span class="toggle-icon">{{ isMenuOpen ? '✕' : '☰' }}</span>
-  </button>
+  <!-- TOPBAR - Barra superior -->
+  <header class="topbar">
+    <button class="menu-toggle" (click)="toggleMenu()">
+      <span class="toggle-icon">{{ isMenuOpen ? '✕' : '☰' }}</span>
+    </button>
+    <div class="topbar-brand">
+      <span class="brand-text">XPOS</span>
+    </div>
+    <div class="topbar-actions">
+      <button class="topbar-icon">🔔</button>
+      <button class="topbar-icon">👤</button>
+    </div>
+  </header>
 
   <!-- Sidebar -->
   <aside class="sidebar" [class.closed]="!isMenuOpen">
     
     <!-- Header del menú -->
-    <div class="sidebar-header">
-      <div class="logo-container">
-        <div class="logo-icon">X</div>
-        <span class="logo-text" *ngIf="isMenuOpen">XPOS</span>
-      </div>
-    </div>
+    
 
     <!-- Navegación -->
     <nav class="sidebar-nav">
@@ -164,5 +168,7 @@
   <div class="menu-overlay" *ngIf="isMenuOpen" (click)="toggleMenu()"></div>
 
 </div>
+<div class = "container-catalog">
+   <router-outlet></router-outlet>
 
-<router-outlet></router-outlet>
+</div>

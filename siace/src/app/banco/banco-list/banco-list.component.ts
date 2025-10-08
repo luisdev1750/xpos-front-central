@@ -20,7 +20,7 @@ import { ToastrService } from 'ngx-toastr';
    
 })
 export class BancoListComponent implements OnInit {
-   displayedColumns = [ 'banId',  'banNombre',  'banActivo',  'actions'];
+   displayedColumns = [   'banNombre',  'banActivo',  'actions'];
    filter = new BancoFilter();
 
    private subs!: Subscription;
