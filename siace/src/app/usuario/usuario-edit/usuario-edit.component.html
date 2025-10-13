@@ -13,6 +13,7 @@
           name="usuNombre"
           placeholder="Nombre Completo"
           required
+           maxlength="200"
         />
         <mat-error *ngIf="usuario.usuNombre == ''"
           >Nombre Completo es requerido</mat-error
@@ -30,6 +31,7 @@
           name="usuUser"
           placeholder="Usuario"
           required
+           maxlength="30"
         />
         <mat-error *ngIf="usuario.usuUser == ''"
           >Usuario es requerido</mat-error
@@ -47,6 +49,7 @@
           name="usuPassword"
           placeholder="Contraseña"
           required
+           maxlength="200"
         />
         <mat-error *ngIf="usuario.usuPassword == undefined"
           >Contraseña es requerido</mat-error
@@ -64,6 +67,7 @@
           name="usuCorreoElectronico"
           placeholder="Correo Electrónico"
           required
+           maxlength="100"
         />
         <mat-error *ngIf="usuario.usuCorreoElectronico == undefined"
           >Correo Electrónico es requerido</mat-error

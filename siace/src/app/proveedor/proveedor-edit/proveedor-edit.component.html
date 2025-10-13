@@ -18,6 +18,7 @@
           name="pveNombre"
           placeholder="Nombre"
           required
+           maxlength="200"
         />
         <mat-error *ngIf="proveedor.pveNombre == ''"
           >Nombre es requerido</mat-error
@@ -52,6 +53,7 @@
           name="pveCalle"
           placeholder="Calle"
           required
+           maxlength="200"
         />
         <mat-error *ngIf="proveedor.pveCalle == ''"
           >Calle es requerido</mat-error
@@ -69,6 +71,7 @@
           name="pveNumeroExterior"
           placeholder="Número Exterior"
           required
+           maxlength="10"
         />
         <mat-error *ngIf="proveedor.pveNumeroExterior == ''"
           >Número Exterior es requerido</mat-error
@@ -85,6 +88,7 @@
           id="pveNumeroInterior"
           name="pveNumeroInterior"
           placeholder="Número Interior"
+           maxlength="10"
         />
       </mat-form-field>
     </div>
@@ -174,6 +178,7 @@
           id="pveTelefono"
           name="pveTelefono"
           placeholder="Teléfono"
+           maxlength="15"
         />
         <mat-error *ngIf="proveedor.pveTelefono == undefined"
           >Teléfono es requerido</mat-error
@@ -191,6 +196,7 @@
           id="pveCorreoElectronico"
           name="pveCorreoElectronico"
           placeholder="Email"
+           maxlength="200"
         />
       </mat-form-field>
     </div>
@@ -204,7 +210,8 @@
           id="pveNumero"
           name="pveNumero"
           placeholder="Número"
-        />
+         maxlength="30"
+          />
       </mat-form-field>
     </div>
 
@@ -220,6 +227,7 @@
           name="pveObservaciones"
           placeholder="Observaciones"
           rows="3"
+           maxlength="500"
         ></textarea>
       </mat-form-field>
     </div>

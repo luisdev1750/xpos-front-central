@@ -124,178 +124,202 @@ export class PromocionEditComponent implements OnInit {
   onSucursalChange(event: any) {
     this.promocion.pmoSucId = event.value;
   }
- save() {
-  console.log('información por enviar');
+  save() {
+    console.log('información por enviar');
 
-  const promocionToSave = { ...this.promocion };
+    const promocionToSave = { ...this.promocion };
 
-  if (promocionToSave.pmoTprId === 0) promocionToSave.pmoTprId = null;
-  if (promocionToSave.pmoTpaId === 0) promocionToSave.pmoTpaId = null;
-  if (promocionToSave.pmoSpaId === 0) promocionToSave.pmoSpaId = null;
+    if (promocionToSave.pmoTprId === 0) promocionToSave.pmoTprId = null;
+    if (promocionToSave.pmoTpaId === 0) promocionToSave.pmoTpaId = null;
+    if (promocionToSave.pmoSpaId === 0) promocionToSave.pmoSpaId = null;
 
-  let cantidadCompra = null;
-  let cantidadObsequio = null;
-  let porcentajeDescuento = null;
+    let cantidadCompra = null;
+    let cantidadObsequio = null;
+    let porcentajeDescuento = null;
+    console.log('información pago:');
+    console.log(this.listTiposPromocones);
 
-  // Validación para promoción tipo NxM (tipo 2)
-  if (promocionToSave.pmoTprId === 2) {
-    const regexPromocion = /(\d+)\s*x\s*(\d+)/i;
-    const match = promocionToSave.pmoNombre.match(regexPromocion);
+    console.log(
+      this.listTiposPromocones.find(
+        (tp) => tp.tprId == promocionToSave.pmoTprId
+      ).tprClave == 'PROMO_NXM'
+    );
 
-    if (!match) {
-      this.toastr.error(
-        'El nombre de la promoción debe incluir un formato NxM (ejemplo: 3x2, 2x1)',
-        'Formato de promoción inválido'
-      );
-      return;
+    if (
+      this.listTiposPromocones?.find(
+        (tp) => tp.tprId == promocionToSave.pmoTprId
+      )?.tprClave == 'PROMO_NXM'
+    ) {
+      const regexPromocion = /(\d+)\s*x\s*(\d+)/i;
+      const match = promocionToSave.pmoNombre.match(regexPromocion);
+
+      if (!match) {
+        this.toastr.error(
+          'El nombre de la promoción debe incluir un formato NxM (ejemplo: 3x2, 2x1)',
+          'Formato de promoción inválido'
+        );
+        return;
+      }
+
+      const cantidadLlevada = parseInt(match[1]);
+      const cantidadPagada = parseInt(match[2]);
+
+      if (cantidadLlevada <= cantidadPagada) {
+        this.toastr.error(
+          `La promoción ${cantidadLlevada}x${cantidadPagada} no es válida. Debe llevarse más unidades de las que se pagan (ejemplo: 3x2, 2x1)`,
+          'Promoción incoherente'
+        );
+        return;
+      }
+
+      cantidadCompra = cantidadLlevada;
+      cantidadObsequio = cantidadLlevada - cantidadPagada;
+
+      console.log(`Promoción válida: ${cantidadLlevada}x${cantidadPagada}`);
+    }
+  
+    if (   this.listTiposPromocones?.find(
+        (tp) => tp.tprId == promocionToSave.pmoTprId
+      )?.tprClave == "PROMO_DIR") {
+      const regexDescuento = /(\d+)\s*%/i;
+      const match = promocionToSave.pmoNombre.match(regexDescuento);
+
+      if (!match) {
+        this.toastr.error(
+          'El nombre de la promoción debe incluir un porcentaje de descuento (ejemplo: Descuento 20%, 50% de descuento)',
+          'Formato de promoción inválido'
+        );
+        return;
+      }
+
+      porcentajeDescuento = parseInt(match[1]);
+
+      if (porcentajeDescuento <= 0 || porcentajeDescuento > 100) {
+        this.toastr.error(
+          `El porcentaje de descuento ${porcentajeDescuento}% no es válido. Debe estar entre 1% y 100%`,
+          'Porcentaje inválido'
+        );
+        return;
+      }
+
+      console.log(`Promoción de descuento válida: ${porcentajeDescuento}%`);
     }
 
-    const cantidadLlevada = parseInt(match[1]);
-    const cantidadPagada = parseInt(match[2]);
 
-    if (cantidadLlevada <= cantidadPagada) {
-      this.toastr.error(
-        `La promoción ${cantidadLlevada}x${cantidadPagada} no es válida. Debe llevarse más unidades de las que se pagan (ejemplo: 3x2, 2x1)`,
-        'Promoción incoherente'
-      );
-      return;
-    }
-
-    cantidadCompra = cantidadLlevada;
-    cantidadObsequio = cantidadLlevada - cantidadPagada;
-    
-    console.log(`Promoción válida: ${cantidadLlevada}x${cantidadPagada}`);
-  }
-
-  // Validación para promoción tipo Descuento (tipo 3)
-  if (promocionToSave.pmoTprId === 3) {
-    const regexDescuento = /(\d+)\s*%/i;
-    const match = promocionToSave.pmoNombre.match(regexDescuento);
-
-    if (!match) {
-      this.toastr.error(
-        'El nombre de la promoción debe incluir un porcentaje de descuento (ejemplo: Descuento 20%, 50% de descuento)',
-        'Formato de promoción inválido'
-      );
-      return;
-    }
-
-    porcentajeDescuento = parseInt(match[1]);
-
-    if (porcentajeDescuento <= 0 || porcentajeDescuento > 100) {
-      this.toastr.error(
-        `El porcentaje de descuento ${porcentajeDescuento}% no es válido. Debe estar entre 1% y 100%`,
-        'Porcentaje inválido'
-      );
-      return;
-    }
-
-    console.log(`Promoción de descuento válida: ${porcentajeDescuento}%`);
-  }
-
-  // Guardar la promoción padre
-  this.promocionService.save(promocionToSave).subscribe({
-    next: (result) => {
-      if (
-        result?.pmoSucId != null &&
-        result?.pmoSucId !== undefined &&
-        result?.pmoSucId > 0
-      ) {
-        // Si es actualización (tiene pmoId), verificar si hay detalles para actualizar
-        if (promocionToSave.pmoId && promocionToSave.pmoId > 0) {
-          this.actualizarDetallesSiExisten(
-            promocionToSave.pmoId, 
-            promocionToSave.pmoTprId ?? 0,
-            cantidadCompra,
-            cantidadObsequio,
-            porcentajeDescuento
-          );
+    // Guardar la promoción padre
+    this.promocionService.save(promocionToSave).subscribe({
+      next: (result) => {
+        if (
+          result?.pmoSucId != null &&
+          result?.pmoSucId !== undefined &&
+          result?.pmoSucId > 0
+        ) {
+          // Si es actualización (tiene pmoId), verificar si hay detalles para actualizar
+          if (promocionToSave.pmoId && promocionToSave.pmoId > 0) {
+            this.actualizarDetallesSiExisten(
+              promocionToSave.pmoId,
+              promocionToSave.pmoTprId ?? 0,
+              cantidadCompra,
+              cantidadObsequio,
+              porcentajeDescuento
+            );
+          } else {
+            // Es nuevo registro, solo mostrar éxito
+            this.mostrarExitoYCerrar();
+          }
         } else {
-          // Es nuevo registro, solo mostrar éxito
-          this.mostrarExitoYCerrar();
+          this.toastr.error('Ha ocurrido un error', 'Error');
         }
-      } else {
+      },
+      error: (err) => {
         this.toastr.error('Ha ocurrido un error', 'Error');
-      }
-    },
-    error: (err) => {
-      this.toastr.error('Ha ocurrido un error', 'Error');
-    },
-  });
-}
+      },
+    });
+  }
 
-private actualizarDetallesSiExisten(
-  pmoId: number, 
-  tipoPromocion: number,
-  cantidadCompra: number | null,
-  cantidadObsequio: number | null,
-  porcentajeDescuento: number | null
-) {
-  // Primero verificar si existen detalles
-  this.promocionDetalleService.getByPromocionId(pmoId).subscribe({
-    next: (detalles) => {
-      if (detalles && detalles.length > 0) {
-        // Hay detalles, actualizar según el tipo
-        if (tipoPromocion === 2 && cantidadCompra !== null && cantidadObsequio !== null) {
-          // Actualizar detalles NxM
-          this.promocionDetalleService.actualizarDetallesNxM(pmoId, cantidadCompra, cantidadObsequio).subscribe({
-            next: () => {
-              this.toastr.success(
-                'La promoción y sus detalles han sido actualizados exitosamente',
-                'Transacción exitosa'
-              );
-              this.mostrarExitoYCerrar();
-            },
-            error: (err) => {
-              console.error('Error actualizando detalles NxM:', err);
-              this.toastr.warning(
-                'La promoción se guardó pero hubo un error al actualizar los detalles',
-                'Advertencia'
-              );
-              this.mostrarExitoYCerrar();
-            }
-          });
-        } else if (tipoPromocion === 3 && porcentajeDescuento !== null) {
-          // Actualizar detalles de descuento
-          this.promocionDetalleService.actualizarDetallesDescuento(pmoId, porcentajeDescuento).subscribe({
-            next: () => {
-              this.toastr.success(
-                'La promoción y sus detalles han sido actualizados exitosamente',
-                'Transacción exitosa'
-              );
-              this.mostrarExitoYCerrar();
-            },
-            error: (err) => {
-              console.error('Error actualizando detalles de descuento:', err);
-              this.toastr.warning(
-                'La promoción se guardó pero hubo un error al actualizar los detalles',
-                'Advertencia'
-              );
-              this.mostrarExitoYCerrar();
-            }
-          });
+  private actualizarDetallesSiExisten(
+    pmoId: number,
+    tipoPromocion: number,
+    cantidadCompra: number | null,
+    cantidadObsequio: number | null,
+    porcentajeDescuento: number | null
+  ) {
+    // Primero verificar si existen detalles
+    this.promocionDetalleService.getByPromocionId(pmoId).subscribe({
+      next: (detalles) => {
+        if (detalles && detalles.length > 0) {
+          // Hay detalles, actualizar según el tipo
+          if (
+            tipoPromocion === 2 &&
+            cantidadCompra !== null &&
+            cantidadObsequio !== null
+          ) {
+            // Actualizar detalles NxM
+            this.promocionDetalleService
+              .actualizarDetallesNxM(pmoId, cantidadCompra, cantidadObsequio)
+              .subscribe({
+                next: () => {
+                  this.toastr.success(
+                    'La promoción y sus detalles han sido actualizados exitosamente',
+                    'Transacción exitosa'
+                  );
+                  this.mostrarExitoYCerrar();
+                },
+                error: (err) => {
+                  console.error('Error actualizando detalles NxM:', err);
+                  this.toastr.warning(
+                    'La promoción se guardó pero hubo un error al actualizar los detalles',
+                    'Advertencia'
+                  );
+                  this.mostrarExitoYCerrar();
+                },
+              });
+          } else if (tipoPromocion === 3 && porcentajeDescuento !== null) {
+            // Actualizar detalles de descuento
+            this.promocionDetalleService
+              .actualizarDetallesDescuento(pmoId, porcentajeDescuento)
+              .subscribe({
+                next: () => {
+                  this.toastr.success(
+                    'La promoción y sus detalles han sido actualizados exitosamente',
+                    'Transacción exitosa'
+                  );
+                  this.mostrarExitoYCerrar();
+                },
+                error: (err) => {
+                  console.error(
+                    'Error actualizando detalles de descuento:',
+                    err
+                  );
+                  this.toastr.warning(
+                    'La promoción se guardó pero hubo un error al actualizar los detalles',
+                    'Advertencia'
+                  );
+                  this.mostrarExitoYCerrar();
+                },
+              });
+          } else {
+            // Tipo obsequio (tipo 1) o no hay cambios que hacer
+            this.mostrarExitoYCerrar();
+          }
         } else {
-          // Tipo obsequio (tipo 1) o no hay cambios que hacer
+          // No hay detalles, solo mostrar éxito
           this.mostrarExitoYCerrar();
         }
-      } else {
-        // No hay detalles, solo mostrar éxito
+      },
+      error: (err) => {
+        console.error('Error verificando detalles:', err);
         this.mostrarExitoYCerrar();
-      }
-    },
-    error: (err) => {
-      console.error('Error verificando detalles:', err);
-      this.mostrarExitoYCerrar();
-    }
-  });
-}
+      },
+    });
+  }
 
-private mostrarExitoYCerrar() {
-  this.toastr.success(
-    'La promoción ha sido guardada exitosamente',
-    'Transacción exitosa'
-  );
-  this.promocionService.setIsUpdated(true);
-  this.dialogRef.close();
-}
+  private mostrarExitoYCerrar() {
+    this.toastr.success(
+      'La promoción ha sido guardada exitosamente',
+      'Transacción exitosa'
+    );
+    this.promocionService.setIsUpdated(true);
+    this.dialogRef.close();
+  }
 }

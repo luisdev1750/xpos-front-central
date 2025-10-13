@@ -6,7 +6,7 @@
     <div class="col-md-6">
       <mat-form-field>
         <mat-label for="proNombre">Nombre</mat-label>
-        <input matInput [(ngModel)]="producto.proNombre" id="proNombre" name="proNombre" placeholder="Nombre" required />
+        <input  maxlength="1000" matInput [(ngModel)]="producto.proNombre" id="proNombre" name="proNombre" placeholder="Nombre" required />
         <mat-error *ngIf="producto.proNombre == ''">Nombre es requerido</mat-error>
       </mat-form-field>
     </div>
@@ -14,7 +14,7 @@
     <div class="col-md-6">
       <mat-form-field>
         <mat-label for="proNombreCorto">Nombre Corto</mat-label>
-        <input matInput [(ngModel)]="producto.proNombreCorto" id="proNombreCorto" name="proNombreCorto" placeholder="Nombre Corto" />
+        <input  maxlength="30" matInput [(ngModel)]="producto.proNombreCorto" id="proNombreCorto" name="proNombreCorto" placeholder="Nombre Corto" />
       </mat-form-field>
     </div>
   </div>
@@ -24,7 +24,7 @@
     <div class="col-md-6">
       <mat-form-field>
         <mat-label for="proSku">SKU</mat-label>
-        <input matInput [(ngModel)]="producto.proSku" id="proSku" name="proSku" placeholder="SKU" required />
+        <input  maxlength="30" matInput [(ngModel)]="producto.proSku" id="proSku" name="proSku" placeholder="SKU" required />
         <mat-error *ngIf="producto.proSku == ''">SKU es requerido</mat-error>
       </mat-form-field>
     </div>
@@ -32,7 +32,7 @@
     <div class="col-md-6">
       <mat-form-field>
         <mat-label for="proCodigoBarras">Código de Barras</mat-label>
-        <input matInput [(ngModel)]="producto.proCodigoBarras" id="proCodigoBarras" name="proCodigoBarras" placeholder="Código de Barras" />
+        <input  maxlength="30" matInput [(ngModel)]="producto.proCodigoBarras" id="proCodigoBarras" name="proCodigoBarras" placeholder="Código de Barras" />
       </mat-form-field>
     </div>
   </div>
@@ -72,7 +72,7 @@
     <div class="col-md-6">
       <mat-form-field>
         <mat-label for="proDescripcionFabricante">Descripción Fabricante</mat-label>
-        <input matInput [(ngModel)]="producto.proDescripcionFabricante" id="proDescripcionFabricante" name="proDescripcionFabricante" placeholder="Descripción Fabricante" />
+        <input  maxlength="500" matInput [(ngModel)]="producto.proDescripcionFabricante" id="proDescripcionFabricante" name="proDescripcionFabricante" placeholder="Descripción Fabricante" />
       </mat-form-field>
     </div>
   </div>
@@ -82,14 +82,14 @@
     <div class="col-md-6">
       <mat-form-field>
         <mat-label for="proRecomendacionUso">Recomendación de Uso</mat-label>
-        <input matInput [(ngModel)]="producto.proRecomendacionUso" id="proRecomendacionUso" name="proRecomendacionUso" placeholder="Recomendación de Uso" />
+        <input  maxlength="500" matInput [(ngModel)]="producto.proRecomendacionUso" id="proRecomendacionUso" name="proRecomendacionUso" placeholder="Recomendación de Uso" />
       </mat-form-field>
     </div>
 
     <div class="col-md-6">
       <mat-form-field>
         <mat-label for="proAlto">Alto</mat-label>
-        <input matInput [(ngModel)]="producto.proAlto" id="proAlto" name="proAlto" placeholder="Alto" />
+        <input  maxlength="10" matInput [(ngModel)]="producto.proAlto" id="proAlto" name="proAlto" placeholder="Alto" />
       </mat-form-field>
     </div>
   </div>
@@ -99,14 +99,14 @@
     <div class="col-md-6">
       <mat-form-field>
         <mat-label for="proLongitud">Longitud</mat-label>
-        <input matInput [(ngModel)]="producto.proLongitud" id="proLongitud" name="proLongitud" placeholder="Longitud" />
+        <input  maxlength="10" matInput [(ngModel)]="producto.proLongitud" id="proLongitud" name="proLongitud" placeholder="Longitud" />
       </mat-form-field>
     </div>
 
     <div class="col-md-6">
       <mat-form-field>
         <mat-label for="proAncho">Ancho</mat-label>
-        <input matInput [(ngModel)]="producto.proAncho" id="proAncho" name="proAncho" placeholder="Ancho" />
+        <input  maxlength="10" matInput [(ngModel)]="producto.proAncho" id="proAncho" name="proAncho" placeholder="Ancho" />
       </mat-form-field>
     </div>
   </div>
@@ -116,14 +116,14 @@
     <div class="col-md-6">
       <mat-form-field>
         <mat-label for="proPeso">Peso</mat-label>
-        <input matInput [(ngModel)]="producto.proPeso" id="proPeso" name="proPeso" placeholder="Peso" />
+        <input  maxlength="30" matInput [(ngModel)]="producto.proPeso" id="proPeso" name="proPeso" placeholder="Peso" />
       </mat-form-field>
     </div>
 
     <div class="col-md-6">
       <mat-form-field>
         <mat-label for="proClaveProdServ">Clave Prod/Serv</mat-label>
-        <input matInput [(ngModel)]="producto.proClaveProdServ" id="proClaveProdServ" name="proClaveProdServ" placeholder="Clave Prod/Serv" />
+        <input  maxlength="10" matInput [(ngModel)]="producto.proClaveProdServ" id="proClaveProdServ" name="proClaveProdServ" placeholder="Clave Prod/Serv" />
       </mat-form-field>
     </div>
   </div>

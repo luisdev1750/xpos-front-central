@@ -16,6 +16,7 @@
           name="sucNombre"
           placeholder="Nombre"
           required
+           maxlength="200"
         />
         <mat-error *ngIf="sucursal.sucNombre == ''"
           >Nombre es requerido</mat-error
@@ -33,6 +34,7 @@
           id="sucNumero"
           name="sucNumero"
           placeholder="Número"
+           maxlength="30"
         />
         <mat-error *ngIf="sucursal.sucNumero == undefined"
           >Número es requerido</mat-error
@@ -49,6 +51,7 @@
           id="sucCalle"
           name="sucCalle"
           placeholder="Calle"
+           maxlength="200"
         />
       </mat-form-field>
     </div>
@@ -62,6 +65,7 @@
           id="sucNumeroExterior"
           name="sucNumeroExterior"
           placeholder="Número Exterior"
+           maxlength="10"
         />
       </mat-form-field>
     </div>
@@ -75,6 +79,7 @@
           id="sucNumeroInterior"
           name="sucNumeroInterior"
           placeholder="Número Interior"
+           maxlength="10"
         />
       </mat-form-field>
     </div>
@@ -88,6 +93,7 @@
           id="sucLatitud"
           name="sucLatitud"
           placeholder="Latitud"
+           maxlength="20"
         />
       </mat-form-field>
     </div>
@@ -101,6 +107,7 @@
           id="sucLongitud"
           name="sucLongitud"
           placeholder="Longitud"
+           maxlength="20"
         />
       </mat-form-field>
     </div>

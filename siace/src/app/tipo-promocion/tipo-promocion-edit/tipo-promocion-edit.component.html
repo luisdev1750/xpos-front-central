@@ -18,6 +18,7 @@
           name="tprNombre"
           placeholder="Nombre"
           required
+           maxlength="198"
         />
         <mat-error *ngIf="tipoPromocion.tprNombre == ''"
           >Nombre es requerido</mat-error
@@ -52,6 +53,7 @@
           name="tprClave"
           placeholder="Código"
           required
+           maxlength="10"
         />
         <mat-error *ngIf="tipoPromocion.tprClave == ''"
           >Código es requerido</mat-error

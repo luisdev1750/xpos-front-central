@@ -2,8 +2,10 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, Subject, Subscription } from 'rxjs';
 import { GeneralService } from '../common/general.service';
 import { HttpClient } from '@angular/common/http';
-import { tap, catchError, delay, map, finalize } from 'rxjs/operators';
+import { tap, catchError, delay, map, finalize, switchMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { PermisosService } from '../permisos.service';
+
 
 interface LoginResult {
    success: boolean;
@@ -20,7 +22,8 @@ interface LoginResult {
          blobToken: string;
          empId: number;
          empRazonSocial: string;
-      }
+      },
+      roleId: string; 
    };
    errors: { code: number; source: string; title: string; detail: string };
 
@@ -35,7 +38,6 @@ interface LoginResult {
    empRazonSocial: string;
 }
 
-
 export interface ApplicationUser {
    userid: number;
    name: string;
@@ -48,7 +50,6 @@ export interface ApplicationUser {
    empRazonSocial: string;
 }
 
-
 @Injectable({ providedIn: 'root' })
 export class LoginService extends GeneralService {
    private subject = new Subject<boolean>();
@@ -56,7 +57,11 @@ export class LoginService extends GeneralService {
    private _user = new BehaviorSubject<ApplicationUser | null>(null);
    user$: Observable<ApplicationUser | null> = this._user.asObservable();
 
-   constructor(private router: Router, private _http: HttpClient) {
+   constructor(
+      private router: Router, 
+      private _http: HttpClient,
+      private permisosService: PermisosService
+   ) {
       super();
 
       if (localStorage !== undefined && localStorage.getItem("user") !== undefined) {
@@ -64,24 +69,20 @@ export class LoginService extends GeneralService {
          let user: ApplicationUser = JSON.parse(localStorage.getItem("user")!);
          this._user.next(user);
          this.startTokenTimer();
+         
+         this.permisosService.obtenerPermisosLocales();
       }
 
-      // Escuchar el evento 'storage' para detectar cambios en el localStorage (como cerrar sesión)
       window.addEventListener('storage', this.handleStorageChange.bind(this));
    }
 
-   // Método para manejar el evento de cambios en el localStorage
    private handleStorageChange(event: StorageEvent): void {
       if (event.key === 'user' && event.newValue === null) {
-         // Si el valor de 'user' es eliminado (cerrar sesión), actualizamos el estado
          this.clearAll();
          console.log('Usuario desconectado en otra pestaña');
-         // Redirigir o actualizar el estado, como redirigir al login o refrescar la página
          window.location.reload();
       }
    }
-
-   /*Accesors */
 
    getIsLogin(): Observable<boolean> {
       return this.subject.asObservable();
@@ -91,12 +92,12 @@ export class LoginService extends GeneralService {
       this.subject.next(isLogin);
    }
 
-   /* Métodos de autenticación */
-
    clearLocalStorage() {
       localStorage.removeItem('access_token');
       localStorage.removeItem('refresh_token');
       localStorage.removeItem('user');
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('perfilId');
    }
 
    clearAll() {
@@ -104,6 +105,7 @@ export class LoginService extends GeneralService {
       this._user.next(null!);
       this.stopTokenTimer();
       this.setIsLogin(false);
+      this.permisosService.limpiarPermisos();
    }
 
    private getTokenRemainingTime() {
@@ -118,32 +120,42 @@ export class LoginService extends GeneralService {
 
    login(username: string, password: string) {
       return this._http
-         .post<LoginResult>(this.sUrl + 'Account/login', { username, password, idsucursal: 1 })
+         .post<LoginResult>(this.sUrl + 'Account/login-usuario', { username, password, idsucursal: 1 })
          .pipe(
             map((usu) => {
-                localStorage.setItem('accessToken', usu.data.accessToken);
+               console.log("Respuesta del servidor:");
+               console.log(usu);
                
-               // let user: ApplicationUser = {
-               //    userid: usu.data.refreshToken.userId,
-               //    name: usu.data.refreshToken.name,
-               //    username: usu.data.refreshToken.userName,
-               //    role: usu.data.role,
-               //    originalUserName: usu.data.refreshToken.userName,
-               //    usrNombreComp: usu.data.refreshToken.usrNombreComp,
-               //    empId: usu.data.refreshToken.empId,
-               //    empRazonSocial: usu.data.refreshToken.empRazonSocial,
-               //    blobToken: usu.data.refreshToken.blobToken
-               // };
-               // this._user.next(user);
-               // this.setLocalStorage(usu, user);
-               // this.startTokenTimer();
-               // this.setIsLogin(true);
-               //   localStorage.setItem('user', JSON.stringify(user));  
-                 // Esto activará el evento 'storage'
-
-               // Notificar a otras pestañas que el usuario ha iniciado sesión
-             
+               localStorage.setItem('accessToken', usu.data.accessToken);
+               localStorage.setItem('perfilId', usu.data.roleId);
+               
                return usu;
+            }),
+            switchMap((usu) => {
+               const perfilId = parseInt(usu.data.roleId);
+               return this.permisosService.cargarPermisos(perfilId).pipe(
+                  map(() => {
+                     // Aquí es donde guardamos el usuario en localStorage
+                     let user: ApplicationUser = {
+                        userid: usu.data.refreshToken.userId,
+                        name: usu.data.refreshToken.name,
+                        username: usu.data.refreshToken.userName,
+                        role: usu.data.role,
+                        originalUserName: usu.data.refreshToken.userName,
+                        usrNombreComp: usu.data.refreshToken.usrNombreComp,
+                        empId: usu.data.refreshToken.empId,
+                        empRazonSocial: usu.data.refreshToken.empRazonSocial,
+                        blobToken: usu.data.refreshToken.blobToken
+                     };
+                     
+                     this._user.next(user);
+                     this.setLocalStorage(usu, user);
+                     this.startTokenTimer();
+                     this.setIsLogin(true);
+                     
+                     return usu;
+                  })
+               );
             })
          );
    }
@@ -155,7 +167,7 @@ export class LoginService extends GeneralService {
             finalize(() => {
                this.clearAll();
                this.router.navigate(['/login']);
-               window.location.reload();  // Se recarga la página
+               window.location.reload();
             })
          )
          .subscribe();

@@ -1,8 +1,8 @@
 export class Promocion {
   pmoId!: number;
-  pmoTprId!: number | null;  // Ahora permite null
-  pmoTpaId!: number | null;  // Ahora permite null
-  pmoSpaId!: number | null;  // Ahora permite null
+  pmoTprId!: number | null;  
+  pmoTpaId!: number | null;  
+  pmoSpaId!: number | null;  
   pmoFechaInicio!: string;
   pmoFechaFin!: string;
   pmoNombre!: string;
@@ -14,5 +14,6 @@ export class Promocion {
   pmoTprNombre!: string;
   pmoTpanombre!: string;
   pmoSpaNombre!: string;
-  pmoSucNombre!: string; 
+  pmoSucNombre!: string;
+  
 }

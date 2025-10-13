@@ -30,6 +30,7 @@
           id="pmoNombre"
           name="pmoNombre"
           placeholder="Nombre de la promoción"
+           maxlength="200"
         />
         <mat-error *ngIf="promocion.pmoNombre == undefined">
           Nombre de la promoción es requerido
@@ -84,6 +85,7 @@
           [value]="promocion.pmoTpaId"
           (selectionChange)="onTipoPagoChange($event)"
         >
+          <mat-option [value]="0">Sin tipo de pago</mat-option>
           <mat-option
             *ngFor="let tipoPago of listTipoPagos"
             [value]="tipoPago.tpaId"
@@ -206,6 +208,7 @@
           name="pmoPolitica"
           placeholder="Política"
           rows="3"
+           maxlength="500"
         ></textarea>
         <mat-error *ngIf="promocion.pmoPolitica == undefined">
           Política es requerida

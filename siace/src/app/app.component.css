@@ -55,7 +55,7 @@
 
 .menu-toggle:hover {
   background: #24599B;
-  transform: scale(1.05);
+  /* transform: scale(1.05); */
 }
 
 .menu-toggle:active {
@@ -72,7 +72,7 @@
 }
 
 .brand-text {
-  color: var(--text-primary);
+  color: white;
   font-size: 20px;
   font-weight: 700;
   letter-spacing: 1px;
@@ -311,20 +311,20 @@
   padding-left: 12px;
 }
 
-/* ==================== SIDEBAR FOOTER ==================== */
-/* ==================== SIDEBAR FOOTER ==================== */
+
 .sidebar-footer {
-  padding: 15px 20px; /* Reduce el padding */
+  padding: 15px 20px; 
   border-top: 1px solid var(--border-color);
-  background: var(--bg-sidebar-light);
+  background: #24599B;
   flex-shrink: 0;
-  min-height: 80px; /* Usa min-height en lugar de height */
+  min-height: 80px; 
 }
 
 .user-info {
   display: flex;
   align-items: center;
   gap: 12px;
+  color: white;
 }
 
 .user-avatar {
@@ -417,8 +417,12 @@ nav {
   background-color: white;
 }
 
-header{
-  background-color: white !important;
+header {
+  padding: 0.5rem !important;
+  background-image: url('../assets/xpos-images/bg-header.png') !important;
+  background-repeat: no-repeat;           
+  background-position: center center;     
+  background-size: cover;                 
 }
 
 /* ==================== CONTENT ADJUSTMENT ==================== */
@@ -439,7 +443,7 @@ header{
 .container-catalog {
   margin-top: -3.5rem;
   display: flex;
-  justify-content: safe center; /* Centra, pero no desborda */
+  justify-content: safe center; 
   width: 100%;
 }
 

@@ -8,7 +8,7 @@
    <div class="col-md-6">
       <mat-form-field>
          <mat-label for="marNombre">Nombre</mat-label>
-         <input matInput [(ngModel)]="marca.marNombre" id="marNombre" name="marNombre" placeholder="Nombre" required>
+         <input  maxlength="200" matInput [(ngModel)]="marca.marNombre" id="marNombre" name="marNombre" placeholder="Nombre" required>
          <mat-error *ngIf="marca.marNombre==''">Nombre es requerido</mat-error>
       </mat-form-field>
    </div>

@@ -26,6 +26,7 @@
           name="perClave"
           placeholder="Código"
           required
+           maxlength="30"
         />
         <mat-error *ngIf="perfil.perClave == ''">Código es requerido</mat-error>
       </mat-form-field>
@@ -40,7 +41,8 @@
           id="perActivo"
           name="perActivo"
           placeholder="Nombre"
-        />
+           maxlength="200"
+          />
       </mat-form-field>
     </div>
   </div>

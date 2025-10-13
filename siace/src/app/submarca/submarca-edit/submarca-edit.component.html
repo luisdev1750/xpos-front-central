@@ -26,7 +26,7 @@
    <div class="col-md-6">
       <mat-form-field>
          <mat-label for="smaNombre">Nombre</mat-label>
-         <input matInput [(ngModel)]="submarca.smaNombre" id="smaNombre" name="smaNombre" placeholder="Nombre" required>
+         <input  maxlength="200" matInput [(ngModel)]="submarca.smaNombre" id="smaNombre" name="smaNombre" placeholder="Nombre" required>
          <mat-error *ngIf="submarca.smaNombre==''">Nombre es requerido</mat-error>
       </mat-form-field>
    </div>
