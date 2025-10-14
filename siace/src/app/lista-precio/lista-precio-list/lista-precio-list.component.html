@@ -1,27 +1,21 @@
-
-
 <div class="proin-main">
   <mat-card class="proin-card">
-    <h2>Catalogo de Lista Precios</h2>
+    <h2>Catálogo de Lista Precios</h2>
     <form #f="ngForm">
- 
+      <mat-form-field>
+        <mat-label>Activo:</mat-label>
+        <mat-select
+          [(ngModel)]="filter.lprActivo"
+          id="marActivo"
+          name="marActivo"
+          (selectionChange)="onActivoChange()"
+        >
+          <mat-option value="all">Todos</mat-option>
+          <mat-option value="true">Sí</mat-option>
+          <mat-option value="false">No</mat-option>
+        </mat-select>
+      </mat-form-field>
 
-       
-         <mat-form-field>
-            <mat-label>Activo:</mat-label>
-            <mat-select
-              [(ngModel)]="filter.lprActivo"
-              id="marActivo"
-              name="marActivo"
-              (selectionChange)="onActivoChange()"
-            >
-              <mat-option value="all">Todos</mat-option>
-              <mat-option value="true">Sí</mat-option>
-              <mat-option value="false">No</mat-option>
-            </mat-select>
-         </mat-form-field>
-
-  
       <mat-form-field appearance="fill">
         <mat-label for="fechaAlta">Fecha Alta</mat-label>
         <input
@@ -40,50 +34,47 @@
         <mat-datepicker #pickerAlta></mat-datepicker>
       </mat-form-field>
 
-    
-
-      <button
-        mat-mini-fab
-        color="accent"
-        (click)="add()"
-    
-      >
+      <button mat-mini-fab color="accent" (click)="add()">
         <mat-icon>add</mat-icon>
       </button>
     </form>
     <div *ngIf="listaPrecioList.length > 0">
       <table mat-table #table [dataSource]="listaPrecioList">
-     
-
         <ng-container matColumnDef="lprNombre">
           <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
-          <mat-cell class = "cell-angular" *matCellDef="let item"> {{ item.lprNombre }} </mat-cell>
+          <mat-cell class="cell-angular" *matCellDef="let item">
+            {{ item.lprNombre }}
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="lprActivo">
-          <mat-header-cell *matHeaderCellDef>
-            Activo
-          </mat-header-cell>
-          <mat-cell *matCellDef="let item" style="justify-content: center;">
+          <mat-header-cell *matHeaderCellDef> Activo </mat-header-cell>
+          <mat-cell *matCellDef="let item" style="justify-content: center">
             <mat-icon *ngIf="item.lprActivo" color="primary"
               >check_circle</mat-icon
             >
             <mat-icon *ngIf="!item.lprActivo" color="warn">cancel</mat-icon>
           </mat-cell>
-        </ng-container>		  
+        </ng-container>
 
         <ng-container matColumnDef="lprFechaVigencia">
           <mat-header-cell *matHeaderCellDef>
             Fecha de vigencia
           </mat-header-cell>
-          <mat-cell style="justify-content: center;" *matCellDef="let item" class = "clave">
-            {{ item.lprFechaVigencia | date : "dd/MM/yyyy HH:mm"  }}
+          <mat-cell
+            style="justify-content: center"
+            *matCellDef="let item"
+            class="clave"
+          >
+            {{ item.lprFechaVigencia | date : "dd/MM/yyyy HH:mm" }}
           </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="lprFechaAlta">
           <mat-header-cell *matHeaderCellDef> Fecha Alta </mat-header-cell>
-          <mat-cell style="justify-content: center;" *matCellDef="let item" > {{ item.lprFechaAlta | date : "dd/MM/yyyy HH:mm" }} </mat-cell>
+          <mat-cell style="justify-content: center" *matCellDef="let item">
+            {{ item.lprFechaAlta | date : "dd/MM/yyyy HH:mm" }}
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="actions">
@@ -94,6 +85,8 @@
               mat-button
               color="warn"
               class="button-edit"
+              matTooltip="Editar"
+              matTooltipPosition="above"
             >
               <mat-icon>edit</mat-icon></button
             >&nbsp;

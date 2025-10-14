@@ -1,10 +1,7 @@
-
-
 <div class="proin-main">
   <mat-card class="proin-card">
-    <h2>Catalogo de Bancos</h2>
+    <h2>Catálogo de Bancos</h2>
     <form #f="ngForm">
-   
       <mat-form-field>
         <mat-label>Activo:</mat-label>
         <mat-select
@@ -30,26 +27,22 @@
     </form>
     <div *ngIf="bancoList.length > 0">
       <table mat-table #table [dataSource]="bancoList">
-      
-
         <ng-container matColumnDef="banNombre">
           <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
-          <mat-cell class = "cell-angular" *matCellDef="let item"> {{ item.banNombre }} </mat-cell>
+          <mat-cell class="cell-angular" *matCellDef="let item">
+            {{ item.banNombre }}
+          </mat-cell>
         </ng-container>
 
-        		 
         <ng-container matColumnDef="banActivo">
-          <mat-header-cell *matHeaderCellDef>
-            Activo
-          </mat-header-cell>
-          <mat-cell *matCellDef="let item" style="justify-content: center;">
+          <mat-header-cell *matHeaderCellDef> Activo </mat-header-cell>
+          <mat-cell *matCellDef="let item" style="justify-content: center">
             <mat-icon *ngIf="item.banActivo" color="primary"
               >check_circle</mat-icon
             >
             <mat-icon *ngIf="!item.banActivo" color="warn">cancel</mat-icon>
           </mat-cell>
         </ng-container>
-   
 
         <ng-container matColumnDef="actions">
           <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
@@ -59,10 +52,18 @@
               mat-button
               color="warn"
               class="button-edit"
+              matTooltip="Editar"
+              matTooltipPosition="above"
             >
               <mat-icon>edit</mat-icon></button
             >&nbsp;
-            <button (click)="delete(item)" mat-button color="warn">
+            <button
+              (click)="delete(item)"
+              mat-button
+              color="warn"
+              matTooltip="Borrar"
+              matTooltipPosition="above"
+            >
               <mat-icon>delete</mat-icon>
             </button>
           </mat-cell>

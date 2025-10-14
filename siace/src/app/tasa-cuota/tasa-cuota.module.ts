@@ -16,7 +16,7 @@ import { TasaCuotaEditComponent } from './tasa-cuota-edit/tasa-cuota-edit.compon
 import { TasaCuotaService } from './tasa-cuota.service';
 import { TasaCuotaRoutingModule } from './tasa-cuota.routing.module';
 import { MatSelectModule } from '@angular/material/select';
-
+import { MatTooltipModule } from '@angular/material/tooltip';
 @NgModule({
   imports: [
     CommonModule,
@@ -31,14 +31,12 @@ import { MatSelectModule } from '@angular/material/select';
     MatDialogModule,
     MatCardModule,
     TasaCuotaRoutingModule,
-        MatSelectModule,
-        MatOptionModule
+    MatSelectModule,
+    MatOptionModule,
+    MatTooltipModule,
   ],
-  declarations: [
-    TasaCuotaListComponent,
-    TasaCuotaEditComponent
-  ],
+  declarations: [TasaCuotaListComponent, TasaCuotaEditComponent],
   providers: [TasaCuotaService],
-  exports: []
+  exports: [],
 })
-export class TasaCuotaModule { }
+export class TasaCuotaModule {}

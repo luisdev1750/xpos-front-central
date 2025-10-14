@@ -56,6 +56,7 @@ import { NivelEstudioService } from './nivel-estudio/nivel-estudio.service';
 import { GiroService } from './giro/giro.service';
 import { NecesidadService } from './necesidad/necesidad.service';
 import { MenuModule } from './menu/menu.module';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 registerLocaleData(localeMx);
@@ -88,6 +89,7 @@ registerLocaleData(localeMx);
     MatStepperModule,
     FlexLayoutModule,
     EstadisticasModule,
+     MatTooltipModule,
     ToastrModule.forRoot({
       //timeOut: 10000,
       //positionClass: 'toast-top-right',

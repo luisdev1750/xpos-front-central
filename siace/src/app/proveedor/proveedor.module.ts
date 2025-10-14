@@ -16,7 +16,7 @@ import { ProveedorEditComponent } from './proveedor-edit/proveedor-edit.componen
 import { ProveedorService } from './proveedor.service';
 import { ProveedorRoutingModule } from './proveedor.routing.module';
 import { MatSelect } from '@angular/material/select';
-
+import { MatTooltipModule } from '@angular/material/tooltip';
 @NgModule({
   imports: [
     CommonModule,
@@ -32,13 +32,11 @@ import { MatSelect } from '@angular/material/select';
     MatCardModule,
     ProveedorRoutingModule,
     MatSelect,
-    MatOption
+    MatOption,
+    MatTooltipModule,
   ],
-  declarations: [
-    ProveedorListComponent,
-    ProveedorEditComponent
-  ],
+  declarations: [ProveedorListComponent, ProveedorEditComponent],
   providers: [ProveedorService],
-  exports: []
+  exports: [],
 })
-export class ProveedorModule { }
+export class ProveedorModule {}

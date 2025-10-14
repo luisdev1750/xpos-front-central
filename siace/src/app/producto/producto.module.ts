@@ -19,7 +19,7 @@ import { PresentacionService } from '../presentacion/presentacion.service';
 import { FamiliaService } from '../familia/familia.service';
 import { MatSelectModule } from '@angular/material/select';
 import { MatPaginatorModule } from '@angular/material/paginator';
-
+import { MatTooltipModule } from '@angular/material/tooltip';
 @NgModule({
   imports: [
     CommonModule,
@@ -35,7 +35,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatCardModule,
     ProductoRoutingModule,
     MatSelectModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatTooltipModule
   ],
   declarations: [
     ProductoListComponent,

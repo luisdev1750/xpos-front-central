@@ -16,7 +16,7 @@ import { TipoPromocionEditComponent } from './tipo-promocion-edit/tipo-promocion
 import { TipoPromocionService } from './tipo-promocion.service';
 import { TipoPromocionRoutingModule } from './tipo-promocion.routing.module';
 import { MatSelectModule } from '@angular/material/select';
-
+import { MatTooltipModule } from '@angular/material/tooltip';
 @NgModule({
   imports: [
     CommonModule,
@@ -31,14 +31,12 @@ import { MatSelectModule } from '@angular/material/select';
     MatDialogModule,
     MatCardModule,
     TipoPromocionRoutingModule,
-          MatSelectModule,
-            MatOptionModule
+    MatSelectModule,
+    MatOptionModule,
+    MatTooltipModule,
   ],
-  declarations: [
-    TipoPromocionListComponent,
-    TipoPromocionEditComponent
-  ],
+  declarations: [TipoPromocionListComponent, TipoPromocionEditComponent],
   providers: [TipoPromocionService],
-  exports: []
+  exports: [],
 })
-export class TipoPromocionModule { }
+export class TipoPromocionModule {}

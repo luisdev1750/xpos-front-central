@@ -1,77 +1,91 @@
-
-
 <div class="proin-main">
-   <mat-card class="proin-card">
-      <h2>Catalogo de Configuración de Sucursales</h2>
-      <form #f="ngForm">
-       
-      
+  <mat-card class="proin-card">
+    <h2>Catálogo de Configuración de Sucursales</h2>
+    <form #f="ngForm">
       <mat-form-field>
         <mat-label>Sucursal</mat-label>
-        <mat-select [value]="filter.scoSucId" (selectionChange)="onSucursalChange($event)">
+        <mat-select
+          [value]="filter.scoSucId"
+          (selectionChange)="onSucursalChange($event)"
+        >
           <mat-option value="0">Todas las sucursales</mat-option>
-          <mat-option *ngFor="let sucursal of listSucursales" 
-                      [value]="sucursal.sucId">
+          <mat-option
+            *ngFor="let sucursal of listSucursales"
+            [value]="sucursal.sucId"
+          >
             {{ sucursal.sucNombre }}
           </mat-option>
         </mat-select>
       </mat-form-field>
-   
-       
-         
 
-         <button mat-mini-fab color="accent" (click)="add()" [disabled]="!f?.valid">
-            <mat-icon>add</mat-icon>
-         </button>
-      </form>
-      <div *ngIf="sucursalConfigList.length > 0">
-         
-         <table mat-table #table [dataSource]="sucursalConfigList">
-            
-         
-            
-            <ng-container matColumnDef="scoSucId">
-               <mat-header-cell *matHeaderCellDef>
-                  Sucursal
-               </mat-header-cell>
-               <mat-cell class = "cell-angular" *matCellDef="let item"> {{item.scoSucNombre}} </mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="scoHost">
-               <mat-header-cell *matHeaderCellDef>
-                  Host
-               </mat-header-cell>
-               <mat-cell class = "cell-angular" *matCellDef="let item"> {{item.scoHost}} </mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="scoTokenUser">
-               <mat-header-cell *matHeaderCellDef>
-                  Token de Usuario
-               </mat-header-cell>
-               <mat-cell *matCellDef="let item"> {{item.scoTokenUser}} </mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="scoTokenPassword">
-               <mat-header-cell *matHeaderCellDef>
-                  Token de contraseña
-               </mat-header-cell>
-               <mat-cell class = "cell-angular" *matCellDef="let item"> {{item.scoTokenPassword}} </mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="actions">
-               <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
-               <mat-cell *matCellDef="let item">
-                  <button (click)="edit(item)" mat-button color="warn" class="button-edit">
-                     <mat-icon>edit</mat-icon>
-                  </button>&nbsp;
-                  <button (click)="delete(item)" mat-button color="warn">
-                     <mat-icon>delete</mat-icon>
-                  </button>
-               </mat-cell>
-            </ng-container>
-            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-         </table>
-      </div>
-   </mat-card>
+      <button
+        mat-mini-fab
+        color="accent"
+        (click)="add()"
+        [disabled]="!f?.valid"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+    </form>
+    <div *ngIf="sucursalConfigList.length > 0">
+      <table mat-table #table [dataSource]="sucursalConfigList">
+        <ng-container matColumnDef="scoSucId">
+          <mat-header-cell *matHeaderCellDef> Sucursal </mat-header-cell>
+          <mat-cell class="cell-angular" *matCellDef="let item">
+            {{ item.scoSucNombre }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="scoHost">
+          <mat-header-cell *matHeaderCellDef> Host </mat-header-cell>
+          <mat-cell class="cell-angular" *matCellDef="let item">
+            {{ item.scoHost }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="scoTokenUser">
+          <mat-header-cell *matHeaderCellDef>
+            Token de Usuario
+          </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.scoTokenUser }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="scoTokenPassword">
+          <mat-header-cell *matHeaderCellDef>
+            Token de contraseña
+          </mat-header-cell>
+          <mat-cell class="cell-angular" *matCellDef="let item">
+            {{ item.scoTokenPassword }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            <button
+              (click)="edit(item)"
+              mat-button
+              color="warn"
+              class="button-edit"
+              matTooltip="Editar"
+              matTooltipPosition="above"
+            >
+              <mat-icon>edit</mat-icon></button
+            >&nbsp;
+            <button
+              (click)="delete(item)"
+              mat-button
+              color="warn"
+              matTooltip="Borrar"
+              matTooltipPosition="above"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+      </table>
+    </div>
+  </mat-card>
 </div>

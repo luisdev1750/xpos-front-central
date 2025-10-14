@@ -7,22 +7,71 @@
   autocomplete="off"
 >
   <div class="row">
+    <!-- BUSCADOR DE PRODUCTO -->
     <div class="col-md-6">
-      <mat-form-field>
-        <mat-label for="priProId">Producto</mat-label>
+      <mat-form-field *ngIf="!isEditing">
+        <mat-label>Producto</mat-label>
         <input
-          matInput
           type="text"
-          [(ngModel)]="productoImagen.priProName"
-          id="priProName"
-          name="priProName"
-          placeholder="Producto"
-          readonly
+          matInput
+          [formControl]="productoControl"
+          [matAutocomplete]="autoProducto"
+          placeholder="Buscar por nombre, descripción, SKU o ID..."
+          [readonly]="isEditing"
         />
-        <mat-error *ngIf="!productoImagen.priProId"
+        <button
+          *ngIf="productoControl.value && !isEditing"
+          matSuffix
+          mat-icon-button
+          aria-label="Limpiar"
+          type="button"
+          (click)="onProductoClear()"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+        <mat-autocomplete
+          #autoProducto="matAutocomplete"
+          [displayWith]="displayProductoFn"
+          (optionSelected)="onProductoSelected($event.option.value)"
+        >
+          <mat-option
+            *ngFor="let producto of filteredProductos | async"
+            [value]="producto"
+          >
+            <span>
+              <strong>{{ producto.proId }}</strong> - {{ producto.proNombre }}
+            </span>
+            <br />
+            <small style="color: #666" *ngIf="producto.proDescripcion">
+              {{ producto.proDescripcion }}
+            </small>
+            <small
+              style="color: #999; margin-left: 8px"
+              *ngIf="producto.proSku"
+            >
+              SKU: {{ producto.proSku }}
+            </small>
+          </mat-option>
+        </mat-autocomplete>
+        <mat-error *ngIf="!productoImagen.priProId && !isEditing"
           >Producto es requerido</mat-error
         >
       </mat-form-field>
+
+      <mat-form-field *ngIf="isEditing">
+        <mat-label>Producto</mat-label>
+        <input
+          matInput
+          [(ngModel)]="productoImagen.priProName"
+          id="priProName"
+          name="priProName"
+          placeholder="Nombre del archivo"
+          readonly
+        />
+      </mat-form-field>
+
+
+
     </div>
 
     <div class="col-md-6">
@@ -126,7 +175,7 @@
       type="submit"
       mat-raised-button
       color="primary"
-      [disabled]="!editForm.form.valid || (!isEditing && !selectedFile)"
+      [disabled]="!editForm.form.valid || (!isEditing && !selectedFile) || !productoImagen.priProId"
     >
       <mat-icon>save</mat-icon>
       {{ isEditing ? "Actualizar" : "Guardar" }}

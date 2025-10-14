@@ -18,6 +18,7 @@ import { SucursalRoutingModule } from './sucursal.routing.module';
 import { MatSelect } from '@angular/material/select';
 import { ProveedorService } from '../proveedor/proveedor.service';
 import { EmpresaService } from '../empresa/empresa.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   imports: [
@@ -34,13 +35,11 @@ import { EmpresaService } from '../empresa/empresa.service';
     MatCardModule,
     SucursalRoutingModule,
     MatSelect,
-    MatOption
+    MatOption,
+    MatTooltipModule,
   ],
-  declarations: [
-    SucursalListComponent,
-    SucursalEditComponent
-  ],
+  declarations: [SucursalListComponent, SucursalEditComponent],
   providers: [SucursalService, ProveedorService, EmpresaService],
-  exports: []
+  exports: [],
 })
-export class SucursalModule { }
+export class SucursalModule {}

@@ -10,7 +10,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
-import {  ComboService } from './combo.service';
+import { ComboService } from './combo.service';
 import { BancoRoutingModule } from './combo.routing.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
@@ -20,9 +20,12 @@ import { ComboListComponent } from './combo-list/combo-list.component';
 import { ComboEditComponent } from './combo-edit/combo-edit.component';
 import { SucursalService } from '../sucursal/sucursal.service';
 import { ListaPrecioService } from '../lista-precio/lista-precio.service';
-import { MatAutocomplete, MatAutocompleteModule } from '@angular/material/autocomplete';
+import {
+  MatAutocomplete,
+  MatAutocompleteModule,
+} from '@angular/material/autocomplete';
 import { ProductoService } from '../producto/producto.service';
-
+import { MatTooltipModule } from '@angular/material/tooltip';
 /*
   MatOption,
     ReactiveFormsModule,
@@ -45,20 +48,23 @@ import { ProductoService } from '../producto/producto.service';
     MatDialogModule,
     MatCardModule,
     BancoRoutingModule,
-       MatSlideToggleModule,
-       MatSelectModule ,
-       MatOptionModule,
-       MatAutocomplete,
-       MatAutocompleteModule,
-       MatSelect,
-       ReactiveFormsModule
-
+    MatSlideToggleModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatAutocomplete,
+    MatAutocompleteModule,
+    MatSelect,
+    ReactiveFormsModule,
+    MatTooltipModule,
   ],
-  declarations: [
-    ComboListComponent,
-    ComboEditComponent
+  declarations: [ComboListComponent, ComboEditComponent],
+  providers: [
+    ComboService,
+    SucursalService,
+    ListaPrecioService,
+    ProductoService,
+    SucursalService,
   ],
-  providers: [ ComboService, SucursalService, ListaPrecioService, ProductoService, SucursalService],
-  exports: []
+  exports: [],
 })
-export class ComboModule { }
+export class ComboModule {}

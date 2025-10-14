@@ -1,8 +1,6 @@
-
-
 <div class="proin-main">
   <mat-card class="proin-card">
-    <h2>Catalogo de Precios de Productos</h2>
+    <h2>Catálogo de Precios de Productos</h2>
     <form #f="ngForm">
       <mat-form-field>
         <mat-label>Lista de Precios</mat-label>
@@ -10,7 +8,7 @@
           [value]="filter.prrLprId"
           (selectionChange)="OnListaPreciosChange($event)"
         >
-            <mat-option value="0">Todas las listas de precios</mat-option>
+          <mat-option value="0">Todas las listas de precios</mat-option>
           <mat-option
             *ngFor="let precio of listaPrecios"
             [value]="precio.lprId"
@@ -33,26 +31,33 @@
       <table mat-table #table [dataSource]="productoPrecioList">
         <ng-container matColumnDef="prrProId">
           <mat-header-cell *matHeaderCellDef> Producto </mat-header-cell>
-          <mat-cell class="cell-angular" *matCellDef="let item"> {{ item.prrProName }} </mat-cell>
+          <mat-cell class="cell-angular" *matCellDef="let item">
+            {{ item.prrProName }}
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="prrLprId">
-          <mat-header-cell *matHeaderCellDef>
-            Lista de Precio
-          </mat-header-cell>
-          <mat-cell class = "cell-angular" *matCellDef="let item"> {{ item.prrLprName }} </mat-cell>
+          <mat-header-cell *matHeaderCellDef> Lista de Precio </mat-header-cell>
+          <mat-cell class="cell-angular" *matCellDef="let item">
+            {{ item.prrLprName }}
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="prrPrecio">
           <mat-header-cell *matHeaderCellDef> Precio </mat-header-cell>
-          <mat-cell style = "justify-content: right !important;" *matCellDef="let item"> {{ item.prrPrecio }} </mat-cell>
+          <mat-cell
+            style="justify-content: right !important"
+            *matCellDef="let item"
+          >
+            {{ item.prrPrecio }}
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="prrFechaAlta">
           <mat-header-cell *matHeaderCellDef> Fecha de Alta </mat-header-cell>
-          <mat-cell style = "justify-content: center;" *matCellDef="let item">             
-                 {{ item.prrFechaAlta| date : "dd/MM/yyyy HH:mm" }}
-            </mat-cell>
+          <mat-cell style="justify-content: center" *matCellDef="let item">
+            {{ item.prrFechaAlta | date : "dd/MM/yyyy HH:mm" }}
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="prrReiId">
@@ -62,8 +67,6 @@
           <mat-cell *matCellDef="let item"> {{ item.prrReiName }} </mat-cell>
         </ng-container>
 
-        
-
         <ng-container matColumnDef="actions">
           <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
           <mat-cell *matCellDef="let item">
@@ -72,10 +75,18 @@
               mat-button
               color="warn"
               class="button-edit"
+              matTooltip="Editar"
+              matTooltipPosition="above"
             >
               <mat-icon>edit</mat-icon></button
             >&nbsp;
-            <button (click)="delete(item)" mat-button color="warn">
+            <button
+              (click)="delete(item)"
+              mat-button
+              color="warn"
+              matTooltip="Borrar"
+              matTooltipPosition="above"
+            >
               <mat-icon>delete</mat-icon>
             </button>
           </mat-cell>

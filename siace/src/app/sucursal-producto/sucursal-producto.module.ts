@@ -20,7 +20,7 @@ import { MatSelect } from '@angular/material/select';
 import { ListaPrecioService } from '../lista-precio/lista-precio.service';
 import { SucursalProductoBusquedaComponent } from './sucursal-producto-busqueda/sucursal-producto-busqueda.component';
 import { ProductoService } from '../producto/producto.service';
-
+import { MatTooltipModule } from '@angular/material/tooltip';
 @NgModule({
   imports: [
     CommonModule,
@@ -36,14 +36,20 @@ import { ProductoService } from '../producto/producto.service';
     MatCardModule,
     SucursalProductoRoutingModule,
     MatSelect,
-    MatOption
+    MatOption,
+    MatTooltipModule,
   ],
   declarations: [
     SucursalProductoListComponent,
     SucursalProductoEditComponent,
-    SucursalProductoBusquedaComponent
+    SucursalProductoBusquedaComponent,
   ],
-  providers: [SucursalProductoService, SucursalService, ListaPrecioService, ProductoService],
-  exports: []
+  providers: [
+    SucursalProductoService,
+    SucursalService,
+    ListaPrecioService,
+    ProductoService,
+  ],
+  exports: [],
 })
-export class SucursalProductoModule { }
+export class SucursalProductoModule {}

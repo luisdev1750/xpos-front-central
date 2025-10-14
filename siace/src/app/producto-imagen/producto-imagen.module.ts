@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -18,7 +18,8 @@ import { ProductoImagenRoutingModule } from './producto-imagen.routing.module';
 import { ProductoService } from '../producto/producto.service';
 import { ProductoImagenBusquedaComponent } from './producto-imagen-busqueda/producto-imagen-busqueda.component';
 import { MatSelect } from '@angular/material/select';
-
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatTooltipModule } from '@angular/material/tooltip';
 @NgModule({
   imports: [
     CommonModule,
@@ -34,7 +35,10 @@ import { MatSelect } from '@angular/material/select';
     MatCardModule,
     ProductoImagenRoutingModule,
     MatSelect, 
-    MatOption
+    MatOption,
+    MatAutocompleteModule,
+     ReactiveFormsModule,
+     MatTooltipModule
   ],
   declarations: [
     ProductoImagenListComponent,

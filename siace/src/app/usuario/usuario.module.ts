@@ -18,7 +18,7 @@ import { UsuarioRoutingModule } from './usuario.routing.module';
 import { PerfilService } from '../perfil/perfil.service';
 import { SucursalService } from '../sucursal/sucursal.service';
 import { MatSelect, MatSelectModule } from '@angular/material/select';
-
+import { MatTooltipModule } from '@angular/material/tooltip';
 @NgModule({
   imports: [
     CommonModule,
@@ -35,14 +35,11 @@ import { MatSelect, MatSelectModule } from '@angular/material/select';
     UsuarioRoutingModule,
     MatSelect,
     MatSelectModule,
-    MatOptionModule
-  
+    MatOptionModule,
+    MatTooltipModule,
   ],
-  declarations: [
-    UsuarioListComponent,
-    UsuarioEditComponent
-  ],
+  declarations: [UsuarioListComponent, UsuarioEditComponent],
   providers: [UsuarioService, PerfilService, SucursalService],
-  exports: []
+  exports: [],
 })
-export class UsuarioModule { }
+export class UsuarioModule {}

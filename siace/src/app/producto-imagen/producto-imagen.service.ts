@@ -91,6 +91,13 @@ export class ProductoImagenService extends GeneralService {
     });
   }
 
+  findAllProductosImagenes(): Observable<any[]> {
+    const url = `${this.api}/all-productos-imagenes`;
+    return this.http.get<any[]>(url, {
+      headers: this.getHeaders(),
+    });
+  }
+
   load(filter: ProductoImagenFilter): void {
     this.find(filter).subscribe({
       next: (result) => {

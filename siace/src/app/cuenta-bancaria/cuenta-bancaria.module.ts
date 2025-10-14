@@ -18,7 +18,7 @@ import { CuentaBancariaRoutingModule } from './cuenta-bancaria.routing.module';
 import { SucursalService } from '../sucursal/sucursal.service';
 import { BancoService } from '../banco/banco.service';
 import { MatSelect } from '@angular/material/select';
-
+import { MatTooltipModule } from '@angular/material/tooltip';
 @NgModule({
   imports: [
     CommonModule,
@@ -34,7 +34,8 @@ import { MatSelect } from '@angular/material/select';
     MatCardModule,
     CuentaBancariaRoutingModule,
     MatSelect,
-    MatOption
+    MatOption,
+     MatTooltipModule,
   ],
   declarations: [
     CuentaBancariaListComponent,

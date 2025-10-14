@@ -17,6 +17,7 @@ import { FamiliaService } from './familia.service';
 import { FamiliaRoutingModule } from './familia.routing.module';
 import { SubmarcaService } from '../submarca/submarca.service';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   imports: [
@@ -33,7 +34,8 @@ import { MatSelectModule } from '@angular/material/select';
     MatCardModule,
     FamiliaRoutingModule,
     MatSelectModule ,
-    MatOptionModule
+    MatOptionModule,
+    MatTooltipModule
   ],
   declarations: [
     FamiliaListComponent,

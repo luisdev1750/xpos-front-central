@@ -1,8 +1,13 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
+import { FormControl } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
+
 import { ProductoImagenService } from '../producto-imagen.service';
 import { ProductoImagen } from '../producto-imagen';
+import { ProductoService } from '../../producto/producto.service';
 
 @Component({
    selector: 'app-producto-imagen-edit',
@@ -23,15 +28,25 @@ export class ProductoImagenEditComponent implements OnInit {
    imagePreview: string | null = null;
    isEditing: boolean = false;
 
+   // Propiedades para el buscador de productos
+   listProductosCompleta: any[] = [];
+   listProductos: any[] = [];
+   productoControl = new FormControl('');
+   filteredProductos!: Observable<any[]>;
+   productoSeleccionado: any = null;
+
    constructor(
       private dialogRef: MatDialogRef<ProductoImagenEditComponent>,
       private productoImagenService: ProductoImagenService,
+      private productoService: ProductoService,
       private toastr: ToastrService,
       @Inject(MAT_DIALOG_DATA) public data: any
    ) {
       this.productoImagen = data.productoImagen;
       this.isEditing = this.productoImagen.priId > 0;
-      
+      console.log("data producto");
+console.log(data);
+
       // Si estamos editando y existe una imagen, cargar la vista previa
       if (this.isEditing && this.productoImagen.priNombre && this.productoImagen.priProId) {
          this.loadImagePreview(this.productoImagen.priProId, this.productoImagen.priNombre);
@@ -40,9 +55,109 @@ export class ProductoImagenEditComponent implements OnInit {
 
    ngOnInit() {
       this.loadCatalogs();
+      this.loadProductos();
    }
 
-   // Cargar imagen existente usando getImagen - ACTUALIZADO con priProId
+   // Una vez que se cargan los productos, setear el seleccionado
+   onProductosLoaded() {
+      if (this.productoImagen.priProId && this.listProductosCompleta.length > 0) {
+         const productoSeleccionadoDelCatalogo = this.listProductosCompleta.find(
+            (p) => p.proId === this.productoImagen.priProId
+         );
+         if (productoSeleccionadoDelCatalogo) {
+            this.productoSeleccionado = productoSeleccionadoDelCatalogo;
+            this.productoControl.setValue(productoSeleccionadoDelCatalogo);
+         }
+      }
+   }
+
+   loadCatalogs() {
+      this.productoImagenService.findTipoImagenes().subscribe({
+         next: result => {
+            this.listTipoImagenes = result;
+         },
+         error: err => {
+            this.toastr.error('Error al cargar tipos de imágenes', 'Error');
+         }
+      });
+   }
+
+   // Cargar productos para el buscador
+   loadProductos() {
+      this.productoImagenService.findAllProductosImagenes().subscribe({
+         next: (productos) => {
+            this.listProductosCompleta = productos;
+            this.listProductos = [...productos];
+            this.setupAutocomplete();
+            // Una vez que se cargan los productos, setear el del data si existe
+            this.onProductosLoaded();
+         },
+         error: (error) => {
+            console.error('Error cargando productos:', error);
+            this.toastr.error('Error cargando productos', 'Error');
+         }
+      });
+   }
+
+   // Configuración del autocomplete
+   setupAutocomplete() {
+      if (this.listProductosCompleta.length === 0) return;
+
+      this.filteredProductos = this.productoControl.valueChanges.pipe(
+         startWith(''),
+         map((value) => this._filterProductos(this._getFilterValue(value)))
+      );
+   }
+
+   // Obtener valor del filtro
+   private _getFilterValue(value: any): string {
+      if (typeof value === 'string') return value;
+      if (value && typeof value === 'object' && value.proNombre)
+         return value.proNombre;
+      return '';
+   }
+
+   // Filtrar productos
+   private _filterProductos(value: string): any[] {
+      const filterValue = value.toLowerCase();
+      return this.listProductos.filter(
+         (producto) =>
+            (producto.proNombre &&
+               producto.proNombre.toLowerCase().includes(filterValue)) ||
+            (producto.proDescripcion &&
+               producto.proDescripcion.toLowerCase().includes(filterValue)) ||
+            (producto.proSku &&
+               producto.proSku.toLowerCase().includes(filterValue)) ||
+            producto.proId.toString().includes(filterValue)
+      );
+   }
+
+   // Mostrar nombre del producto en el input
+   displayProductoFn(producto: any): string {
+      return producto && producto.proNombre ? producto.proNombre : '';
+   }
+
+   // Cuando se selecciona un producto
+   onProductoSelected(producto: any) {
+      if (!producto || !producto.proId) return;
+
+      this.productoSeleccionado = producto;
+      this.productoImagen.priProId = producto.proId;
+      this.productoImagen.priProName = producto.proNombre;
+      
+      console.log('Producto seleccionado:', producto);
+      this.toastr.success('Producto seleccionado', 'Éxito');
+   }
+
+   // Limpiar búsqueda
+   onProductoClear() {
+      this.productoControl.reset();
+      this.productoSeleccionado = null;
+      this.productoImagen.priProId = 0;
+      this.productoImagen.priProName = '';
+   }
+
+   // Cargar imagen existente
    loadImagePreview(priProId: number, fileName: string) {
       this.productoImagenService.getImagen(priProId, fileName).subscribe({
          next: (blob: Blob) => {
@@ -55,17 +170,6 @@ export class ProductoImagenEditComponent implements OnInit {
          error: (err) => {
             console.error('Error al cargar imagen', err);
             this.toastr.warning('No se pudo cargar la vista previa de la imagen', 'Advertencia');
-         }
-      });
-   }
-   
-   loadCatalogs() {
-      this.productoImagenService.findTipoImagenes().subscribe({
-         next: result => {
-            this.listTipoImagenes = result;
-         },
-         error: err => {
-            this.toastr.error('Error al cargar tipos de imágenes', 'Error');
          }
       });
    }
@@ -85,8 +189,8 @@ export class ProductoImagenEditComponent implements OnInit {
             return;
          }
 
-         // Validar tamaño (ejemplo: máximo 5MB)
-         const maxSize = 5 * 1024 * 1024; // 5MB
+         // Validar tamaño (máximo 5MB)
+         const maxSize = 5 * 1024 * 1024;
          if (file.size > maxSize) {
             this.toastr.error('El archivo es demasiado grande. Máximo 5MB', 'Error');
             return;

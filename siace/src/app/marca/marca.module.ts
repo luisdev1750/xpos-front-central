@@ -18,6 +18,7 @@ import { MarcaRoutingModule } from './marca.routing.module';
 
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 @NgModule({
@@ -35,7 +36,8 @@ import { MatOptionModule } from '@angular/material/core';
     MatCardModule,
     MarcaRoutingModule,
     MatSelectModule,
-    MatOptionModule
+    MatOptionModule,
+    MatTooltipModule
   ],
   declarations: [
     MarcaListComponent,

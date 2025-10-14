@@ -1,134 +1,169 @@
-
 <div class="proin-main">
-   <mat-card class="proin-card">
-      <h2>Catalogo de Sucursales</h2>
-      <form #f="ngForm">
-         
-         <mat-form-field>
-            <mat-label>Empresa:</mat-label>
-            <mat-select
-               [(ngModel)]="filter.sucEmpId"
-               (selectionChange)="onEmpresaChange($event)"
-               name="sucEmpId"
-            >
-               <mat-option value="0">Todas las empresas</mat-option>
-               <mat-option *ngFor="let empresa of empresasList" [value]="empresa.empId">
-                  {{ empresa.empNombre }}
-               </mat-option>
-            </mat-select>
-         </mat-form-field>
+  <mat-card class="proin-card">
+    <h2>Catálogo de Sucursales</h2>
+    <form #f="ngForm">
+      <mat-form-field>
+        <mat-label>Empresa:</mat-label>
+        <mat-select
+          [(ngModel)]="filter.sucEmpId"
+          (selectionChange)="onEmpresaChange($event)"
+          name="sucEmpId"
+        >
+          <mat-option value="0">Todas las empresas</mat-option>
+          <mat-option
+            *ngFor="let empresa of empresasList"
+            [value]="empresa.empId"
+          >
+            {{ empresa.empNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
-         <mat-form-field>
-            <mat-label>Estado:</mat-label>
-            <mat-select
-               [value]="filter.sucEstId"
-               (selectionChange)="onEstadoChange($event)"
-               name="sucEstId"
-            >
-               <mat-option value="0">Todos los estados</mat-option>
-               <mat-option *ngFor="let estado of estadosList" [value]="estado.estId">
-                  {{ estado.estNombre }}
-               </mat-option>
-            </mat-select>
-         </mat-form-field>
+      <mat-form-field>
+        <mat-label>Estado:</mat-label>
+        <mat-select
+          [value]="filter.sucEstId"
+          (selectionChange)="onEstadoChange($event)"
+          name="sucEstId"
+        >
+          <mat-option value="0">Todos los estados</mat-option>
+          <mat-option *ngFor="let estado of estadosList" [value]="estado.estId">
+            {{ estado.estNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
-         <mat-form-field>
-            <mat-label>Municipio:</mat-label>
-            <mat-select
-               [value]="filter.sucMunId"
-               (selectionChange)="onMunicipioChange($event)"
-               name="sucMunId"
-            >
-               <mat-option value="0">Todos los municipios</mat-option>
-               <mat-option *ngFor="let municipio of municipiosList" [value]="municipio.munId">
-                  {{ municipio.munNombre }}
-               </mat-option>
-            </mat-select>
-         </mat-form-field>
+      <mat-form-field>
+        <mat-label>Municipio:</mat-label>
+        <mat-select
+          [value]="filter.sucMunId"
+          (selectionChange)="onMunicipioChange($event)"
+          name="sucMunId"
+        >
+          <mat-option value="0">Todos los municipios</mat-option>
+          <mat-option
+            *ngFor="let municipio of municipiosList"
+            [value]="municipio.munId"
+          >
+            {{ municipio.munNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
-         <mat-form-field>
-            <mat-label>Ciudad:</mat-label>
-            <mat-select
-               [value]="filter.sucCiuId"
-               (selectionChange)="onCiudadChange($event)"
-               name="sucCiuId"
-            >
-               <mat-option value="0">Todas las ciudades</mat-option>
-               <mat-option *ngFor="let ciudad of ciudadesList" [value]="ciudad.ciuId">
-                  {{ ciudad.ciuNombre }}
-               </mat-option>
-            </mat-select>
-         </mat-form-field>
+      <mat-form-field>
+        <mat-label>Ciudad:</mat-label>
+        <mat-select
+          [value]="filter.sucCiuId"
+          (selectionChange)="onCiudadChange($event)"
+          name="sucCiuId"
+        >
+          <mat-option value="0">Todas las ciudades</mat-option>
+          <mat-option
+            *ngFor="let ciudad of ciudadesList"
+            [value]="ciudad.ciuId"
+          >
+            {{ ciudad.ciuNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
-         <mat-form-field>
-            <mat-label>Colonia:</mat-label>
-            <mat-select
-               [value]="filter.sucColId"
-               (selectionChange)="onColoniaChange($event)"
-               name="sucColId"
-            >
-               <mat-option value="0">Todas las colonias</mat-option>
-               <mat-option *ngFor="let colonia of coloniasList" [value]="colonia.colId">
-                  {{ colonia.colNombre }}
-               </mat-option>
-            </mat-select>
-         </mat-form-field>
+      <mat-form-field>
+        <mat-label>Colonia:</mat-label>
+        <mat-select
+          [value]="filter.sucColId"
+          (selectionChange)="onColoniaChange($event)"
+          name="sucColId"
+        >
+          <mat-option value="0">Todas las colonias</mat-option>
+          <mat-option
+            *ngFor="let colonia of coloniasList"
+            [value]="colonia.colId"
+          >
+            {{ colonia.colNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
-         <button mat-mini-fab color="accent" (click)="add()" [disabled]="!f?.valid">
-            <mat-icon>add</mat-icon>
-         </button>
-      </form>
-      
-      <div *ngIf="sucursalList.length > 0">
-         <table mat-table #table [dataSource]="sucursalList">
-            
-      
-            
-            <ng-container matColumnDef="sucNombre">
-               <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
-               <mat-cell *matCellDef="let item">{{ item.sucNombre }}</mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="sucNumero">
-               <mat-header-cell *matHeaderCellDef>Número</mat-header-cell>
-               <mat-cell class = "clave" *matCellDef="let item">{{ item.sucNumero }}</mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="sucCalle">
-               <mat-header-cell *matHeaderCellDef>Calle</mat-header-cell>
-               <mat-cell class = "clave" *matCellDef="let item">{{ item.sucCalle }}</mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="sucCiuNombre">
-               <mat-header-cell *matHeaderCellDef>Ciudad</mat-header-cell>
-               <mat-cell class = "cell-angular"  *matCellDef="let item">{{ item.sucCiuName }}</mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="sucColNombre">
-               <mat-header-cell *matHeaderCellDef>Colonia</mat-header-cell>
-               <mat-cell class = "cell-angular"  *matCellDef="let item">{{ item.sucColName }}</mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="sucEmpNombre">
-               <mat-header-cell *matHeaderCellDef>Empresa</mat-header-cell>
-               <mat-cell class = "cell-angular" *matCellDef="let item">{{ item.sucEmpNombre }}</mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="actions">
-               <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
-               <mat-cell *matCellDef="let item">
-                  <button (click)="edit(item)" mat-button color="warn" class="button-edit">
-                     <mat-icon>edit</mat-icon>
-                  </button>&nbsp;
-                  <button (click)="delete(item)" mat-button color="warn">
-                     <mat-icon>delete</mat-icon>
-                  </button>
-               </mat-cell>
-            </ng-container>
-            
-            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-         </table>
-      </div>
-   </mat-card>
+      <button
+        mat-mini-fab
+        color="accent"
+        (click)="add()"
+        [disabled]="!f?.valid"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+    </form>
+
+    <div *ngIf="sucursalList.length > 0">
+      <table mat-table #table [dataSource]="sucursalList">
+        <ng-container matColumnDef="sucNombre">
+          <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
+          <mat-cell *matCellDef="let item">{{ item.sucNombre }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="sucNumero">
+          <mat-header-cell *matHeaderCellDef>Número</mat-header-cell>
+          <mat-cell class="clave" *matCellDef="let item">{{
+            item.sucNumero
+          }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="sucCalle">
+          <mat-header-cell *matHeaderCellDef>Calle</mat-header-cell>
+          <mat-cell class="clave" *matCellDef="let item">{{
+            item.sucCalle
+          }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="sucCiuNombre">
+          <mat-header-cell *matHeaderCellDef>Ciudad</mat-header-cell>
+          <mat-cell class="cell-angular" *matCellDef="let item">{{
+            item.sucCiuName
+          }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="sucColNombre">
+          <mat-header-cell *matHeaderCellDef>Colonia</mat-header-cell>
+          <mat-cell class="cell-angular" *matCellDef="let item">{{
+            item.sucColName
+          }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="sucEmpNombre">
+          <mat-header-cell *matHeaderCellDef>Empresa</mat-header-cell>
+          <mat-cell class="cell-angular" *matCellDef="let item">{{
+            item.sucEmpNombre
+          }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            <button
+              (click)="edit(item)"
+              mat-button
+              color="warn"
+              class="button-edit"
+              matTooltip="Editar"
+              matTooltipPosition="above"
+            >
+              <mat-icon>edit</mat-icon></button
+            >&nbsp;
+            <button
+              (click)="delete(item)"
+              mat-button
+              color="warn"
+              matTooltip="Borrar"
+              matTooltipPosition="above"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+      </table>
+    </div>
+  </mat-card>
 </div>

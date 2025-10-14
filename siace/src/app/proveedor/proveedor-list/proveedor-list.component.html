@@ -1,11 +1,7 @@
-
-
 <div class="proin-main">
   <mat-card class="proin-card">
-    <h2>Catalogo de Proveedores</h2>
+    <h2>Catálogo de Proveedores</h2>
     <form #f="ngForm">
-    
-
       <mat-form-field>
         <mat-label>Activo:</mat-label>
         <mat-select
@@ -26,7 +22,7 @@
           [value]="filter.pveEstId"
           (selectionChange)="onEstadoChange($event)"
         >
-            <mat-option value="0">Todos los estados</mat-option>
+          <mat-option value="0">Todos los estados</mat-option>
           <mat-option *ngFor="let estado of estadosList" [value]="estado.estId">
             {{ estado.estNombre }}
           </mat-option>
@@ -89,29 +85,28 @@
     </form>
     <div *ngIf="proveedorList.length > 0">
       <table mat-table #table [dataSource]="proveedorList">
-     
-
         <ng-container matColumnDef="pveNombre">
           <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
-          <mat-cell class = "cell-angular" *matCellDef="let item"> {{ item.pveNombre }} </mat-cell>
+          <mat-cell class="cell-angular" *matCellDef="let item">
+            {{ item.pveNombre }}
+          </mat-cell>
         </ng-container>
 
-          <ng-container matColumnDef="pveActivo">
-          <mat-header-cell *matHeaderCellDef>
-            Activo 
-          </mat-header-cell>
-          <mat-cell *matCellDef="let item" style="justify-content: center;">
+        <ng-container matColumnDef="pveActivo">
+          <mat-header-cell *matHeaderCellDef> Activo </mat-header-cell>
+          <mat-cell *matCellDef="let item" style="justify-content: center">
             <mat-icon *ngIf="item.pveActivo" color="primary"
               >check_circle</mat-icon
             >
             <mat-icon *ngIf="!item.pveActivo" color="warn">cancel</mat-icon>
           </mat-cell>
         </ng-container>
-       
 
         <ng-container matColumnDef="pveCalle">
           <mat-header-cell *matHeaderCellDef> Calle </mat-header-cell>
-          <mat-cell  class = "cell-angular" *matCellDef="let item"> {{ item.pveCalle }} </mat-cell>
+          <mat-cell class="cell-angular" *matCellDef="let item">
+            {{ item.pveCalle }}
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="pveNumeroExterior">
@@ -130,12 +125,16 @@
 
         <ng-container matColumnDef="pveCiuId">
           <mat-header-cell *matHeaderCellDef> Ciudad </mat-header-cell>
-          <mat-cell class = "cell-angular" *matCellDef="let item"> {{ item.pveCiuNombre }} </mat-cell>
+          <mat-cell class="cell-angular" *matCellDef="let item">
+            {{ item.pveCiuNombre }}
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="pveColId">
           <mat-header-cell *matHeaderCellDef> Colonia </mat-header-cell>
-          <mat-cell class = "cell-angular" *matCellDef="let item"> {{ item.pveColNombre }} </mat-cell>
+          <mat-cell class="cell-angular" *matCellDef="let item">
+            {{ item.pveColNombre }}
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="pveTelefono">
@@ -144,22 +143,26 @@
         </ng-container>
 
         <ng-container matColumnDef="pveCorreoElectronico">
-          <mat-header-cell class = "mail-class" *matHeaderCellDef> Email </mat-header-cell>
-          <mat-cell class = "cell-angular mail-class" *matCellDef="let item">
+          <mat-header-cell class="mail-class" *matHeaderCellDef>
+            Email
+          </mat-header-cell>
+          <mat-cell class="cell-angular mail-class" *matCellDef="let item">
             {{ item.pveCorreoElectronico }}
           </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="pveObservaciones">
           <mat-header-cell *matHeaderCellDef> Observaciones </mat-header-cell>
-          <mat-cell class = "cell-angular" *matCellDef="let item">
+          <mat-cell class="cell-angular" *matCellDef="let item">
             {{ item.pveObservaciones }}
           </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="pveNumero">
           <mat-header-cell *matHeaderCellDef> Número </mat-header-cell>
-          <mat-cell class = "clave" *matCellDef="let item"> {{ item.pveNumero }} </mat-cell>
+          <mat-cell class="clave" *matCellDef="let item">
+            {{ item.pveNumero }}
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="actions">
@@ -170,10 +173,11 @@
               mat-button
               color="warn"
               class="button-edit"
+              matTooltip="Editar"
+              matTooltipPosition="above"
             >
               <mat-icon>edit</mat-icon></button
             >&nbsp;
-         
           </mat-cell>
         </ng-container>
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

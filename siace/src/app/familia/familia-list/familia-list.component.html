@@ -1,8 +1,6 @@
-
-
 <div class="proin-main">
   <mat-card class="proin-card">
-    <h2>Catalogo de Familias</h2>
+    <h2>Catálogo de Familias</h2>
     <form #f="ngForm">
       <div class="row align-items-center">
         <div class="col-md-2">
@@ -80,17 +78,14 @@
         </ng-container>
 
         <ng-container matColumnDef="famActivo">
-          <mat-header-cell *matHeaderCellDef>
-            Activo
-          </mat-header-cell>
-          <mat-cell *matCellDef="let item" style="justify-content: center;">
+          <mat-header-cell *matHeaderCellDef> Activo </mat-header-cell>
+          <mat-cell *matCellDef="let item" style="justify-content: center">
             <mat-icon *ngIf="item.famActivo" color="primary"
               >check_circle</mat-icon
             >
             <mat-icon *ngIf="!item.famActivo" color="warn">cancel</mat-icon>
           </mat-cell>
         </ng-container>
-
 
         <ng-container matColumnDef="actions">
           <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
@@ -100,6 +95,8 @@
               mat-button
               color="warn"
               class="button-edit"
+              matTooltip="Editar"
+              matTooltipPosition="above"
             >
               <mat-icon>edit</mat-icon></button
             >&nbsp;

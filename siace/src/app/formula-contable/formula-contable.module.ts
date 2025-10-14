@@ -17,7 +17,7 @@ import { FormulaContableService } from './formula-contable.service';
 import { FormulaContableRoutingModule } from './formula-contable.routing.module';
 import { SucursalService } from '../sucursal/sucursal.service';
 import { MatSelect } from '@angular/material/select';
-
+import { MatTooltipModule } from '@angular/material/tooltip';
 @NgModule({
   imports: [
     CommonModule,
@@ -32,14 +32,12 @@ import { MatSelect } from '@angular/material/select';
     MatDialogModule,
     MatCardModule,
     FormulaContableRoutingModule,
-    MatSelect, 
-    MatOption
+    MatSelect,
+    MatOption,
+    MatTooltipModule,
   ],
-  declarations: [
-    FormulaContableListComponent,
-    FormulaContableEditComponent
-  ],
+  declarations: [FormulaContableListComponent, FormulaContableEditComponent],
   providers: [FormulaContableService, SucursalService],
-  exports: []
+  exports: [],
 })
-export class FormulaContableModule { }
+export class FormulaContableModule {}

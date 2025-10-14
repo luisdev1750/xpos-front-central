@@ -17,8 +17,12 @@ import { ProductoProveedorService } from './producto-proveedor.service';
 import { ProductoProveedorRoutingModule } from './producto-proveedor.routing.module';
 import { ProveedorService } from '../proveedor/proveedor.service';
 import { MatSelect } from '@angular/material/select';
-import { MatAutocomplete, MatAutocompleteModule } from '@angular/material/autocomplete';
+import {
+  MatAutocomplete,
+  MatAutocompleteModule,
+} from '@angular/material/autocomplete';
 import { ProductoService } from '../producto/producto.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   imports: [
@@ -39,13 +43,13 @@ import { ProductoService } from '../producto/producto.service';
     MatAutocomplete,
     ReactiveFormsModule,
     MatAutocompleteModule,
-
+    MatTooltipModule,
   ],
   declarations: [
     ProductoProveedorListComponent,
-    ProductoProveedorEditComponent
+    ProductoProveedorEditComponent,
   ],
   providers: [ProductoProveedorService, ProveedorService, ProductoService],
-  exports: []
+  exports: [],
 })
-export class ProductoProveedorModule { }
+export class ProductoProveedorModule {}

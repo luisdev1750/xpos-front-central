@@ -16,7 +16,7 @@ import { PerfilEditComponent } from './perfil-edit/perfil-edit.component';
 import { PerfilService } from './perfil.service';
 import { PerfilRoutingModule } from './perfil.routing.module';
 import { MatSelectModule } from '@angular/material/select';
-
+import { MatTooltipModule } from '@angular/material/tooltip';
 @NgModule({
   imports: [
     CommonModule,
@@ -33,6 +33,7 @@ import { MatSelectModule } from '@angular/material/select';
     PerfilRoutingModule,
     MatSelectModule,
     MatOptionModule,
+    MatTooltipModule,
   ],
   declarations: [PerfilListComponent, PerfilEditComponent],
   providers: [PerfilService],

@@ -16,6 +16,8 @@ import { PresentacionEditComponent } from './presentacion-edit/presentacion-edit
 import { PresentacionService } from './presentacion.service';
 import { PresentacionRoutingModule } from './presentacion.routing.module';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -30,14 +32,11 @@ import { MatSelectModule } from '@angular/material/select';
     MatDialogModule,
     MatCardModule,
     PresentacionRoutingModule,
-    MatSelectModule
-    
+    MatSelectModule,
+    MatTooltipModule,
   ],
-  declarations: [
-    PresentacionListComponent,
-    PresentacionEditComponent
-  ],
+  declarations: [PresentacionListComponent, PresentacionEditComponent],
   providers: [PresentacionService],
-  exports: []
+  exports: [],
 })
-export class PresentacionModule { }
+export class PresentacionModule {}

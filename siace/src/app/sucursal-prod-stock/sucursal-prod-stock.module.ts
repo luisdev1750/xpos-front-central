@@ -18,7 +18,7 @@ import { SucursalProdStockRoutingModule } from './sucursal-prod-stock.routing.mo
 import { SucursalService } from '../sucursal/sucursal.service';
 import { ProductoService } from '../producto/producto.service';
 import { MatSelect } from '@angular/material/select';
-
+import { MatTooltipModule } from '@angular/material/tooltip';
 @NgModule({
   imports: [
     CommonModule,
@@ -34,7 +34,8 @@ import { MatSelect } from '@angular/material/select';
     MatCardModule,
     SucursalProdStockRoutingModule,
     MatSelect,
-    MatOption
+    MatOption,
+    MatTooltipModule,
   ],
   declarations: [
     SucursalProdStockListComponent,

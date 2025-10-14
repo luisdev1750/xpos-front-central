@@ -6,7 +6,6 @@
         <mat-icon>arrow_back</mat-icon>
         Regresar
       </button>
-      
     </div>
 
     <form #f="ngForm">
@@ -81,6 +80,8 @@
               mat-button
               color="warn"
               class="button-edit"
+              matTooltip="Editar"
+              matTooltipPosition="above"
             >
               <mat-icon>edit</mat-icon></button
             >&nbsp;
@@ -89,6 +90,8 @@
               mat-button
               color="warn"
               *ngIf="fechaValida"
+              matTooltip="Borrar"
+              matTooltipPosition="above"
             >
               <mat-icon>delete</mat-icon>
             </button>

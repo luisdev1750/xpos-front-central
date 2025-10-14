@@ -18,12 +18,15 @@ import { PromocionDetalleRoutingModule } from './promocion-detalle.routing.modul
 import { TipoPromocionService } from '../tipo-promocion/tipo-promocion.service';
 import { ProductoService } from '../producto/producto.service';
 import { FamiliaService } from '../familia/familia.service';
-import { MatAutocomplete, MatAutocompleteModule } from '@angular/material/autocomplete';
+import {
+  MatAutocomplete,
+  MatAutocompleteModule,
+} from '@angular/material/autocomplete';
 import { PresentacionService } from '../presentacion/presentacion.service';
 import { MatSelect } from '@angular/material/select';
 import { PromocionService } from '../promocion/promocion.service';
 import { PromocionObsequioService } from '../promocion-obsequio/promocion-obsequio.service';
-
+import { MatTooltipModule } from '@angular/material/tooltip';
 /*
   MatAutocomplete,
     MatOption,
@@ -48,9 +51,10 @@ import { PromocionObsequioService } from '../promocion-obsequio/promocion-obsequ
     MatAutocomplete,
     MatOption,
     ReactiveFormsModule,
-    MatAutocomplete, 
+    MatAutocomplete,
     MatAutocompleteModule,
-    MatSelect
+    MatSelect,
+    MatTooltipModule,
   ],
   declarations: [PromocionDetalleListComponent, PromocionDetalleEditComponent],
   providers: [
@@ -60,7 +64,7 @@ import { PromocionObsequioService } from '../promocion-obsequio/promocion-obsequ
     FamiliaService,
     PresentacionService,
     PromocionService,
-    PromocionObsequioService
+    PromocionObsequioService,
   ],
   exports: [],
 })

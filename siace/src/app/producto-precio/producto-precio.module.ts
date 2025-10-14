@@ -19,6 +19,7 @@ import { ListaPrecioService } from '../lista-precio/lista-precio.service';
 import { MatSelect } from '@angular/material/select';
 import { ProductoPrecioBusquedaComponent } from './producto-precio-busqueda/producto-precio-busqueda.component';
 import { ProductoService } from '../producto/producto.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   imports: [
@@ -35,14 +36,15 @@ import { ProductoService } from '../producto/producto.service';
     MatCardModule,
     ProductoPrecioRoutingModule,
     MatSelect,
-    MatOption
+    MatOption,
+    MatTooltipModule,
   ],
   declarations: [
     ProductoPrecioListComponent,
     ProductoPrecioEditComponent,
-    ProductoPrecioBusquedaComponent
+    ProductoPrecioBusquedaComponent,
   ],
   providers: [ProductoPrecioService, ListaPrecioService, ProductoService],
-  exports: []
+  exports: [],
 })
-export class ProductoPrecioModule { }
+export class ProductoPrecioModule {}

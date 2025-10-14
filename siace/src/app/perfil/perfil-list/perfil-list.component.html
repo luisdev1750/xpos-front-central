@@ -1,7 +1,7 @@
 
 <div class="proin-main">
   <mat-card class="proin-card">
-    <h2>Catalogo de Perfiles</h2>
+    <h2>Catálogo de Perfiles</h2>
     <form #f="ngForm">
     
 
@@ -64,6 +64,8 @@
               mat-button
               color="warn"
               class="button-edit"
+                matTooltip="Editar"
+              matTooltipPosition="above"
             >
               <mat-icon>edit</mat-icon></button
             >&nbsp;
@@ -72,6 +74,8 @@
               mat-button
               color="primary"
               class="button-redirect"
+              matTooltip="Ir a menú por perfil"
+              matTooltipPosition="above"
             >
               <mat-icon>open_in_new</mat-icon>
               <!-- También puedes usar: launch, exit_to_app, arrow_forward, link -->

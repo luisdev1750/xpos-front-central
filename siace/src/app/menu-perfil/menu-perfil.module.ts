@@ -18,7 +18,7 @@ import { MenuPerfilRoutingModule } from './menu-perfil.routing.module';
 import { PerfilService } from '../perfil/perfil.service';
 import { MatSelect } from '@angular/material/select';
 import { MenuListComponent } from '../menu/menu-list/menu-list.component';
-
+import { MatTooltipModule } from '@angular/material/tooltip';
 @NgModule({
   imports: [
     CommonModule,
@@ -34,14 +34,11 @@ import { MenuListComponent } from '../menu/menu-list/menu-list.component';
     MatCardModule,
     MenuPerfilRoutingModule,
     MatOption,
-    MatSelect
-    
+    MatSelect,
+    MatTooltipModule,
   ],
-  declarations: [
-    MenuPerfilListComponent,
-    MenuPerfilEditComponent
-  ],
+  declarations: [MenuPerfilListComponent, MenuPerfilEditComponent],
   providers: [MenuPerfilService, PerfilService],
-  exports: []
+  exports: [],
 })
-export class MenuPerfilModule { }
+export class MenuPerfilModule {}

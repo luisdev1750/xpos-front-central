@@ -42,6 +42,7 @@ export class ProductoImagenListComponent implements OnInit {
       this.search();
     });
 
+
     this.filter.priId = '0';
     this.filter.priTimId = '0';
   }
@@ -164,15 +165,7 @@ export class ProductoImagenListComponent implements OnInit {
   }
 
   edit(ele: ProductoImagen, isEditing: boolean = false) {
-    if (!isEditing) {
-      this.dialog.open(ProductoImagenBusquedaComponent, {
-        data: { productoImagen: JSON.parse(JSON.stringify(ele)) },
-        height: '500px',
-        width: '700px',
-        maxWidth: 'none',
-        disableClose: true,
-      });
-    } else {
+  
       this.dialog.open(ProductoImagenEditComponent, {
         data: { productoImagen: JSON.parse(JSON.stringify(ele)) },
         height: '500px',
@@ -180,7 +173,7 @@ export class ProductoImagenListComponent implements OnInit {
         maxWidth: 'none',
         disableClose: true,
       });
-    }
+    
   }
 
   search(): void {

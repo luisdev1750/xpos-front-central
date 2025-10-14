@@ -20,7 +20,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 
-
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   imports: [
@@ -36,16 +36,13 @@ import { MatOptionModule } from '@angular/material/core';
     MatDialogModule,
     MatCardModule,
     BancoRoutingModule,
-       MatSlideToggleModule,
-       MatSelectModule ,
-       MatOptionModule
-
+    MatSlideToggleModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatTooltipModule,
   ],
-  declarations: [
-    BancoListComponent,
-    BancoEditComponent
-  ],
+  declarations: [BancoListComponent, BancoEditComponent],
   providers: [BancoService],
-  exports: []
+  exports: [],
 })
-export class BancoModule { }
+export class BancoModule {}

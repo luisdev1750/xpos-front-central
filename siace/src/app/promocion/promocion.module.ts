@@ -23,7 +23,7 @@ import { TipoPagoService } from '../tipo-pago/tipo-pago.service';
 import { TipoSubpagoService } from '../tipo-subpago/tipo-subpago.service';
 import { MatSelect } from '@angular/material/select';
 import { PromocionDetalleService } from '../promocion-detalle/promocion-detalle.service';
-
+import { MatTooltipModule } from '@angular/material/tooltip';
 @NgModule({
   imports: [
     CommonModule,
@@ -39,7 +39,8 @@ import { PromocionDetalleService } from '../promocion-detalle/promocion-detalle.
     MatCardModule,
     PromocionObsequioRoutingModule,
     MatSelect,
-    MatOption
+    MatOption,
+    MatTooltipModule
   ],
   declarations: [      
     PromocionListComponent,

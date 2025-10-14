@@ -17,6 +17,7 @@ import { SucursalConfigService } from './sucursal-config.service';
 import { SucursalConfigRoutingModule } from './sucursal-config.routing.module';
 import { SucursalService } from '../sucursal/sucursal.service';
 import { MatSelect } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   imports: [
@@ -33,7 +34,8 @@ import { MatSelect } from '@angular/material/select';
     MatCardModule,
     SucursalConfigRoutingModule,
     MatSelect, 
-    MatOption
+    MatOption,
+       MatTooltipModule,
   ],
   declarations: [
     SucursalConfigListComponent,

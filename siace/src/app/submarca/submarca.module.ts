@@ -19,6 +19,7 @@ import { MarcaService } from '../marca/marca.service';
 import { MatSelect } from "@angular/material/select";
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
+import { MatTooltipModule } from '@angular/material/tooltip';
 @NgModule({
   imports: [
     CommonModule,
@@ -35,7 +36,8 @@ import { MatOptionModule } from '@angular/material/core';
     SubmarcaRoutingModule,
     MatSelect,
     MatSelectModule,
-    MatOptionModule
+    MatOptionModule,
+    MatTooltipModule
 ],
   declarations: [
     SubmarcaListComponent,

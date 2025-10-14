@@ -1,7 +1,6 @@
-
 <div class="proin-main">
   <mat-card class="proin-card">
-    <h2>Catalogo de Productos por Proveedor</h2>
+    <h2>Catálogo de Productos por Proveedor</h2>
     <form #f="ngForm">
       <!-- Autocomplete para Producto -->
       <mat-form-field>
@@ -34,8 +33,6 @@
         </mat-autocomplete>
       </mat-form-field>
 
-   
-
       <mat-form-field>
         <mat-label>Proveedor</mat-label>
         <input
@@ -62,7 +59,6 @@
         </mat-autocomplete>
       </mat-form-field>
 
-     
       <mat-form-field>
         <mat-label>Unidad de medida</mat-label>
         <mat-select
@@ -77,7 +73,6 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-    
 
       <button
         mat-mini-fab
@@ -93,26 +88,34 @@
       <table mat-table #table [dataSource]="productoProveedorList">
         <ng-container matColumnDef="prvProId">
           <mat-header-cell *matHeaderCellDef> Producto </mat-header-cell>
-          <mat-cell style="display: inline !important; text-align: left !important;" *matCellDef="let item"> {{ item.prvPrName }} </mat-cell>
+          <mat-cell
+            style="display: inline !important; text-align: left !important"
+            *matCellDef="let item"
+          >
+            {{ item.prvPrName }}
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="prvPveId">
-          <mat-header-cell *matHeaderCellDef>
-            Proveedor
-          </mat-header-cell>
-          <mat-cell  *matCellDef="let item"> {{ item.prvPveName }} </mat-cell>
+          <mat-header-cell *matHeaderCellDef> Proveedor </mat-header-cell>
+          <mat-cell *matCellDef="let item"> {{ item.prvPveName }} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="prvUnmId">
           <mat-header-cell *matHeaderCellDef>
-             Unidades de Medida
+            Unidades de Medida
           </mat-header-cell>
           <mat-cell *matCellDef="let item"> {{ item.prvUnmName }} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="prvPrecio">
           <mat-header-cell *matHeaderCellDef> Precio </mat-header-cell>
-          <mat-cell style = "justify-content: right !important;" *matCellDef="let item"> {{ item.prvPrecio }} </mat-cell>
+          <mat-cell
+            style="justify-content: right !important"
+            *matCellDef="let item"
+          >
+            {{ item.prvPrecio }}
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="actions">
@@ -123,10 +126,18 @@
               mat-button
               color="warn"
               class="button-edit"
+              matTooltip="Editar"
+              matTooltipPosition="above"
             >
               <mat-icon>edit</mat-icon></button
             >&nbsp;
-            <button (click)="delete(item)" mat-button color="warn">
+            <button
+              (click)="delete(item)"
+              mat-button
+              color="warn"
+              matTooltip="Borrar"
+              matTooltipPosition="above"
+            >
               <mat-icon>delete</mat-icon>
             </button>
           </mat-cell>

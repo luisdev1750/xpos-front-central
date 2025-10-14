@@ -40,9 +40,14 @@
               [(ngModel)]="searchText"
               id="searchText"
               name="searchText"
-              placeholder="Nombre, SKU, descripción..."
+              placeholder="Nombre archivo, Producto, Tipo imagen..."
               (keyup)="searchProducts(searchText)"
+              autocomplete="off"
+              spellcheck="false"
+              autoCorrect="off"
+              autoCapitalize="off"
             />
+
             <mat-icon matSuffix>search</mat-icon>
           </mat-form-field>
           <button
@@ -61,16 +66,18 @@
 
     <div *ngIf="listProductosImagenes.length > 0">
       <table mat-table #table [dataSource]="listProductosImagenes">
-       
-
         <ng-container matColumnDef="priNombre">
           <mat-header-cell *matHeaderCellDef> Nombre Archivo </mat-header-cell>
-          <mat-cell class = "cell-angular" *matCellDef="let item"> {{ item.priNombre }} </mat-cell>
+          <mat-cell class="cell-angular" *matCellDef="let item">
+            {{ item.priNombre }}
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="priProId">
           <mat-header-cell *matHeaderCellDef> Producto </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.priProName }} </mat-cell>
+          <mat-cell class="cell-angular" *matCellDef="let item">
+            {{ item.priProName }}
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="priTimId">
@@ -86,6 +93,8 @@
               mat-icon-button
               color="primary"
               matTooltip="Editar"
+              matTooltip="Editar"
+              matTooltipPosition="above"
             >
               <mat-icon>edit</mat-icon>
             </button>
@@ -94,6 +103,8 @@
               mat-icon-button
               color="warn"
               matTooltip="Eliminar"
+              matTooltip="Borrar"
+              matTooltipPosition="above"
             >
               <mat-icon>delete</mat-icon>
             </button>
