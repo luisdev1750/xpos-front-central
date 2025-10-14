@@ -28,6 +28,7 @@ export class ProductoImagenListComponent implements OnInit {
   searchText: string = '';
   private subs!: Subscription;
   listProductosImagenes: any = [];
+  listProductosImagenesBackup: any = []; // Array backup con todos los datos iniciales
   listTipoImagenes: any = [];
   isEditing: boolean = false;
 
@@ -52,13 +53,13 @@ export class ProductoImagenListComponent implements OnInit {
 
   clearSearch() {
     this.searchText = '';
+    this.listProductosImagenes = [...this.listProductosImagenesBackup];
   }
 
   ngOnDestroy(): void {
     this.subs?.unsubscribe();
   }
 
-  // AGREGADO: Método para obtener la URL de la imagen
   getImageUrl(item: any): string {
     if (item.priProId && item.priNombre) {
       return this.productoImagenService.getImageUrl(item.priProId, item.priNombre);
@@ -66,7 +67,6 @@ export class ProductoImagenListComponent implements OnInit {
     return '';
   }
 
-  // AGREGADO: Método para abrir imagen en nueva pestaña
   openImageInNewTab(item: any): void {
     const url = this.getImageUrl(item);
     if (url) {
@@ -84,6 +84,7 @@ export class ProductoImagenListComponent implements OnInit {
       .subscribe({
         next: (result) => {
           this.listProductosImagenes = result;
+          this.listProductosImagenesBackup = [...result]; // Guardar backup
         },
         error: (err) => {
           this.toastr.error('Ha ocurrido un error', 'Error');
@@ -106,15 +107,20 @@ export class ProductoImagenListComponent implements OnInit {
     this.search();
   }
 
+  // Método de búsqueda local con filtro en tiempo real
   searchProducts(word: string) {
-    this.productoImagenService.findByWord(word).subscribe({
-      next: (result) => {
-        this.listProductosImagenes = result;
-      },
-      error: (err) => {
-        this.toastr.error('Ha ocurrido un error', 'Error');
-      },
-    });
+    if (!word || word.trim().length === 0) {
+ 
+      this.listProductosImagenes = [...this.listProductosImagenesBackup];
+    } else {
+
+      const wordLower = word.toLowerCase().trim();
+      this.listProductosImagenes = this.listProductosImagenesBackup.filter((item: any) =>
+        item.priNombre?.toLowerCase().includes(wordLower) ||
+        item.priProName?.toLowerCase().includes(wordLower) ||
+        item.priTimName?.toLowerCase().includes(wordLower)
+      );
+    }
   }
 
   get productoImagenList(): ProductoImagen[] {
@@ -181,6 +187,8 @@ export class ProductoImagenListComponent implements OnInit {
     this.productoImagenService.find(this.filter).subscribe({
       next: (result) => {
         this.listProductosImagenes = result;
+        this.listProductosImagenesBackup = [...result]; // Actualizar backup cuando se aplican filtros
+        this.searchText = ''; // Limpiar búsqueda al cambiar filtro
       },
       error: (err) => {
         this.toastr.error('Ha ocurrido un error', 'Error');

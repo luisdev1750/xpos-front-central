@@ -35,7 +35,7 @@ export class PromocionListComponent implements OnInit {
     'pmoTpaId',
     'pmoSpaId',
     'pmoPolitica',
-    'pmoObsequioUnico',
+
     'pmoLimiteCantidad',
     'pmoSucId',
     'actions',

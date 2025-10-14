@@ -2,276 +2,312 @@
 
 <!-- Menu wrapper con topbar -->
 <div class="menu-wrapper">
-  
   <!-- TOPBAR - Barra superior -->
   <header class="topbar">
     <button class="menu-toggle" (click)="toggleMenu()">
-      <span class="toggle-icon">{{ isMenuOpen ? '✕' : '☰' }}</span>
+      <span class="toggle-icon">{{ isMenuOpen ? "✕" : "☰" }}</span>
     </button>
     <div class="topbar-brand">
       <span class="brand-text">XPOS</span>
     </div>
     <div class="topbar-actions">
       <button class="topbar-icon">🔔</button>
-      <button class="topbar-icon">👤</button>
+      <a
+        routerLink="/login"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="topbar-icon"
+      >
+        🚪
+      </a>
     </div>
   </header>
 
   <!-- Sidebar -->
   <aside class="sidebar" [class.closed]="!isMenuOpen">
-    
     <!-- Navegación -->
     <nav class="sidebar-nav">
-      
-      <!-- Login (ID: 1) -->
-      <a *ngIf="tienePermiso(menuIds.login)"
-         routerLink="/login" 
-         routerLinkActive="active" 
-         [routerLinkActiveOptions]="{exact: true}" 
-         class="nav-item"
-         (click)="onNavItemClick()">
-        <span class="nav-icon">📊</span>
-        <span class="nav-text" *ngIf="isMenuOpen">Login</span>
-      </a>
-
-      <!-- Catálogos (Sección ID: 34) -->
-      <div class="nav-section" *ngIf="tienePermisoSeccion('catalogos')">
-        <div class="nav-item nav-parent" (click)="toggleSection('catalogos')">
+      <div class="nav-section" *ngIf="tienePermisoSeccion('productos')">
+        <div class="nav-item nav-parent" (click)="toggleSection('productos')">
           <span class="nav-icon">📦</span>
-          <span class="nav-text" *ngIf="isMenuOpen">Catálogos</span>
+          <span class="nav-text" *ngIf="isMenuOpen">Productos</span>
           <span class="nav-arrow" *ngIf="isMenuOpen">
-            {{ expandedSections['catalogos'] ? '▼' : '▶' }}
+            {{ expandedSections["productos"] ? "▼" : "▶" }}
           </span>
         </div>
-        <div class="nav-submenu" *ngIf="expandedSections['catalogos'] && isMenuOpen">
-          <a *ngIf="tienePermiso(menuIds.productos)" 
-             routerLink="/producto" 
-             routerLinkActive="active" 
-             class="nav-subitem" 
-             (click)="onNavItemClick()">Productos</a>
-          
+        <div
+          class="nav-submenu"
+          *ngIf="expandedSections['productos'] && isMenuOpen"
+        >
           <a
-             routerLink="/marca" 
-             routerLinkActive="active" 
-             class="nav-subitem" 
-             (click)="onNavItemClick()">Marcas</a>
-          
+            routerLink="/producto"
+            routerLinkActive="active"
+            class="nav-subitem"
+            (click)="onNavItemClick()"
+            >Productos</a
+          >
+
           <a
-             routerLink="/submarca" 
-             routerLinkActive="active" 
-             class="nav-subitem" 
-             (click)="onNavItemClick()">Submarcas</a>
-          
-          <a 
-             routerLink="/familia" 
-             routerLinkActive="active" 
-             class="nav-subitem" 
-             (click)="onNavItemClick()">Familias</a>
-          
+            routerLink="/familia"
+            routerLinkActive="active"
+            class="nav-subitem"
+            (click)="onNavItemClick()"
+            >Familias</a
+          >
+
           <a
-             routerLink="/presentacion" 
-             routerLinkActive="active" 
-             class="nav-subitem" 
-             (click)="onNavItemClick()">Presentaciones</a>
-          
-          <a 
-             routerLink="/banco" 
-             routerLinkActive="active" 
-             class="nav-subitem" 
-             (click)="onNavItemClick()">Bancos</a>
-          
+            routerLink="/marca"
+            routerLinkActive="active"
+            class="nav-subitem"
+            (click)="onNavItemClick()"
+            >Marcas</a
+          >
+
           <a
-             routerLink="/proveedor" 
-             routerLinkActive="active" 
-             class="nav-subitem" 
-             (click)="onNavItemClick()">Proveedores</a>
+            routerLink="/submarca"
+            routerLinkActive="active"
+            class="nav-subitem"
+            (click)="onNavItemClick()"
+            >Submarcas</a
+          >
+
+          <a
+            routerLink="/presentacion"
+            routerLinkActive="active"
+            class="nav-subitem"
+            (click)="onNavItemClick()"
+            >Presentaciones</a
+          >
+
+          <a
+            routerLink="/proveedor"
+            routerLinkActive="active"
+            class="nav-subitem"
+            (click)="onNavItemClick()"
+            >Proveedores</a
+          >
+
+          <a
+            routerLink="/lista-precio"
+            routerLinkActive="active"
+            class="nav-subitem"
+            (click)="onNavItemClick()"
+            >Listas de Precio</a
+          >
+
+          <a
+            routerLink="/producto-precio"
+            routerLinkActive="active"
+            class="nav-subitem"
+            (click)="onNavItemClick()"
+            >Precios de Productos</a
+          >
+
+          <a
+            routerLink="/producto-proveedor"
+            routerLinkActive="active"
+            class="nav-subitem"
+            (click)="onNavItemClick()"
+            >Productos-Proveedores</a
+          >
+
+          <a
+            routerLink="/producto-imagen"
+            routerLinkActive="active"
+            class="nav-subitem"
+            (click)="onNavItemClick()"
+            >Imágenes Producto</a
+          >
+
+          <a
+            routerLink="/sucursal-producto"
+            routerLinkActive="active"
+            class="nav-subitem"
+            (click)="onNavItemClick()"
+            >Productos por Sucursal</a
+          >
+
+          <a
+            routerLink="/sucursal-prod-stock"
+            routerLinkActive="active"
+            class="nav-subitem"
+            (click)="onNavItemClick()"
+            >Stock por Sucursal</a
+          >
+
+          <a
+            routerLink="/producto-sugerido"
+            routerLinkActive="active"
+            class="nav-subitem"
+            (click)="onNavItemClick()"
+            >Productos Sugeridos</a
+          >
         </div>
       </div>
 
-      <!-- Sucursales (Sección ID: 35) -->
-      <div class="nav-section" *ngIf="tienePermisoSeccion('sucursales')">
-        <div class="nav-item nav-parent" (click)="toggleSection('sucursales')">
-          <span class="nav-icon">🏢</span>
-          <span class="nav-text" *ngIf="isMenuOpen">Sucursales</span>
-          <span class="nav-arrow" *ngIf="isMenuOpen">
-            {{ expandedSections['sucursales'] ? '▼' : '▶' }}
-          </span>
-        </div>
-        <div class="nav-submenu" *ngIf="expandedSections['sucursales'] && isMenuOpen">
-          <a 
-             routerLink="/sucursal" 
-             routerLinkActive="active" 
-             class="nav-subitem" 
-             (click)="onNavItemClick()">Sucursales</a>
-          
-          <a 
-             routerLink="/sucursal-configuracion" 
-             routerLinkActive="active" 
-             class="nav-subitem" 
-             (click)="onNavItemClick()">Configuración</a>
-          
-          <a 
-             routerLink="/sucursal-producto" 
-             routerLinkActive="active" 
-             class="nav-subitem" 
-             (click)="onNavItemClick()">Productos Sucursal</a>
-          
-          <a
-             routerLink="/sucursal-prod-stock" 
-             routerLinkActive="active" 
-             class="nav-subitem" 
-             (click)="onNavItemClick()">Stock</a>
-        </div>
-      </div>
-
-      <!-- Precios y Promociones (Sección ID: 36) -->
-      <div class="nav-section" *ngIf="tienePermisoSeccion('precios')">
-        <div class="nav-item nav-parent" (click)="toggleSection('precios')">
+      <!-- ====== CATEGORÍA: PROMOCIONES (CEN_PROM) ====== -->
+      <div class="nav-section" *ngIf="tienePermisoSeccion('promociones')">
+        <div class="nav-item nav-parent" (click)="toggleSection('promociones')">
           <span class="nav-icon">🏷️</span>
-          <span class="nav-text" *ngIf="isMenuOpen">Precios y Promociones</span>
+          <span class="nav-text" *ngIf="isMenuOpen">Promociones</span>
           <span class="nav-arrow" *ngIf="isMenuOpen">
-            {{ expandedSections['precios'] ? '▼' : '▶' }}
+            {{ expandedSections["promociones"] ? "▼" : "▶" }}
           </span>
         </div>
-        <div class="nav-submenu" *ngIf="expandedSections['precios'] && isMenuOpen">
-          <a 
-             routerLink="/lista-precio" 
-             routerLinkActive="active" 
-             class="nav-subitem" 
-             (click)="onNavItemClick()">Listas de Precio</a>
-          
-          <a 
-             routerLink="/producto-precio" 
-             routerLinkActive="active" 
-             class="nav-subitem" 
-             (click)="onNavItemClick()">Precio Productos</a>
-          
-          <a 
-             routerLink="/promocion" 
-             routerLinkActive="active" 
-             class="nav-subitem" 
-             (click)="onNavItemClick()">Promociones</a>
-          
-          <a 
-             routerLink="/tipo-promocion" 
-             routerLinkActive="active" 
-             class="nav-subitem" 
-             (click)="onNavItemClick()">Tipos Promoción</a>
+        <div
+          class="nav-submenu"
+          *ngIf="expandedSections['promociones'] && isMenuOpen"
+        >
+          <a
+            routerLink="/tipo-promocion"
+            routerLinkActive="active"
+            class="nav-subitem"
+            (click)="onNavItemClick()"
+            >Tipo de Promociones</a
+          >
+          <a
+            routerLink="/promocion"
+            routerLinkActive="active"
+            class="nav-subitem"
+            (click)="onNavItemClick()"
+            >Promociones</a
+          >
           
           <a
-             routerLink="/promocion-detalle" 
-             routerLinkActive="active" 
-             class="nav-subitem" 
-             (click)="onNavItemClick()">Detalle Promoción</a>
-          
+            routerLink="/promocion-detalle"
+            routerLinkActive="active"
+            class="nav-subitem"
+            (click)="onNavItemClick()"
+            >Detalles Promoción</a
+          >
+
           <a
-             routerLink="/promocion-obsequio" 
-             routerLinkActive="active" 
-             class="nav-subitem" 
-             (click)="onNavItemClick()">Obsequios</a>
-          
-          <a 
-             routerLink="/combo" 
-             routerLinkActive="active" 
-             class="nav-subitem" 
-             (click)="onNavItemClick()">Combos</a>
+            routerLink="/promocion-obsequio"
+            routerLinkActive="active"
+            class="nav-subitem"
+            (click)="onNavItemClick()"
+            >Obsequios</a
+          >
+
+          <a
+            routerLink="/combo"
+            routerLinkActive="active"
+            class="nav-subitem"
+            (click)="onNavItemClick()"
+            >Combos</a
+          >
+
+          <a
+            routerLink="/banner"
+            routerLinkActive="active"
+            class="nav-subitem"
+            (click)="onNavItemClick()"
+            >Banners</a
+          >
         </div>
       </div>
 
-      <!-- Finanzas (Sección ID: 37) -->
+      <!-- ====== CATEGORÍA: FINANZAS (CEN_FINA) ====== -->
       <div class="nav-section" *ngIf="tienePermisoSeccion('finanzas')">
         <div class="nav-item nav-parent" (click)="toggleSection('finanzas')">
           <span class="nav-icon">💰</span>
           <span class="nav-text" *ngIf="isMenuOpen">Finanzas</span>
           <span class="nav-arrow" *ngIf="isMenuOpen">
-            {{ expandedSections['finanzas'] ? '▼' : '▶' }}
+            {{ expandedSections["finanzas"] ? "▼" : "▶" }}
           </span>
         </div>
-        <div class="nav-submenu" *ngIf="expandedSections['finanzas'] && isMenuOpen">
-          <a 
-             routerLink="/cuenta-bancaria" 
-             routerLinkActive="active" 
-             class="nav-subitem" 
-             (click)="onNavItemClick()">Cuentas Bancarias</a>
-          
-          <a 
-             routerLink="/tasa-cuota" 
-             routerLinkActive="active" 
-             class="nav-subitem" 
-             (click)="onNavItemClick()">Tasas y Cuotas</a>
-          
-          <a 
-             routerLink="/formula-contable" 
-             routerLinkActive="active" 
-             class="nav-subitem" 
-             (click)="onNavItemClick()">Fórmulas Contables</a>
+        <div
+          class="nav-submenu"
+          *ngIf="expandedSections['finanzas'] && isMenuOpen"
+        >
+          <a
+            routerLink="/banco"
+            routerLinkActive="active"
+            class="nav-subitem"
+            (click)="onNavItemClick()"
+            >Bancos</a
+          >
+
+          <a
+            routerLink="/tasa-cuota"
+            routerLinkActive="active"
+            class="nav-subitem"
+            (click)="onNavItemClick()"
+            >Tasas y Cuotas</a
+          >
+
+          <a
+            routerLink="/cuenta-bancaria"
+            routerLinkActive="active"
+            class="nav-subitem"
+            (click)="onNavItemClick()"
+            >Cuentas Bancarias</a
+          >
+
+          <a
+            routerLink="/formula-contable"
+            routerLinkActive="active"
+            class="nav-subitem"
+            (click)="onNavItemClick()"
+            >Fórmulas Contables</a
+          >
         </div>
       </div>
 
-      <!-- Administración (Sección ID: 38) -->
+      <!-- ====== CATEGORÍA: ADMINISTRACIÓN (CEN_ADMI) ====== -->
       <div class="nav-section" *ngIf="tienePermisoSeccion('admin')">
         <div class="nav-item nav-parent" (click)="toggleSection('admin')">
           <span class="nav-icon">👥</span>
           <span class="nav-text" *ngIf="isMenuOpen">Administración</span>
           <span class="nav-arrow" *ngIf="isMenuOpen">
-            {{ expandedSections['admin'] ? '▼' : '▶' }}
+            {{ expandedSections["admin"] ? "▼" : "▶" }}
           </span>
         </div>
-        <div class="nav-submenu" *ngIf="expandedSections['admin'] && isMenuOpen">
-          <a 
-             routerLink="/usuario" 
-             routerLinkActive="active" 
-             class="nav-subitem" 
-             (click)="onNavItemClick()">Usuarios</a>
-          
+        <div
+          class="nav-submenu"
+          *ngIf="expandedSections['admin'] && isMenuOpen"
+        >
           <a
-             routerLink="/perfil" 
-             routerLinkActive="active" 
-             class="nav-subitem" 
-             (click)="onNavItemClick()">Perfiles</a>
-          
-          <a 
-             routerLink="/menu-perfil" 
-             routerLinkActive="active" 
-             class="nav-subitem" 
-             (click)="onNavItemClick()">Menú por Perfil</a>
+            routerLink="/perfil"
+            routerLinkActive="active"
+            class="nav-subitem"
+            (click)="onNavItemClick()"
+            >Perfiles</a
+          >
+
+          <a
+            routerLink="/sucursal"
+            routerLinkActive="active"
+            class="nav-subitem"
+            (click)="onNavItemClick()"
+            >Sucursales</a
+          >
+
+          <a
+            routerLink="/sucursal-configuracion"
+            routerLinkActive="active"
+            class="nav-subitem"
+            (click)="onNavItemClick()"
+            >Configuración Sucursales</a
+          >
+
+          <a
+            routerLink="/usuario"
+            routerLinkActive="active"
+            class="nav-subitem"
+            (click)="onNavItemClick()"
+            >Usuarios</a
+          >
+
+          <a
+            routerLink="/menu-perfil"
+            routerLinkActive="active"
+            class="nav-subitem"
+            (click)="onNavItemClick()"
+            >Menús por Perfil</a
+          >
         </div>
       </div>
-
-      <!-- Multimedia (Sección ID: 39) -->
-      <div class="nav-section" *ngIf="tienePermisoSeccion('multimedia')">
-        <div class="nav-item nav-parent" (click)="toggleSection('multimedia')">
-          <span class="nav-icon">🖼️</span>
-          <span class="nav-text" *ngIf="isMenuOpen">Multimedia</span>
-          <span class="nav-arrow" *ngIf="isMenuOpen">
-            {{ expandedSections['multimedia'] ? '▼' : '▶' }}
-          </span>
-        </div>
-        <div class="nav-submenu" *ngIf="expandedSections['multimedia'] && isMenuOpen">
-          <a 
-             routerLink="/producto-imagen" 
-             routerLinkActive="active" 
-             class="nav-subitem" 
-             (click)="onNavItemClick()">Imágenes Producto</a>
-          
-          <a
-             routerLink="/banner" 
-             routerLinkActive="active" 
-             class="nav-subitem" 
-             (click)="onNavItemClick()">Banners</a>
-        </div>
-      </div>
-
-      <!-- Producto-Proveedor (ID: 41) -->
-      <a *ngIf="tienePermiso(menuIds.productoProveedor)"
-         routerLink="/producto-proveedor" 
-         routerLinkActive="active" 
-         class="nav-item"
-         (click)="onNavItemClick()">
-        <span class="nav-icon">🔗</span>
-        <span class="nav-text" *ngIf="isMenuOpen">Producto-Proveedor</span>
-      </a>
-
     </nav>
 
     <!-- Footer del sidebar -->
@@ -284,13 +320,11 @@
         </div>
       </div>
     </div>
-
   </aside>
 
   <!-- Overlay para cerrar en móvil -->
   <div class="menu-overlay" *ngIf="isMenuOpen" (click)="toggleMenu()"></div>
-
 </div>
 <div class="container-catalog">
-   <router-outlet></router-outlet>
+  <router-outlet></router-outlet>
 </div>

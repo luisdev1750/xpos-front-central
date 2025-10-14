@@ -7,6 +7,11 @@ import { GeneralService } from './common/general.service';
 export interface Permiso {
   mepPerId: number;
   mepMenId: number;
+  mepMenClave: string;
+}
+
+export interface PermisoMap {
+  [key: string]: number; // clave -> mepMenId
 }
 
 @Injectable({
@@ -14,6 +19,12 @@ export interface Permiso {
 })
 export class PermisosService extends GeneralService {
   private api = this.sUrl + 'Permisos';
+  
+  // Almacenar mapeo de claves a IDs
+  private permisoMapSubject = new BehaviorSubject<PermisoMap>({});
+  public permisoMap$ = this.permisoMapSubject.asObservable();
+  
+  // Almacenar lista de permisos para compatibilidad
   private permisosSubject = new BehaviorSubject<number[]>([]);
   public permisos$ = this.permisosSubject.asObservable();
 
@@ -21,7 +32,6 @@ export class PermisosService extends GeneralService {
     super();
   }
 
-  // Método para obtener headers con el token
   private getHeaders(): HttpHeaders {
     const token = localStorage.getItem('accessToken');
     let headers = new HttpHeaders().set('Accept', 'application/json');
@@ -42,10 +52,20 @@ export class PermisosService extends GeneralService {
       headers: this.getHeaders()
     }).pipe(
       tap(permisos => {
-        // Extraer solo los IDs de menú y almacenarlos
-        const menuIds = permisos.map(p => p.mepMenId);
+        // Crear mapeo de claves a IDs
+        const permisoMap: PermisoMap = {};
+        const menuIds: number[] = [];
+        
+        permisos.forEach(p => {
+          permisoMap[p.mepMenClave] = p.mepMenId;
+          menuIds.push(p.mepMenId);
+        });
+        
+        this.permisoMapSubject.next(permisoMap);
         this.permisosSubject.next(menuIds);
-        // También guardar en localStorage para persistencia
+        
+        // Guardar en localStorage
+        localStorage.setItem('permisoMap', JSON.stringify(permisoMap));
         localStorage.setItem('permisos', JSON.stringify(menuIds));
       })
     );
@@ -54,40 +74,72 @@ export class PermisosService extends GeneralService {
   /**
    * Obtiene los permisos desde localStorage (para cuando se recarga la página)
    */
-  obtenerPermisosLocales(): number[] {
+  obtenerPermisosLocales(): void {
+    const permisoMapStr = localStorage.getItem('permisoMap');
     const permisosStr = localStorage.getItem('permisos');
-    if (permisosStr) {
-      const permisos = JSON.parse(permisosStr);
-      this.permisosSubject.next(permisos);
-      console.log("permisos locales:");
-      console.log(permisosStr);
-        console.log();
-        
-      
-      return permisos;
+    
+    if (permisoMapStr) {
+      try {
+        const permisoMap = JSON.parse(permisoMapStr);
+        this.permisoMapSubject.next(permisoMap);
+      } catch (e) {
+        console.error('Error al parsear permisoMap:', e);
+      }
     }
-    return [];
+    
+    if (permisosStr) {
+      try {
+        const permisos = JSON.parse(permisosStr);
+        this.permisosSubject.next(permisos);
+      } catch (e) {
+        console.error('Error al parsear permisos:', e);
+      }
+    }
   }
 
   /**
-   * Verifica si el usuario tiene permiso para un menú específico
+   * Verifica si el usuario tiene permiso por clave (RECOMENDADO)
+   */
+  tienePermisoPorClave(clave: string): boolean {
+    const permisoMap = this.permisoMapSubject.value;
+    return clave in permisoMap;
+  }
+
+  /**
+   * Verifica si el usuario tiene permiso para un menú específico (por ID)
    */
   tienePermiso(menuId: number): boolean {
     return this.permisosSubject.value.includes(menuId);
   }
 
   /**
-   * Verifica si tiene permiso para alguno de los menús de una sección
+   * Verifica si tiene permiso para alguna de las claves
    */
-  tienePermisoSeccion(menuIds: number[]): boolean {
-    return menuIds.some(id => this.tienePermiso(id));
+  tienePermisoSeccion(claves: string[]): boolean {
+    return claves.some(clave => this.tienePermisoPorClave(clave));
+  }
+
+  /**
+   * Obtener el mepMenId por clave
+   */
+  obtenerIdPorClave(clave: string): number | undefined {
+    return this.permisoMapSubject.value[clave];
+  }
+
+  /**
+   * Obtener todas las claves de permisos
+   */
+  obtenerTodasLasClaves(): string[] {
+    return Object.keys(this.permisoMapSubject.value);
   }
 
   /**
    * Limpia los permisos (útil para logout)
    */
   limpiarPermisos(): void {
+    this.permisoMapSubject.next({});
     this.permisosSubject.next([]);
+    localStorage.removeItem('permisoMap');
     localStorage.removeItem('permisos');
   }
 }

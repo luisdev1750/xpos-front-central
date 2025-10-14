@@ -41,19 +41,10 @@
               id="searchText"
               name="searchText"
               placeholder="Nombre, SKU, descripción..."
-              (keyup.enter)="searchProducts(searchText)"
+              (keyup)="searchProducts(searchText)"
             />
             <mat-icon matSuffix>search</mat-icon>
           </mat-form-field>
-          <button
-            mat-raised-button
-            color="primary"
-            (click)="searchProducts(searchText)"
-            type="button"
-          >
-            <mat-icon>search</mat-icon>
-            Buscar
-          </button>
           <button
             mat-raised-button
             color="accent"

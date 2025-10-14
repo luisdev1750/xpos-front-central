@@ -25,9 +25,7 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class ProductoListComponent implements OnInit, OnDestroy {
   displayedColumns = [
- 
     'proNombre',
-  
     'proSku',
     'proCodigoBarras',
     'proFamId',
@@ -44,6 +42,10 @@ export class ProductoListComponent implements OnInit, OnDestroy {
 
   filter = new ProductoFilter();
   dataSource = new MatTableDataSource<Producto>();
+  
+  // Variables para búsqueda
+  searchText: string = '';
+  private productoBackup: Producto[] = []; // Backup de todos los productos
 
   private subs!: Subscription;
 
@@ -51,6 +53,7 @@ export class ProductoListComponent implements OnInit, OnDestroy {
   familiaList: Familia[] = [];
   presentacionList: Presentacion[] = [];
   unidadMedidaList: any[] = [];
+  
   constructor(
     private productoService: ProductoService,
     private toastr: ToastrService,
@@ -59,7 +62,6 @@ export class ProductoListComponent implements OnInit, OnDestroy {
     private familiaService: FamiliaService,
     private paginatorIntl: MatPaginatorIntl
   ) {
-    // Configurar etiquetas del paginador en español
     this.configurarPaginadorEspanol();
 
     this.subs = this.productoService.getIsUpdated().subscribe(() => {
@@ -75,6 +77,11 @@ export class ProductoListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.search();
     this.loadCatalogs();
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+    this.search();
   }
 
   ngOnDestroy(): void {
@@ -107,15 +114,18 @@ export class ProductoListComponent implements OnInit, OnDestroy {
 
   OnFamiliaChange(event: any) {
     this.filter.proFamId = event.value;
+    this.searchText = ''; // Limpiar búsqueda al cambiar filtro
     this.search();
   }
 
   onActivoChange(): void {
+    this.searchText = ''; // Limpiar búsqueda al cambiar filtro
     this.search();
   }
 
   OnPresentacionChange(event: any) {
     this.filter.proPreId = event.value;
+    this.searchText = ''; // Limpiar búsqueda al cambiar filtro
     this.search();
   }
 
@@ -127,7 +137,6 @@ export class ProductoListComponent implements OnInit, OnDestroy {
       })
       .subscribe(
         (result) => {
-          console.log(result);
           this.presentacionList = result;
         },
         (error) => {
@@ -139,22 +148,52 @@ export class ProductoListComponent implements OnInit, OnDestroy {
       .find({ famId: '0', famSmaId: '0', famIdParent: '0' })
       .subscribe(
         (result) => {
-          console.log(result);
           this.familiaList = result;
         },
         (error) => {
           this.toastr.error('Ha ocurrido un error', 'Error');
         }
       );
+      
     this.productoService.findByCatalogo('listar-unidades').subscribe(
       (result) => {
-        console.log(result);
         this.unidadMedidaList = result;
       },
       (error) => {
         this.toastr.error('Ha ocurrido un error', 'Error');
       }
     );
+  }
+
+  /* Búsqueda en tiempo real */
+  searchProducts(word: string): void {
+    if (!word || word.trim().length === 0) {
+      // Si el buscador está vacío, mostrar todos los productos del backup
+      this.dataSource.data = [...this.productoBackup];
+    } else {
+      // Filtrar por múltiples campos
+      const wordLower = word.toLowerCase().trim();
+      const filtered = this.productoBackup.filter((item: any) =>
+        item.proNombre?.toLowerCase().includes(wordLower) ||
+        item.proSku?.toLowerCase().includes(wordLower) ||
+        item.proCodigoBarras?.toLowerCase().includes(wordLower) ||
+        item.proFamNombre?.toLowerCase().includes(wordLower) ||
+        item.proPreNombre?.toLowerCase().includes(wordLower)
+      );
+      this.dataSource.data = filtered;
+    }
+    // Resetear paginador a la primera página
+    if (this.paginator) {
+      this.paginator.firstPage();
+    }
+  }
+
+  clearSearch(): void {
+    this.searchText = '';
+    this.dataSource.data = [...this.productoBackup];
+    if (this.paginator) {
+      this.paginator.firstPage();
+    }
   }
 
   /* Accesors */
@@ -201,20 +240,6 @@ export class ProductoListComponent implements OnInit, OnDestroy {
             this.toastr.error('Ha ocurrido un error', 'Error');
           },
         });
-        // this.productoService.delete(producto).subscribe({
-        //   next: (result) => {
-        //     if (Number(result) > 0) {
-        //       this.toastr.success(
-        //         'El producto ha sido eliminado exitosamente',
-        //         'Transacción exitosa'
-        //       );
-        //       this.productoService.setIsUpdated(true);
-        //     } else this.toastr.error('Ha ocurrido un error', 'Error');
-        //   },
-        //   error: (err) => {
-        //     this.toastr.error('Ha ocurrido un error', 'Error');
-        //   },
-        // });
       }
     });
   }
@@ -237,6 +262,7 @@ export class ProductoListComponent implements OnInit, OnDestroy {
   search(): void {
     this.productoService.find(this.filter).subscribe(
       (data) => {
+        this.productoBackup = [...data]; // Guardar backup
         this.dataSource.data = data;
         this.dataSource.paginator = this.paginator;
       },
@@ -244,28 +270,5 @@ export class ProductoListComponent implements OnInit, OnDestroy {
         console.error('Error al cargar productos', err);
       }
     );
-
-    // Actualizar el dataSource con los datos del servicio
-    this.updateDataSource();
-  }
-
-  /**
-   * Actualiza el MatTableDataSource con los datos del servicio
-   */
-  private updateDataSource(): void {
-    this.dataSource.data = this.productoList;
-    if (this.paginator) {
-      this.dataSource.paginator = this.paginator;
-    }
-  }
-
-  /**
-   * Método que se ejecuta después de que la vista se inicializa
-   * para asegurar que el paginador esté disponible
-   */
-  ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-    // Hacer la búsqueda inicial después de que el paginador esté listo
-    this.search();
   }
 }

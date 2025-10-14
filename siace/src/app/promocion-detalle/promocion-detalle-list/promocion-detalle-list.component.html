@@ -1,13 +1,20 @@
-
 <div class="proin-main">
   <mat-card class="proin-card">
     <h2>Promoción detalle</h2>
+    <div style="display: flex; align-items: center; margin-bottom: 8px">
+      <button mat-stroked-button color="primary" (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+        Regresar
+      </button>
+      
+    </div>
+
     <form #f="ngForm">
       <button
         mat-mini-fab
         color="accent"
         (click)="add()"
-        *ngIf = "fechaValida && promocionDetalleList.length < 1"
+        *ngIf="fechaValida && promocionDetalleList.length < 1"
         [disabled]="!f?.valid"
       >
         <mat-icon>add</mat-icon>
@@ -15,8 +22,6 @@
     </form>
     <div *ngIf="promocionDetalleList.length > 0">
       <table mat-table #table [dataSource]="promocionDetalleList">
-        
-
         <ng-container matColumnDef="prdPmoId">
           <mat-header-cell *matHeaderCellDef> Promoción </mat-header-cell>
           <mat-cell *matCellDef="let item"> {{ item.prdPmoName }} </mat-cell>
@@ -24,12 +29,16 @@
 
         <ng-container matColumnDef="prdProId">
           <mat-header-cell *matHeaderCellDef> Producto </mat-header-cell>
-          <mat-cell class = "cell-angular" *matCellDef="let item"> {{ item.prdProName }} </mat-cell>
+          <mat-cell class="cell-angular" *matCellDef="let item">
+            {{ item.prdProName }}
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="prdFamId">
           <mat-header-cell *matHeaderCellDef> Familia </mat-header-cell>
-          <mat-cell class = "cell-angular" *matCellDef="let item"> {{ item.prdFamName }} </mat-cell>
+          <mat-cell class="cell-angular" *matCellDef="let item">
+            {{ item.prdFamName }}
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="prdPreId">
@@ -75,7 +84,12 @@
             >
               <mat-icon>edit</mat-icon></button
             >&nbsp;
-            <button (click)="delete(item)" mat-button color="warn" *ngIf = "fechaValida">
+            <button
+              (click)="delete(item)"
+              mat-button
+              color="warn"
+              *ngIf="fechaValida"
+            >
               <mat-icon>delete</mat-icon>
             </button>
           </mat-cell>

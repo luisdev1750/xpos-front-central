@@ -27,10 +27,12 @@
           [(ngModel)]="promocionCurrent.pmoTprId"
           name="pmoTprId"
           (selectionChange)="onPromocionIdChange($event)"
+          [disabled]="true"
         >
           <mat-option
             *ngFor="let tipoPromocion of tipoPromocionList"
             [value]="tipoPromocion.tprId"
+            
           >
             {{ tipoPromocion.tprNombre }}
           </mat-option>
@@ -85,7 +87,7 @@
             [value]="producto"
           >
             <span>
-              <strong>{{ producto.proId }}</strong> - {{ producto.proNombre }}
+              <strong>{{ producto.proSku }}</strong>  {{ producto.proNombre }}
             </span>
             <br />
             <small style="color: #666" *ngIf="producto.proDescripcion">

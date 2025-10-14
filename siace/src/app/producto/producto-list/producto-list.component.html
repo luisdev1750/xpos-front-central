@@ -1,4 +1,3 @@
-
 <div class="proin-main">
   <mat-card class="proin-card">
     <h2>Catalogo de Productos</h2>
@@ -53,18 +52,58 @@
       </button>
     </form>
 
+    <!-- BUSCADOR EN TIEMPO REAL -->
+    <form #searchForm="ngForm" style="margin-bottom: 20px">
+      <mat-card style="padding: 4px">
+        <div style="display: flex; gap: 10px; align-items: center">
+          <mat-form-field style="flex: 1">
+            <mat-label>Buscar productos...</mat-label>
+            <input
+              matInput
+              type="search"
+              [(ngModel)]="searchText"
+              name="searchText"
+              placeholder="Nombre, SKU, código de barras..."
+              (keyup)="searchProducts(searchText)"
+            />
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+          <button
+            mat-raised-button
+            color="accent"
+            (click)="clearSearch()"
+            type="button"
+            *ngIf="searchText && searchText.length > 0"
+          >
+            <mat-icon>clear</mat-icon>
+            Limpiar
+          </button>
+        </div>
+      </mat-card>
+    </form>
+
     <div *ngIf="dataSource.data.length > 0">
       <table mat-table #table [dataSource]="dataSource">
         <ng-container matColumnDef="proNombre">
-          <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
-          <mat-cell class ="cell-angular" *matCellDef="let item"> {{ item.proNombre }} </mat-cell>
+          <mat-header-cell *matHeaderCellDef style="flex: 0 0 20%">
+            Nombre
+          </mat-header-cell>
+          <mat-cell
+            class="cell-angular"
+            *matCellDef="let item"
+            style="flex: 0 0 20%"
+          >
+            {{ item.proNombre }}
+          </mat-cell>
         </ng-container>
 
-       
-
         <ng-container matColumnDef="proSku">
-          <mat-header-cell *matHeaderCellDef> SKU </mat-header-cell>
-          <mat-cell class = "clave" *matCellDef="let item"> {{ item.proSku }} </mat-cell>
+          <mat-header-cell *matHeaderCellDef style="flex: 0 0 8%">
+            SKU
+          </mat-header-cell>
+          <mat-cell class="clave" *matCellDef="let item" style="flex: 0 0 8%">
+            {{ item.proSku }}
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="proCodigoBarras">
@@ -78,28 +117,32 @@
 
         <ng-container matColumnDef="proFamId">
           <mat-header-cell *matHeaderCellDef> Familia </mat-header-cell>
-          <mat-cell class ="cell-angular" *matCellDef="let item"> {{ item.proFamNombre }} </mat-cell>
+          <mat-cell class="cell-angular" *matCellDef="let item">
+            {{ item.proFamNombre }}
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="proPreId">
           <mat-header-cell *matHeaderCellDef> Presentación </mat-header-cell>
-          <mat-cell class ="cell-angular" *matCellDef="let item"> {{ item.proPreNombre}} </mat-cell>
+          <mat-cell class="cell-angular" *matCellDef="let item">
+            {{ item.proPreNombre }}
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="proUnmId">
           <mat-header-cell *matHeaderCellDef>
             Unidad de Medida
           </mat-header-cell>
-          <mat-cell class ="cell-angular" *matCellDef="let item"> {{ item.proUnmNombre }} </mat-cell>
+          <mat-cell class="cell-angular" *matCellDef="let item">
+            {{ item.proUnmNombre }}
+          </mat-cell>
         </ng-container>
-
-     
 
         <ng-container matColumnDef="proDevolucion">
           <mat-header-cell *matHeaderCellDef>
             Permite devolución
           </mat-header-cell>
-          <mat-cell *matCellDef="let item" style="justify-content: center;">
+          <mat-cell *matCellDef="let item" style="justify-content: center">
             <mat-icon *ngIf="item.proDevolucion" color="primary"
               >check_circle</mat-icon
             >
@@ -109,7 +152,7 @@
 
         <ng-container matColumnDef="proActivo">
           <mat-header-cell *matHeaderCellDef> Activo </mat-header-cell>
-          <mat-cell *matCellDef="let item" style="justify-content: center;">
+          <mat-cell *matCellDef="let item" style="justify-content: center">
             <mat-icon *ngIf="item.proActivo" color="primary"
               >check_circle</mat-icon
             >
@@ -152,6 +195,16 @@
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
       </table>
+    </div>
+
+    <div
+      *ngIf="dataSource.data.length === 0"
+      style="text-align: center; padding: 40px; color: #999"
+    >
+      <mat-icon style="font-size: 64px; width: 64px; height: 64px">
+        search_off
+      </mat-icon>
+      <p>No se encontraron productos</p>
     </div>
 
     <!-- Paginador -->

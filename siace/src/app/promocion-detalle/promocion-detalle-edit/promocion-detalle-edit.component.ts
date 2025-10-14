@@ -123,6 +123,9 @@ export class PromocionDetalleEditComponent implements OnInit {
   loadCatalogosIniciales() {
     this.promocionDetalleService.getCatalogosIniciales().subscribe({
       next: (data) => {
+        console.log("Log from servicio");
+        console.log(data);
+                
         // Guardar copias completas
         this.listFamiliasCompleta = [...data.familias];
         this.listProductosCompleta = [...data.productos];
@@ -132,6 +135,9 @@ export class PromocionDetalleEditComponent implements OnInit {
         this.listFamilias = [...data.familias];
         this.listProductos = [...data.productos];
         this.listPresentaciones = [...data.presentaciones];
+console.log("list productos completa");
+console.log(this.listProductosCompleta);
+
 
         // Setup autocomplete
         this.setupAutocomplete();
@@ -348,6 +354,7 @@ export class PromocionDetalleEditComponent implements OnInit {
       map((value) => this._filterProductos(this._getFilterValue(value)))
     );
 
+
     // Autocomplete para producto obsequio
     this.filteredProductosObsequio =
       this.productoObsequioControl.valueChanges.pipe(
@@ -404,9 +411,8 @@ export class PromocionDetalleEditComponent implements OnInit {
       (producto) =>
         (producto.proNombre &&
           producto.proNombre.toLowerCase().includes(filterValue)) ||
-        (producto.proDescripcion &&
-          producto.proDescripcion.toLowerCase().includes(filterValue)) ||
-        producto.proId.toString().includes(filterValue)
+        (producto.proSku &&
+          producto.proSku.toLowerCase().includes(filterValue)) 
     );
   }
 

@@ -15,7 +15,7 @@ import { TipoPromocionService } from '../../tipo-promocion/tipo-promocion.servic
 import { ActivatedRoute } from '@angular/router';
 import { PromocionService } from '../../promocion/promocion.service';
 import { Promocion } from '../../promocion/promocion';
-
+import { Location } from '@angular/common';
 @Component({
   selector: 'app-promocion-detalle',
   standalone: false,
@@ -24,7 +24,6 @@ import { Promocion } from '../../promocion/promocion';
 })
 export class PromocionDetalleListComponent implements OnInit {
   displayedColumns = [
-  
     'prdPmoId',
     'prdProId',
     'prdFamId',
@@ -52,7 +51,8 @@ export class PromocionDetalleListComponent implements OnInit {
     private productoServie: ProductoService,
     private familiaService: FamiliaService,
     private route: ActivatedRoute,
-    private promocionServiceController: PromocionService
+    private promocionServiceController: PromocionService,
+    private location: Location
   ) {
     this.subs = this.promocionDetalleService.getIsUpdated().subscribe(() => {
       this.search();
@@ -65,6 +65,10 @@ export class PromocionDetalleListComponent implements OnInit {
     await this.getParams();
     this.loadCatalogs();
     this.search();
+  }
+
+  goBack() {
+    this.location.back();
   }
 
   getParams() {
