@@ -18,6 +18,18 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
+      <mat-form-field>
+        <mat-label>Aplicación</mat-label>
+        <mat-select
+          [(ngModel)]="filter.mepAppId"
+          name="mepAppId"
+          (selectionChange)="onChangeApp($event)"
+        >
+          <mat-option value="0">Todas</mat-option>
+          <mat-option value="1">XPOS</mat-option>
+          <mat-option value="2">CENTRAL</mat-option>
+        </mat-select>
+      </mat-form-field>
 
       <button
         mat-mini-fab
@@ -37,7 +49,9 @@
 
         <ng-container matColumnDef="mepMenId">
           <mat-header-cell *matHeaderCellDef> Menú </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.menuNombre }} </mat-cell>
+          <mat-cell class="cell-angular" *matCellDef="let item">
+            {{ item.menuNombre }}
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="actions">

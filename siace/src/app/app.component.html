@@ -1,7 +1,5 @@
-<loading-dialog></loading-dialog>
-
 <!-- Menu wrapper con topbar -->
-<div class="menu-wrapper">
+<div class="menu-wrapper" *ngIf="!isLoginPage()">
   <!-- TOPBAR - Barra superior -->
   <header class="topbar">
     <button class="menu-toggle" (click)="toggleMenu()">
@@ -27,7 +25,8 @@
   <aside class="sidebar" [class.closed]="!isMenuOpen">
     <!-- Navegación -->
     <nav class="sidebar-nav">
-      <div class="nav-section" *ngIf="tienePermisoSeccion('productos')">
+      <!-- ====== CATEGORÍA: PRODUCTOS (CEN_PROD) ====== -->
+      <div class="nav-section">
         <div class="nav-item nav-parent" (click)="toggleSection('productos')">
           <span class="nav-icon">📦</span>
           <span class="nav-text" *ngIf="isMenuOpen">Productos</span>
@@ -40,6 +39,7 @@
           *ngIf="expandedSections['productos'] && isMenuOpen"
         >
           <a
+            *ngIf="tienePermiso('CEN_PROD')"
             routerLink="/producto"
             routerLinkActive="active"
             class="nav-subitem"
@@ -48,6 +48,7 @@
           >
 
           <a
+            *ngIf="tienePermiso('CEN_FAMI')"
             routerLink="/familia"
             routerLinkActive="active"
             class="nav-subitem"
@@ -56,6 +57,7 @@
           >
 
           <a
+            *ngIf="tienePermiso('CEN_MARC')"
             routerLink="/marca"
             routerLinkActive="active"
             class="nav-subitem"
@@ -64,6 +66,7 @@
           >
 
           <a
+            *ngIf="tienePermiso('CEN_SUBM')"
             routerLink="/submarca"
             routerLinkActive="active"
             class="nav-subitem"
@@ -72,6 +75,7 @@
           >
 
           <a
+            *ngIf="tienePermiso('CEN_PRES')"
             routerLink="/presentacion"
             routerLinkActive="active"
             class="nav-subitem"
@@ -80,6 +84,7 @@
           >
 
           <a
+            *ngIf="tienePermiso('CEN_PROV')"
             routerLink="/proveedor"
             routerLinkActive="active"
             class="nav-subitem"
@@ -88,6 +93,7 @@
           >
 
           <a
+            *ngIf="tienePermiso('CEN_LIST')"
             routerLink="/lista-precio"
             routerLinkActive="active"
             class="nav-subitem"
@@ -96,6 +102,7 @@
           >
 
           <a
+            *ngIf="tienePermiso('CEN_PREC')"
             routerLink="/producto-precio"
             routerLinkActive="active"
             class="nav-subitem"
@@ -104,6 +111,7 @@
           >
 
           <a
+            *ngIf="tienePermiso('CEN_PROPR')"
             routerLink="/producto-proveedor"
             routerLinkActive="active"
             class="nav-subitem"
@@ -112,6 +120,7 @@
           >
 
           <a
+            *ngIf="tienePermiso('CEN_IMGPRO')"
             routerLink="/producto-imagen"
             routerLinkActive="active"
             class="nav-subitem"
@@ -120,6 +129,7 @@
           >
 
           <a
+            *ngIf="tienePermiso('CEN_PROSUC')"
             routerLink="/sucursal-producto"
             routerLinkActive="active"
             class="nav-subitem"
@@ -128,6 +138,7 @@
           >
 
           <a
+            *ngIf="tienePermiso('CEN_STOSUC')"
             routerLink="/sucursal-prod-stock"
             routerLinkActive="active"
             class="nav-subitem"
@@ -136,6 +147,7 @@
           >
 
           <a
+            *ngIf="tienePermiso('CEN_PROSUG')"
             routerLink="/producto-sugerido"
             routerLinkActive="active"
             class="nav-subitem"
@@ -146,7 +158,7 @@
       </div>
 
       <!-- ====== CATEGORÍA: PROMOCIONES (CEN_PROM) ====== -->
-      <div class="nav-section" *ngIf="tienePermisoSeccion('promociones')">
+      <div class="nav-section">
         <div class="nav-item nav-parent" (click)="toggleSection('promociones')">
           <span class="nav-icon">🏷️</span>
           <span class="nav-text" *ngIf="isMenuOpen">Promociones</span>
@@ -159,6 +171,7 @@
           *ngIf="expandedSections['promociones'] && isMenuOpen"
         >
           <a
+            *ngIf="tienePermiso('CEN_TPROM')"
             routerLink="/tipo-promocion"
             routerLinkActive="active"
             class="nav-subitem"
@@ -166,6 +179,7 @@
             >Tipo de Promociones</a
           >
           <a
+            *ngIf="tienePermiso('CEN_PROMO')"
             routerLink="/promocion"
             routerLinkActive="active"
             class="nav-subitem"
@@ -174,6 +188,7 @@
           >
           
           <a
+            *ngIf="tienePermiso('CEN_DPROM')"
             routerLink="/promocion-detalle"
             routerLinkActive="active"
             class="nav-subitem"
@@ -182,6 +197,7 @@
           >
 
           <a
+            *ngIf="tienePermiso('CEN_OBSEQ')"
             routerLink="/promocion-obsequio"
             routerLinkActive="active"
             class="nav-subitem"
@@ -190,6 +206,7 @@
           >
 
           <a
+            *ngIf="tienePermiso('CEN_COMBO')"
             routerLink="/combo"
             routerLinkActive="active"
             class="nav-subitem"
@@ -198,6 +215,7 @@
           >
 
           <a
+            *ngIf="tienePermiso('CEN_BANN')"
             routerLink="/banner"
             routerLinkActive="active"
             class="nav-subitem"
@@ -208,7 +226,7 @@
       </div>
 
       <!-- ====== CATEGORÍA: FINANZAS (CEN_FINA) ====== -->
-      <div class="nav-section" *ngIf="tienePermisoSeccion('finanzas')">
+      <div class="nav-section">
         <div class="nav-item nav-parent" (click)="toggleSection('finanzas')">
           <span class="nav-icon">💰</span>
           <span class="nav-text" *ngIf="isMenuOpen">Finanzas</span>
@@ -221,6 +239,7 @@
           *ngIf="expandedSections['finanzas'] && isMenuOpen"
         >
           <a
+            *ngIf="tienePermiso('CEN_BANC')"
             routerLink="/banco"
             routerLinkActive="active"
             class="nav-subitem"
@@ -229,6 +248,7 @@
           >
 
           <a
+            *ngIf="tienePermiso('CEN_TASCUO')"
             routerLink="/tasa-cuota"
             routerLinkActive="active"
             class="nav-subitem"
@@ -237,6 +257,7 @@
           >
 
           <a
+            *ngIf="tienePermiso('CEN_CTBAN')"
             routerLink="/cuenta-bancaria"
             routerLinkActive="active"
             class="nav-subitem"
@@ -245,6 +266,7 @@
           >
 
           <a
+            *ngIf="tienePermiso('CEN_FORMC')"
             routerLink="/formula-contable"
             routerLinkActive="active"
             class="nav-subitem"
@@ -255,7 +277,7 @@
       </div>
 
       <!-- ====== CATEGORÍA: ADMINISTRACIÓN (CEN_ADMI) ====== -->
-      <div class="nav-section" *ngIf="tienePermisoSeccion('admin')">
+      <div class="nav-section">
         <div class="nav-item nav-parent" (click)="toggleSection('admin')">
           <span class="nav-icon">👥</span>
           <span class="nav-text" *ngIf="isMenuOpen">Administración</span>
@@ -268,6 +290,7 @@
           *ngIf="expandedSections['admin'] && isMenuOpen"
         >
           <a
+            *ngIf="tienePermiso('CEN_PERF')"
             routerLink="/perfil"
             routerLinkActive="active"
             class="nav-subitem"
@@ -276,6 +299,7 @@
           >
 
           <a
+            *ngIf="tienePermiso('CEN_SUC')"
             routerLink="/sucursal"
             routerLinkActive="active"
             class="nav-subitem"
@@ -284,6 +308,7 @@
           >
 
           <a
+            *ngIf="tienePermiso('CEN_CONFSUC')"
             routerLink="/sucursal-configuracion"
             routerLinkActive="active"
             class="nav-subitem"
@@ -292,6 +317,7 @@
           >
 
           <a
+            *ngIf="tienePermiso('CEN_USUA')"
             routerLink="/usuario"
             routerLinkActive="active"
             class="nav-subitem"
@@ -300,6 +326,7 @@
           >
 
           <a
+            *ngIf="tienePermiso('CEN_MENPER')"
             routerLink="/menu-perfil"
             routerLinkActive="active"
             class="nav-subitem"

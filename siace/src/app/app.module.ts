@@ -57,6 +57,7 @@ import { GiroService } from './giro/giro.service';
 import { NecesidadService } from './necesidad/necesidad.service';
 import { MenuModule } from './menu/menu.module';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { WelcomeComponent } from './welcome/welcome.component';
 
 
 registerLocaleData(localeMx);
@@ -69,6 +70,7 @@ registerLocaleData(localeMx);
     LoadingDialogComponent,
     SigaNavComponent,
     SigaNavigationBarComponent,
+    WelcomeComponent,
   ],
   imports: [
     HttpClientModule,

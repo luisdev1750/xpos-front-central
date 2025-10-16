@@ -2,49 +2,41 @@
   <mat-card class="proin-card">
     <h2>Catálogo de Familias</h2>
     <form #f="ngForm">
-      <div class="row align-items-center">
-        <div class="col-md-2">
-          <mat-form-field>
-            <mat-label>Submarca</mat-label>
-            <mat-select (selectionChange)="onSubmarcaChange($event)">
-              <mat-option value="0">Todas las submarcas</mat-option>
-              <mat-option
-                *ngFor="let submarca of submarcasListsFilter"
-                [value]="submarca.smaId"
-              >
-                {{ submarca.smaNombre }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-
-        <div class="col-md-2">
-          <mat-form-field>
-            <mat-label>Familia Padre:</mat-label>
-
-            <mat-select (selectionChange)="onFamiliaPadreChange($event)">
-              <mat-option value="0">Todas las familias</mat-option>
-              <mat-option
-                *ngFor="let familia of familiasListFilter"
-                [value]="familia.famId"
-              >
-                {{ familia.famNombre }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-
-        <div class="col-md-2">
-          <button
-            mat-mini-fab
-            color="accent"
-            (click)="add()"
-            [disabled]="!f?.valid"
+      <mat-form-field>
+        <mat-label>Submarca</mat-label>
+        <mat-select (selectionChange)="onSubmarcaChange($event)">
+          <mat-option value="0">Todas las submarcas</mat-option>
+          <mat-option
+            *ngFor="let submarca of submarcasListsFilter"
+            [value]="submarca.smaId"
           >
-            <mat-icon>add</mat-icon>
-          </button>
-        </div>
-      </div>
+            {{ submarca.smaNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Familia Padre:</mat-label>
+
+        <mat-select (selectionChange)="onFamiliaPadreChange($event)">
+          <mat-option value="0">Todas las familias</mat-option>
+          <mat-option
+            *ngFor="let familia of familiasListFilter"
+            [value]="familia.famId"
+          >
+            {{ familia.famNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button
+        mat-mini-fab
+        color="accent"
+        (click)="add()"
+        [disabled]="!f?.valid"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
     </form>
 
     <div *ngIf="familiaList.length > 0">

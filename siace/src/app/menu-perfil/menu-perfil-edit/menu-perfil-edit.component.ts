@@ -11,11 +11,16 @@ import { of } from 'rxjs';
   selector: 'app-menu-perfil-edit',
   standalone: false,
   templateUrl: './menu-perfil-edit.component.html',
-  styles: [
-    'form { display: flex; flex-direction: column; min-width: 500px; }',
-    'form > * { width: 100% }',
-    '.mat-mdc-form-field {width: 100%;}',
-  ],
+ styles: [
+  'form { display: flex; flex-direction: column; min-width: 500px; }',
+  'form > * { width: 100% }',
+  '.mat-mdc-form-field {width: 100%;}',
+  '.menu-option-content { display: flex; align-items: center; gap: 10px; }',
+  '.app-badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; min-width: 60px; text-align: center; }',
+  '.badge-xpos { background-color: #3f51b5; color: white; }',
+  '.badge-central { background-color: #ff9800; color: white; }',
+  '.menu-name { flex: 1; }'
+]
 })
 export class MenuPerfilEditComponent implements OnInit {
   id!: string;
@@ -94,7 +99,6 @@ export class MenuPerfilEditComponent implements OnInit {
   }
 
   OnMenuChange(event: any) {
-    console.log('---------here----');
 
     this.menuPerfil.mepMenId = event.value;
   }
@@ -115,7 +119,7 @@ export class MenuPerfilEditComponent implements OnInit {
           );
           this.menuPerfilService.setIsUpdated(true);
           this.dialogRef.close();
-           window.location.reload();
+         
         } else this.toastr.error('Ha ocurrido un error', 'Error');
       },
       error: (err) => {

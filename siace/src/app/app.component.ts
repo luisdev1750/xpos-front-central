@@ -13,15 +13,13 @@ export class AppComponent implements OnInit {
 
   isMenuOpen = false;
   expandedSections: { [key: string]: boolean } = {
-    catalogos: false,
-    sucursales: false,
-    precios: false,
+    productos: false,
+    promociones: false,
     finanzas: false,
     admin: false,
-    multimedia: false,
   };
 
-  // Mapeo de claves de secciones a claves de menú
+  // Mapeo de claves de secciones a claves de menú padre
   seccionesClaves = {
     productos: ['CEN_PROD'],        // Categoría: Productos
     promociones: ['CEN_PROM'],      // Categoría: Promociones
@@ -29,17 +27,23 @@ export class AppComponent implements OnInit {
     admin: ['CEN_ADMI'],            // Categoría: Administración
   };
 
-  // IDs de menú por clave (para menús individuales no agrupados)
-  menuClaves = {
-    login: 'LOGIN',
-    productoProveedor: 'PROD_PROV',
+  // Mapeo de claves de menú HIJOS por sección
+  menusHijos = {
+    productos: ['CEN_PROD', 'CEN_FAMI', 'CEN_MARC', 'CEN_SUBM', 'CEN_PRES', 'CEN_PROV', 'CEN_LIST', 'CEN_PREC', 'CEN_PROPR', 'CEN_IMGPRO', 'CEN_PROSUC', 'CEN_STOSUC', 'CEN_PROSUG'],
+    promociones: ['CEN_TPROM', 'CEN_PROMO', 'CEN_DPROM', 'CEN_OBSEQ', 'CEN_COMBO', 'CEN_BANN'],
+    finanzas: ['CEN_BANC', 'CEN_TASCUO', 'CEN_CTBAN', 'CEN_FORMC'],
+    admin: ['CEN_PERF', 'CEN_SUC', 'CEN_CONFSUC', 'CEN_USUA', 'CEN_MENPER']
   };
 
   constructor(
     private router: Router,
-    public permisosService: PermisosService
+    public permisosService: PermisosService,
+    
   ) {}
 
+   isLoginPage(): boolean {
+    return this.router.url === '/login';
+  }
   ngOnInit(): void {
     this.permisosService.obtenerPermisosLocales();
 
@@ -74,23 +78,24 @@ export class AppComponent implements OnInit {
   }
 
   /**
-   * Verifica si tiene permiso por clave
+   * Verifica si tiene permiso por clave individual
    */
   tienePermiso(clave: string): boolean {
     return this.permisosService.tienePermisoPorClave(clave);
   }
 
   /**
-   * Verifica si tiene permiso para una sección completa
+   * Verifica si tiene permiso para algún hijo de una sección
+   * Retorna true si tiene al menos un permiso de los menús hijos
    */
-  tienePermisoSeccion(seccionKey: string): boolean {
-    const claves = (this.seccionesClaves as any)[seccionKey];
+  tieneAlgunPermisoHijo(seccionKey: string): boolean {
+    const claves = (this.menusHijos as any)[seccionKey];
     
-    if (!claves) {
-      console.warn(`Sección desconocida: ${seccionKey}`);
+    if (!claves || !Array.isArray(claves)) {
       return false;
     }
 
-    return this.permisosService.tienePermisoSeccion(claves);
+    // Retorna true si tiene al menos un permiso de los hijos
+    return claves.some(clave => this.permisosService.tienePermisoPorClave(clave));
   }
 }

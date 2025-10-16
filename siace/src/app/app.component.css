@@ -451,3 +451,9 @@ header {
   border: red solid 1px;
   width: auto !important;
 }
+
+.sidebar{
+  min-height: calc(100vh - 50px);
+  max-height: 100vh;
+  
+}

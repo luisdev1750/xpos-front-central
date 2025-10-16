@@ -32,7 +32,18 @@
           required
         >
           <mat-option *ngFor="let menu of listMenus" [value]="menu.menuId">
-            {{ menu.menuNombre }}
+            <span class="menu-option-content">
+              <span 
+                class="app-badge"
+                [ngClass]="{
+                  'badge-xpos': menu.menuClave?.startsWith('MEN_'),
+                  'badge-central': menu.menuClave?.startsWith('CEN_')
+                }"
+              >
+                {{ menu.menuClave?.startsWith('MEN_') ? 'XPOS' : 'CENTRAL' }}
+              </span>
+              <span class="menu-name">{{ menu.menuNombre }}</span>
+            </span>
           </mat-option>
         </mat-select>
         <mat-error *ngIf="menuPerfil.mepMenId == undefined">

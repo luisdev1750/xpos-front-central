@@ -47,7 +47,7 @@ export class MenuPerfilService extends GeneralService {
   
   
    find(filter: MenuPerfilFilter): Observable<MenuPerfil[]> {
-      const url = `${this.api}/${filter.mepPerId}/${filter.mepMenId}`;
+      const url = `${this.api}/${filter.mepPerId}/${filter.mepMenId}/${filter.mepAppId}`;
       return this.http.get<MenuPerfil[]>(url, {
          headers: this.getHeaders()  // Usar headers con token
       });

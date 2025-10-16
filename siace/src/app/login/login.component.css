@@ -228,6 +228,10 @@
   }
 }
 
+.main-container{
+  min-width: 500px;
+}
+
 /* Estilos para el fondo del body (opcional - aplicar en el componente padre o globalmente) */
 /*
 body {

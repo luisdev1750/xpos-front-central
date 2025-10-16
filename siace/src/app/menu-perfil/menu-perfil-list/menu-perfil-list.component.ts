@@ -11,20 +11,21 @@ import { ToastrService } from 'ngx-toastr';
 import { PerfilService } from '../../perfil/perfil.service';
 import { ActivatedRoute } from '@angular/router';
 import { FormControl } from '@angular/forms';
+
 @Component({
   selector: 'app-menu-perfil',
   standalone: false,
   templateUrl: 'menu-perfil-list.component.html',
   styles: ['table { }', '.mat-column-actions {flex: 0 0 10%;}'],
 })
-export class MenuPerfilListComponent implements OnInit {
+export class MenuPerfilListComponent implements OnInit, OnDestroy {
   displayedColumns = ['mepPerId', 'mepMenId', 'actions'];
   filter = new MenuPerfilFilter();
   perfilControl = new FormControl('0');
   private subs!: Subscription;
   listPerfiles: any[] = [];
-  /* Inicialización */
   parentPerIdString: string = '0';
+
   constructor(
     private menuPerfilService: MenuPerfilService,
     private toastr: ToastrService,
@@ -32,12 +33,14 @@ export class MenuPerfilListComponent implements OnInit {
     private perfilService: PerfilService,
     private route: ActivatedRoute,
   ) {
-    //  this.subs = this.menuPerfilService.getIsUpdated().subscribe(() => {
-    //    this.search();
-    //  });
+
+    this.subs = this.menuPerfilService.getIsUpdated().subscribe(() => {
+      this.search();
+    });
 
     this.filter.mepPerId = '0';
     this.filter.mepMenId = '0';
+    this.filter.mepAppId = '0'; 
   }
 
   ngOnInit() {
@@ -55,6 +58,7 @@ export class MenuPerfilListComponent implements OnInit {
   ngOnDestroy(): void {
     this.subs?.unsubscribe();
   }
+
   loadCatalogs() {
     this.perfilService
       .find({
@@ -65,7 +69,6 @@ export class MenuPerfilListComponent implements OnInit {
       .subscribe(
         (data) => {
           console.log(data);
-
           this.listPerfiles = data;
         },
         (error) => {
@@ -79,17 +82,17 @@ export class MenuPerfilListComponent implements OnInit {
     this.search();
   }
 
-  /* Accesors */
+  onChangeApp(event: any) {
+    this.filter.mepAppId = event.value;
+    this.search(); 
+  }
 
   get menuPerfilList(): MenuPerfil[] {
     return this.menuPerfilService.menuPerfilList;
   }
 
-  /* Métodos */
-
   add() {
     let newMenuPerfil: MenuPerfil = new MenuPerfil();
-
     this.edit(newMenuPerfil);
   }
 
@@ -100,6 +103,7 @@ export class MenuPerfilListComponent implements OnInit {
         message: '¿Está seguro de eliminar el perfil?',
       },
     });
+    
     confirmDialog.afterClosed().subscribe((result) => {
       if (result === true) {
         this.menuPerfilService.delete(menuPerfil).subscribe({
@@ -113,9 +117,11 @@ export class MenuPerfilListComponent implements OnInit {
                 'El perfil ha sido eliminado exitosamente',
                 'Transacción exitosa'
               );
+              // Esto dispara el observable que actualiza la lista
               this.menuPerfilService.setIsUpdated(true);
-               window.location.reload();
-            } else this.toastr.error('Ha ocurrido un error', 'Error');
+            } else {
+              this.toastr.error('Ha ocurrido un error', 'Error');
+            }
           },
           error: (err) => {
             this.toastr.error('Ha ocurrido un error', 'Error');
