@@ -1,0 +1,9 @@
+<div class="overlay" (click)="closeDialog()">
+  <div
+    class="image-container"
+    @zoomAnimation
+    (click)="$event.stopPropagation()"
+  >
+    <img [src]="data.url" alt="Imagen ampliada" />
+  </div>
+</div>

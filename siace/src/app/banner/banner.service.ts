@@ -18,7 +18,6 @@ export class BannerService extends GeneralService {
     super();
   }
 
-  // Método para obtener headers con el token
   private getHeaders(): HttpHeaders {
     const token = localStorage.getItem('accessToken');
     let headers = new HttpHeaders().set('Accept', 'application/json');
@@ -33,7 +32,7 @@ export class BannerService extends GeneralService {
   find(filter: BannerFilter): Observable<Banner[]> {
     const url = `${this.api}/${filter.subSucId}/${filter.subActivo}`;
     return this.http.get<Banner[]>(url, {
-      headers: this.getHeaders(), // Usar headers con token
+      headers: this.getHeaders(),
     });
   }
 
@@ -41,7 +40,7 @@ export class BannerService extends GeneralService {
     const url = `${this.api}/${id}`;
     return this.http
       .get<Banner[]>(url, {
-        headers: this.getHeaders(), // Usar headers con token
+        headers: this.getHeaders(),
       })
       .pipe(map((ele) => ele[0]));
   }
@@ -59,11 +58,11 @@ export class BannerService extends GeneralService {
     });
   }
 
-  loads(): void {
+  listar(): void {
     const url = `${this.api}/listar/`;
     this.http
       .get<Banner[]>(url, {
-        headers: this.getHeaders(), // Usar headers con token
+        headers: this.getHeaders(),
       })
       .subscribe({
         next: (result) => {
@@ -81,16 +80,24 @@ export class BannerService extends GeneralService {
     console.log('Guardando entidad:', entity);
     const sucursalId = Number(entity.subSucId);
     if (entity.subId) {
-      return this.http.put<Banner>(url, entity, { headers });
+      return this.http.put<Banner>(
+        url,
+        this.createFormData(entity, Number(entity.subId)),
+        { headers }
+      );
     } else {
       return this.subIdMax(sucursalId).pipe(
         switchMap((maxId: number) => {
           const nuevoSubId = maxId + 1;
-          entity.subId = String(nuevoSubId); // Asignamos el nuevo ID
+          entity.subId = Number(nuevoSubId); // Asignamos el nuevo ID
           console.log(
             `Max ID encontrado: ${maxId}. Asignando nuevo SubId: ${entity.subId}`
           );
-          return this.http.post<Banner>(url, entity, { headers });
+          return this.http.post<Banner>(
+            url,
+            this.createFormData(entity, Number(entity.subId)),
+            { headers }
+          );
         })
       );
     }
@@ -100,9 +107,7 @@ export class BannerService extends GeneralService {
     let params = new HttpParams();
     let url = '';
     if (entity.subId) {
-      url = `${
-        this.api
-      }/${entity.subId.toString()}/${entity.subSucId.toString()}`;
+      url = `${this.api}/${entity.subId}/${entity.subSucId}`;
       return this.http.delete<Banner>(url, {
         headers: this.getHeaders(),
         params,
@@ -114,15 +119,31 @@ export class BannerService extends GeneralService {
   subIdMax(sucId: number): Observable<number> {
     const url = `${this.api}/max/${sucId}`;
     return this.http.get<number>(url, {
-      headers: this.getHeaders(), // Usar headers con token
+      headers: this.getHeaders(),
     });
   }
 
-  getImagen(fileName: string): Observable<Blob> {
-    const url = `${this.api}/imagen/${fileName}`;
-    return this.http.get(url, {
-      headers: this.getHeaders(),
-      responseType: 'blob',
-    });
+  getImagen(fileName: string): Observable<string> {
+    const url = `${this.api}/imagen/${encodeURIComponent(fileName)}`;
+    return this.http
+      .get(url, {
+        headers: this.getHeaders(),
+        responseType: 'blob',
+      })
+      .pipe(map((blob) => URL.createObjectURL(blob)));
+  }
+
+  private createFormData(entity: Banner, userId: number): FormData {
+    const formData = new FormData();
+    const entityToSend = { ...entity };
+    const imagenFile = entityToSend.imagenUrl;
+    entityToSend.subOrden = Number(entityToSend.subOrden);
+    delete entityToSend.imagenUrl;
+    delete entityToSend.blobUrl;
+    formData.append('bannerJson', JSON.stringify(entityToSend));
+    if (imagenFile) {
+      formData.append('imagen', imagenFile, imagenFile.name);
+    }
+    return formData;
   }
 }

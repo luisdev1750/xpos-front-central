@@ -21,9 +21,17 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
+import { MatGridListModule } from '@angular/material/grid-list';
 
-import { MatAutocomplete, MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
+import {
+  MatAutocomplete,
+  MatAutocompleteModule,
+} from '@angular/material/autocomplete';
+import { ImagePreviewComponent } from './banner-edit/image-preview/image-preview.component';
 
 @NgModule({
   imports: [
@@ -39,19 +47,23 @@ import { MatAutocomplete, MatAutocompleteModule } from '@angular/material/autoco
     MatDialogModule,
     MatCardModule,
     BannerRoutingModule,
-       MatSlideToggleModule,
-       MatSelectModule ,
-       MatOptionModule,
-       MatAutocomplete,
-       MatAutocompleteModule,
-       ReactiveFormsModule
-
+    MatSlideToggleModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatAutocomplete,
+    MatAutocompleteModule,
+    ReactiveFormsModule,
+    MatGridListModule,
+    MatCheckboxModule,
+    MatSnackBarModule,
+    MatTooltipModule,
   ],
   declarations: [
     BannerListComponent,
-    BannerEditComponent
+    BannerEditComponent,
+    ImagePreviewComponent,
   ],
   providers: [BannerService, SucursalService],
-  exports: []
+  exports: [],
 })
-export class BannerModule { }
+export class BannerModule {}

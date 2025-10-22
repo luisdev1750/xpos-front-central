@@ -1,168 +1,237 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ToastrService } from 'ngx-toastr';
-
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  Inject,
+} from '@angular/core';
 import { BannerService } from '../banner.service';
-import { SucursalService } from '../../sucursal/sucursal.service';
 import { Banner } from '../banner';
-import { map, switchMap } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
+import { ConfirmDialogComponent } from '../../common/confirm-dialog/confirm-dialog.component';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
+import { ImagePreviewComponent } from './image-preview/image-preview.component';
+import { BannerFilter } from '../banner-filter';
 
 @Component({
   selector: 'app-banner-edit',
   standalone: false,
   templateUrl: './banner-edit.component.html',
-  styles: [
-    'form { display: flex; flex-direction: column; min-width: 500px; }',
-    'form > * { width: 100% }',
-    '.mat-mdc-form-field {width: 100%;}',
-  ],
+  styleUrl: './banner-edit.component.css',
 })
 export class BannerEditComponent implements OnInit {
-  id!: string;
-  banner!: Banner;
+  bannerList: Banner[] = [];
+  filter = new BannerFilter();
+  showNewBannerRow: boolean = false; // <--- nueva bandera
+  showSelected: boolean = false;
+  newBanner: Banner = {
+    subId: 0,
+    subSucId: 0,
+    subNombre: '',
+    subOrden: 0,
+    subActivo: true,
+    imagenUrl: null,
+    blobUrl: '',
+  };
+  displayedColumns: string[] = [
+    'imagen',
+    'nombre',
+    'orden',
+    'activo',
+    'actions',
+  ];
   listSucursales: any[] = [];
 
-  selectedFile: File | null = null;
-  imagePreview: string | null = null;
-  isEditing: boolean = false;
+  /** Guardará los estados de edición por ID */
+  editState: { [key: number]: boolean } = {};
 
-  /* Constructores */
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+  selectedBanner?: Banner;
 
   constructor(
     private dialogRef: MatDialogRef<BannerEditComponent>,
     private bannerService: BannerService,
     private toastr: ToastrService,
-    private sucursalSerivice: SucursalService,
+    private dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    this.banner = { ...data.banner };
+    const idSuc = { ...data };
+    this.filter.subSucId = idSuc.banner;
+    this.filter.subActivo = '';
+    this.newBanner.subSucId = idSuc.banner;
+    this.listSucursales = idSuc.listSucursales;
+    console.log(this.filter);
+    this.bannerList = [];
   }
 
-  ngOnInit() {
-    this.loadCatalogs();
+  ngOnInit(): void {
+    this.loadBanners();
   }
 
-  /*Métodos*/
+  get tableData(): Banner[] {
+    return this.showNewBannerRow
+      ? [this.newBanner, ...this.bannerList]
+      : this.bannerList;
+  }
 
-  save() {
-    // El valor ya es booleano, no necesita conversión adicional
-    this.bannerService.save(this.banner).subscribe({
-      next: (result) => {
-        if (
-          result?.subId !== undefined &&
-          result?.subId !== null &&
-          Number(result.subId) >= 0
-        ) {
-          this.toastr.success(
-            'El banner ha sido guardado exitosamente',
-            'Transacción exitosa'
-          );
-          this.bannerService.setIsUpdated(true);
-          this.dialogRef.close();
-        } else this.toastr.error('Ha ocurrido un error', 'Error');
+  /** Mostrar la fila de nuevo banner */
+  addNewBannerRow(): void {
+    this.showNewBannerRow = true;
+    this.newBanner = {
+      subId: 0,
+      subSucId: Number(this.filter.subSucId),
+      subNombre: '',
+      subOrden: 0,
+      subActivo: true,
+      imagenUrl: null,
+      blobUrl: '',
+    };
+  }
+
+  selectNewImage(): void {
+    this.selectedBanner = this.newBanner;
+    this.fileInput.nativeElement.click();
+  }
+
+  addNewBanner(): void {
+    if (!this.newBanner.subNombre || !this.newBanner.imagenUrl) {
+      this.toastr.info('Debes completar nombre y seleccionar imagen', 'Banner');
+      return;
+    }
+
+    if (!this.newBanner.subOrden || this.newBanner.subOrden === 0) {
+      this.toastr.info('Debes agregar un orden', 'Banner');
+      return;
+    }
+
+    this.bannerService.save(this.newBanner).subscribe({
+      next: (res) => {
+        this.toastr.success('Banner agregado correctamente', 'Éxito');
+        this.showNewBannerRow = false; // Oculta la fila temporal
+        this.loadBanners();
       },
       error: (err) => {
-        this.toastr.error('Ha ocurrido un error', 'Error');
+        this.toastr.error('Agregar una sucursal', 'Error');
+        console.error(err);
       },
     });
   }
 
-  loadCatalogs() {
-    // Cargar sucursales
-    this.sucursalSerivice
-      .find({
-        sucId: '0',
-        sucCiuId: '0',
-        sucColId: '0',
-        sucEmpId: '0',
-        sucEstId: '0',
-        sucMunId: '0',
-      })
-      .subscribe(
-        (res) => {
-          console.log('Sucursales cargadas:', res);
-          this.listSucursales = res;
-        },
-        (error) => {
-          console.log('Error al cargar sucursales:', error);
-          this.toastr.error('Error al cargar sucursales', 'Error');
-        }
-      );
-  }
-
-  // Manejar la selección de archivo
-  onFileSelected(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      // Validar tipo de archivo
-      const validTypes = [
-        'image/jpeg',
-        'image/jpg',
-        'image/png',
-        'image/gif',
-        'image/webp',
-      ];
-      if (!validTypes.includes(file.type)) {
-        this.toastr.error(
-          'Tipo de archivo no válido. Solo se permiten imágenes (JPG, PNG, GIF, WEBP)',
-          'Error'
-        );
-        return;
-      }
-
-      // Validar tamaño (ejemplo: máximo 5MB)
-      const maxSize = 5 * 1024 * 1024; // 5MB
-      if (file.size > maxSize) {
-        this.toastr.error(
-          'El archivo es demasiado grande. Máximo 5MB',
-          'Error'
-        );
-        return;
-      }
-
-      this.selectedFile = file;
-
-      this.banner.subNombre = file.name;
-      // Generar vista previa del nuevo archivo
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.imagePreview = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-  }
-
-  // Limpiar la imagen seleccionada
-  clearImage() {
-    this.selectedFile = null;
-    if (!this.isEditing) {
-      this.imagePreview = null;
+  /** Carga inicial de banners */
+  loadBanners(): void {
+    console.log(this.filter.subSucId?.toString());
+    if (
+      this.filter.subSucId?.toString() === '' &&
+      this.newBanner.subSucId !== 0
+    ) {
+      this.showSelected = true;
+      return;
     } else {
-      // Restaurar la imagen original si estamos editando
-      if (this.banner.subNombre) {
-        this.loadImagePreview(this.banner.subNombre);
-      }
+      this.bannerService.find(this.filter).subscribe({
+        next: (result: Banner[]) => {
+          this.showSelected = false;
+          this.bannerList = result; // aquí ya es Banner[]
+          this.loadBannerImages(); // opcional: cargar imágenes
+          this.bannerList.forEach((b) => (this.editState[b.subId] = false));
+        },
+        error: (err) => {
+          console.error('Error cargando banners', err);
+          this.bannerList = [];
+        },
+      });
     }
   }
 
-  // Cargar imagen existente usando getImagen
-  loadImagePreview(fileName: string) {
-    this.bannerService.getImagen(fileName).subscribe({
-      next: (blob: Blob) => {
-        const reader = new FileReader();
-        reader.onload = (e: any) => {
-          this.imagePreview = e.target.result;
-        };
-        reader.readAsDataURL(blob);
+  loadBannerImages(): void {
+    this.bannerList.forEach((banner) => {
+      if (banner.subNombre) {
+        this.bannerService.getImagen(banner.subNombre).subscribe({
+          next: (url) => (banner.blobUrl = url),
+          error: (err) => {
+            console.error('Error cargando imagen', err);
+            banner.blobUrl = ''; // opcional: imagen por defecto
+          },
+        });
+      }
+    });
+  }
+  /** Detecta cambios y activa el modo edición del banner */
+  onEditChange(item: Banner): void {
+    this.editState[item.subId] = true;
+  }
+
+  onChangeImage(item: Banner): void {
+    this.selectedBanner = item;
+    this.fileInput.nativeElement.click();
+  }
+
+  /** Subir nueva imagen y marcar banner como editado */
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0 && this.selectedBanner) {
+      const file = input.files[0];
+      this.selectedBanner.imagenUrl = file;
+      this.selectedBanner.subNombre = file.name;
+      this.selectedBanner.blobUrl = URL.createObjectURL(file);
+      this.editState[this.selectedBanner.subId] = true;
+      this.toastr.info(`Imagen seleccionada: ${file.name}`, 'Banner');
+    }
+  }
+
+  /** Actualizar cambios */
+  updateBanner(item: Banner): void {
+    this.bannerService.save(item).subscribe({
+      next: () => {
+        this.toastr.success('Banner actualizado correctamente', 'Éxito');
+        this.editState[item.subId] = false;
+        this.loadBanners();
       },
       error: (err) => {
-        console.error('Error al cargar imagen', err);
-        this.toastr.warning(
-          'No se pudo cargar la vista previa de la imagen',
-          'Advertencia'
-        );
+        this.toastr.error('Error al actualizar el banner', 'Error');
+        console.error(err);
       },
+    });
+  }
+
+  /** Eliminar banner */
+  deleteBanner(item: Banner): void {
+    const confirmDialog = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: 'Confirmación',
+        message: '¿Está seguro de eliminar el banco?',
+      },
+    });
+    confirmDialog.afterClosed().subscribe((result) => {
+      if (result === true) {
+        this.bannerService.delete(item).subscribe({
+          next: () => {
+            this.toastr.success('Banner eliminado', 'Éxito');
+            this.loadBanners();
+          },
+          error: (err) => {
+            this.toastr.error('Error al eliminar banner', 'Error');
+            console.error(err);
+          },
+        });
+      }
+    });
+  }
+
+  /** Saber si un banner está en edición */
+  isEditing(item: Banner): boolean {
+    return this.editState[item.subId];
+  }
+
+  openImagePreview(url: string): void {
+    this.dialog.open(ImagePreviewComponent, {
+      data: { url },
+      panelClass: 'no-padding-dialog',
+      backdropClass: 'transparent-backdrop',
+      hasBackdrop: true,
     });
   }
 }
