@@ -1,4 +1,4 @@
 export class BannerFilter {
-  subSucId = '';
-  subActivo = '';
+  subSucId?: number | string;
+  subActivo?: string;
 }
