@@ -1470,3 +1470,20 @@ body{
 .mat-mdc-dialog-surface .mdc-dialog__surface{
   border: red solid 1px !important; 
 }
+
+.custom-dialog-container .mat-mdc-dialog-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.custom-dialog-container .mat-mdc-dialog-surface {
+  width: 75vw !important;
+  height: 80vh !important;
+  max-width: 100vw !important;
+  max-height: 100vh !important;
+  margin: auto !important;
+  overflow: auto !important;
+  border-radius: 12px !important;
+  padding: 1rem !important;
+}
