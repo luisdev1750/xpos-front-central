@@ -31,6 +31,7 @@
           name="pmoNombre"
           placeholder="Nombre de la promoción"
            maxlength="200"
+           required=""
         />
         <mat-error *ngIf="promocion.pmoNombre == undefined">
           Nombre de la promoción es requerido
@@ -47,10 +48,12 @@
         <mat-select
           [value]="promocion.pmoTprId"
           (selectionChange)="onTipoPromocionesChange($event)"
-        >
+          required
+          >
           <mat-option
             *ngFor="let tipoPromocion of listTiposPromocones"
             [value]="tipoPromocion.tprId"
+            
           >
             {{ tipoPromocion.tprNombre }}
           </mat-option>
@@ -64,6 +67,7 @@
         <mat-select
           [value]="promocion.pmoSucId"
           (selectionChange)="onSucursalChange($event)"
+          required
         >
           <mat-option
             *ngFor="let sucursal of listSucursales"
@@ -127,6 +131,7 @@
           id="pmoFechaInicio"
           name="pmoFechaInicio"
           placeholder="Selecciona fecha de inicio"
+          required
         />
         <mat-datepicker-toggle
           matSuffix
@@ -149,6 +154,7 @@
           id="pmoFechaFin"
           name="pmoFechaFin"
           placeholder="Selecciona fecha de fin"
+          required
         />
         <mat-datepicker-toggle
           matSuffix

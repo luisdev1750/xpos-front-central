@@ -6,13 +6,14 @@
   autocomplete="off"
 >
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
       <mat-form-field>
         <mat-label>Sucursal</mat-label>
         <mat-select
           [value]="sucursalProdStock.spsSucId"
           (selectionChange)="onChangeSucursalId($event)"
-           [disabled]="isReadonly" 
+          [disabled]="isReadonly"
+          required
         >
           <mat-option
             *ngFor="let sucursal of listSucursal"
@@ -23,13 +24,14 @@
         </mat-select>
       </mat-form-field>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-6">
       <mat-form-field>
         <mat-label>Producto</mat-label>
         <mat-select
           [value]="sucursalProdStock.spsProId"
           (selectionChange)="OnChangeProducto($event)"
-           [disabled]="isReadonly" 
+          [disabled]="isReadonly"
+          required
         >
           <mat-option
             *ngFor="let producto of listProducto"
@@ -41,7 +43,7 @@
       </mat-form-field>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-6">
       <mat-form-field>
         <mat-label for="spsStockMinimo">Stock minimo</mat-label>
         <input
@@ -51,7 +53,7 @@
           id="spsStockMinimo"
           name="spsStockMinimo"
           placeholder="Stock minimo"
-            
+          required
         />
 
         <mat-error *ngIf="sucursalProdStock.spsStockMinimo == undefined"
@@ -59,9 +61,7 @@
         >
       </mat-form-field>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
       <mat-form-field>
         <mat-label for="spsStockMaximo">Stock maximo</mat-label>
         <input
@@ -71,6 +71,7 @@
           id="spsStockMaximo"
           name="spsStockMaximo"
           placeholder="Stock maximo"
+          required
         />
 
         <mat-error *ngIf="sucursalProdStock.spsStockMaximo == undefined"
@@ -79,6 +80,7 @@
       </mat-form-field>
     </div>
   </div>
+
   <div class="button-row text-center" role="group">
     <button
       type="submit"

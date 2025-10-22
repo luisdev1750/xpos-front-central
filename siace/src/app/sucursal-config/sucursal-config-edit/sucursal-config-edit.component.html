@@ -7,7 +7,9 @@
   <div class="col-md-6">
       <mat-form-field>
         <mat-label>Sucursal</mat-label>
-        <mat-select [value]="sucursalConfig.scoSucId" (selectionChange)="onSucursalChange($event)">
+        <mat-select
+        required
+        [value]="sucursalConfig.scoSucId" (selectionChange)="onSucursalChange($event)">
           <mat-option *ngFor="let sucursal of listSucursales" 
                       [value]="sucursal.sucId">
             {{ sucursal.sucNombre }}
@@ -20,7 +22,7 @@
    <div class="col-md-6">
       <mat-form-field>
          <mat-label for="scoHost">Host</mat-label>
-         <input  maxlength="200" matInput [(ngModel)]="sucursalConfig.scoHost" id="scoHost" name="scoHost" placeholder="Host" >
+         <input required maxlength="200" matInput [(ngModel)]="sucursalConfig.scoHost" id="scoHost" name="scoHost" placeholder="Host" >
          
       </mat-form-field>
    </div>
@@ -30,7 +32,7 @@
    <div class="col-md-6">
       <mat-form-field>
          <mat-label for="scoTokenUser">Token de Usuario</mat-label>
-         <input  maxlength="100" matInput [(ngModel)]="sucursalConfig.scoTokenUser" id="scoTokenUser" name="scoTokenUser" placeholder="Token de Usuario" >
+         <input required maxlength="100" matInput [(ngModel)]="sucursalConfig.scoTokenUser" id="scoTokenUser" name="scoTokenUser" placeholder="Token de Usuario" >
          
       </mat-form-field>
    </div>
@@ -38,7 +40,7 @@
    <div class="col-md-6">
       <mat-form-field>
          <mat-label for="scoTokenPassword">Token de contraseña</mat-label>
-         <input  maxlength="100" matInput [(ngModel)]="sucursalConfig.scoTokenPassword" id="scoTokenPassword" name="scoTokenPassword" placeholder="Token de contraseña" >
+         <input required maxlength="100" matInput [(ngModel)]="sucursalConfig.scoTokenPassword" id="scoTokenPassword" name="scoTokenPassword" placeholder="Token de contraseña" >
          
       </mat-form-field>
    </div>

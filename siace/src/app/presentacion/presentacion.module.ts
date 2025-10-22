@@ -17,6 +17,7 @@ import { PresentacionService } from './presentacion.service';
 import { PresentacionRoutingModule } from './presentacion.routing.module';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   imports: [
@@ -34,6 +35,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     PresentacionRoutingModule,
     MatSelectModule,
     MatTooltipModule,
+    MatPaginatorModule
   ],
   declarations: [PresentacionListComponent, PresentacionEditComponent],
   providers: [PresentacionService],

@@ -19,6 +19,7 @@ import { PerfilService } from '../perfil/perfil.service';
 import { MatSelect } from '@angular/material/select';
 import { MenuListComponent } from '../menu/menu-list/menu-list.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatPaginatorModule } from '@angular/material/paginator';
 @NgModule({
   imports: [
     CommonModule,
@@ -36,6 +37,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatOption,
     MatSelect,
     MatTooltipModule,
+    MatPaginatorModule
   ],
   declarations: [MenuPerfilListComponent, MenuPerfilEditComponent],
   providers: [MenuPerfilService, PerfilService],

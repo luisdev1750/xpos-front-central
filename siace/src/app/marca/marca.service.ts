@@ -32,7 +32,7 @@ export class MarcaService extends GeneralService {
       let url = '';
       if (entity.marId) {
          url = `${this.api}/${entity.marId.toString()}`;
-         params = new HttpParams().set('ID', entity.marId.toString());
+       
          return this.http.delete<Marca>(url, {
             headers: this.getHeaders(), 
             params

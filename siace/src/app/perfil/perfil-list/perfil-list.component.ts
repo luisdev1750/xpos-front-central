@@ -14,7 +14,44 @@ import { Router } from '@angular/router';
   selector: 'app-perfil',
   standalone: false,
   templateUrl: 'perfil-list.component.html',
-  styles: ['table {}', '.mat-column-actions {flex: 0 0 10%;}'],
+     styles: [
+    `
+      table { 
+        width: 100%; 
+      }
+      
+      .mat-mdc-cell, .mat-mdc-header-cell {
+        word-break: break-word !important;
+        white-space: normal !important;
+        overflow-wrap: break-word !important;
+        padding: 8px !important;
+      }
+      
+      .mat-column-perNombre { 
+        flex: 0 0 30% !important;
+        min-width: 200px;
+      }
+      
+      .mat-column-perClave { 
+        flex: 0 0 20% !important;
+        min-width: 150px;
+      }
+      
+      .mat-column-perActivo {
+        flex: 0 0 15% !important;
+        text-align: center;
+      }
+      
+      .mat-column-actions {
+        flex: 0 0 15% !important;
+      }
+      
+      .mat-mdc-row {
+        min-height: 48px;
+        height: auto !important;
+      }
+    `
+  ],
 })
 export class PerfilListComponent implements OnInit {
   displayedColumns = [ 'perNombre', 'perClave', 'perActivo', 'actions'];

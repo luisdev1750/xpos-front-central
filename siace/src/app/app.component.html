@@ -185,25 +185,7 @@
             class="nav-subitem"
             (click)="onNavItemClick()"
             >Promociones</a
-          >
-          
-          <a
-            *ngIf="tienePermiso('CEN_DPROM')"
-            routerLink="/promocion-detalle"
-            routerLinkActive="active"
-            class="nav-subitem"
-            (click)="onNavItemClick()"
-            >Detalles Promoción</a
-          >
-
-          <a
-            *ngIf="tienePermiso('CEN_OBSEQ')"
-            routerLink="/promocion-obsequio"
-            routerLinkActive="active"
-            class="nav-subitem"
-            (click)="onNavItemClick()"
-            >Obsequios</a
-          >
+          >                         
 
           <a
             *ngIf="tienePermiso('CEN_COMBO')"

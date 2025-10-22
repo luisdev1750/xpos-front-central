@@ -1,8 +1,6 @@
 <h2>Detalle del usuario</h2>
 <form *ngIf="usuario" #editForm="ngForm" (ngSubmit)="save()" autocomplete="off">
   <div class="row">
-
-
     <div class="col-md-6">
       <mat-form-field>
         <mat-label for="usuNombre">Nombre Completo</mat-label>
@@ -13,7 +11,7 @@
           name="usuNombre"
           placeholder="Nombre Completo"
           required
-           maxlength="200"
+          maxlength="200"
         />
         <mat-error *ngIf="usuario.usuNombre == ''"
           >Nombre Completo es requerido</mat-error
@@ -31,7 +29,7 @@
           name="usuUser"
           placeholder="Usuario"
           required
-           maxlength="30"
+          maxlength="30"
         />
         <mat-error *ngIf="usuario.usuUser == ''"
           >Usuario es requerido</mat-error
@@ -48,30 +46,30 @@
           id="usuPassword"
           name="usuPassword"
           placeholder="Contraseña"
-          required
-           maxlength="200"
+          maxlength="200"
         />
-        <mat-error *ngIf="usuario.usuPassword == undefined"
-          >Contraseña es requerido</mat-error
-        >
       </mat-form-field>
     </div>
 
     <div class="col-md-6">
       <mat-form-field>
-        <mat-label for="usuCorreoElectronico">Correo Electrónico</mat-label>
+        <mat-label>Correo Electrónico</mat-label>
         <input
           matInput
           [(ngModel)]="usuario.usuCorreoElectronico"
-          id="usuCorreoElectronico"
           name="usuCorreoElectronico"
-          placeholder="Correo Electrónico"
+          type="email"
+          email
           required
-           maxlength="100"
+          #correo="ngModel"
+          placeholder="ejemplo@correo.com"
         />
-        <mat-error *ngIf="usuario.usuCorreoElectronico == undefined"
-          >Correo Electrónico es requerido</mat-error
-        >
+        <mat-error *ngIf="correo.invalid && (correo.dirty || correo.touched)">
+          <span *ngIf="correo.errors?.['required']"
+            >El correo es requerido</span
+          >
+          <span *ngIf="correo.errors?.['email']">Ingrese un correo válido</span>
+        </mat-error>
       </mat-form-field>
     </div>
 
@@ -81,6 +79,7 @@
         <mat-select
           (selectionChange)="onPerfilChange($event)"
           [value]="usuario.usuPerId"
+          required
         >
           <mat-option
             *ngFor="let perfil of perfilListsFilter"
@@ -110,52 +109,13 @@
     </div>
 
     <div class="col-md-6">
-      <mat-form-field appearance="fill">
-        <mat-label for="fechaVigencia">Fecha Alta</mat-label>
-        <input
-          matInput
-          [matDatepicker]="pickerAlta"
-          [(ngModel)]="usuario.usuFechaAlta"
-          id="usuFechaAlta"
-          name="usuFechaAlta"
-          placeholder="Selecciona fecha alta"
-        />
-
-        <mat-datepicker-toggle
-          matSuffix
-          [for]="pickerAlta"
-        ></mat-datepicker-toggle>
-        <mat-datepicker #pickerAlta></mat-datepicker>
-      </mat-form-field>
-    </div>
-
-    <div class="col-md-6">
-      <mat-form-field appearance="fill">
-        <mat-label for="fechaVigencia">Fecha Modificación</mat-label>
-        <input
-          matInput
-          [matDatepicker]="pickerModificacion"
-          [(ngModel)]="usuario.usuFecha_Modificacion"
-          id=".suFecha_Modificacion"
-          name="usuFecha_Modificacion"
-          placeholder="Selecciona fecha modificación"
-        />
-
-        <mat-datepicker-toggle
-          matSuffix
-          [for]="pickerModificacion"
-        ></mat-datepicker-toggle>
-        <mat-datepicker #pickerModificacion></mat-datepicker>
-      </mat-form-field>
-    </div>
-
-    <div class="col-md-6">
       <mat-form-field>
         <mat-label>Activo</mat-label>
         <mat-select
           id="banActivo"
           name="banActivo"
           [(ngModel)]="usuario.usuActivo"
+          required
           (selectionChange)="onActivoChange($event)"
         >
           <mat-option [value]="true">Sí</mat-option>

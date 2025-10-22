@@ -73,7 +73,7 @@ export class LoginService extends GeneralService {
          this.permisosService.obtenerPermisosLocales();
       }
 
-      window.addEventListener('storage', this.handleStorageChange.bind(this));
+
    }
 
    private handleStorageChange(event: StorageEvent): void {

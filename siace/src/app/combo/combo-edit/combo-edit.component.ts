@@ -22,9 +22,9 @@ import { SucursalService } from '../../sucursal/sucursal.service';
   ],
 })
 export class ComboEditComponent implements OnInit {
-  // Propiedades existentes
   id!: string;
   combo!: Combo;
+  isEditMode: boolean = false;
   displayedColumns = [
     'nombreProducto',
     'productoSku',
@@ -32,14 +32,14 @@ export class ComboEditComponent implements OnInit {
     'actions',
   ];
   listPrecios: any[] = [];
-  listSucursal: any[] = []; 
-  // Nuevas propiedades para el buscador de productos
+  listSucursal: any[] = [];
   listProductosCompleta: any[] = [];
   listProductos: any[] = [];
   productoControl = new FormControl('');
   filteredProductos!: Observable<any[]>;
   productoSeleccionado: any = null;
   private isUpdatingProgrammatically = false;
+  private nextTempId: number = -1; // 🔹 Contador para IDs temporales únicos
 
   constructor(
     private dialogRef: MatDialogRef<ComboEditComponent>,
@@ -53,11 +53,27 @@ export class ComboEditComponent implements OnInit {
     console.log('Data recuperada');
     console.log(data);
     this.combo = { ...data.combo };
+
+    this.isEditMode =
+      this.combo.comboId && this.combo.comboId > 0 ? true : false;
+    
+    // 🔹 Asignar IDs temporales únicos a productos existentes que no los tengan
+    if (this.combo.productos && this.combo.productos.length > 0) {
+      this.combo.productos = this.combo.productos.map((p: any) => {
+        if (!p._tempId) {
+          return { ...p, _tempId: this.nextTempId-- };
+        }
+        return p;
+      });
+    }
   }
 
   ngOnInit() {
     this.loadCatalogs();
-    this.loadProductos();
+
+    if (this.combo.sucursalId) {
+      this.loadProductos(this.combo.sucursalId);
+    }
   }
 
   loadCatalogs() {
@@ -80,50 +96,91 @@ export class ComboEditComponent implements OnInit {
         }
       );
 
-      this.sucursalesService.findAll().subscribe((res)=>{
-        console.log("sucursales");
+    this.sucursalesService.findAll().subscribe(
+      (res) => {
+        console.log('sucursales');
         console.log(res);
-        
-        
+
         this.listSucursal = res;
-      }, 
-    (error)=>{
-      console.log(error);
-      
-    })
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
-  onSucursalChange(event: any){
-    this.combo.sucursalId = event.value; 
-  }
-  // Método para cargar productos (ajusta según tu servicio)
-  loadProductos() {
-    // Aquí debes llamar a tu servicio de productos
-    // Por ejemplo: this.productoService.find({...}).subscribe(...)
-    // Por ahora lo dejo como ejemplo
- ////
-     this.productoService.find({ 
-      proId: '0',
-      proFamId: '0',
-      proPreId: '0',
-      proActivo: 'true'
-     }).subscribe({
-    next: (productos) => {
-      this.listProductosCompleta = productos;
-      this.listProductos = [...productos];
-      this.setupAutocomplete();
-    },
-    error: (error) => {
-      console.error('Error cargando productos:', error);
-      this.toastr.error('Error cargando productos', 'Error');
+
+  onSucursalChange(event: any) {
+    if (!this.canChangeSucursal()) {
+      this.toastr.warning(
+        'No puede cambiar la sucursal. Primero elimine todos los productos del combo.',
+        'Advertencia'
+      );
+      event.source.value = this.combo.sucursalId;
+      return;
     }
-  });
 
-    // Temporal - simula datos para que veas la estructura
- 
-    this.setupAutocomplete();
+    this.combo.sucursalId = event.value;
+
+    if (event.value) {
+      this.loadProductos(event.value);
+    } else {
+      this.listProductosCompleta = [];
+      this.listProductos = [];
+      this.productoControl.reset();
+      this.productoSeleccionado = null;
+    }
   }
 
-  // Configuración del autocomplete
+  canChangeSucursal(): boolean {
+    if (this.isEditMode) {
+      return false;
+    }
+
+    return !this.combo.productos || this.combo.productos.length === 0;
+  }
+
+  loadProductos(sucursalId: number) {
+    if (!sucursalId || sucursalId <= 0) {
+      this.toastr.warning(
+        'Debe seleccionar una sucursal primero',
+        'Advertencia'
+      );
+      this.listProductosCompleta = [];
+      this.listProductos = [];
+      return;
+    }
+
+    this.comboService.findProductos(sucursalId).subscribe({
+      next: (productos) => {
+        console.log('Productos de sucursal ' + sucursalId);
+        console.log(productos);
+
+        if (productos && productos.length > 0) {
+          this.listProductosCompleta = productos;
+          this.listProductos = [...productos];
+          this.setupAutocomplete();
+          this.toastr.success(
+            `${productos.length} productos cargados`,
+            'Éxito'
+          );
+        } else {
+          this.listProductosCompleta = [];
+          this.listProductos = [];
+          this.toastr.info(
+            'No hay productos disponibles para esta sucursal',
+            'Información'
+          );
+        }
+      },
+      error: (error) => {
+        console.error('Error cargando productos:', error);
+        this.toastr.error('Error cargando productos', 'Error');
+        this.listProductosCompleta = [];
+        this.listProductos = [];
+      },
+    });
+  }
+
   setupAutocomplete() {
     if (this.listProductosCompleta.length === 0) return;
 
@@ -133,7 +190,6 @@ export class ComboEditComponent implements OnInit {
     );
   }
 
-  // Obtener valor del filtro
   private _getFilterValue(value: any): string {
     if (typeof value === 'string') return value;
     if (value && typeof value === 'object' && value.proNombre)
@@ -141,7 +197,6 @@ export class ComboEditComponent implements OnInit {
     return '';
   }
 
-  // Filtrar productos
   private _filterProductos(value: string): any[] {
     const filterValue = value.toLowerCase();
     return this.listProductos.filter(
@@ -156,12 +211,10 @@ export class ComboEditComponent implements OnInit {
     );
   }
 
-  // Mostrar nombre del producto en el input
   displayProductoFn(producto: any): string {
     return producto && producto.proNombre ? producto.proNombre : '';
   }
 
-  // Cuando se selecciona un producto
   onProductoSelected(producto: any) {
     if (this.isUpdatingProgrammatically) return;
     if (!producto || !producto.proId) return;
@@ -170,29 +223,19 @@ export class ComboEditComponent implements OnInit {
     console.log('Producto seleccionado:', producto);
   }
 
-  // Agregar producto a la tabla
   agregarProducto() {
     if (!this.productoSeleccionado) {
       this.toastr.warning('Debe seleccionar un producto', 'Advertencia');
       return;
     }
 
-    // Verificar si el producto ya existe en la lista
-    const existe = this.combo.productos.some(
-      (p: any) => p.productoId === this.productoSeleccionado.proId
-    );
-
-    if (existe) {
-      this.toastr.warning('El producto ya está en el combo', 'Advertencia');
-      return;
-    }
-
-    // Agregar el producto a la lista
+    // 🔹 Crear nuevo producto con ID temporal único
     const nuevoProducto = {
       productoId: this.productoSeleccionado.proId,
       productoNombre: this.productoSeleccionado.proNombre,
       productoSku: this.productoSeleccionado.proSku,
       productoActivo: this.productoSeleccionado.proActivo,
+      _tempId: this.nextTempId-- // ID temporal único para identificar esta fila específica
     };
 
     this.combo.productos = [...this.combo.productos, nuevoProducto];
@@ -204,7 +247,6 @@ export class ComboEditComponent implements OnInit {
     this.toastr.success('Producto agregado al combo', 'Éxito');
   }
 
-  // Limpiar búsqueda
   onProductoClear() {
     this.productoControl.reset();
     this.productoSeleccionado = null;
@@ -220,18 +262,26 @@ export class ComboEditComponent implements OnInit {
 
   delete(item: any) {
     console.log('Borrando producto:', item);
+
     this.combo.productos = this.combo.productos.filter(
-      (p: any) => p.productoId !== item.productoId
+      (p: any) => p._tempId !== item._tempId
     );
     this.toastr.success('Producto eliminado del combo', 'Éxito');
   }
 
   save() {
-    this.comboService.save(this.combo).subscribe({
+    // 🔹 Limpiar _tempId antes de enviar al backend
+    const comboToSave = {
+      ...this.combo,
+      productos: this.combo.productos.map((p: any) => {
+        const { _tempId, ...productoSinTempId } = p;
+        return productoSinTempId;
+      })
+    };
+
+    this.comboService.save(comboToSave).subscribe({
       next: (result) => {
-        if (
-          result?.comboId > 0
-        ) {
+        if (result?.comboId > 0) {
           this.toastr.success(
             'El combo ha sido guardado exitosamente',
             'Transacción exitosa'

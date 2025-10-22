@@ -76,7 +76,20 @@ export class ListaPrecioListComponent implements OnInit {
 
     this.edit(newListaPrecio);
   }
+  // Limpiar solo la fecha
+  clearFechaAlta(): void {
+    this.filter.lprFechaAlta = 'all';
+    this.search();
+  }
 
+  // Limpiar todos los filtros
+  clearFilters(): void {
+    this.filter.lprId = '0';
+    this.filter.lprActivo = 'all';
+    this.filter.lprFechaVigencia = 'all';
+    this.filter.lprFechaAlta = 'all';
+    this.search();
+  }
   delete(listaPrecio: ListaPrecio): void {
     const confirmDialog = this.dialog.open(ConfirmDialogComponent, {
       data: {

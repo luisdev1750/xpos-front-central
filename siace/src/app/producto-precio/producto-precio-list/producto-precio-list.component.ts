@@ -11,6 +11,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ListaPrecioService } from '../../lista-precio/lista-precio.service';
 import { ListaPrecio } from '../../lista-precio/lista-precio';
 import { ProductoPrecioBusquedaComponent } from '../producto-precio-busqueda/producto-precio-busqueda.component';
+import {  Inject } from '@angular/core';
 
 @Component({
   selector: 'app-producto-precio',
@@ -18,7 +19,7 @@ import { ProductoPrecioBusquedaComponent } from '../producto-precio-busqueda/pro
   templateUrl: 'producto-precio-list.component.html',
   styles: ['table { }', '.mat-column-actions {flex: 0 0 10%;}'],
 })
-export class ProductoPrecioListComponent implements OnInit {
+export class ProductoPrecioListComponent implements OnInit , OnDestroy{
   displayedColumns = [
     'prrProId',
     'prrLprId',

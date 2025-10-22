@@ -35,6 +35,7 @@ export class UsuarioEditComponent implements OnInit {
     this.usuario = data.usuario;
     this.perfilListsFilter = data.perfilListsFilter;
     this.sucursalListsFilter = data.sucursalListsFilter;
+    this.usuario.usuPassword = ''; 
   }
   onSucursalChange(event: any) {
     this.usuario.usuSucId = event.value;
@@ -66,7 +67,8 @@ export class UsuarioEditComponent implements OnInit {
         } else this.toastr.error('Ha ocurrido un error', 'Error');
       },
       error: (err) => {
-        this.toastr.error('Ha ocurrido un error', 'Error');
+        console.log(err);
+        this.toastr.error( 'Error: '+err.error.message);
       },
     });
   }

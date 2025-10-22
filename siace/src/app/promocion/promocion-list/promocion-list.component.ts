@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { PromocionService } from '../promocion.service';
@@ -14,7 +14,8 @@ import { TipoPromocionService } from '../../tipo-promocion/tipo-promocion.servic
 import { TipoPagoService } from '../../tipo-pago/tipo-pago.service';
 import { TipoSubpagoService } from '../../tipo-subpago/tipo-subpago.service';
 import { ActivatedRoute, Router } from '@angular/router';
-
+import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 @Component({
   selector: 'app-promocion',
   standalone: false,
@@ -27,7 +28,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class PromocionListComponent implements OnInit {
   // Columnas adaptadas para la entidad Promocion original
   displayedColumns = [
-
     'pmoNombre',
     'pmoFechaInicio',
     'pmoFechaFin',
@@ -41,10 +41,11 @@ export class PromocionListComponent implements OnInit {
     'actions',
   ];
   filter = new PromocionFilter();
-  listTipoPromocion : any[] = [];
-  listSucursales : any[] = []; 
+  listTipoPromocion: any[] = [];
+  listSucursales: any[] = [];
   private subs!: Subscription;
-
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  dataSource = new MatTableDataSource<Promocion>();
   /* Inicialización */
 
   constructor(
@@ -55,15 +56,16 @@ export class PromocionListComponent implements OnInit {
     private tipoPromocionService: TipoPromocionService,
     private tipoPagosService: TipoPagoService,
     private tipoSubpagoService: TipoSubpagoService,
-    private router: Router
+    private router: Router,
+    private paginatorIntl: MatPaginatorIntl
   ) {
     this.subs = this.promocionService.getIsUpdated().subscribe(() => {
       this.search();
     });
-
+    this.configurarPaginadorEspanol();
     this.filter.pmoId = '0';
     this.filter.pmoSucId = '0';
-    this.filter.pmoTpr = '0'; 
+    this.filter.pmoTpr = '0';
   }
 
   ngOnInit() {
@@ -75,35 +77,64 @@ export class PromocionListComponent implements OnInit {
     this.subs?.unsubscribe();
   }
 
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+  }
+
+  private configurarPaginadorEspanol(): void {
+    this.paginatorIntl.itemsPerPageLabel = 'Elementos por página';
+    this.paginatorIntl.nextPageLabel = 'Siguiente página';
+    this.paginatorIntl.previousPageLabel = 'Página anterior';
+    this.paginatorIntl.firstPageLabel = 'Primera página';
+    this.paginatorIntl.lastPageLabel = 'Última página';
+
+    this.paginatorIntl.getRangeLabel = (
+      page: number,
+      pageSize: number,
+      length: number
+    ) => {
+      if (length === 0 || pageSize === 0) {
+        return `0 de ${length}`;
+      }
+      const startIndex = page * pageSize;
+      const endIndex =
+        startIndex < length
+          ? Math.min(startIndex + pageSize, length)
+          : startIndex + pageSize;
+      return `${startIndex + 1} – ${endIndex} de ${length}`;
+    };
+  }
   loadCatalogs() {
     this.sucursalService.findAll().subscribe(
       (res) => {
         console.log('Response');
         console.log(res);
-        this.listSucursales = res; 
+        this.listSucursales = res;
       },
       (error) => {
         console.log(error);
       }
     );
 
-    this.tipoPromocionService.find({
-      tprId: '0',
-      tprActivo: 'all',
-    }).subscribe((res)=>{
-      console.log("Res tipo promoción service");
-      console.log(res);
-      this.listTipoPromocion = res;
-    })
+    this.tipoPromocionService
+      .find({
+        tprId: '0',
+        tprActivo: 'all',
+      })
+      .subscribe((res) => {
+        console.log('Res tipo promoción service');
+        console.log(res);
+        this.listTipoPromocion = res;
+      });
   }
-  onTipoPromocionChange(event: any){
-    this.filter.pmoTpr = event.value; 
-    this.search(); 
+  onTipoPromocionChange(event: any) {
+    this.filter.pmoTpr = event.value;
+    this.search();
   }
-  onSucursalChange(event: any){
+  onSucursalChange(event: any) {
     this.filter.pmoSucId = event.value;
-    this.search(); 
-  };
+    this.search();
+  }
   redirectToPromocionesObsequio(item: any) {
     console.log(item.pmoFechaFin); // "2022-01-01T00:00:00Z"
 
@@ -207,14 +238,23 @@ export class PromocionListComponent implements OnInit {
   edit(ele: Promocion) {
     this.dialog.open(PromocionEditComponent, {
       data: { promocion: JSON.parse(JSON.stringify(ele)) },
-      height: '600px', // Aumenté la altura por más campos
-      width: '800px', // Aumenté el ancho por más campos
+      height: '600px', 
+      width: '800px', 
       maxWidth: 'none',
       disableClose: true,
     });
   }
 
   search(): void {
-    this.promocionService.load(this.filter);
+
+    this.promocionService.find(this.filter).subscribe((data)=>{
+      this.dataSource.data = data;
+      this.dataSource.paginator = this.paginator;
+    },
+      (err)=>{
+        console.log("Error al cargar datos", err);
+        
+      });
+
   }
 }

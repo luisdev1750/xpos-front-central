@@ -120,7 +120,7 @@ export class ComboListComponent implements OnInit, OnDestroy {
 
   edit(combo: any) {
     this.dialog.open(ComboEditComponent, {
-      data: { combo: JSON.parse(JSON.stringify(combo)) },
+      data: { combo: JSON.parse(JSON.stringify(combo)), comboId: 1 },
       height: '600px',
       width: '900px',
       maxWidth: 'none',

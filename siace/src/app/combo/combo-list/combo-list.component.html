@@ -118,11 +118,14 @@
       </table>
     </div>
 
-    <div
+   <div
       *ngIf="listCombos.length === 0"
-      style="padding: 20px; text-align: center"
+      style="text-align: center; padding: 40px; color: #999"
     >
-      <p>No se encontraron combos con los filtros seleccionados.</p>
+      <mat-icon style="font-size: 64px; width: 64px; height: 64px">
+        image_search
+      </mat-icon>
+      <p>No se encontraron registros de combos</p>
     </div>
   </mat-card>
 </div>

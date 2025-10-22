@@ -40,8 +40,8 @@
         <mat-icon>add</mat-icon>
       </button>
     </form>
-    <div *ngIf="menuPerfilList.length > 0">
-      <table mat-table #table [dataSource]="menuPerfilList">
+    <div *ngIf="dataSource.data.length > 0">
+      <table mat-table #table [dataSource]="dataSource">
         <ng-container matColumnDef="mepPerId">
           <mat-header-cell *matHeaderCellDef> Perfil </mat-header-cell>
           <mat-cell *matCellDef="let item"> {{ item.perfilNombre }} </mat-cell>
@@ -70,7 +70,25 @@
         </ng-container>
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+      
       </table>
+        <div class="contenedor-paginator">
+          <mat-paginator
+            class="paginator"
+            [pageSizeOptions]="[10, 20, 50, 100]"
+            showFirstLastButtons
+          >
+          </mat-paginator>
+        </div>
+    </div>
+    <div
+      *ngIf="dataSource.data.length === 0"
+      style="text-align: center; padding: 40px; color: #999"
+    >
+      <mat-icon style="font-size: 64px; width: 64px; height: 64px">
+        image_search
+      </mat-icon>
+      <p>No se encontraron registros de menú perfiles</p>
     </div>
   </mat-card>
 </div>

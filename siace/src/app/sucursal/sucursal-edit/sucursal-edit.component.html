@@ -201,6 +201,7 @@
         <mat-select
           [value]="sucursal.sucEmpId"
           (selectionChange)="onEmpresaChange($event)"
+          required
         >
           <mat-option
             *ngFor="let empresa of empresasList"

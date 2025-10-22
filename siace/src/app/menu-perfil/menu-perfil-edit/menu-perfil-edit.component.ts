@@ -11,16 +11,16 @@ import { of } from 'rxjs';
   selector: 'app-menu-perfil-edit',
   standalone: false,
   templateUrl: './menu-perfil-edit.component.html',
- styles: [
-  'form { display: flex; flex-direction: column; min-width: 500px; }',
-  'form > * { width: 100% }',
-  '.mat-mdc-form-field {width: 100%;}',
-  '.menu-option-content { display: flex; align-items: center; gap: 10px; }',
-  '.app-badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; min-width: 60px; text-align: center; }',
-  '.badge-xpos { background-color: #3f51b5; color: white; }',
-  '.badge-central { background-color: #ff9800; color: white; }',
-  '.menu-name { flex: 1; }'
-]
+  styles: [
+    'form { display: flex; flex-direction: column; min-width: 500px; }',
+    'form > * { width: 100% }',
+    '.mat-mdc-form-field {width: 100%;}',
+    '.menu-option-content { display: flex; align-items: center; gap: 10px; }',
+    '.app-badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; min-width: 60px; text-align: center; }',
+    '.badge-xpos { background-color: #3f51b5; color: white; }',
+    '.badge-central { background-color: #ff9800; color: white; }',
+    '.menu-name { flex: 1; }',
+  ],
 })
 export class MenuPerfilEditComponent implements OnInit {
   id!: string;
@@ -28,8 +28,10 @@ export class MenuPerfilEditComponent implements OnInit {
 
   listPerfiles: any[] = [];
   listMenus: any[] = [];
+  listMenusFiltered: any[] = [];
 
-  /* Constructores */
+  // Filtro de aplicación
+  appFilter: string = 'TODOS';
 
   constructor(
     private dialogRef: MatDialogRef<MenuPerfilEditComponent>,
@@ -39,41 +41,19 @@ export class MenuPerfilEditComponent implements OnInit {
   ) {
     this.menuPerfil = data.menuPerfil;
     this.listPerfiles = data.listPerfiles;
- 
-   if(data.parentPerIdString){
-       this.menuPerfil.mepPerId = data.parentPerIdString;
-   }
+
+    if (data.parentPerIdString) {
+      this.menuPerfil.mepPerId = data.parentPerIdString;
+    }
   }
 
   ngOnInit() {
     if (this.menuPerfil.mepPerId) {
-      this.menuPerfilService
-        .findMenusExcluidos(`${this.menuPerfil.mepPerId}`)
-        .subscribe(
-          (data) => {
-            if (data.length == 0) {
-              this.toastr.info(
-                'No hay menús disponibles para asignar a este perfil',
-                'Información'
-              );
-              this.listMenus = data;
-              return;
-            }
-            this.listMenus = data;
-            console.log(this.listMenus);
-          },
-          (error) => {
-            this.toastr.error(
-              'Ha ocurrido un error al cargar los menús',
-              'Error'
-            );
-          }
-        );
+      this.loadMenus();
     }
   }
 
-  OnPerfilChange(event: any) {
-    this.menuPerfil.mepPerId = event.value;
+  loadMenus() {
     this.menuPerfilService
       .findMenusExcluidos(`${this.menuPerfil.mepPerId}`)
       .subscribe(
@@ -84,9 +64,11 @@ export class MenuPerfilEditComponent implements OnInit {
               'Información'
             );
             this.listMenus = data;
+            this.listMenusFiltered = data;
             return;
           }
           this.listMenus = data;
+          this.applyFilter();
           console.log(this.listMenus);
         },
         (error) => {
@@ -98,16 +80,48 @@ export class MenuPerfilEditComponent implements OnInit {
       );
   }
 
-  OnMenuChange(event: any) {
+  OnPerfilChange(event: any) {
+    this.menuPerfil.mepPerId = event.value;
 
+    // Limpiar los filtros y selecciones dependientes
+    this.appFilter = 'TODOS';
+    this.menuPerfil.mepMenId = 0;
+    this.listMenus = [];
+    this.listMenusFiltered = [];
+
+    // Cargar nuevos menús
+    this.loadMenus();
+  }
+
+  OnMenuChange(event: any) {
     this.menuPerfil.mepMenId = event.value;
   }
-  /*Métodos*/
+
+  OnAppFilterChange(event: any) {
+    this.appFilter = event.value;
+
+    this.menuPerfil.mepMenId = 0;
+
+    this.applyFilter();
+  }
+
+  applyFilter() {
+    if (this.appFilter === 'TODOS') {
+      this.listMenusFiltered = this.listMenus;
+    } else if (this.appFilter === 'XPOS') {
+      this.listMenusFiltered = this.listMenus.filter((menu) =>
+        menu.menuClave?.startsWith('MEN_')
+      );
+    } else if (this.appFilter === 'CENTRAL') {
+      this.listMenusFiltered = this.listMenus.filter((menu) =>
+        menu.menuClave?.startsWith('CEN_')
+      );
+    }
+  }
 
   save() {
     this.menuPerfilService.save(this.menuPerfil).subscribe({
       next: (result) => {
-        ///   if (result?.banId !== undefined && result?.banId !== null && Number(result.banId) >= 0) {
         if (
           result?.mepMenId !== undefined &&
           result?.mepMenId !== null &&
@@ -118,8 +132,12 @@ export class MenuPerfilEditComponent implements OnInit {
             'Transacción exitosa'
           );
           this.menuPerfilService.setIsUpdated(true);
-          this.dialogRef.close();
-         
+
+          this.menuPerfil.mepMenId = 0;
+          if (this.menuPerfil.mepPerId) {
+            this.loadMenus();
+          }
+          // this.dialogRef.close();
         } else this.toastr.error('Ha ocurrido un error', 'Error');
       },
       error: (err) => {

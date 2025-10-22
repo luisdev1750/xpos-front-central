@@ -1,8 +1,8 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { FormControl } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 
 import { ProductoImagenService } from '../producto-imagen.service';
@@ -21,12 +21,15 @@ import { ProductoService } from '../../producto/producto.service';
       '.file-input-wrapper { margin: 15px 0; }'
    ]
 })
-export class ProductoImagenEditComponent implements OnInit {
+export class ProductoImagenEditComponent implements OnInit, OnDestroy {
    productoImagen!: ProductoImagen;
    listTipoImagenes: any = [];
    selectedFile: File | null = null;
    imagePreview: string | null = null;
    isEditing: boolean = false;
+   
+   // Suscripción para actualizaciones
+   private subs!: Subscription;
 
    // Propiedades para el buscador de productos
    listProductosCompleta: any[] = [];
@@ -42,10 +45,15 @@ export class ProductoImagenEditComponent implements OnInit {
       private toastr: ToastrService,
       @Inject(MAT_DIALOG_DATA) public data: any
    ) {
+      // Suscripción para recargar cuando se actualice
+      this.subs = this.productoImagenService.getIsUpdated().subscribe(() => {
+         this.loadProductos();
+      });
+      
       this.productoImagen = data.productoImagen;
       this.isEditing = this.productoImagen.priId > 0;
       console.log("data producto");
-console.log(data);
+      console.log(data);
 
       // Si estamos editando y existe una imagen, cargar la vista previa
       if (this.isEditing && this.productoImagen.priNombre && this.productoImagen.priProId) {
@@ -56,6 +64,13 @@ console.log(data);
    ngOnInit() {
       this.loadCatalogs();
       this.loadProductos();
+   }
+
+   ngOnDestroy() {
+      // Limpiar suscripción al destruir el componente
+      if (this.subs) {
+         this.subs.unsubscribe();
+      }
    }
 
    // Una vez que se cargan los productos, setear el seleccionado
@@ -246,7 +261,7 @@ console.log(data);
                   : 'La imagen del producto ha sido guardada exitosamente';
                this.toastr.success(mensaje, 'Transacción exitosa');
                this.productoImagenService.setIsUpdated(true);
-               window.location.reload();
+               // window.location.reload();
                this.dialogRef.close(result);
             } else {
                this.toastr.error('Ha ocurrido un error al guardar', 'Error');

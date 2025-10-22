@@ -28,7 +28,7 @@ export class UsuarioListComponent implements OnInit {
 
     'usuNombre',
     'usuUser',
-    'usuPassword',
+
     'usuCorreoElectronico',
     'usuPerId',
     'usuSucId',

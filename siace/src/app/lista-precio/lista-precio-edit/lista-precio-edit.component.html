@@ -55,6 +55,7 @@
           id="fechaVigencia"
           name="fechaVigencia"
           placeholder="Selecciona fecha vigencia"
+          required
         />
 
         <mat-datepicker-toggle
@@ -67,23 +68,7 @@
 
     <div class="col-md-6">
   
-      <mat-form-field appearance="fill">
-        <mat-label>Fecha Alta</mat-label>
-        <input
-          matInput
-          [matDatepicker]="pickerAlta"
-          [(ngModel)]="listaPrecio.lprFechaAlta"
-          id="fechaAlta"
-          name="fechaAlta"
-          placeholder="Selecciona fecha alta"
-        />
-
-        <mat-datepicker-toggle
-          matSuffix
-          [for]="pickerAlta"
-        ></mat-datepicker-toggle>
-        <mat-datepicker #pickerAlta></mat-datepicker>
-      </mat-form-field>
+   
     </div>
   </div>
   <div class="button-row text-center" role="group">

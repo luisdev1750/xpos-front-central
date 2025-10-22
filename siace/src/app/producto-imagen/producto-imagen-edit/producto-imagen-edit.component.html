@@ -37,6 +37,7 @@
           <mat-option
             *ngFor="let producto of filteredProductos | async"
             [value]="producto"
+            
           >
             <span>
               <strong>{{ producto.proId }}</strong> - {{ producto.proNombre }}
@@ -67,6 +68,7 @@
           name="priProName"
           placeholder="Nombre del archivo"
           readonly
+          required
         />
       </mat-form-field>
 

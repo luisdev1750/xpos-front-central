@@ -49,6 +49,13 @@ export class ComboService extends GeneralService {
          headers: this.getHeaders()  // Usar headers con token
       });
    }
+
+   findProductos(sucId: number): Observable<Combo[]> {
+      const url = `${this.api}/productosPorSucursales/${sucId}`;
+      return this.http.get<Combo[]>(url, {
+         headers: this.getHeaders()  // Usar headers con token
+      });
+   }
    
    findById(id: string): Observable<Combo> {
       const url = `${this.api}/${id}`;

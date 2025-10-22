@@ -12,12 +12,37 @@
         <mat-select
           [value]="menuPerfil.mepPerId"
           (selectionChange)="OnPerfilChange($event)"
+          required
         >
           <mat-option
             *ngFor="let perfil of listPerfiles"
             [value]="perfil.perId"
           >
             {{ perfil.perNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-6">
+      <mat-form-field>
+        <mat-label>Aplicación</mat-label>
+        <mat-select
+          [value]="appFilter"
+          (selectionChange)="OnAppFilterChange($event)"
+        >
+          <mat-option value="TODOS">Todos</mat-option>
+          <mat-option value="XPOS">
+            <span class="menu-option-content">
+         
+              <span>XPOS</span>
+            </span>
+          </mat-option>
+          <mat-option value="CENTRAL">
+            <span class="menu-option-content">
+            
+              <span>Central</span>
+            </span>
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -31,7 +56,7 @@
           (selectionChange)="OnMenuChange($event)"
           required
         >
-          <mat-option *ngFor="let menu of listMenus" [value]="menu.menuId">
+          <mat-option *ngFor="let menu of listMenusFiltered" [value]="menu.menuId">
             <span class="menu-option-content">
               <span 
                 class="app-badge"

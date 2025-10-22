@@ -91,7 +91,7 @@ export class BancoListComponent implements OnInit {
 
             this.bancoService.delete(banco).subscribe({
                next: (result) => {
-                  if (Number(result) > 0) {
+                  if (result?.banId > 0) {
                      this.toastr.success('El banco ha sido eliminado exitosamente', 'Transacción exitosa');
                      this.bancoService.setIsUpdated(true);
                   }

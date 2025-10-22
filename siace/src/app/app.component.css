@@ -457,3 +457,24 @@ header {
   max-height: 100vh;
   
 }
+
+/* Opción 1: Usando ::ng-deep (si el CSS está en el componente) */
+/* Botón válido (habilitado) */
+button.mat-raised-button.btn-primary {
+    background-color: #3f51b5 !important;
+    color: white !important;
+}
+
+/* Botón inválido (deshabilitado) */
+button.mat-raised-button.btn-disabled {
+    background-color: #e0e0e0 !important;
+    color: #9e9e9e !important;
+    opacity: 1 !important; /* Importante para que sea visible */
+}
+
+/* Sobrescribir el estado disabled de Material */
+button.mat-raised-button.btn-disabled[disabled] {
+    background-color: #e0e0e0 !important;
+    color: #9e9e9e !important;
+    opacity: 1 !important;
+}

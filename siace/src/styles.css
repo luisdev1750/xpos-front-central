@@ -1470,3 +1470,32 @@ body{
 .mat-mdc-dialog-surface .mdc-dialog__surface{
   border: red solid 1px !important; 
 }
+.mat-raised-button:disabled,
+.mat-raised-button[disabled] {
+    opacity: 1 !important;
+    background-color: #e0e0e0 !important;
+    color: rgba(0, 0, 0, 0.38) !important;
+}
+
+.mat-raised-button:not(:disabled) {
+    background-color: #3f51b5 !important;
+    color: white !important;
+}
+
+/* Sobrescribe los estilos del botón en el diálogo */
+.mat-mdc-dialog-surface .mat-mdc-raised-button {
+    background-color: #e0e0e0 !important;
+    color: rgba(0, 0, 0, 0.6) !important;
+}
+
+.mat-mdc-dialog-surface .mat-mdc-raised-button:not([disabled]) {
+    background-color:  #ff8800  !important;
+    color: white !important;
+}
+
+.mat-mdc-dialog-surface .mat-mdc-raised-button[disabled] {
+    background-color: #e0e0e0 !important;
+    color: rgba(0, 0, 0, 0.38) !important;
+    opacity: 1 !important;
+}
+

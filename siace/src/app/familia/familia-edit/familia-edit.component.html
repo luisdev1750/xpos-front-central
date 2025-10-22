@@ -5,27 +5,24 @@
     <div class="col-md-6">
       <mat-form-field>
         <mat-label>Familia Padre</mat-label>
-        <mat-select
-          [value]="familia.famIdParent"
-          (selectionChange)="onFamiliaPadreChange($event)"
-        >
+        <mat-select [(ngModel)]="familia.famIdParent" name="famIdParent">
           <mat-option
-            *ngFor="let familia of familiasListFilter"
-            [value]="familia.famId"
+            *ngFor="let fam of familiasListFilter"
+            [value]="fam.famId"
           >
-            {{ familia.famNombre }}
+            {{ fam.famNombre }}
           </mat-option>
         </mat-select>
+        <mat-error *ngIf="!familia.famIdParent">
+          La familia padre es requerida
+        </mat-error>
       </mat-form-field>
     </div>
 
     <div class="col-md-6">
       <mat-form-field>
         <mat-label>Submarca</mat-label>
-        <mat-select
-          [value]="familia.famSmaId"
-          (selectionChange)="onSubmarcaChange($event)"
-        >
+        <mat-select [(ngModel)]="familia.famSmaId" name="famSmaId" required>
           <mat-option
             *ngFor="let submarca of submarcasLists"
             [value]="submarca.smaId"
@@ -33,6 +30,9 @@
             {{ submarca.smaNombre }}
           </mat-option>
         </mat-select>
+        <mat-error *ngIf="!familia.famSmaId">
+          La submarca es requerida
+        </mat-error>
       </mat-form-field>
     </div>
   </div>
@@ -90,17 +90,6 @@
         >
       </mat-form-field>
     </div>
-
-    <!-- <div class="col-md-4">
-      <mat-form-field>
-        <mat-label>Activo</mat-label>
-        <input matInput 
-               [(ngModel)]="familia.famActivo" 
-               id="famActivo" 
-               name="famActivo" 
-               placeholder="Activo">
-      </mat-form-field>
-    </div> -->
   </div>
 
   <!-- Botones -->
@@ -108,7 +97,7 @@
     <button
       type="submit"
       mat-raised-button
-      color="primary"
+      [color]="editForm.form.valid ? 'primary' : 'warn'"
       [disabled]="!editForm.form.valid"
     >
       Guardar

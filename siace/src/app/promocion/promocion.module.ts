@@ -24,6 +24,7 @@ import { TipoSubpagoService } from '../tipo-subpago/tipo-subpago.service';
 import { MatSelect } from '@angular/material/select';
 import { PromocionDetalleService } from '../promocion-detalle/promocion-detalle.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatPaginatorModule } from '@angular/material/paginator';
 @NgModule({
   imports: [
     CommonModule,
@@ -40,7 +41,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     PromocionObsequioRoutingModule,
     MatSelect,
     MatOption,
-    MatTooltipModule
+    MatTooltipModule,
+    MatPaginatorModule
   ],
   declarations: [      
     PromocionListComponent,

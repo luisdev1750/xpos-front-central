@@ -165,5 +165,15 @@
         <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
       </table>
     </div>
+
+    <div
+      *ngIf="sucursalList.length === 0"
+      style="text-align: center; padding: 40px; color: #999"
+    >
+      <mat-icon style="font-size: 64px; width: 64px; height: 64px">
+        image_search
+      </mat-icon>
+      <p>No se encontraron registros de sucursales</p>
+    </div>
   </mat-card>
 </div>

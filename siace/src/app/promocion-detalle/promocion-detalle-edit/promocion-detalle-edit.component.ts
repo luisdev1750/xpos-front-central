@@ -26,7 +26,7 @@ export class PromocionDetalleEditComponent implements OnInit {
   // ==========================================
   // PROPIEDADES
   // ==========================================
-  
+
   // Propiedades básicas
   promocionDetalle!: PromocionDetalle;
   promocionId: string = '';
@@ -63,7 +63,7 @@ export class PromocionDetalleEditComponent implements OnInit {
   // ==========================================
   // CONSTRUCTOR
   // ==========================================
-  
+
   constructor(
     private dialogRef: MatDialogRef<PromocionDetalleEditComponent>,
     private promocionDetalleService: PromocionDetalleService,
@@ -84,7 +84,7 @@ export class PromocionDetalleEditComponent implements OnInit {
   // ==========================================
   // LIFECYCLE HOOKS
   // ==========================================
-  
+
   ngOnInit() {
     this.loadCatalogosIniciales();
     this.loadInicialInfoCombobox();
@@ -93,7 +93,7 @@ export class PromocionDetalleEditComponent implements OnInit {
   // ==========================================
   // CARGA INICIAL DE DATOS
   // ==========================================
-  
+
   loadInicialInfoCombobox() {
     // Cargar tipos de promoción
     this.promocionService.find({ tprId: '0', tprActivo: 'all' }).subscribe({
@@ -107,7 +107,7 @@ export class PromocionDetalleEditComponent implements OnInit {
 
     // Cargar promoción actual
     this.promocionServiceController
-      .find({ pmoId: this.promocionId, pmoTpr: '0', pmoSucId : '0' })
+      .find({ pmoId: this.promocionId, pmoTpr: '0', pmoSucId: '0' })
       .subscribe({
         next: (res) => {
           if (res[0]) {
@@ -123,9 +123,9 @@ export class PromocionDetalleEditComponent implements OnInit {
   loadCatalogosIniciales() {
     this.promocionDetalleService.getCatalogosIniciales().subscribe({
       next: (data) => {
-        console.log("Log from servicio");
+        console.log('Log from servicio');
         console.log(data);
-                
+
         // Guardar copias completas
         this.listFamiliasCompleta = [...data.familias];
         this.listProductosCompleta = [...data.productos];
@@ -135,9 +135,8 @@ export class PromocionDetalleEditComponent implements OnInit {
         this.listFamilias = [...data.familias];
         this.listProductos = [...data.productos];
         this.listPresentaciones = [...data.presentaciones];
-console.log("list productos completa");
-console.log(this.listProductosCompleta);
-
+        console.log('list productos completa');
+        console.log(this.listProductosCompleta);
 
         // Setup autocomplete
         this.setupAutocomplete();
@@ -152,10 +151,21 @@ console.log(this.listProductosCompleta);
     });
   }
 
+  /**
+   * Valida que al menos uno de los tres campos esté seleccionado
+   */
+  isAtLeastOneFieldSelected(): boolean {
+    return !!(
+      (this.promocionDetalle.prdFamId && this.promocionDetalle.prdFamId > 0) ||
+      (this.promocionDetalle.prdProId && this.promocionDetalle.prdProId > 0) ||
+      (this.promocionDetalle.prdPreId && this.promocionDetalle.prdPreId > 0)
+    );
+  }
+
   // ==========================================
   // EVENTOS DE CAMBIO
   // ==========================================
-  
+
   onPromocionIdChange(event: any) {
     this.promocionDetalle.prdPmoId = event.value;
   }
@@ -307,7 +317,7 @@ console.log(this.listProductosCompleta);
   onProductoObsequioSelected(producto: any) {
     this.productoObsequioSeleccionado = producto;
     this.promocionDetalle.prdPobProId = producto?.proId || 0;
-    console.log("Producto seleccionado:");
+    console.log('Producto seleccionado:');
     console.log(producto);
     this.productoObsequioSeleccionado.prdFamId = producto.proFamId;
     this.productoObsequioSeleccionado.prdPreId = producto.proPreId;
@@ -316,7 +326,7 @@ console.log(this.listProductosCompleta);
   // ==========================================
   // UTILIDADES
   // ==========================================
-  
+
   resetToInitialState() {
     this.listFamilias = [...this.listFamiliasCompleta];
     this.listProductos = [...this.listProductosCompleta];
@@ -344,7 +354,7 @@ console.log(this.listProductosCompleta);
   // ==========================================
   // AUTOCOMPLETE
   // ==========================================
-  
+
   setupAutocomplete() {
     if (this.listProductosCompleta.length === 0) return;
 
@@ -353,7 +363,6 @@ console.log(this.listProductosCompleta);
       startWith(''),
       map((value) => this._filterProductos(this._getFilterValue(value)))
     );
-
 
     // Autocomplete para producto obsequio
     this.filteredProductosObsequio =
@@ -392,7 +401,7 @@ console.log(this.listProductosCompleta);
       if (productoObsequio) {
         this.productoObsequioControl.setValue(productoObsequio);
         this.productoObsequioSeleccionado = productoObsequio;
-        console.log("producto obsequio inicial");
+        console.log('producto obsequio inicial');
         console.log(productoObsequio);
       }
     }
@@ -411,8 +420,7 @@ console.log(this.listProductosCompleta);
       (producto) =>
         (producto.proNombre &&
           producto.proNombre.toLowerCase().includes(filterValue)) ||
-        (producto.proSku &&
-          producto.proSku.toLowerCase().includes(filterValue)) 
+        (producto.proSku && producto.proSku.toLowerCase().includes(filterValue))
     );
   }
 
@@ -432,11 +440,29 @@ console.log(this.listProductosCompleta);
     return producto && producto.proNombre ? producto.proNombre : '';
   }
 
+  /**
+   * Método auxiliar para mostrar el estado de validación en tiempo real
+   */
+  getValidationMessage(): string | null {
+    if (!this.isAtLeastOneFieldSelected()) {
+      return 'Debe seleccionar al menos: Familia, Producto Principal o Presentación';
+    }
+    return null;
+  }
+
   // ==========================================
   // GUARDAR
   // ==========================================
-  
+
   save() {
+    if (!this.isAtLeastOneFieldSelected()) {
+      this.toastr.error(
+        'Debe seleccionar al menos uno: Familia, Producto Principal o Presentación',
+        'Validación requerida'
+      );
+      return;
+    }
+
     if (!this.promocionCurrent || !this.promocionDetalle) {
       this.toastr.error('Faltan datos necesarios para guardar', 'Error');
       return;
@@ -450,11 +476,11 @@ console.log(this.listProductosCompleta);
     // Extraer valores NxM del nombre de la promoción si es tipo NxM
     let cantidadCompra = null;
     let cantidadObsequio = null;
-    
+
     if (esPromocionNxM) {
       const regexPromocion = /(\d+)\s*x\s*(\d+)/i;
       const match = this.promocionCurrent.pmoNombre.match(regexPromocion);
-      
+
       if (!match) {
         this.toastr.error(
           'No se pudo extraer la información NxM del nombre de la promoción',
@@ -462,22 +488,26 @@ console.log(this.listProductosCompleta);
         );
         return;
       }
-      
-      cantidadCompra = parseInt(match[1]);    // Primer número (N) - ej: 3 en "3x2"
-      const cantidadPagada = parseInt(match[2]);  // Segundo número (M) - ej: 2 en "3x2"
+
+      cantidadCompra = parseInt(match[1]); // Primer número (N) - ej: 3 en "3x2"
+      const cantidadPagada = parseInt(match[2]); // Segundo número (M) - ej: 2 en "3x2"
       cantidadObsequio = cantidadCompra - cantidadPagada; // Calcular obsequio: 3-2=1
-      
-      console.log(`Promoción NxM detectada: ${cantidadCompra}x${cantidadPagada}`);
-      console.log(`prdNxmProdCompra: ${cantidadCompra}, prdNxmProdObsequio: ${cantidadObsequio}`);
+
+      console.log(
+        `Promoción NxM detectada: ${cantidadCompra}x${cantidadPagada}`
+      );
+      console.log(
+        `prdNxmProdCompra: ${cantidadCompra}, prdNxmProdObsequio: ${cantidadObsequio}`
+      );
     }
 
     // Extraer porcentaje de descuento del nombre de la promoción si es tipo Descuento
     let porcentajeDescuento = null;
-    
+
     if (esPromocionDescuento) {
       const regexDescuento = /(\d+)\s*%/i;
       const match = this.promocionCurrent.pmoNombre.match(regexDescuento);
-      
+
       if (!match) {
         this.toastr.error(
           'No se pudo extraer el porcentaje de descuento del nombre de la promoción',
@@ -485,24 +515,33 @@ console.log(this.listProductosCompleta);
         );
         return;
       }
-      
+
       porcentajeDescuento = parseInt(match[1]); // ej: 70 en "Descuento 70%"
-      
+
       console.log(`Promoción de descuento detectada: ${porcentajeDescuento}%`);
       console.log(`prdPorcentajeDescuento: ${porcentajeDescuento}`);
     }
 
-    console.log("producto de promoción detalle");
-    console.log(this.promocionDetalle); 
-    console.log("producto obsequio seleccionado en lista");
+    console.log('producto de promoción detalle');
+    console.log(this.promocionDetalle);
+    console.log('producto obsequio seleccionado en lista');
     console.log(this.productoObsequioSeleccionado);
-  
+
     const productoRequest: PromocionDetalle = {
       prdId: this.promocionDetalle.prdId || 0,
       prdPmoId: this.promocionCurrent.pmoId,
-      prdProId: this.promocionDetalle.prdProId != 0 ? this.promocionDetalle.prdProId: null ,
-      prdFamId: this.promocionDetalle.prdFamId != 0 ?this.promocionDetalle.prdFamId : null,
-      prdPreId: this.promocionDetalle.prdPreId != 0 ? this.promocionDetalle.prdPreId : null ,
+      prdProId:
+        this.promocionDetalle.prdProId != 0
+          ? this.promocionDetalle.prdProId
+          : null,
+      prdFamId:
+        this.promocionDetalle.prdFamId != 0
+          ? this.promocionDetalle.prdFamId
+          : null,
+      prdPreId:
+        this.promocionDetalle.prdPreId != 0
+          ? this.promocionDetalle.prdPreId
+          : null,
       prdNxmProdCompra: esPromocionNxM ? cantidadCompra : null,
       prdNxmProdObsequio: esPromocionNxM ? cantidadObsequio : null,
       prdPorcentajeDescuento: esPromocionDescuento ? porcentajeDescuento : null,
@@ -550,7 +589,7 @@ console.log(this.listProductosCompleta);
       pobId: this.promocionDetalle.prdPobId || 0,
       pobPmoId: Number(this.promocionId),
       pobFamId: this.productoObsequioSeleccionado.prdFamId ?? 0,
-      pobPreId:  this.productoObsequioSeleccionado.prdPreId ?? 0,
+      pobPreId: this.productoObsequioSeleccionado.prdPreId ?? 0,
       pobProId: this.productoObsequioSeleccionado.proId ?? 0,
       pobPmoSucId: Number(this.promocionCurrent.pmoSucId),
     };
@@ -587,7 +626,7 @@ console.log(this.listProductosCompleta);
   // ==========================================
   // VALIDACIONES
   // ==========================================
-  
+
   private isValidResult(result: any): boolean {
     return (
       result?.prdFamId != null &&

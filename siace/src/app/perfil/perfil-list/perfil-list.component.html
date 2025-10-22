@@ -34,7 +34,7 @@
 
         <ng-container matColumnDef="perNombre">
           <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.perNombre }} </mat-cell>
+          <mat-cell class = "cell-angular" [matTooltip]="item.perNombre" *matCellDef="let item"> {{ item.perNombre }} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="perClave">
@@ -57,7 +57,7 @@
           
 
         <ng-container matColumnDef="actions">
-          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
           <mat-cell *matCellDef="let item">
             <button
               (click)="edit(item)"
@@ -74,7 +74,7 @@
               mat-button
               color="primary"
               class="button-redirect"
-              matTooltip="Ir a menú por perfil"
+              matTooltip="Asignar Menús"
               matTooltipPosition="above"
             >
               <mat-icon>open_in_new</mat-icon>
@@ -85,6 +85,15 @@
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
       </table>
+    </div>
+    <div
+      *ngIf="perfilList.length === 0"
+      style="text-align: center; padding: 40px; color: #999"
+    >
+      <mat-icon style="font-size: 64px; width: 64px; height: 64px">
+        image_search
+      </mat-icon>
+      <p>No se encontraron registros de perfiles</p>
     </div>
   </mat-card>
 </div>

@@ -89,6 +89,7 @@
           name="pveNumeroInterior"
           placeholder="Número Interior"
            maxlength="10"
+           required
         />
       </mat-form-field>
     </div>
@@ -179,6 +180,7 @@
           name="pveTelefono"
           placeholder="Teléfono"
            maxlength="15"
+           required
         />
         <mat-error *ngIf="proveedor.pveTelefono == undefined"
           >Teléfono es requerido</mat-error

@@ -64,10 +64,7 @@
           <mat-cell  class="cell-angular" *matCellDef="let item"> {{ item.usuUser }} </mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="usuPassword">
-          <mat-header-cell *matHeaderCellDef> Contraseña </mat-header-cell>
-          <mat-cell  class="cell-angular" *matCellDef="let item"> {{ item.usuPassword }} </mat-cell>
-        </ng-container>
+        
 
         <ng-container matColumnDef="usuCorreoElectronico">
           <mat-header-cell *matHeaderCellDef>
@@ -112,7 +109,8 @@
             Fecha Modificación
           </mat-header-cell>
           <mat-cell *matCellDef="let item">
-            {{ item.usuFecha_Modificacion }}
+            
+             {{ item.usuFechaModificacion| date : "dd/MM/yyyy HH:mm" }}
           </mat-cell>
         </ng-container>
 
@@ -134,6 +132,15 @@
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
       </table>
+    </div>
+    <div
+      *ngIf="usuarioList.length === 0"
+      style="text-align: center; padding: 40px; color: #999"
+    >
+      <mat-icon style="font-size: 64px; width: 64px; height: 64px">
+        image_search
+      </mat-icon>
+      <p>No se encontraron registros de usuarios</p>
     </div>
   </mat-card>
 </div>

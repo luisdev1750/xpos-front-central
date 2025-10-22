@@ -11,6 +11,7 @@
         <mat-select
         [value]="submarca.smaMarId"
          (selectionChange)="onMarcaChange($event)"
+         required
         >
           <mat-option
             *ngFor="let marca of marcaListsFilter"
@@ -41,7 +42,7 @@
           name="banActivo"
           [(ngModel)]="submarca.smaActivo"
           (selectionChange)="onActivoChange($event)"
-          
+           required
         >
           <mat-option [value]="true">Sí</mat-option>
           <mat-option [value]="false">No</mat-option>

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MenuPerfilFilter } from '../menu-perfil-filter';
 import { MenuPerfilService } from '../menu-perfil.service';
@@ -11,6 +11,8 @@ import { ToastrService } from 'ngx-toastr';
 import { PerfilService } from '../../perfil/perfil.service';
 import { ActivatedRoute } from '@angular/router';
 import { FormControl } from '@angular/forms';
+import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-menu-perfil',
@@ -26,23 +28,53 @@ export class MenuPerfilListComponent implements OnInit, OnDestroy {
   listPerfiles: any[] = [];
   parentPerIdString: string = '0';
 
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  dataSource = new MatTableDataSource<MenuPerfil>();
+
   constructor(
     private menuPerfilService: MenuPerfilService,
     private toastr: ToastrService,
     public dialog: MatDialog,
     private perfilService: PerfilService,
     private route: ActivatedRoute,
+    private paginatorIntl: MatPaginatorIntl
   ) {
-
     this.subs = this.menuPerfilService.getIsUpdated().subscribe(() => {
       this.search();
     });
-
+    this.configurarPaginadorEspanol();
     this.filter.mepPerId = '0';
     this.filter.mepMenId = '0';
-    this.filter.mepAppId = '0'; 
+    this.filter.mepAppId = '0';
   }
 
+  private configurarPaginadorEspanol(): void {
+    this.paginatorIntl.itemsPerPageLabel = 'Elementos por página';
+    this.paginatorIntl.nextPageLabel = 'Siguiente página';
+    this.paginatorIntl.previousPageLabel = 'Página anterior';
+    this.paginatorIntl.firstPageLabel = 'Primera página';
+    this.paginatorIntl.lastPageLabel = 'Última página';
+
+    this.paginatorIntl.getRangeLabel = (
+      page: number,
+      pageSize: number,
+      length: number
+    ) => {
+      if (length === 0 || pageSize === 0) {
+        return `0 de ${length}`;
+      }
+      const startIndex = page * pageSize;
+      const endIndex =
+        startIndex < length
+          ? Math.min(startIndex + pageSize, length)
+          : startIndex + pageSize;
+      return `${startIndex + 1} – ${endIndex} de ${length}`;
+    };
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+  }
   ngOnInit() {
     this.route.paramMap.subscribe((params) => {
       const id = params.get('id');
@@ -84,7 +116,7 @@ export class MenuPerfilListComponent implements OnInit, OnDestroy {
 
   onChangeApp(event: any) {
     this.filter.mepAppId = event.value;
-    this.search(); 
+    this.search();
   }
 
   get menuPerfilList(): MenuPerfil[] {
@@ -103,7 +135,7 @@ export class MenuPerfilListComponent implements OnInit, OnDestroy {
         message: '¿Está seguro de eliminar el perfil?',
       },
     });
-    
+
     confirmDialog.afterClosed().subscribe((result) => {
       if (result === true) {
         this.menuPerfilService.delete(menuPerfil).subscribe({
@@ -147,6 +179,15 @@ export class MenuPerfilListComponent implements OnInit, OnDestroy {
   }
 
   search(): void {
-    this.menuPerfilService.load(this.filter);
+    // this.menuPerfilService.load(this.filter);
+
+    this.menuPerfilService.find(this.filter).subscribe((data)=>{
+      this.dataSource.data = data;
+      this.dataSource.paginator = this.paginator;
+    },
+    (error)=>{
+      console.log("Error al cargar datos", error);
+      
+    });
   }
 }

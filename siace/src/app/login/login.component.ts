@@ -37,8 +37,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private buscarContestacionesService: BuscarContestacionesService,
     private toastr: ToastrService
   ) {
-    this.username = 'GRNT2';
-    this.password = '12345678';
+    this.username = '';
+    this.password = '';
     this.busy = false;
     this.loginError = undefined!;
     this.loginService.clearAll();
