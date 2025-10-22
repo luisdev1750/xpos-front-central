@@ -3,27 +3,22 @@ import { Subscription } from 'rxjs';
 import { BannerFilter } from '../banner-filter';
 import { BannerService } from '../banner.service';
 import { SucursalService } from '../../sucursal/sucursal.service';
-import { Banner } from '../banner';
 import { BannerEditComponent } from '../banner-edit/banner-edit.component';
-
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmDialogComponent } from '../../common/confirm-dialog/confirm-dialog.component';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
-  selector: 'app-banco',
+  selector: 'app-banner-list',
   standalone: false,
   templateUrl: './banner-list.component.html',
-  styles: [
-    'table { min-width: 800px }',
-    '.mat-column-actions {flex: 0 15% 20%;}',
-  ],
+  styleUrl: './banner-list.component.css',
 })
 export class BannerListComponent implements OnInit {
-  displayedColumns = ['id', 'sucursal', 'nombre', 'orden', 'activo', 'actions'];
+  displayedColumns = ['idSucursal', 'sucursal', 'actions'];
   filter = new BannerFilter();
   listSucursales: any[] = [];
   private subs!: Subscription;
+  isEditing: boolean = false;
 
   constructor(
     private bannerService: BannerService,
@@ -34,6 +29,7 @@ export class BannerListComponent implements OnInit {
     this.subs = this.bannerService.getIsUpdated().subscribe(() => {
       this.search();
     });
+    console.log(this.bannerSucList);
     this.filter.subSucId = '0';
     this.filter.subActivo = '';
   }
@@ -41,49 +37,16 @@ export class BannerListComponent implements OnInit {
   ngOnInit(): void {
     this.loadCatalogs();
     this.search();
+    this.isEditing = false;
   }
 
   ngOnDestroy(): void {
     this.subs?.unsubscribe();
   }
 
-  get bannerList(): Banner[] {
-    return this.bannerService.bannerList;
-  }
-
-  add(): void {
-    const newBanner: Banner = new Banner();
-    this.edit(newBanner);
-  }
-
-  edit(banner: Banner): void {
-    this.dialog.open(BannerEditComponent, {
-      data: { banner: JSON.parse(JSON.stringify(banner)) },
-      height: '500px',
-      width: '700px',
-      maxWidth: 'none',
-      disableClose: true,
-    });
-  }
-
-  delete(banner: Banner): void {
-    const confirmDialog = this.dialog.open(ConfirmDialogComponent, {
-      data: {
-        title: 'Confirmación',
-        message: '¿Está seguro de eliminar el banner?',
-      },
-    });
-    confirmDialog.afterClosed().subscribe((result) => {
-      if (result === true) {
-        this.bannerService.delete(banner).subscribe({
-          next: (res) => {
-            this.toastr.success('Banner eliminado exitosamente', 'Éxito');
-            this.bannerService.setIsUpdated(true);
-          },
-          error: (err) => this.toastr.error('Ha ocurrido un error', 'Error'),
-        });
-      }
-    });
+  add(idSuc?: string | number): void {
+    const newBanner: number[] = Number(idSuc) > 0 ? [Number(idSuc)] : [];
+    this.editSuc(newBanner);
   }
 
   onActivoChange(): void {
@@ -119,5 +82,32 @@ export class BannerListComponent implements OnInit {
           this.toastr.error('Error al cargar sucursales', 'Error');
         }
       );
+  }
+
+  getNombreSucursal(id: number): string {
+    const sucursal = this.listSucursales.find((s) => s.sucId === id);
+    return sucursal ? sucursal.sucNombre : '—';
+  }
+
+  get bannerSucList(): number[] {
+    return [
+      ...new Set(this.bannerService.bannerList.map((b) => b.subSucId)),
+    ].sort((a, b) => a - b);
+  }
+
+  editSuc(idSuc: number[]): void {
+    this.dialog.open(BannerEditComponent, {
+      data: {
+        banner: JSON.parse(JSON.stringify(idSuc)),
+        listSucursales: this.listSucursales,
+        isEditing: this.isEditing,
+        bannerSucList: this.bannerSucList
+      },
+      height: '80vh',
+      width: '75vw',
+      maxWidth: '90vw',
+      panelClass: 'custom-dialog-container',
+      disableClose: true,
+    });
   }
 }
