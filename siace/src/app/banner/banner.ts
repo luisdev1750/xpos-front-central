@@ -1,7 +1,9 @@
 export class Banner {
-  subId!: string;
-  subSucId!: string;
+  subId!: number;
+  subSucId!: number;
   subNombre!: string;
-  subOrden!: string;
-  subActivo!: string; // 'Activo' o 'Inactivo'
+  subOrden!: number;
+  subActivo!: boolean; // 'Activo' o 'Inactivo'
+  imagenUrl?: File | null;
+  blobUrl?: string; // URL para mostrar la imagen en la tabla
 }
