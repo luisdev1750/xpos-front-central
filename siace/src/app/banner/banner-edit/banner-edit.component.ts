@@ -27,7 +27,7 @@ export class BannerEditComponent implements OnInit {
   bannerList: Banner[] = [];
   filter = new BannerFilter();
   showNewBannerRow: boolean = false; // <--- nueva bandera
-  showSelected: boolean = false;
+  onEditing: boolean = false;
   newBanner: Banner = {
     subId: 0,
     subSucId: 0,
@@ -64,8 +64,14 @@ export class BannerEditComponent implements OnInit {
     this.filter.subActivo = '';
     this.newBanner.subSucId = idSuc.banner;
     this.listSucursales = idSuc.listSucursales;
-    console.log(this.filter);
+    this.onEditing = idSuc.isEditing;
     this.bannerList = [];
+
+    if (idSuc.isEditing) {
+      this.filter.subSucId =
+        data.selectedSucId === '0' ? '' : data.selectedSucId;
+      this.bannerList = [];
+    }
   }
 
   ngOnInit(): void {
@@ -113,9 +119,10 @@ export class BannerEditComponent implements OnInit {
         this.toastr.success('Banner agregado correctamente', 'Éxito');
         this.showNewBannerRow = false; // Oculta la fila temporal
         this.loadBanners();
+        this.bannerService.notifyUpdate();
       },
       error: (err) => {
-        this.toastr.error('Agregar una sucursal', 'Error');
+        this.toastr.error(err.error, 'Error');
         console.error(err);
       },
     });
@@ -128,12 +135,10 @@ export class BannerEditComponent implements OnInit {
       this.filter.subSucId?.toString() === '' &&
       this.newBanner.subSucId !== 0
     ) {
-      this.showSelected = true;
       return;
     } else {
       this.bannerService.find(this.filter).subscribe({
         next: (result: Banner[]) => {
-          this.showSelected = false;
           this.bannerList = result; // aquí ya es Banner[]
           this.loadBannerImages(); // opcional: cargar imágenes
           this.bannerList.forEach((b) => (this.editState[b.subId] = false));
@@ -189,6 +194,7 @@ export class BannerEditComponent implements OnInit {
         this.toastr.success('Banner actualizado correctamente', 'Éxito');
         this.editState[item.subId] = false;
         this.loadBanners();
+        this.bannerService.notifyUpdate();
       },
       error: (err) => {
         this.toastr.error('Error al actualizar el banner', 'Error');
@@ -211,6 +217,7 @@ export class BannerEditComponent implements OnInit {
           next: () => {
             this.toastr.success('Banner eliminado', 'Éxito');
             this.loadBanners();
+            this.bannerService.notifyUpdate();
           },
           error: (err) => {
             this.toastr.error('Error al eliminar banner', 'Error');

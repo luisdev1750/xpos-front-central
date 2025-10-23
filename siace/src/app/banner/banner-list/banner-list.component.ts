@@ -38,6 +38,13 @@ export class BannerListComponent implements OnInit {
     this.loadCatalogs();
     this.search();
     this.isEditing = false;
+    this.bannerService.bannersUpdated$.subscribe((updated) => {
+      if (updated) {
+        this.loadCatalogs();
+        this.search();
+        this.isEditing = false;
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -45,8 +52,20 @@ export class BannerListComponent implements OnInit {
   }
 
   add(idSuc?: string | number): void {
-    const newBanner: number[] = Number(idSuc) > 0 ? [Number(idSuc)] : [];
-    this.editSuc(newBanner);
+    const selectedSucId = this.filter.subSucId;
+    this.dialog.open(BannerEditComponent, {
+      data: {
+        banner: [], // sin id porque es nuevo
+        listSucursales: this.listSucursales,
+        selectedSucId: selectedSucId,
+        isEditing: true,
+      },
+      height: '80vh',
+      width: '75vw',
+      maxWidth: '90vw',
+      panelClass: 'custom-dialog-container',
+      disableClose: true,
+    });
   }
 
   onActivoChange(): void {
@@ -96,12 +115,13 @@ export class BannerListComponent implements OnInit {
   }
 
   editSuc(idSuc: number[]): void {
+    console.log('id suc ' + idSuc);
     this.dialog.open(BannerEditComponent, {
       data: {
         banner: JSON.parse(JSON.stringify(idSuc)),
         listSucursales: this.listSucursales,
-        isEditing: this.isEditing,
-        bannerSucList: this.bannerSucList
+        bannerSucList: this.bannerSucList,
+        isEditing: false,
       },
       height: '80vh',
       width: '75vw',

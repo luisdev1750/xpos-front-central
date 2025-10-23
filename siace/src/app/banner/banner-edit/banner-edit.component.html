@@ -5,9 +5,26 @@
 </div>
 
 <div class="banner-container">
+  <mat-form-field appearance="outline">
+    <mat-label>Búsqueda por Sucursal:</mat-label>
+    <mat-select
+      [(ngModel)]="filter.subSucId"
+      id="sucursal"
+      name="sucursal"
+      [disabled]="!onEditing"
+    >
+      <mat-option value="">Todas las sucursales</mat-option>
+      <mat-option
+        *ngFor="let sucursal of listSucursales"
+        [value]="sucursal.sucId"
+      >
+        {{ sucursal.sucNombre }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
   <div class="header-row">
     <h2>Gestión de Banners</h2>
-
     <button
       mat-mini-fab
       color="primary"
@@ -20,35 +37,15 @@
       <mat-icon>add</mat-icon>
     </button>
   </div>
-  <mat-form-field appearance="outline">
-    <mat-label>Búsqueda por Sucursal:</mat-label>
-    <mat-select
-      [(ngModel)]="filter.subSucId"
-      id="sucursal"
-      name="sucursal"
-      [disabled]="!showSelected"
-    >
-      <mat-option value="0">Todas las sucursales</mat-option>
-      <mat-option
-        *ngFor="let sucursal of listSucursales"
-        [value]="sucursal.sucId"
-      >
-        {{ sucursal.sucNombre }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
 
-  
   <table
     mat-table
     [dataSource]="tableData"
     class="mat-elevation-z8 full-width-table"
   >
-    
     <ng-container matColumnDef="imagen">
       <th mat-header-cell *matHeaderCellDef>Imagen</th>
       <td mat-cell *matCellDef="let item; let i = index">
-        
         <ng-container *ngIf="i === 0 && showNewBannerRow">
           <img
             *ngIf="newBanner.blobUrl"
@@ -60,7 +57,6 @@
           />
         </ng-container>
 
-        
         <ng-container *ngIf="i !== 0 || !showNewBannerRow">
           <img
             *ngIf="item.blobUrl"
@@ -75,7 +71,6 @@
       </td>
     </ng-container>
 
-    
     <ng-container matColumnDef="nombre">
       <th mat-header-cell *matHeaderCellDef>Nombre</th>
       <td mat-cell *matCellDef="let item; let i = index">
@@ -88,7 +83,6 @@
       </td>
     </ng-container>
 
-    
     <ng-container matColumnDef="orden">
       <th mat-header-cell *matHeaderCellDef>Orden</th>
       <td mat-cell *matCellDef="let item; let i = index">
@@ -114,7 +108,6 @@
       </td>
     </ng-container>
 
-    
     <ng-container matColumnDef="activo">
       <th mat-header-cell *matHeaderCellDef>Activo</th>
       <td mat-cell *matCellDef="let item; let i = index">
@@ -130,11 +123,9 @@
       </td>
     </ng-container>
 
-    
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>Acciones</th>
       <td mat-cell *matCellDef="let item; let i = index">
-        
         <ng-container *ngIf="i === 0 && showNewBannerRow">
           <button
             mat-icon-button
@@ -157,7 +148,6 @@
           </button>
         </ng-container>
 
-        
         <ng-container *ngIf="i !== 0 || !showNewBannerRow">
           <button
             mat-icon-button
@@ -191,12 +181,10 @@
       </td>
     </ng-container>
 
-    
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
 
-  
   <input
     type="file"
     #fileInput
