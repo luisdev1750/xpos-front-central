@@ -11,6 +11,7 @@
       [(ngModel)]="filter.subSucId"
       id="sucursal"
       name="sucursal"
+      (selectionChange)="loadBanners()"
       [disabled]="!onEditing"
     >
       <mat-option value="">Todas las sucursales</mat-option>
