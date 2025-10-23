@@ -1,7 +1,7 @@
 import { Banner } from './banner';
 import { BannerFilter } from './banner-filter';
 import { Injectable } from '@angular/core';
-import { EMPTY, Observable, switchMap } from 'rxjs';
+import { EMPTY, Observable, switchMap, BehaviorSubject } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { GeneralService } from '../common/general.service';
 import { map } from 'rxjs/operators';
@@ -13,9 +13,15 @@ import { ToastrService } from 'ngx-toastr';
 export class BannerService extends GeneralService {
   bannerList: Banner[] = [];
   api = this.sUrl + 'SucursalesBanner';
+  private bannersUpdated = new BehaviorSubject<boolean>(false);
+  bannersUpdated$ = this.bannersUpdated.asObservable();
 
   constructor(private http: HttpClient, private toastr: ToastrService) {
     super();
+  }
+
+  notifyUpdate() {
+    this.bannersUpdated.next(true);
   }
 
   private getHeaders(): HttpHeaders {
@@ -51,7 +57,7 @@ export class BannerService extends GeneralService {
         this.bannerList = result;
       },
       error: (err) => {
-        console.error('error cargando', err);
+        // console.error('error cargando', err);
         this.toastr.info(err.error, 'Información');
         this.bannerList = [];
       },
