@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { PermisosService } from './permisos.service';
@@ -38,12 +38,13 @@ export class AppComponent implements OnInit {
   constructor(
     private router: Router,
     public permisosService: PermisosService,
-    
+    private elementRef: ElementRef
   ) {}
 
-   isLoginPage(): boolean {
+  isLoginPage(): boolean {
     return this.router.url === '/login';
   }
+
   ngOnInit(): void {
     this.permisosService.obtenerPermisosLocales();
 
@@ -56,6 +57,29 @@ export class AppComponent implements OnInit {
           this.isMenuOpen = false;
         }
       });
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    // Solo cerrar el menú si está abierto y el click fue fuera del menú
+    if (!this.isMenuOpen) {
+      return;
+    }
+
+    const clickedElement = event.target as HTMLElement;
+    const sidebar = this.elementRef.nativeElement.querySelector('.sidebar');
+    const topbar = this.elementRef.nativeElement.querySelector('.topbar');
+    const menuToggle = this.elementRef.nativeElement.querySelector('.menu-toggle');
+
+    // Verificar si el click fue dentro del sidebar, topbar o en el botón de toggle
+    const clickedInsideSidebar = sidebar?.contains(clickedElement);
+    const clickedInsideTopbar = topbar?.contains(clickedElement);
+    const clickedMenuToggle = menuToggle?.contains(clickedElement);
+
+    // Si el click fue fuera de estos elementos, cerrar el menú
+    if (!clickedInsideSidebar && !clickedInsideTopbar && !clickedMenuToggle) {
+      this.isMenuOpen = false;
+    }
   }
 
   @HostListener('window:resize', ['$event'])

@@ -37,7 +37,7 @@ export class SucursalProductoService extends GeneralService {
     if (entity.supSucId) {
       url = `${
         this.api
-      }/${entity.supSucId.toString()}/${entity.supProId.toString()}/${entity.supLprId.toString()}`;
+      }/${entity.supSucId.toString()}/${entity.supProId.toString()}/${entity?.supLprId?.toString()}`;
 
       return this.http.delete<SucursalProducto>(url, {
         headers: this.getHeaders(),

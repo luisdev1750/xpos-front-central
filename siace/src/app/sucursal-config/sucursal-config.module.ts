@@ -33,15 +33,12 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatDialogModule,
     MatCardModule,
     SucursalConfigRoutingModule,
-    MatSelect, 
+    MatSelect,
     MatOption,
-       MatTooltipModule,
+    MatTooltipModule,
   ],
-  declarations: [
-    SucursalConfigListComponent,
-    SucursalConfigEditComponent
-  ],
+  declarations: [SucursalConfigListComponent, SucursalConfigEditComponent],
   providers: [SucursalConfigService, SucursalService],
-  exports: []
+  exports: [],
 })
-export class SucursalConfigModule { }
+export class SucursalConfigModule {}

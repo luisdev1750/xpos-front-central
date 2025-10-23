@@ -13,7 +13,7 @@ export class Producto {
   proLongitud!: string;
   proAncho!: string;
   proPeso!: string;
-  proClaveProdServ!: string;
+  proClaveprodserv!: string;
   proDevolucion!: boolean;
   proActivo!: boolean;
   proFechaAlta!: string;

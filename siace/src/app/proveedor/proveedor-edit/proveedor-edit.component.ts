@@ -40,16 +40,23 @@ export class ProveedorEditComponent implements OnInit {
 
   async ngOnInit() {
     this.isInitializing = true;
-    
+
     // Primero cargamos todos los estados
     await this.loadEstados();
-    
+
     // Si el proveedor tiene una ciudad, hacemos la ingeniería inversa
     if (this.proveedor.pveCiuId) {
       await this.initializeFromCiudad();
     }
-    
+
     this.isInitializing = false;
+  }
+
+  allowOnlyNumbers(event: KeyboardEvent): void {
+    const charCode = event.which ? event.which : event.keyCode;
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault(); // bloquea cualquier carácter no numérico
+    }
   }
 
   async loadEstados(): Promise<void> {
@@ -70,11 +77,16 @@ export class ProveedorEditComponent implements OnInit {
 
   async initializeFromCiudad(): Promise<void> {
     try {
-      console.log('Iniciando ingeniería inversa para ciudad:', this.proveedor.pveCiuId);
-      
+      console.log(
+        'Iniciando ingeniería inversa para ciudad:',
+        this.proveedor.pveCiuId
+      );
+
       // Obtenemos la información completa de la jerarquía
-      const ubicacionCompleta = await this.getUbicacionCompleta(this.proveedor.pveCiuId);
-      
+      const ubicacionCompleta = await this.getUbicacionCompleta(
+        this.proveedor.pveCiuId
+      );
+
       if (!ubicacionCompleta) {
         console.error('No se pudo obtener la ubicación completa');
         return;
@@ -85,17 +97,21 @@ export class ProveedorEditComponent implements OnInit {
       // Asignamos los IDs faltantes al proveedor
       this.proveedor.pveEstId = ubicacionCompleta.estado.estId;
       this.proveedor.pveMunId = ubicacionCompleta.municipio.munId;
-      
+
       // Cargamos las listas en cascada
       await this.loadMunicipiosForEstado(ubicacionCompleta.estado.estId);
       await this.loadCiudadesForMunicipio(ubicacionCompleta.municipio.munId);
       await this.loadColoniasForCiudad(this.proveedor.pveCiuId);
 
       console.log('Proveedor actualizado:', this.proveedor);
-      console.log('Listas cargadas - Municipios:', this.municipiosList.length, 
-                  'Ciudades:', this.ciudadesList.length, 
-                  'Colonias:', this.coloniasList.length);
-
+      console.log(
+        'Listas cargadas - Municipios:',
+        this.municipiosList.length,
+        'Ciudades:',
+        this.ciudadesList.length,
+        'Colonias:',
+        this.coloniasList.length
+      );
     } catch (error) {
       console.error('Error en la inicialización desde ciudad:', error);
       this.toastr.error('Error al cargar la información de ubicación', 'Error');
@@ -104,14 +120,16 @@ export class ProveedorEditComponent implements OnInit {
 
   async getUbicacionCompleta(ciudadId: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.proveedorService.getUbicacionCompletaByCiudad(Number(ciudadId)).subscribe(
-        (res) => {
-          resolve(res);
-        },
-        (error) => {
-          reject(error);
-        }
-      );
+      this.proveedorService
+        .getUbicacionCompletaByCiudad(Number(ciudadId))
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (error) => {
+            reject(error);
+          }
+        );
     });
   }
 
@@ -120,7 +138,10 @@ export class ProveedorEditComponent implements OnInit {
       this.proveedorService.findMunicipios(Number(estadoId)).subscribe(
         (res) => {
           this.municipiosList = res;
-          console.log(`Municipios cargados para estado ${estadoId}:`, this.municipiosList);
+          console.log(
+            `Municipios cargados para estado ${estadoId}:`,
+            this.municipiosList
+          );
           resolve();
         },
         (error) => {
@@ -136,7 +157,10 @@ export class ProveedorEditComponent implements OnInit {
       this.proveedorService.findCiudades(Number(municipioId)).subscribe(
         (res) => {
           this.ciudadesList = res;
-          console.log(`Ciudades cargadas para municipio ${municipioId}:`, this.ciudadesList);
+          console.log(
+            `Ciudades cargadas para municipio ${municipioId}:`,
+            this.ciudadesList
+          );
           resolve();
         },
         (error) => {
@@ -152,7 +176,10 @@ export class ProveedorEditComponent implements OnInit {
       this.proveedorService.findColonias(Number(ciudadId)).subscribe(
         (res) => {
           this.coloniasList = res;
-          console.log(`Colonias cargadas para ciudad ${ciudadId}:`, this.coloniasList);
+          console.log(
+            `Colonias cargadas para ciudad ${ciudadId}:`,
+            this.coloniasList
+          );
           resolve();
         },
         (error) => {
@@ -165,9 +192,9 @@ export class ProveedorEditComponent implements OnInit {
 
   onEstadoChange(event: any) {
     if (this.isInitializing) return;
-    
+
     console.log('Estado cambiado:', event.value);
-    
+
     this.proveedor.pveEstId = event.value;
     this.proveedor.pveMunId = '';
     this.proveedor.pveCiuId = '';
@@ -185,9 +212,9 @@ export class ProveedorEditComponent implements OnInit {
 
   onMunicipioChange(event: any) {
     if (this.isInitializing) return;
-    
+
     console.log('Municipio cambiado:', event.value);
-    
+
     this.proveedor.pveMunId = event.value;
     this.proveedor.pveCiuId = '';
     this.proveedor.pveColId = '';
@@ -203,9 +230,9 @@ export class ProveedorEditComponent implements OnInit {
 
   onCiudadChange(event: any) {
     if (this.isInitializing) return;
-    
+
     console.log('Ciudad cambiada:', event.value);
-    
+
     this.proveedor.pveCiuId = event.value;
     this.proveedor.pveColId = '';
 
@@ -219,7 +246,7 @@ export class ProveedorEditComponent implements OnInit {
 
   onColoniaChange(event: any) {
     if (this.isInitializing) return;
-    
+
     console.log('Colonia cambiada:', event.value);
     this.proveedor.pveColId = event.value;
   }
@@ -262,7 +289,7 @@ export class ProveedorEditComponent implements OnInit {
 
   save() {
     console.log('Guardando proveedor:', this.proveedor);
-    
+
     this.proveedorService.save(this.proveedor).subscribe({
       next: (result) => {
         if (Number(result) > 0) {

@@ -40,6 +40,8 @@
         <mat-icon>add</mat-icon>
       </button>
     </form>
+
+    <!-- TABLA: Solo dentro de *ngIf -->
     <div *ngIf="dataSource.data.length > 0">
       <table mat-table #table [dataSource]="dataSource">
         <ng-container matColumnDef="mepPerId">
@@ -54,8 +56,16 @@
           </mat-cell>
         </ng-container>
 
+        
+        <ng-container matColumnDef="mepOrigenId">
+          <mat-header-cell *matHeaderCellDef> Aplicación</mat-header-cell>
+          <mat-cell class="cell-angular" *matCellDef="let item">
+            {{ item.origen }}
+          </mat-cell>
+        </ng-container>
+
         <ng-container matColumnDef="actions">
-          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
           <mat-cell *matCellDef="let item">
             <button
               (click)="delete(item)"
@@ -70,17 +80,10 @@
         </ng-container>
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
-      
       </table>
-        <div class="contenedor-paginator">
-          <mat-paginator
-            class="paginator"
-            [pageSizeOptions]="[10, 20, 50, 100]"
-            showFirstLastButtons
-          >
-          </mat-paginator>
-        </div>
     </div>
+
+    <!-- MENSAJE VACÍO -->
     <div
       *ngIf="dataSource.data.length === 0"
       style="text-align: center; padding: 40px; color: #999"
@@ -89,6 +92,15 @@
         image_search
       </mat-icon>
       <p>No se encontraron registros de menú perfiles</p>
+    </div>
+
+    <div class="contenedor-paginator">
+      <mat-paginator
+        class="paginator"
+        [pageSizeOptions]="[10, 20, 50, 100]"
+        showFirstLastButtons
+      >
+      </mat-paginator>
     </div>
   </mat-card>
 </div>

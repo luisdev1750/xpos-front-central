@@ -45,6 +45,11 @@ export class MenuPerfilEditComponent implements OnInit {
     if (data.parentPerIdString) {
       this.menuPerfil.mepPerId = data.parentPerIdString;
     }
+    
+    // Inicializar mepMenId como null si es 0 o undefined
+    if (!this.menuPerfil.mepMenId || this.menuPerfil.mepMenId === 0) {
+      this.menuPerfil.mepMenId = null as any;
+    }
   }
 
   ngOnInit() {
@@ -85,7 +90,7 @@ export class MenuPerfilEditComponent implements OnInit {
 
     // Limpiar los filtros y selecciones dependientes
     this.appFilter = 'TODOS';
-    this.menuPerfil.mepMenId = 0;
+    this.menuPerfil.mepMenId = null as any;
     this.listMenus = [];
     this.listMenusFiltered = [];
 
@@ -100,7 +105,7 @@ export class MenuPerfilEditComponent implements OnInit {
   OnAppFilterChange(event: any) {
     this.appFilter = event.value;
 
-    this.menuPerfil.mepMenId = 0;
+    this.menuPerfil.mepMenId = null as any;
 
     this.applyFilter();
   }
@@ -119,7 +124,18 @@ export class MenuPerfilEditComponent implements OnInit {
     }
   }
 
+  // Función para comparar IDs correctamente
+  compareMenuIds(id1: any, id2: any): boolean {
+    return id1 === id2;
+  }
+
   save() {
+    // Validación adicional antes de guardar
+    if (!this.menuPerfil.mepMenId || this.menuPerfil.mepMenId === null) {
+      this.toastr.error('Debe seleccionar un menú', 'Error de validación');
+      return;
+    }
+
     this.menuPerfilService.save(this.menuPerfil).subscribe({
       next: (result) => {
         if (
@@ -133,7 +149,7 @@ export class MenuPerfilEditComponent implements OnInit {
           );
           this.menuPerfilService.setIsUpdated(true);
 
-          this.menuPerfil.mepMenId = 0;
+          this.menuPerfil.mepMenId = null as any;
           if (this.menuPerfil.mepPerId) {
             this.loadMenus();
           }

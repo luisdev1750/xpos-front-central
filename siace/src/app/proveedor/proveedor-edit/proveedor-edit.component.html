@@ -169,54 +169,73 @@
   </div>
 
 
-    <div class="col-md-6">
-      <mat-form-field>
-        <mat-label>Teléfono</mat-label>
-        <input
-          matInput
-          type="tel"
-          [(ngModel)]="proveedor.pveTelefono"
-          id="pveTelefono"
-          name="pveTelefono"
-          placeholder="Teléfono"
-           maxlength="15"
-           required
-        />
-        <mat-error *ngIf="proveedor.pveTelefono == undefined"
-          >Teléfono es requerido</mat-error
-        >
-      </mat-form-field>
-    </div>
+   <div class="col-md-6">
+  <mat-form-field>
+    <mat-label>Teléfono</mat-label>
+    <input
+      matInput
+      type="text"
+      inputmode="numeric"
+      pattern="^[0-9]{7,15}$"
+      [(ngModel)]="proveedor.pveTelefono"
+      id="pveTelefono"
+      name="pveTelefono"
+      placeholder="Teléfono"
+      maxlength="15"
+      required
+      (keypress)="allowOnlyNumbers($event)"
+    />
+    <mat-error *ngIf="!proveedor.pveTelefono">
+      Teléfono es requerido
+    </mat-error>
+    <mat-error *ngIf="!editForm.controls['pveTelefono']?.valid">
+      Solo se permiten números (7–15 dígitos)
+    </mat-error>
+  </mat-form-field>
+</div>
 
-    <div class="col-md-6">
+
+      <div class="col-md-6">
       <mat-form-field>
         <mat-label>Email</mat-label>
         <input
           matInput
           type="email"
           [(ngModel)]="proveedor.pveCorreoElectronico"
+          #emailInput="ngModel"
           id="pveCorreoElectronico"
           name="pveCorreoElectronico"
           placeholder="Email"
-           maxlength="200"
+          maxlength="200"
+          email
+          pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
         />
+        <mat-error *ngIf="emailInput.hasError('email') || emailInput.hasError('pattern')">
+          Ingrese un correo electrónico válido
+        </mat-error>
       </mat-form-field>
     </div>
 
-    <div class="col-md-6">
-      <mat-form-field>
-        <mat-label>Número</mat-label>
-        <input
-          matInput
-          [(ngModel)]="proveedor.pveNumero"
-          id="pveNumero"
-          name="pveNumero"
-          placeholder="Número"
-         maxlength="30"
-          />
-      </mat-form-field>
-    </div>
-
+   <div class="col-md-6">
+  <mat-form-field>
+    <mat-label>Número</mat-label>
+    <input
+      matInput
+      type="text"
+      inputmode="numeric"
+      pattern="^[0-9]+$"
+      [(ngModel)]="proveedor.pveNumero"
+      id="pveNumero"
+      name="pveNumero"
+      placeholder="Número"
+      maxlength="30"
+      (keypress)="allowOnlyNumbers($event)"
+    />
+    <mat-error *ngIf="!editForm.controls['pveNumero']?.valid">
+      Solo se permiten números
+    </mat-error>
+  </mat-form-field>
+</div>
 
 
     <div class="col-md-12">

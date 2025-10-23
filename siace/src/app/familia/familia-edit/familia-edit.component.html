@@ -1,4 +1,4 @@
-<h2>Detalle de la familia</h2>
+<h2>Detalle de la Familia</h2>
 <form *ngIf="familia" #editForm="ngForm" (ngSubmit)="save()" autocomplete="off">
   <!-- Primera fila -->
   <div class="row">
@@ -6,6 +6,7 @@
       <mat-form-field>
         <mat-label>Familia Padre</mat-label>
         <mat-select [(ngModel)]="familia.famIdParent" name="famIdParent">
+          <mat-option [value]="null">Sin familia</mat-option>
           <mat-option
             *ngFor="let fam of familiasListFilter"
             [value]="fam.famId"

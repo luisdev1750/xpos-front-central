@@ -1,4 +1,7 @@
 <h2>Detalle del producto por sucursal</h2>
+
+
+
 <form
   *ngIf="sucursalProducto"
   #editForm="ngForm"
@@ -10,9 +13,11 @@
       <mat-form-field>
         <mat-label>Sucursal</mat-label>
         <mat-select
-          [value]="sucursalProducto.supSucId"
+          [(ngModel)]="sucursalProducto.supSucId"
+          name="supSucId"
           (selectionChange)="onSucursalChange($event)"
-           [disabled]="!isAdding"
+          [disabled]="!isAdding"
+          required
         >
           <mat-option
             *ngFor="let sucursal of listSucursales"
@@ -35,6 +40,7 @@
           name="supProId"
           placeholder="Clave de Producto"
           readonly
+          required
         />
       </mat-form-field>
     </div>
@@ -43,9 +49,11 @@
       <mat-form-field>
         <mat-label>Lista de Precios</mat-label>
         <mat-select
-          [value]="sucursalProducto.supLprId"
+          [(ngModel)]="sucursalProducto.supLprId"
+          name="supLprId"
           (selectionChange)="onListaPrecioChange($event)"
           panelClass="alternating-options"
+          required
         >
           <mat-option
             *ngFor="let listaPrecio of listListaPrecios"
@@ -58,12 +66,7 @@
     </div>
   </div>
   <div class="button-row text-center" role="group">
-    <button
-      type="submit"
-      mat-raised-button
-      color="primary"
-      [disabled]="!editForm.form.valid"
-    >
+    <button type="submit" mat-raised-button [disabled]="!editForm.form.valid">
       Guardar
     </button>
     <button mat-button mat-dialog-close>Cancelar</button>

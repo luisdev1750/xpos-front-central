@@ -39,6 +39,15 @@ export class SucursalProductoEditComponent implements OnInit {
   }
 
   ngOnInit() {
+
+      if (this.isAdding) {
+    if (this.sucursalProducto.supSucId === 0) {
+      this.sucursalProducto.supSucId = null;
+    }
+    if (this.sucursalProducto.supLprId === 0) {
+      this.sucursalProducto.supLprId = null;
+    }
+  }
     this.loadCatalogs();
   }
   loadCatalogs() {
@@ -77,7 +86,12 @@ export class SucursalProductoEditComponent implements OnInit {
           (res) => {
             console.log('Respuesta de productos sucursal:');
             console.log(res);
-              this.listListaPrecios = res;
+            this.listListaPrecios = res;
+            if (res.length == 0) {
+              this.toastr.info(
+                'Este producto no tiene listas de precios para esta sucursal'
+              );
+            }
           },
           (error) => {
             console.log();

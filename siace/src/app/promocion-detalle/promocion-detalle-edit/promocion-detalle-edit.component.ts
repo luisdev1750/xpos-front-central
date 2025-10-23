@@ -627,13 +627,26 @@ export class PromocionDetalleEditComponent implements OnInit {
   // VALIDACIONES
   // ==========================================
 
-  private isValidResult(result: any): boolean {
-    return (
-      result?.prdFamId != null &&
+ private isValidResult(result: any): boolean {
+  return (
+    (
+      result?.prdFamId !== null &&
       result?.prdFamId !== undefined &&
       result?.prdFamId > 0
-    );
-  }
+    ) ||
+    (
+      result?.prdPreId !== null &&
+      result?.prdPreId !== undefined &&
+      result?.prdPreId > 0
+    ) ||
+    (
+      result?.prdProId !== null &&
+      result?.prdProId !== undefined &&
+      result?.prdProId > 0
+    )
+  );
+}
+
 
   private isValidObsequioResult(result: any): boolean {
     return (

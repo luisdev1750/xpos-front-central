@@ -1,4 +1,10 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  AfterViewInit,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MenuPerfilFilter } from '../menu-perfil-filter';
 import { MenuPerfilService } from '../menu-perfil.service';
@@ -20,8 +26,10 @@ import { MatTableDataSource } from '@angular/material/table';
   templateUrl: 'menu-perfil-list.component.html',
   styles: ['table { }', '.mat-column-actions {flex: 0 0 10%;}'],
 })
-export class MenuPerfilListComponent implements OnInit, OnDestroy {
-  displayedColumns = ['mepPerId', 'mepMenId', 'actions'];
+export class MenuPerfilListComponent
+  implements OnInit, OnDestroy, AfterViewInit
+{
+  displayedColumns = ['mepPerId', 'mepMenId', 'mepOrigenId','actions'];
   filter = new MenuPerfilFilter();
   perfilControl = new FormControl('0');
   private subs!: Subscription;
@@ -61,7 +69,7 @@ export class MenuPerfilListComponent implements OnInit, OnDestroy {
       length: number
     ) => {
       if (length === 0 || pageSize === 0) {
-        return `0 de ${length}`;
+        return `1 de ${length + 1}`;
       }
       const startIndex = page * pageSize;
       const endIndex =
@@ -73,6 +81,7 @@ export class MenuPerfilListComponent implements OnInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
+    console.log('Paginator:', this.paginator);
     this.dataSource.paginator = this.paginator;
   }
   ngOnInit() {
@@ -172,8 +181,8 @@ export class MenuPerfilListComponent implements OnInit, OnDestroy {
         parentPerIdString: Number(this.parentPerIdString),
       },
       height: '500px',
-      width: '700px',
       maxWidth: 'none',
+      width: '700px',
       disableClose: true,
     });
   }
@@ -181,13 +190,14 @@ export class MenuPerfilListComponent implements OnInit, OnDestroy {
   search(): void {
     // this.menuPerfilService.load(this.filter);
 
-    this.menuPerfilService.find(this.filter).subscribe((data)=>{
-      this.dataSource.data = data;
-      this.dataSource.paginator = this.paginator;
-    },
-    (error)=>{
-      console.log("Error al cargar datos", error);
-      
-    });
+    this.menuPerfilService.find(this.filter).subscribe(
+      (data) => {
+        this.dataSource.data = data;
+        this.dataSource.paginator = this.paginator;
+      },
+      (error) => {
+        console.log('Error al cargar datos', error);
+      }
+    );
   }
 }

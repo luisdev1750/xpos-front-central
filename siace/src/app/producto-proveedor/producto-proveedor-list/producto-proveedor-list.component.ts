@@ -170,7 +170,7 @@ export class ProductoProveedorListComponent implements OnInit {
     this.proveedorService
       .find({
         pveId: '0',
-        pveActivo: 'all',
+        pveActivo: 'true',
         pveEstId: '0',
         pveMunId: '0',
         pveCiuId: '0',
@@ -187,7 +187,7 @@ export class ProductoProveedorListComponent implements OnInit {
         proId: '0',
         proFamId: '0',
         proPreId: '0',
-        proActivo: 'all',
+        proActivo: 'true',
       })
       .subscribe(
         (res) => {

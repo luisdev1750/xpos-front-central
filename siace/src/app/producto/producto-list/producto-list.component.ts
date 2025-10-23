@@ -101,7 +101,7 @@ export class ProductoListComponent implements OnInit, OnDestroy {
       length: number
     ) => {
       if (length === 0 || pageSize === 0) {
-        return `0 de ${length}`;
+        return `1 de ${length + 1}`;
       }
       const startIndex = page * pageSize;
       const endIndex =
@@ -253,8 +253,9 @@ export class ProductoListComponent implements OnInit, OnDestroy {
         unidadMedidaList: this.unidadMedidaList,
       },
       height: '500px',
-      width: '700px',
+      
       maxWidth: 'none',
+          width: '700px',     
       disableClose: true,
     });
   }

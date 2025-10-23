@@ -10,7 +10,9 @@
       <mat-form-field>
         <mat-label>Perfil</mat-label>
         <mat-select
-          [value]="menuPerfil.mepPerId"
+          [(ngModel)]="menuPerfil.mepPerId"
+          name="mepPerId"
+          #perfilInput="ngModel"
           (selectionChange)="OnPerfilChange($event)"
           required
         >
@@ -21,6 +23,9 @@
             {{ perfil.perNombre }}
           </mat-option>
         </mat-select>
+        <mat-error *ngIf="perfilInput.hasError('required')">
+          Perfil es requerido
+        </mat-error>
       </mat-form-field>
     </div>
 
@@ -28,19 +33,18 @@
       <mat-form-field>
         <mat-label>Aplicación</mat-label>
         <mat-select
-          [value]="appFilter"
+          [(ngModel)]="appFilter"
+          name="appFilter"
           (selectionChange)="OnAppFilterChange($event)"
         >
           <mat-option value="TODOS">Todos</mat-option>
           <mat-option value="XPOS">
             <span class="menu-option-content">
-         
               <span>XPOS</span>
             </span>
           </mat-option>
           <mat-option value="CENTRAL">
             <span class="menu-option-content">
-            
               <span>Central</span>
             </span>
           </mat-option>
@@ -52,10 +56,14 @@
       <mat-form-field>
         <mat-label>Menú</mat-label>
         <mat-select
-          [value]="menuPerfil.mepMenId"
+          [(ngModel)]="menuPerfil.mepMenId"
+          name="mepMenId"
+          #menuInput="ngModel"
           (selectionChange)="OnMenuChange($event)"
           required
+          [compareWith]="compareMenuIds"
         >
+          <mat-option [value]="null">-- Seleccione un menú --</mat-option>
           <mat-option *ngFor="let menu of listMenusFiltered" [value]="menu.menuId">
             <span class="menu-option-content">
               <span 
@@ -71,7 +79,7 @@
             </span>
           </mat-option>
         </mat-select>
-        <mat-error *ngIf="menuPerfil.mepMenId == undefined">
+        <mat-error *ngIf="menuInput.hasError('required')">
           Menú es requerido
         </mat-error>
       </mat-form-field>

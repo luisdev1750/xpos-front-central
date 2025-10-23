@@ -40,18 +40,13 @@
             
           >
             <span>
-              <strong>{{ producto.proId }}</strong> - {{ producto.proNombre }}
+              <strong>{{ producto.proSku }}</strong> - {{ producto.proNombre }}
             </span>
             <br />
             <small style="color: #666" *ngIf="producto.proDescripcion">
               {{ producto.proDescripcion }}
             </small>
-            <small
-              style="color: #999; margin-left: 8px"
-              *ngIf="producto.proSku"
-            >
-              SKU: {{ producto.proSku }}
-            </small>
+           
           </mat-option>
         </mat-autocomplete>
         <mat-error *ngIf="!productoImagen.priProId && !isEditing"

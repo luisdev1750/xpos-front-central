@@ -66,6 +66,14 @@ export class UsuarioListComponent implements OnInit {
     this.search();
   }
 
+
+  // En tu componente
+ajustarFechaUTC(fechaString: string): string {
+  if (!fechaString) return '';
+  // Quitar la Z y tratarla como hora local
+  const fechaSinZ = fechaString.replace('Z', '');
+  return fechaSinZ;
+}
   ngOnDestroy(): void {
     this.subs?.unsubscribe();
   }

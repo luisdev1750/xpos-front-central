@@ -94,7 +94,7 @@ export class PromocionListComponent implements OnInit {
       length: number
     ) => {
       if (length === 0 || pageSize === 0) {
-        return `0 de ${length}`;
+        return `1 de ${length + 1}`;
       }
       const startIndex = page * pageSize;
       const endIndex =
