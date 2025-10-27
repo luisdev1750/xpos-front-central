@@ -31,7 +31,7 @@ export class PromocionEditComponent implements OnInit {
   listTiposPromocones: any[] = [];
   listSucursales: any[] = [];
   /* Constructores */
-
+  isEditing = false;
   constructor(
     private dialogRef: MatDialogRef<PromocionEditComponent>,
     private promocionService: PromocionService,
@@ -48,6 +48,7 @@ export class PromocionEditComponent implements OnInit {
     console.log('Promocion seleccionada');
     console.log(this.promocion);
     console.log(data.promocion);
+         this.isEditing = data.isEditing ?? false; 
   }
 
   ngOnInit() {

@@ -106,7 +106,7 @@ export class CuentaBancariaListComponent implements OnInit {
    add() {
       let newCuentaBancaria: CuentaBancaria = new CuentaBancaria();
 
-      this.edit(newCuentaBancaria);
+      this.edit(newCuentaBancaria, false);
    }
 
 
@@ -138,11 +138,12 @@ export class CuentaBancariaListComponent implements OnInit {
    }
 
 
-   edit(ele: CuentaBancaria) {
+   edit(ele: CuentaBancaria, isEditing: boolean = true) {
       this.dialog.open(CuentaBancariaEditComponent, {
-         data: {cuentaBancaria:JSON.parse(JSON.stringify(ele)),
+         data: {cuentaBancaria:JSON.parse(JSON.stringify(ele), ),
             sucursalList: this.sucursalList,
-            bancoList: this.bancoList
+            bancoList: this.bancoList,
+            isEditing: isEditing
          },
          height: '500px',
          width: '700px',

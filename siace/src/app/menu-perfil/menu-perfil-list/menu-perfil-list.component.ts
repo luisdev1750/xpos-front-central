@@ -92,7 +92,7 @@ export class MenuPerfilListComponent
         this.parentPerIdString = id;
       }
       this.search();
-      this.loadCatalogs();
+     
     });
   }
 
@@ -141,7 +141,7 @@ export class MenuPerfilListComponent
     const confirmDialog = this.dialog.open(ConfirmDialogComponent, {
       data: {
         title: 'Confirmación',
-        message: '¿Está seguro de eliminar el perfil?',
+        message: '¿Está seguro de eliminar el menú de perfil?',
       },
     });
 
@@ -194,6 +194,7 @@ export class MenuPerfilListComponent
       (data) => {
         this.dataSource.data = data;
         this.dataSource.paginator = this.paginator;
+         this.loadCatalogs();
       },
       (error) => {
         console.log('Error al cargar datos', error);

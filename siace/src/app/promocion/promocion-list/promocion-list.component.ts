@@ -201,7 +201,7 @@ export class PromocionListComponent implements OnInit {
 
   add() {
     let newPromocion: Promocion = new Promocion();
-    this.edit(newPromocion);
+    this.edit(newPromocion, false);
   }
 
   delete(promocion: Promocion): void {
@@ -235,13 +235,14 @@ export class PromocionListComponent implements OnInit {
     });
   }
 
-  edit(ele: Promocion) {
+  edit(ele: Promocion, isEditing:boolean = true) {
     this.dialog.open(PromocionEditComponent, {
-      data: { promocion: JSON.parse(JSON.stringify(ele)) },
+      data: { promocion: JSON.parse(JSON.stringify(ele)),  isEditing: isEditing },
       height: '600px', 
       width: '800px', 
       maxWidth: 'none',
       disableClose: true,
+     
     });
   }
 

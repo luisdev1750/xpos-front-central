@@ -16,8 +16,7 @@ export class ProductoImagenService extends GeneralService {
     super();
   }
 
- 
-  // Método para obtener headers con el token (sin Content-Type para FormData)
+  // Método para obtener headers con el token
   private getHeaders(includeContentType: boolean = true): HttpHeaders {
     const token = localStorage.getItem('accessToken');
     let headers = new HttpHeaders();
@@ -33,6 +32,62 @@ export class ProductoImagenService extends GeneralService {
     return headers;
   }
 
+
+
+  // NUEVO: Método para obtener productos agrupados con sus imágenes
+  findAgrupados(filter: ProductoImagenFilter): Observable<any[]> {
+    const url = `${this.api}/agrupados/${filter.priTimId}`;
+    return this.http.get<any[]>(url, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  // NUEVO: Guardar múltiples imágenes en lote
+  saveBatch(data: any): Observable<any> {
+    const formData = new FormData();
+    formData.append('proId', data.proId.toString());
+    
+    // Preparar array de tipos y archivos
+    const imagenesData: any[] = [];
+    const nuevasImagenes: File[] = [];
+    
+    data.imagenes.forEach((img: any, index: number) => {
+      imagenesData.push({
+        tipoId: img.tipoId,
+        tipoNombre: img.tipoNombre,
+        isNew: img.isNew,
+        nombreArchivo: img.nombreArchivo || null,
+        index: img.isNew ? nuevasImagenes.length : -1
+      });
+      
+      if (img.isNew && img.archivo) {
+        nuevasImagenes.push(img.archivo);
+      }
+    });
+    
+    // Agregar JSON con metadata
+    formData.append('imagenesData', JSON.stringify(imagenesData));
+    
+    // Agregar archivos nuevos
+    nuevasImagenes.forEach((archivo, index) => {
+      formData.append(`imagenes`, archivo);
+    });
+
+    const url = `${this.api}/batch`;
+    return this.http.post<any>(url, formData, {
+      headers: this.getHeaders(false),
+    });
+  }
+
+  // NUEVO: Eliminar todas las imágenes de un producto
+  deleteByProducto(proId: number): Observable<any> {
+    const url = `${this.api}/producto/${proId}`;
+    return this.http.delete<any>(url, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  // Mantener métodos existentes para compatibilidad
   delete(entity: ProductoImagen): Observable<any> {
     let params = new HttpParams();
     let url = '';
@@ -46,7 +101,6 @@ export class ProductoImagenService extends GeneralService {
     return EMPTY;
   }
 
-  // ACTUALIZADO: Obtener imagen con priProId
   getImagen(priProId: number, fileName: string): Observable<Blob> {
     const url = `${this.api}/imagen/${priProId}/${fileName}`;
     return this.http.get(url, {
@@ -55,7 +109,15 @@ export class ProductoImagenService extends GeneralService {
     });
   }
 
- 
+  // NUEVO: Obtener imagen como Data URL (Base64) para usar en <img src>
+  getImagenAsDataUrl(priProId: number, fileName: string): Observable<string> {
+    return this.getImagen(priProId, fileName).pipe(
+      map((blob: Blob) => {
+        return URL.createObjectURL(blob);
+      })
+    );
+  }
+
   getImageUrl(priProId: number, fileName: string): string {
     return `${this.api}/imagen/${priProId}/${fileName}`;
   }
@@ -109,7 +171,7 @@ export class ProductoImagenService extends GeneralService {
     });
   }
 
-  // Crear nueva imagen con archivo
+  // Métodos antiguos - mantener para compatibilidad pero marcar como deprecated
   create(priProId: number, priTimId: number, imagen: File): Observable<any> {
     const formData = new FormData();
     formData.append('priProId', priProId.toString());
@@ -122,7 +184,6 @@ export class ProductoImagenService extends GeneralService {
     });
   }
 
-  // Actualizar imagen existente (con o sin nuevo archivo)
   update(
     priId: number,
     priProId: number,
@@ -144,7 +205,6 @@ export class ProductoImagenService extends GeneralService {
     });
   }
 
-  // Método genérico save que determina si es crear o actualizar
   save(entity: ProductoImagen, imagen?: File): Observable<any> {
     if (entity.priId && entity.priId > 0) {
       return this.update(

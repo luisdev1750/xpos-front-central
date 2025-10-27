@@ -1,23 +1,23 @@
 <div class="proin-main">
   <mat-card class="proin-card">
-    <h2>Catálogo de Menú perfiles</h2>
+    <h2>Catálogo de Menú por Perfiles</h2>
     <form #f="ngForm">
       <mat-form-field>
-        <mat-label>Perfil</mat-label>
-        <mat-select
-          [(ngModel)]="filter.mepPerId"
-          name="perfil"
-          (selectionChange)="OnChangePerfil($event)"
-        >
-          <mat-option value="0">Todos los perfiles</mat-option>
-          <mat-option
-            *ngFor="let perfil of listPerfiles"
-            [value]="perfil.perId"
-          >
-            {{ perfil.perNombre }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+  <mat-label>Perfil</mat-label>
+  <mat-select
+    [(ngModel)]="filter.mepPerId"
+    name="perfil"
+    (selectionChange)="OnChangePerfil($event)"
+  >
+    <mat-option value="0">Todos los perfiles</mat-option>
+    <mat-option
+      *ngFor="let perfil of listPerfiles"
+      [value]="perfil.perId.toString()"
+    >
+      {{ perfil.perNombre }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
       <mat-form-field>
         <mat-label>Aplicación</mat-label>
         <mat-select

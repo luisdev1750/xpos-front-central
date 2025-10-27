@@ -20,6 +20,8 @@ import { ProductoImagenBusquedaComponent } from './producto-imagen-busqueda/prod
 import { MatSelect } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatChipsModule } from '@angular/material/chips';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -38,7 +40,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatOption,
     MatAutocompleteModule,
      ReactiveFormsModule,
-     MatTooltipModule
+     MatTooltipModule,
+     MatChipsModule
+     
   ],
   declarations: [
     ProductoImagenListComponent,

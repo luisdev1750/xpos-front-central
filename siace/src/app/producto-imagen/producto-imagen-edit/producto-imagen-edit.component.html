@@ -1,15 +1,10 @@
-<h2>{{ isEditing ? "Editar" : "Nueva" }} Imagen de Producto</h2>
+<h2>{{ isEditMode ? "Editar" : "Agregar" }} Imágenes de Producto</h2>
 
-<form
-  *ngIf="productoImagen"
-  #editForm="ngForm"
-  (ngSubmit)="save()"
-  autocomplete="off"
->
+<form *ngIf="productoImagen" #editForm="ngForm" (ngSubmit)="save()" autocomplete="off">
   <div class="row">
-    <!-- BUSCADOR DE PRODUCTO -->
-    <div class="col-md-6">
-      <mat-form-field *ngIf="!isEditing">
+    <!-- BUSCADOR DE PRODUCTO (Solo en modo crear) -->
+    <div class="col-md-12" *ngIf="!isEditMode">
+      <mat-form-field>
         <mat-label>Producto</mat-label>
         <input
           type="text"
@@ -17,10 +12,10 @@
           [formControl]="productoControl"
           [matAutocomplete]="autoProducto"
           placeholder="Buscar por nombre, descripción, SKU o ID..."
-          [readonly]="isEditing"
+          [readonly]="isEditMode"
         />
         <button
-          *ngIf="productoControl.value && !isEditing"
+          *ngIf="productoControl.value && !isEditMode"
           matSuffix
           mat-icon-button
           aria-label="Limpiar"
@@ -37,7 +32,6 @@
           <mat-option
             *ngFor="let producto of filteredProductos | async"
             [value]="producto"
-            
           >
             <span>
               <strong>{{ producto.proSku }}</strong> - {{ producto.proNombre }}
@@ -46,76 +40,65 @@
             <small style="color: #666" *ngIf="producto.proDescripcion">
               {{ producto.proDescripcion }}
             </small>
-           
           </mat-option>
         </mat-autocomplete>
-        <mat-error *ngIf="!productoImagen.priProId && !isEditing"
-          >Producto es requerido</mat-error
-        >
+        <mat-error *ngIf="!productoImagen.proId && !isEditMode">
+          Producto es requerido
+        </mat-error>
       </mat-form-field>
+    </div>
 
-      <mat-form-field *ngIf="isEditing">
+    <!-- Producto seleccionado (en modo edición) -->
+    <div class="col-md-12" *ngIf="isEditMode">
+      <mat-form-field>
         <mat-label>Producto</mat-label>
         <input
           matInput
-          [(ngModel)]="productoImagen.priProName"
-          id="priProName"
-          name="priProName"
-          placeholder="Nombre del archivo"
+          [(ngModel)]="productoImagen.proNombre"
+          id="proNombre"
+          name="proNombre"
           readonly
           required
         />
+        <mat-hint>SKU: {{ productoImagen.proSku }}</mat-hint>
       </mat-form-field>
+    </div>
+  </div>
 
-
-
+  <!-- SECCIÓN AGREGAR IMAGEN -->
+  <div class="row" style="margin-top: 24px; margin-bottom: 16px">
+    <div class="col-md-12">
+      <h3 style="margin-bottom: 16px; font-size: 16px; font-weight: 500; color: #666;">
+        Agregar Imagen al Producto
+      </h3>
     </div>
 
     <div class="col-md-6">
       <mat-form-field>
         <mat-label>Tipo de imagen</mat-label>
         <mat-select
-          [value]="productoImagen.priTimId"
-          (selectionChange)="onProductoImagenChange($event)"
-          required
+          [(ngModel)]="tipoImagenSeleccionado"
+          name="tipoImagenSeleccionado"
+          [disabled]="!productoImagen.proId || tiposDisponibles.length === 0"
         >
           <mat-option
-            *ngFor="let imagen of listTipoImagenes"
-            [value]="imagen.timId"
+            *ngFor="let tipo of tiposDisponibles"
+            [value]="tipo.timId"
           >
-            {{ imagen.timNombre }}
+            {{ tipo.timNombre }}
           </mat-option>
         </mat-select>
-        <mat-error *ngIf="!productoImagen.priTimId"
-          >Tipo de imagen es requerido</mat-error
-        >
+        <mat-hint *ngIf="!productoImagen.proId" style="color: #f44336">
+          Primero seleccione un producto
+        </mat-hint>
+        <mat-hint *ngIf="productoImagen.proId && tiposDisponibles.length === 0" style="color: #4caf50">
+          ✓ Todos los tipos agregados (5/5)
+        </mat-hint>
       </mat-form-field>
     </div>
 
     <div class="col-md-6">
-      <mat-form-field *ngIf="isEditing">
-        <mat-label>Nombre del archivo actual</mat-label>
-        <input
-          matInput
-          [(ngModel)]="productoImagen.priNombre"
-          id="priNombre"
-          name="priNombre"
-          placeholder="Nombre del archivo"
-          readonly
-        />
-      </mat-form-field>
-    </div>
-  </div>
-
-  <!-- Sección de carga de imagen -->
-  <div class="row">
-    <div class="col-md-12">
       <div class="file-input-wrapper">
-        <label style="display: block; margin-bottom: 8px; font-weight: 500">
-          {{ isEditing ? "Cambiar imagen (opcional)" : "Seleccionar imagen" }}
-          <span *ngIf="!isEditing" style="color: red">*</span>
-        </label>
-
         <input
           type="file"
           (change)="onFileSelected($event)"
@@ -123,59 +106,159 @@
           #fileInput
           style="display: none"
         />
-
         <button
           type="button"
           mat-raised-button
           color="accent"
           (click)="fileInput.click()"
+          [disabled]="!productoImagen.proId"
+          style="width: 100%;"
         >
           <mat-icon>cloud_upload</mat-icon>
-          {{ selectedFile ? "Cambiar archivo" : "Seleccionar archivo" }}
+          {{ archivoTemporal ? 'Cambiar archivo' : 'Seleccionar archivo' }}
         </button>
-
-        <button
-          *ngIf="selectedFile"
-          type="button"
-          mat-button
-          color="warn"
-          (click)="clearImage()"
-        >
-          <mat-icon>clear</mat-icon>
-          Limpiar
-        </button>
-
-        <div *ngIf="selectedFile" style="margin-top: 8px; color: #666">
-          <mat-icon style="vertical-align: middle; font-size: 18px"
-            >attachment</mat-icon
-          >
-          {{ selectedFile.name }} ({{ (selectedFile.size / 1024).toFixed(2) }}
-          KB)
+        
+        <div *ngIf="archivoTemporal" style="margin-top: 8px; color: #666; font-size: 14px;">
+          <mat-icon style="vertical-align: middle; font-size: 18px">attachment</mat-icon>
+          {{ archivoTemporal.name }} ({{ (archivoTemporal.size / 1024).toFixed(2) }} KB)
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Vista previa de la imagen -->
-  <div class="row" *ngIf="imagePreview">
-    <div class="col-md-12">
-      <mat-card style="padding: 15px; margin: 15px 0">
-        <mat-card-title>Vista previa</mat-card-title>
-        <img [src]="imagePreview" alt="Vista previa" class="image-preview" />
-      </mat-card>
+    <div class="col-md-12" style="margin-top: 16px; display: flex; gap: 10px;">
+      <button
+        type="button"
+        mat-raised-button
+        color="primary"
+        (click)="agregarImagenALista()"
+        [disabled]="!tipoImagenSeleccionado || !archivoTemporal || !productoImagen.proId"
+        style="flex: 1;"
+      >
+        <mat-icon>add</mat-icon>
+        Agregar a la lista
+      </button>
+      
+      <button
+        type="button"
+        mat-button
+        color="warn"
+        (click)="limpiarFormularioTemporal()"
+        [disabled]="!tipoImagenSeleccionado && !archivoTemporal"
+      >
+        <mat-icon>clear</mat-icon>
+        Limpiar
+      </button>
+    </div>
+
+    <div class="col-md-12" style="margin-top: 8px;">
+      <mat-hint style="font-size: 14px; color: #666; display: flex; align-items: center">
+        <mat-icon style="vertical-align: middle; font-size: 18px; margin-right: 8px">info</mat-icon>
+        <span *ngIf="productoImagen.proId">
+          Imágenes agregadas: {{ listaImagenes.length }}/5
+        </span>
+        <span *ngIf="!productoImagen.proId" style="color: #f44336">
+          Seleccione un producto para agregar imágenes
+        </span>
+      </mat-hint>
     </div>
   </div>
 
+  <!-- TABLA DE IMÁGENES -->
+  <div *ngIf="listaImagenes && listaImagenes.length > 0" style="margin-top: 16px">
+    <h3 style="margin-bottom: 16px; font-size: 16px; font-weight: 500; color: #666;">
+      Imágenes del Producto ({{ listaImagenes.length }}/5)
+    </h3>
+    <table mat-table [dataSource]="listaImagenes" class="mat-elevation-z2">
+      <!-- Columna Preview -->
+      <ng-container matColumnDef="preview">
+        <mat-header-cell *matHeaderCellDef style="flex: 0 0 100px;"> Vista Previa </mat-header-cell>
+        <mat-cell *matCellDef="let item" style="flex: 0 0 100px;">
+          <img 
+            [src]="item.preview" 
+            alt="Preview" 
+            style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px; cursor: pointer;"
+            (click)="abrirImagenEnNuevaPestana(item.preview)"
+            matTooltip="Click para ver en tamaño completo"
+          />
+        </mat-cell>
+      </ng-container>
+
+      <!-- Columna Tipo -->
+      <ng-container matColumnDef="tipoNombre">
+        <mat-header-cell *matHeaderCellDef> Tipo de Imagen </mat-header-cell>
+        <mat-cell *matCellDef="let item">
+          <mat-chip 
+            [style.background-color]="getTipoColor(item.tipoNombre)"
+            style="color: white;">
+            {{ item.tipoNombre }}
+          </mat-chip>
+        </mat-cell>
+      </ng-container>
+
+      <!-- Columna Nombre Archivo -->
+      <ng-container matColumnDef="nombreArchivo">
+        <mat-header-cell *matHeaderCellDef> Nombre Archivo </mat-header-cell>
+        <mat-cell *matCellDef="let item">
+          {{ item.nombreArchivo || (item.archivo ? item.archivo.name : 'N/A') }}
+        </mat-cell>
+      </ng-container>
+
+      <!-- Columna Estado -->
+      <ng-container matColumnDef="estado">
+        <mat-header-cell *matHeaderCellDef style="flex: 0 0 100px;"> Estado </mat-header-cell>
+        <mat-cell *matCellDef="let item" style="flex: 0 0 100px;">
+          <mat-chip 
+            [style.background-color]="item.isNew ? '#4caf50' : '#2196f3'"
+            style="color: white; font-size: 11px;">
+            {{ item.isNew ? 'Nueva' : 'Existente' }}
+          </mat-chip>
+        </mat-cell>
+      </ng-container>
+
+      <!-- Columna Acciones -->
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef style="flex: 0 0 80px;"> Acciones </mat-header-cell>
+        <mat-cell *matCellDef="let item" style="flex: 0 0 80px;">
+          <button
+            (click)="eliminarImagenDeLista(item)"
+            mat-icon-button
+            color="warn"
+            matTooltip="Eliminar de la lista"
+            type="button"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumnsImagenes"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumnsImagenes"></mat-row>
+    </table>
+  </div>
+
+  <!-- Mensaje cuando no hay imágenes -->
+  <div
+    *ngIf="!listaImagenes || listaImagenes.length === 0"
+    style="margin-top: 16px; padding: 24px; text-align: center; background-color: #f5f5f5; border-radius: 4px;"
+  >
+    <mat-icon style="font-size: 48px; height: 48px; width: 48px; color: #999">
+      add_photo_alternate
+    </mat-icon>
+    <p style="margin-top: 16px; color: #666">
+      No hay imágenes agregadas. Seleccione tipo de imagen y archivo para agregar.
+    </p>
+  </div>
+
   <!-- Botones de acción -->
-  <div class="button-row text-center" role="group" style="margin-top: 20px">
+  <div class="button-row text-center" role="group" style="margin-top: 24px">
     <button
       type="submit"
       mat-raised-button
       color="primary"
-      [disabled]="!editForm.form.valid || (!isEditing && !selectedFile) || !productoImagen.priProId"
+      [disabled]="!editForm.form.valid || listaImagenes.length === 0 || !productoImagen.proId"
     >
       <mat-icon>save</mat-icon>
-      {{ isEditing ? "Actualizar" : "Guardar" }}
+      {{ isEditMode ? 'Actualizar' : 'Guardar' }}
     </button>
     <button type="button" mat-button (click)="cancel()">
       <mat-icon>cancel</mat-icon>

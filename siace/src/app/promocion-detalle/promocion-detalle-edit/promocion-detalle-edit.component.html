@@ -1,4 +1,4 @@
-<h2>Detalle del detalle de promoción</h2>
+<h2>Detalle del Detalle de Promoción</h2>
 <form
   *ngIf="promocionDetalle"
   #editForm="ngForm"
@@ -42,10 +42,12 @@
       <!-- Familia -->
       <mat-form-field>
         <mat-label>Familia</mat-label>
+      
         <mat-select
           [value]="promocionDetalle.prdFamId"
           (selectionChange)="onFamiliaChange($event)"
         >
+        <mat-option [value] = "null">Sin Familia</mat-option>
           <mat-option
             *ngFor="let familia of listFamilias"
             [value]="familia.famId"
@@ -105,6 +107,9 @@
           [value]="promocionDetalle.prdPreId"
           (selectionChange)="onPresentacionChange($event)"
         >
+          <mat-option
+          [value]="null"
+          >Sin Presentación</mat-option>
           <mat-option
             *ngFor="let presentacion of listPresentaciones"
             [value]="presentacion.preId"

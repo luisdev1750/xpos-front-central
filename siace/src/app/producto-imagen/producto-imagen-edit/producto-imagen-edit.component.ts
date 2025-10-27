@@ -4,278 +4,400 @@ import { ToastrService } from 'ngx-toastr';
 import { FormControl } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-
 import { ProductoImagenService } from '../producto-imagen.service';
-import { ProductoImagen } from '../producto-imagen';
-import { ProductoService } from '../../producto/producto.service';
+
+interface ImagenItem {
+  tipoId: number;
+  tipoNombre: string;
+  archivo?: File;
+  preview: string;
+  isNew: boolean;
+  nombreArchivo?: string;
+  _tempId: number; // ID temporal único para identificar cada fila
+}
 
 @Component({
-   selector: 'app-producto-imagen-edit',
-   standalone: false,
-   templateUrl: './producto-imagen-edit.component.html',
-   styles: [
-      'form { display: flex; flex-direction: column; min-width: 500px; }',
-      'form > * { width: 100% }',
-      '.mat-mdc-form-field {width: 100%;}',
-      '.image-preview { max-width: 200px; max-height: 200px; margin: 10px 0; border-radius: 8px; }',
-      '.file-input-wrapper { margin: 15px 0; }'
-   ]
+  selector: 'app-producto-imagen-edit',
+  standalone: false,
+  templateUrl: './producto-imagen-edit.component.html',
+  styles: [
+    'form { display: flex; flex-direction: column; min-width: 500px; }',
+    'form > * { width: 100% }',
+    '.mat-mdc-form-field {width: 100%;}',
+    '.file-input-wrapper { margin: 15px 0; }',
+    'mat-chip { margin: 2px !important; }'
+  ]
 })
 export class ProductoImagenEditComponent implements OnInit, OnDestroy {
-   productoImagen!: ProductoImagen;
-   listTipoImagenes: any = [];
-   selectedFile: File | null = null;
-   imagePreview: string | null = null;
-   isEditing: boolean = false;
-   
-   // Suscripción para actualizaciones
-   private subs!: Subscription;
+  productoImagen: any;
+  isEditMode: boolean = false;
+  displayedColumnsImagenes = ['preview', 'tipoNombre', 'nombreArchivo', 'estado', 'actions'];
+  
+  // Listas de tipos de imagen
+  listTipoImagenesCompleta: any[] = [];
+  tiposDisponibles: any[] = [];
+  
+  // Lista de imágenes agregadas
+  listaImagenes: ImagenItem[] = [];
+  
+  // Formulario temporal para agregar imagen
+  tipoImagenSeleccionado: number | null = null;
+  archivoTemporal: File | null = null;
+  previewTemporal: string | null = null;
+  
+  // Productos para autocomplete
+  listProductosCompleta: any[] = [];
+  listProductos: any[] = [];
+  productoControl = new FormControl('');
+  filteredProductos!: Observable<any[]>;
+  productoSeleccionado: any = null;
+  
+  private subs!: Subscription;
+  private nextTempId: number = -1; // Contador para IDs temporales únicos
 
-   // Propiedades para el buscador de productos
-   listProductosCompleta: any[] = [];
-   listProductos: any[] = [];
-   productoControl = new FormControl('');
-   filteredProductos!: Observable<any[]>;
-   productoSeleccionado: any = null;
-
-   constructor(
-      private dialogRef: MatDialogRef<ProductoImagenEditComponent>,
-      private productoImagenService: ProductoImagenService,
-      private productoService: ProductoService,
-      private toastr: ToastrService,
-      @Inject(MAT_DIALOG_DATA) public data: any
-   ) {
-      // Suscripción para recargar cuando se actualice
-      this.subs = this.productoImagenService.getIsUpdated().subscribe(() => {
-         this.loadProductos();
-      });
-      
-      this.productoImagen = data.productoImagen;
-      this.isEditing = this.productoImagen.priId > 0;
-      console.log("data producto");
-      console.log(data);
-
-      // Si estamos editando y existe una imagen, cargar la vista previa
-      if (this.isEditing && this.productoImagen.priNombre && this.productoImagen.priProId) {
-         this.loadImagePreview(this.productoImagen.priProId, this.productoImagen.priNombre);
-      }
-   }
-
-   ngOnInit() {
-      this.loadCatalogs();
+  constructor(
+    private dialogRef: MatDialogRef<ProductoImagenEditComponent>,
+    private productoImagenService: ProductoImagenService,
+    private toastr: ToastrService,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
+    this.subs = this.productoImagenService.getIsUpdated().subscribe(() => {
       this.loadProductos();
-   }
-
-   ngOnDestroy() {
-      // Limpiar suscripción al destruir el componente
-      if (this.subs) {
-         this.subs.unsubscribe();
-      }
-   }
-
-   // Una vez que se cargan los productos, setear el seleccionado
-   onProductosLoaded() {
-      if (this.productoImagen.priProId && this.listProductosCompleta.length > 0) {
-         const productoSeleccionadoDelCatalogo = this.listProductosCompleta.find(
-            (p) => p.proId === this.productoImagen.priProId
-         );
-         if (productoSeleccionadoDelCatalogo) {
-            this.productoSeleccionado = productoSeleccionadoDelCatalogo;
-            this.productoControl.setValue(productoSeleccionadoDelCatalogo);
-         }
-      }
-   }
-
-   loadCatalogs() {
-      this.productoImagenService.findTipoImagenes().subscribe({
-         next: result => {
-            this.listTipoImagenes = result;
-         },
-         error: err => {
-            this.toastr.error('Error al cargar tipos de imágenes', 'Error');
-         }
-      });
-   }
-
-   // Cargar productos para el buscador
-   loadProductos() {
-      this.productoImagenService.findAllProductosImagenes().subscribe({
-         next: (productos) => {
-            this.listProductosCompleta = productos;
-            this.listProductos = [...productos];
-            this.setupAutocomplete();
-            // Una vez que se cargan los productos, setear el del data si existe
-            this.onProductosLoaded();
-         },
-         error: (error) => {
-            console.error('Error cargando productos:', error);
-            this.toastr.error('Error cargando productos', 'Error');
-         }
-      });
-   }
-
-   // Configuración del autocomplete
-   setupAutocomplete() {
-      if (this.listProductosCompleta.length === 0) return;
-
-      this.filteredProductos = this.productoControl.valueChanges.pipe(
-         startWith(''),
-         map((value) => this._filterProductos(this._getFilterValue(value)))
-      );
-   }
-
-   // Obtener valor del filtro
-   private _getFilterValue(value: any): string {
-      if (typeof value === 'string') return value;
-      if (value && typeof value === 'object' && value.proNombre)
-         return value.proNombre;
-      return '';
-   }
-
-   // Filtrar productos
-   private _filterProductos(value: string): any[] {
-      const filterValue = value.toLowerCase();
-      return this.listProductos.filter(
-         (producto) =>
-            (producto.proNombre &&
-               producto.proNombre.toLowerCase().includes(filterValue)) ||
-            (producto.proDescripcion &&
-               producto.proDescripcion.toLowerCase().includes(filterValue)) ||
-            (producto.proSku &&
-               producto.proSku.toLowerCase().includes(filterValue)) ||
-            producto.proId.toString().includes(filterValue)
-      );
-   }
-
-   // Mostrar nombre del producto en el input
-   displayProductoFn(producto: any): string {
-      return producto && producto.proNombre ? producto.proNombre : '';
-   }
-
-   // Cuando se selecciona un producto
-   onProductoSelected(producto: any) {
-      if (!producto || !producto.proId) return;
-
-      this.productoSeleccionado = producto;
-      this.productoImagen.priProId = producto.proId;
-      this.productoImagen.priProName = producto.proNombre;
+    });
+    
+    this.productoImagen = { ...data.productoImagen };
+    this.isEditMode = this.productoImagen.proId > 0;
+    
+    console.log('📦 Data recibida en constructor:', this.productoImagen);
+    
+    // Si estamos editando, cargar las imágenes existentes
+    // CORRECCIÓN: Verificar tanto "imagenes" (minúscula) como "Imagenes" (mayúscula)
+    const imagenesData = this.productoImagen.imagenes || this.productoImagen.Imagenes;
+    
+    if (this.isEditMode && imagenesData && imagenesData.length > 0) {
+      console.log('🖼️ Cargando imágenes existentes:', imagenesData);
       
-      console.log('Producto seleccionado:', producto);
-      this.toastr.success('Producto seleccionado', 'Éxito');
-   }
-
-   // Limpiar búsqueda
-   onProductoClear() {
-      this.productoControl.reset();
-      this.productoSeleccionado = null;
-      this.productoImagen.priProId = 0;
-      this.productoImagen.priProName = '';
-   }
-
-   // Cargar imagen existente
-   loadImagePreview(priProId: number, fileName: string) {
-      this.productoImagenService.getImagen(priProId, fileName).subscribe({
-         next: (blob: Blob) => {
-            const reader = new FileReader();
-            reader.onload = (e: any) => {
-               this.imagePreview = e.target.result;
-            };
-            reader.readAsDataURL(blob);
-         },
-         error: (err) => {
-            console.error('Error al cargar imagen', err);
-            this.toastr.warning('No se pudo cargar la vista previa de la imagen', 'Advertencia');
-         }
-      });
-   }
-
-   onProductoImagenChange(event: any) {
-      this.productoImagen.priTimId = event.value;
-   }
-
-   // Manejar la selección de archivo
-   onFileSelected(event: any) {
-      const file = event.target.files[0];
-      if (file) {
-         // Validar tipo de archivo
-         const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
-         if (!validTypes.includes(file.type)) {
-            this.toastr.error('Tipo de archivo no válido. Solo se permiten imágenes (JPG, PNG, GIF, WEBP)', 'Error');
-            return;
-         }
-
-         // Validar tamaño (máximo 5MB)
-         const maxSize = 5 * 1024 * 1024;
-         if (file.size > maxSize) {
-            this.toastr.error('El archivo es demasiado grande. Máximo 5MB', 'Error');
-            return;
-         }
-
-         this.selectedFile = file;
-         
-         // Generar vista previa del nuevo archivo
-         const reader = new FileReader();
-         reader.onload = (e: any) => {
-            this.imagePreview = e.target.result;
-         };
-         reader.readAsDataURL(file);
-      }
-   }
-
-   // Limpiar la imagen seleccionada
-   clearImage() {
-      this.selectedFile = null;
-      if (!this.isEditing) {
-         this.imagePreview = null;
-      } else {
-         // Restaurar la imagen original si estamos editando
-         if (this.productoImagen.priNombre && this.productoImagen.priProId) {
-            this.loadImagePreview(this.productoImagen.priProId, this.productoImagen.priNombre);
-         }
-      }
-   }
-
-   save() {
-      // Validaciones
-      if (!this.isEditing && !this.selectedFile) {
-         this.toastr.error('Debe seleccionar una imagen', 'Error');
-         return;
-      }
-
-      if (!this.productoImagen.priProId) {
-         this.toastr.error('Debe seleccionar un producto', 'Error');
-         return;
-      }
-
-      if (!this.productoImagen.priTimId) {
-         this.toastr.error('Debe seleccionar un tipo de imagen', 'Error');
-         return;
-      }
-
-      // Llamar al servicio
-      this.productoImagenService.save(this.productoImagen, this.selectedFile || undefined).subscribe({
-         next: result => {
-            if (result && (result.priId || result.message)) {
-               const mensaje = this.isEditing 
-                  ? 'La imagen del producto ha sido actualizada exitosamente' 
-                  : 'La imagen del producto ha sido guardada exitosamente';
-               this.toastr.success(mensaje, 'Transacción exitosa');
-               this.productoImagenService.setIsUpdated(true);
-               // window.location.reload();
-               this.dialogRef.close(result);
-            } else {
-               this.toastr.error('Ha ocurrido un error al guardar', 'Error');
+      // IMPORTANTE: Cargar imágenes como Blob para pasar token de autorización
+      imagenesData.forEach((img: any) => {
+        const tipoId = img.timId || img.TimId;
+        const tipoNombre = img.timNombre || img.TimNombre;
+        const nombreArchivo = img.priNombre || img.PriNombre;
+        
+        // Agregar placeholder mientras carga
+        const tempId = this.nextTempId--;
+        this.listaImagenes.push({
+          tipoId: tipoId,
+          tipoNombre: tipoNombre,
+          nombreArchivo: nombreArchivo,
+          preview: 'assets/loading.gif', // Placeholder (opcional)
+          isNew: false,
+          _tempId: tempId
+        });
+        
+        // Cargar imagen real con token
+        this.productoImagenService.getImagenAsDataUrl(
+          this.productoImagen.proId,
+          nombreArchivo
+        ).subscribe({
+          next: (dataUrl: string) => {
+            // Actualizar preview con la imagen real
+            const imagenEnLista = this.listaImagenes.find(i => i._tempId === tempId);
+            if (imagenEnLista) {
+              imagenEnLista.preview = dataUrl;
             }
-         },
-         error: err => {
-            console.error('Error al guardar:', err);
-            const errorMsg = err.error?.error || err.error?.message || 'Ha ocurrido un error';
-            this.toastr.error(errorMsg, 'Error');
-         }
+          },
+          error: (err) => {
+            console.error(`❌ Error cargando imagen ${nombreArchivo}:`, err);
+            // Mantener placeholder o usar imagen de error
+            const imagenEnLista = this.listaImagenes.find(i => i._tempId === tempId);
+            if (imagenEnLista) {
+              imagenEnLista.preview = 'assets/image-error.png'; // Opcional
+            }
+          }
+        });
       });
-   }
+      
+      console.log('✅ Lista de imágenes procesada:', this.listaImagenes);
+      
+      // Actualizar tipos disponibles después de cargar imágenes existentes
+      this.actualizarTiposDisponibles();
+    } else {
+      console.log('ℹ️ No hay imágenes existentes o modo creación');
+    }
+  }
 
-   cancel() {
-      this.dialogRef.close();
-   }
+  ngOnInit() {
+    this.loadCatalogs();
+    this.loadProductos();
+  }
+
+  ngOnDestroy() {
+    if (this.subs) {
+      this.subs.unsubscribe();
+    }
+    
+    // IMPORTANTE: Liberar URLs de Blob para evitar memory leaks
+    this.listaImagenes.forEach(img => {
+      if (img.preview && img.preview.startsWith('blob:')) {
+        URL.revokeObjectURL(img.preview);
+      }
+    });
+  }
+
+  loadCatalogs() {
+    this.productoImagenService.findTipoImagenes().subscribe({
+      next: result => {
+        console.log('📋 Tipos de imagen cargados:', result);
+        this.listTipoImagenesCompleta = result;
+        this.actualizarTiposDisponibles();
+      },
+      error: err => {
+        console.error('❌ Error al cargar tipos de imágenes:', err);
+        this.toastr.error('Error al cargar tipos de imágenes', 'Error');
+      }
+    });
+  }
+
+  loadProductos() {
+    this.productoImagenService.findAllProductosImagenes().subscribe({
+      next: (productos) => {
+        this.listProductosCompleta = productos;
+        this.listProductos = [...productos];
+        this.setupAutocomplete();
+        
+        // Si estamos editando y hay producto, setear el seleccionado
+        if (this.productoImagen.proId && this.listProductosCompleta.length > 0) {
+          const productoEncontrado = this.listProductosCompleta.find(
+            (p) => p.proId === this.productoImagen.proId
+          );
+          if (productoEncontrado) {
+            this.productoSeleccionado = productoEncontrado;
+            this.productoControl.setValue(productoEncontrado);
+          }
+        }
+      },
+      error: (error) => {
+        console.error('Error cargando productos:', error);
+        this.toastr.error('Error cargando productos', 'Error');
+      }
+    });
+  }
+
+  setupAutocomplete() {
+    if (this.listProductosCompleta.length === 0) return;
+
+    this.filteredProductos = this.productoControl.valueChanges.pipe(
+      startWith(''),
+      map((value) => this._filterProductos(this._getFilterValue(value)))
+    );
+  }
+
+  private _getFilterValue(value: any): string {
+    if (typeof value === 'string') return value;
+    if (value && typeof value === 'object' && value.proNombre)
+      return value.proNombre;
+    return '';
+  }
+
+  private _filterProductos(value: string): any[] {
+    const filterValue = value.toLowerCase();
+    return this.listProductos.filter(
+      (producto) =>
+        (producto.proNombre &&
+          producto.proNombre.toLowerCase().includes(filterValue)) ||
+        (producto.proDescripcion &&
+          producto.proDescripcion.toLowerCase().includes(filterValue)) ||
+        (producto.proSku &&
+          producto.proSku.toLowerCase().includes(filterValue))
+    );
+  }
+
+  displayProductoFn(producto: any): string {
+    return producto && producto.proNombre ? producto.proNombre : '';
+  }
+
+  onProductoSelected(producto: any) {
+    if (!producto || !producto.proId) return;
+
+    this.productoSeleccionado = producto;
+    this.productoImagen.proId = producto.proId;
+    this.productoImagen.proNombre = producto.proNombre;
+    this.productoImagen.proSku = producto.proSku;
+    
+    console.log('Producto seleccionado:', producto);
+    this.toastr.success('Producto seleccionado', 'Éxito');
+  }
+
+  onProductoClear() {
+    this.productoControl.reset();
+    this.productoSeleccionado = null;
+    this.productoImagen.proId = 0;
+    this.productoImagen.proNombre = '';
+    this.productoImagen.proSku = '';
+  }
+
+  actualizarTiposDisponibles() {
+    // Filtrar tipos que ya están en la lista
+    const tiposYaAgregados = this.listaImagenes.map(img => img.tipoId);
+    this.tiposDisponibles = this.listTipoImagenesCompleta.filter(
+      tipo => !tiposYaAgregados.includes(tipo.timId)
+    );
+    
+    console.log('🔄 Tipos disponibles actualizados:', {
+      total: this.listTipoImagenesCompleta.length,
+      agregados: tiposYaAgregados,
+      disponibles: this.tiposDisponibles.length
+    });
+  }
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      // Validar tipo de archivo
+      const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+      if (!validTypes.includes(file.type)) {
+        this.toastr.error('Tipo de archivo no válido. Solo se permiten imágenes (JPG, PNG, GIF, WEBP)', 'Error');
+        return;
+      }
+
+      // Validar tamaño (máximo 5MB)
+      const maxSize = 5 * 1024 * 1024;
+      if (file.size > maxSize) {
+        this.toastr.error('El archivo es demasiado grande. Máximo 5MB', 'Error');
+        return;
+      }
+
+      this.archivoTemporal = file;
+      
+      // Generar vista previa
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.previewTemporal = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  agregarImagenALista() {
+    if (!this.tipoImagenSeleccionado || !this.archivoTemporal) {
+      this.toastr.warning('Debe seleccionar un tipo de imagen y un archivo', 'Advertencia');
+      return;
+    }
+
+    if (!this.productoImagen.proId) {
+      this.toastr.warning('Debe seleccionar un producto primero', 'Advertencia');
+      return;
+    }
+
+    // Buscar el nombre del tipo
+    const tipoEncontrado = this.listTipoImagenesCompleta.find(
+      t => t.timId === this.tipoImagenSeleccionado
+    );
+
+    if (!tipoEncontrado) {
+      this.toastr.error('Tipo de imagen no encontrado', 'Error');
+      return;
+    }
+
+    // Verificar que no se duplique (seguridad adicional)
+    const yaCargado = this.listaImagenes.find(img => img.tipoId === this.tipoImagenSeleccionado);
+    if (yaCargado) {
+      this.toastr.warning('Este tipo de imagen ya está agregado', 'Advertencia');
+      return;
+    }
+
+    // Crear nueva imagen en la lista
+    const nuevaImagen: ImagenItem = {
+      tipoId: this.tipoImagenSeleccionado,
+      tipoNombre: tipoEncontrado.timNombre,
+      archivo: this.archivoTemporal,
+      preview: this.previewTemporal!,
+      isNew: true,
+      _tempId: this.nextTempId--
+    };
+
+    this.listaImagenes = [...this.listaImagenes, nuevaImagen];
+    this.actualizarTiposDisponibles();
+    this.limpiarFormularioTemporal();
+    
+    this.toastr.success(`Imagen tipo "${tipoEncontrado.timNombre}" agregada`, 'Éxito');
+  }
+
+  limpiarFormularioTemporal() {
+    this.tipoImagenSeleccionado = null;
+    this.archivoTemporal = null;
+    this.previewTemporal = null;
+  }
+
+  eliminarImagenDeLista(item: ImagenItem) {
+    this.listaImagenes = this.listaImagenes.filter(
+      img => img._tempId !== item._tempId
+    );
+    this.actualizarTiposDisponibles();
+    this.toastr.success(`Imagen tipo "${item.tipoNombre}" eliminada de la lista`, 'Éxito');
+  }
+
+  abrirImagenEnNuevaPestana(url: string) {
+    window.open(url, '_blank');
+  }
+
+  getTipoColor(tipoNombre: string): string {
+    const colores: any = {
+      'Chico': '#2196F3',
+      'Carrusel': '#4CAF50',
+      'Grande': '#FF9800',
+      'Inicio': '#9C27B0',
+      'Mediana': '#F44336'
+    };
+    return colores[tipoNombre] || '#757575';
+  }
+
+  save() {
+    // Validaciones
+    if (this.listaImagenes.length === 0) {
+      this.toastr.error('Debe agregar al menos una imagen', 'Error');
+      return;
+    }
+
+    if (!this.productoImagen.proId) {
+      this.toastr.error('Debe seleccionar un producto', 'Error');
+      return;
+    }
+
+    // Preparar datos para enviar
+    const imagenesParaEnviar = this.listaImagenes.map(img => {
+      const { _tempId, ...imagenSinTempId } = img;
+      return imagenSinTempId;
+    });
+
+    const datosParaGuardar = {
+      proId: this.productoImagen.proId,
+      imagenes: imagenesParaEnviar
+    };
+
+    // Llamar al servicio
+    this.productoImagenService.saveBatch(datosParaGuardar).subscribe({
+      next: result => {
+        if (result && result.proId > 0) {
+          const mensaje = this.isEditMode 
+            ? 'Las imágenes del producto han sido actualizadas exitosamente' 
+            : 'Las imágenes del producto han sido guardadas exitosamente';
+          this.toastr.success(mensaje, 'Transacción exitosa');
+          this.productoImagenService.setIsUpdated(true);
+          this.dialogRef.close(result);
+        } else {
+          this.toastr.error('Ha ocurrido un error al guardar', 'Error');
+        }
+      },
+      error: err => {
+        console.error('Error al guardar:', err);
+        const errorMsg = err.error?.error || err.error?.message || 'Ha ocurrido un error';
+        this.toastr.error(errorMsg, 'Error');
+      }
+    });
+  }
+
+  cancel() {
+    this.dialogRef.close();
+  }
 }

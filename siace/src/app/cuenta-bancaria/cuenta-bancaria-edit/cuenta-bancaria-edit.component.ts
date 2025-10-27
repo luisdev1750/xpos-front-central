@@ -23,7 +23,7 @@ export class CuentaBancariaEditComponent implements OnInit {
    cuentaBancaria!: CuentaBancaria;
    sucursalList: any[] = [];
    bancoList: any[] = [];
-
+   isEditing: boolean = false;
    /* Constructores */
    
    constructor(
@@ -34,6 +34,8 @@ export class CuentaBancariaEditComponent implements OnInit {
       this.cuentaBancaria=data.cuentaBancaria;
       this.sucursalList=data.sucursalList;
       this.bancoList=data.bancoList;
+      this.isEditing = data.isEditing ;
+
    }
 
 

@@ -36,18 +36,17 @@
             <mat-label>Buscar productos...</mat-label>
             <input
               matInput
-              type="search"
+              type="text"
               [(ngModel)]="searchText"
               id="searchText"
               name="searchText"
-              placeholder="Nombre archivo, Producto, Tipo imagen..."
+              placeholder="Nombre producto, SKU..."
               (keyup)="searchProducts(searchText)"
               autocomplete="off"
               spellcheck="false"
               autoCorrect="off"
               autoCapitalize="off"
             />
-
             <mat-icon matSuffix>search</mat-icon>
           </mat-form-field>
           <button
@@ -66,34 +65,71 @@
 
     <div *ngIf="listProductosImagenes.length > 0">
       <table mat-table #table [dataSource]="listProductosImagenes">
-        <ng-container matColumnDef="priNombre">
-          <mat-header-cell *matHeaderCellDef> Nombre Archivo </mat-header-cell>
-          <mat-cell class="cell-angular" *matCellDef="let item">
-            {{ item.priNombre }}
-          </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="priProId">
+        <!-- Columna Producto -->
+        <ng-container matColumnDef="proNombre">
           <mat-header-cell *matHeaderCellDef> Producto </mat-header-cell>
           <mat-cell class="cell-angular" *matCellDef="let item">
-            {{ item.priProName }}
+            <div style="display: flex; flex-direction: column">
+              <strong>{{ item.proNombre }}</strong>
+              <small style="color: #666">SKU: {{ item.proSku }}</small>
+            </div>
           </mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="priTimId">
-          <mat-header-cell *matHeaderCellDef> Tipo Imagen </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.priTimName }} </mat-cell>
+        <!-- Columna Tipos de Imágenes -->
+        <ng-container matColumnDef="tiposImagenes">
+          <mat-header-cell *matHeaderCellDef>
+            Tipos de Imágenes
+          </mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            <div
+              style="
+                display: flex;
+                flex-wrap: wrap;
+                gap: 4px;
+                align-items: center;
+              "
+            >
+              <mat-chip
+                *ngFor="let tipo of item.tiposImagenes"
+                [style.background-color]="getTipoColor(tipo.timNombre)"
+                style="
+                  color: white;
+                  font-size: 11px;
+                  height: 24px;
+                  padding: 0 8px;
+                "
+              >
+                {{ tipo.timNombre }}
+              </mat-chip>
+              <span
+                class="count-badge"
+                [style.background-color]="
+                  item.tiposImagenes.length === 5 ? '#4caf50' : '#ff9800'
+                "
+                style="
+                  color: white;
+                  padding: 2px 8px;
+                  border-radius: 12px;
+                  font-size: 12px;
+                  font-weight: bold;
+                "
+              >
+                {{ item.tiposImagenes.length }}/5
+              </span>
+            </div>
+          </mat-cell>
         </ng-container>
 
+        <!-- Columna Acciones -->
         <ng-container matColumnDef="actions">
           <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
           <mat-cell *matCellDef="let item">
             <button
-              (click)="edit(item, true)"
+              (click)="edit(item)"
               mat-icon-button
               color="primary"
-              matTooltip="Editar"
-              matTooltip="Editar"
+              matTooltip="Editar imágenes"
               matTooltipPosition="above"
             >
               <mat-icon>edit</mat-icon>
@@ -102,8 +138,7 @@
               (click)="delete(item)"
               mat-icon-button
               color="warn"
-              matTooltip="Eliminar"
-              matTooltip="Borrar"
+              matTooltip="Eliminar todas las imágenes"
               matTooltipPosition="above"
             >
               <mat-icon>delete</mat-icon>

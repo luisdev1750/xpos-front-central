@@ -1,4 +1,4 @@
-<h2>Detalle del cuenta bancaria</h2>
+<h2>Detalle de Cuenta Bancaria</h2>
 <form
   *ngIf="cuentaBancaria"
   #editForm="ngForm"
@@ -14,10 +14,13 @@
         <mat-select
           [value]="cuentaBancaria.cubSucId"
           (selectionChange)="OnSucursalChange($event)"
-          required        >
+          required 
+          [disabled]="isEditing"
+          >
           <mat-option
             *ngFor="let sucursal of sucursalList"
             [value]="sucursal.sucId"
+            
           >
             {{ sucursal.sucNombre }}
           </mat-option>

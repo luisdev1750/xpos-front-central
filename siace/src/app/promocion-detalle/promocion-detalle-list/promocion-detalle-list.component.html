@@ -1,6 +1,6 @@
 <div class="proin-main">
   <mat-card class="proin-card">
-    <h2>Promoción detalle</h2>
+    <h2>Promoción Detalle</h2>
     <div style="display: flex; align-items: center; margin-bottom: 8px">
       <button mat-stroked-button color="primary" (click)="goBack()">
         <mat-icon>arrow_back</mat-icon>
@@ -73,7 +73,7 @@
         </ng-container>
 
         <ng-container matColumnDef="actions">
-          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
           <mat-cell *matCellDef="let item">
             <button
               (click)="edit(item)"
