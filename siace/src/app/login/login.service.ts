@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { tap, catchError, delay, map, finalize, switchMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { PermisosService } from '../permisos.service';
+import { ToastrService } from 'ngx-toastr';
 
 
 interface LoginResult {
@@ -60,7 +61,8 @@ export class LoginService extends GeneralService {
    constructor(
       private router: Router, 
       private _http: HttpClient,
-      private permisosService: PermisosService
+      private permisosService: PermisosService,
+      private toastr: ToastrService
    ) {
       super();
 
@@ -219,7 +221,13 @@ export class LoginService extends GeneralService {
       this.timer = of(true)
          .pipe(
             delay(timeout),
-            tap(() => this.refreshToken())
+            tap(() => {
+            // En lugar de refreshToken(), hacer logout directo
+            console.log('Token expirado, cerrando sesión...');
+            this.clearAll();
+            this.toastr.info("La sesión ha expirado");
+            this.router.navigate(['/login']);
+         })
          )
          .subscribe();
    }

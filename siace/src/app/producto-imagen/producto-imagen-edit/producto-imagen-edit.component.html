@@ -255,7 +255,7 @@
       type="submit"
       mat-raised-button
       color="primary"
-      [disabled]="!editForm.form.valid || listaImagenes.length === 0 || !productoImagen.proId"
+        [disabled]="listaImagenes.length === 0 || !productoImagen.proId"
     >
       <mat-icon>save</mat-icon>
       {{ isEditMode ? 'Actualizar' : 'Guardar' }}

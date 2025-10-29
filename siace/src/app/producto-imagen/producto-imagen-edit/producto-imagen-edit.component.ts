@@ -1,10 +1,11 @@
-import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy, ViewChild  } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { FormControl } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { ProductoImagenService } from '../producto-imagen.service';
+import { NgForm } from '@angular/forms';
 
 interface ImagenItem {
   tipoId: number;
@@ -29,6 +30,7 @@ interface ImagenItem {
   ]
 })
 export class ProductoImagenEditComponent implements OnInit, OnDestroy {
+  @ViewChild('editForm') editForm!: NgForm;
   productoImagen: any;
   isEditMode: boolean = false;
   displayedColumnsImagenes = ['preview', 'tipoNombre', 'nombreArchivo', 'estado', 'actions'];
@@ -274,6 +276,10 @@ export class ProductoImagenEditComponent implements OnInit, OnDestroy {
       reader.onload = (e: any) => {
         this.previewTemporal = e.target.result;
       };
+
+      console.log("Lista imagenes:");      
+      console.log(this.listaImagenes.length);
+      
       reader.readAsDataURL(file);
     }
   }
@@ -317,12 +323,34 @@ export class ProductoImagenEditComponent implements OnInit, OnDestroy {
     };
 
     this.listaImagenes = [...this.listaImagenes, nuevaImagen];
+
+       this.toastr.success(`Imagen tipo "${tipoEncontrado.timNombre}" agregada`, 'Éxito');
+    console.log(this.listaImagenes.length);
+      console.log('Estado después de agregar imagen:');
+  console.log('- Total imágenes:', this.listaImagenes.length);
+  console.log('- Formulario válido:', this.editForm?.form?.valid);
+  console.log('- Producto ID:', this.productoImagen.proId);
+  console.log('- Validaciones formulario:', this.editForm?.form?.errors);
     this.actualizarTiposDisponibles();
     this.limpiarFormularioTemporal();
     
-    this.toastr.success(`Imagen tipo "${tipoEncontrado.timNombre}" agregada`, 'Éxito');
+ 
   }
 
+
+puedeGuardar(): boolean {
+  const valido = (this.editForm?.valid ?? false) && 
+                 this.listaImagenes.length > 0 && 
+                 this.productoImagen.proId > 0;
+  
+  console.log('¿Puede guardar?', valido, {
+    formValido: this.editForm?.valid,
+    imagenes: this.listaImagenes.length,
+    productoId: this.productoImagen.proId
+  });
+  
+  return valido;
+}
   limpiarFormularioTemporal() {
     this.tipoImagenSeleccionado = null;
     this.archivoTemporal = null;
