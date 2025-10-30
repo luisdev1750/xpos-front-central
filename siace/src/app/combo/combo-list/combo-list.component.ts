@@ -7,7 +7,10 @@ import { ToastrService } from 'ngx-toastr';
 import { ComboEditComponent } from '../combo-edit/combo-edit.component';
 import { SucursalService } from '../../sucursal/sucursal.service';
 import { ComboFilter } from '../combo-filter';
-
+import { ViewChild } from '@angular/core';
+import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { Combo } from '../combo';
 @Component({
   selector: 'app-combo-list',
   standalone: false,
@@ -18,29 +21,61 @@ import { ComboFilter } from '../combo-filter';
   ],
 })
 export class ComboListComponent implements OnInit, OnDestroy {
-  displayedColumns = [ 'comboNombre', 'sucursalId', 'precioCombo', 'comboActivo', 'actions'];
-  
+  displayedColumns = [
+    'comboNombre',
+    'sucursalId',
+    'precioCombo',
+    'comboActivo',
+    'actions',
+  ];
+
   filter = new ComboFilter();
 
   private subs!: Subscription;
   listSucursales: any[] = [];
   listCombos: any[] = [];
-
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  dataSource = new MatTableDataSource<Combo>();
   constructor(
     private comboService: ComboService,
     private toastr: ToastrService,
     public dialog: MatDialog,
     private sucursalSerivice: SucursalService,
-    
+    private paginatorIntl: MatPaginatorIntl
   ) {
     this.subs = this.comboService.getIsUpdated().subscribe(() => {
       this.search();
     });
-
+    this.configurarPaginadorEspanol();
     this.filter.comboSucId = '0';
     this.filter.comboActivo = 'all';
   }
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+  }
+  private configurarPaginadorEspanol(): void {
+    this.paginatorIntl.itemsPerPageLabel = 'Elementos por página';
+    this.paginatorIntl.nextPageLabel = 'Siguiente página';
+    this.paginatorIntl.previousPageLabel = 'Página anterior';
+    this.paginatorIntl.firstPageLabel = 'Primera página';
+    this.paginatorIntl.lastPageLabel = 'Última página';
 
+    this.paginatorIntl.getRangeLabel = (
+      page: number,
+      pageSize: number,
+      length: number
+    ) => {
+      if (length === 0 || pageSize === 0) {
+        return `0 de ${length}`;
+      }
+      const startIndex = page * pageSize;
+      const endIndex =
+        startIndex < length
+          ? Math.min(startIndex + pageSize, length)
+          : startIndex + pageSize;
+      return `${startIndex + 1} – ${endIndex} de ${length}`;
+    };
+  }
   ngOnInit() {
     this.loadCatalogs();
   }
@@ -58,8 +93,6 @@ export class ComboListComponent implements OnInit, OnDestroy {
     this.search();
   }
 
-
-
   loadCatalogs() {
     // Cargar sucursales
     this.sucursalSerivice
@@ -69,7 +102,7 @@ export class ComboListComponent implements OnInit, OnDestroy {
         sucColId: '0',
         sucEmpId: '0',
         sucEstId: '0',
-        sucMunId: '0'
+        sucMunId: '0',
       })
       .subscribe(
         (res) => {
@@ -96,6 +129,8 @@ export class ComboListComponent implements OnInit, OnDestroy {
         (res) => {
           console.log('Combos cargados:', res);
           this.listCombos = res;
+          this.dataSource.data = res;
+          this.dataSource.paginator = this.paginator;
         },
         (error) => {
           console.log('Error al cargar combos:', error);
@@ -112,7 +147,7 @@ export class ComboListComponent implements OnInit, OnDestroy {
       sucursalId: 0,
       listaPrecioId: 0,
       precioCombo: 0,
-      productos: []
+      productos: [],
     };
 
     this.edit(newCombo);
@@ -135,7 +170,7 @@ export class ComboListComponent implements OnInit, OnDestroy {
         message: `¿Está seguro de eliminar el combo "${combo.comboNombre}"?`,
       },
     });
-    
+
     confirmDialog.afterClosed().subscribe((result) => {
       if (result === true) {
         this.comboService.delete(combo).subscribe({
@@ -160,7 +195,7 @@ export class ComboListComponent implements OnInit, OnDestroy {
   }
 
   getSucursalNombre(sucId: number): string {
-    const sucursal = this.listSucursales.find(s => s.sucId === sucId);
+    const sucursal = this.listSucursales.find((s) => s.sucId === sucId);
     return sucursal ? sucursal.sucNombre : 'N/A';
   }
 }

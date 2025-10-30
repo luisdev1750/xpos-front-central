@@ -8,6 +8,9 @@ import { ProveedorEditComponent } from '../proveedor-edit/proveedor-edit.compone
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../common/confirm-dialog/confirm-dialog.component';
 import { ToastrService } from 'ngx-toastr';
+import { ViewChild } from '@angular/core';
+import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-proveedor',
@@ -17,7 +20,6 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class ProveedorListComponent implements OnInit {
   displayedColumns = [
-    
     'pveNombre',
     'pveActivo',
     'pveCalle',
@@ -39,26 +41,54 @@ export class ProveedorListComponent implements OnInit {
   municipiosList: any = [];
   ciudadesList: any = [];
   private subs!: Subscription;
-
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  dataSource = new MatTableDataSource<Proveedor>();
   /* Inicialización */
 
   constructor(
     private proveedorService: ProveedorService,
     private toastr: ToastrService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private paginatorIntl: MatPaginatorIntl
   ) {
     this.subs = this.proveedorService.getIsUpdated().subscribe(() => {
       this.search();
     });
-
+    this.configurarPaginadorEspanol();
     this.filter.pveId = '0';
     this.filter.pveActivo = 'all';
     this.filter.pveCiuId = '0';
     this.filter.pveColId = '0';
     this.filter.pveEstId = '0';
-    this.filter.pveMunId = '0'; 
+    this.filter.pveMunId = '0';
   }
 
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+  }
+  private configurarPaginadorEspanol(): void {
+    this.paginatorIntl.itemsPerPageLabel = 'Elementos por página';
+    this.paginatorIntl.nextPageLabel = 'Siguiente página';
+    this.paginatorIntl.previousPageLabel = 'Página anterior';
+    this.paginatorIntl.firstPageLabel = 'Primera página';
+    this.paginatorIntl.lastPageLabel = 'Última página';
+
+    this.paginatorIntl.getRangeLabel = (
+      page: number,
+      pageSize: number,
+      length: number
+    ) => {
+      if (length === 0 || pageSize === 0) {
+        return `0 de ${length}`;
+      }
+      const startIndex = page * pageSize;
+      const endIndex =
+        startIndex < length
+          ? Math.min(startIndex + pageSize, length)
+          : startIndex + pageSize;
+      return `${startIndex + 1} – ${endIndex} de ${length}`;
+    };
+  }
   ngOnInit() {
     this.search();
     this.loadCatalogs();
@@ -79,14 +109,14 @@ export class ProveedorListComponent implements OnInit {
     this.filter.pveColId = '0';
 
     this.getMunicipios(Number(this.filter.pveEstId));
-     this.search();
+    this.search();
   }
   onMunicipioChange(event: any) {
     this.filter.pveMunId = event.value;
     this.filter.pveCiuId = '0';
     this.filter.pveColId = '0';
     this.getCiudades(Number(this.filter.pveMunId));
-     this.search();
+    this.search();
   }
   onCiudadChange(event: any) {
     this.filter.pveCiuId = event.value;
@@ -222,6 +252,15 @@ export class ProveedorListComponent implements OnInit {
   }
 
   search(): void {
-    this.proveedorService.load(this.filter);
+    // this.proveedorService.load(this.filter);
+    this.proveedorService.find(this.filter).subscribe(
+      (data) => {
+        this.dataSource.data = data;
+        this.dataSource.paginator = this.paginator;
+      },
+      (err) => {
+        console.error('Error al cargar datos', err);
+      }
+    );
   }
 }

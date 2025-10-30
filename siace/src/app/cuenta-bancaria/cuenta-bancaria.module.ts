@@ -19,6 +19,7 @@ import { SucursalService } from '../sucursal/sucursal.service';
 import { BancoService } from '../banco/banco.service';
 import { MatSelect } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatPaginator } from '@angular/material/paginator';
 @NgModule({
   imports: [
     CommonModule,
@@ -36,6 +37,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatSelect,
     MatOption,
      MatTooltipModule,
+     MatPaginator
   ],
   declarations: [
     CuentaBancariaListComponent,

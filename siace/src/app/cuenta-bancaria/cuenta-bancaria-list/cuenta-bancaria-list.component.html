@@ -1,4 +1,3 @@
-
 <div class="proin-main">
   <mat-card class="proin-card">
     <h2>Catálogo de Cuentas Bancarias</h2>
@@ -41,8 +40,8 @@
         <mat-icon>add</mat-icon>
       </button>
     </form>
-    <div *ngIf="cuentaBancariaList.length > 0">
-      <table mat-table #table [dataSource]="cuentaBancariaList">
+    <div *ngIf="dataSource.data.length > 0">
+      <table mat-table #table [dataSource]="dataSource">
         <ng-container matColumnDef="cubSucId">
           <mat-header-cell *matHeaderCellDef> Sucursal </mat-header-cell>
           <mat-cell *matCellDef="let item"> {{ item.cubSucName }} </mat-cell>
@@ -55,7 +54,10 @@
 
         <ng-container matColumnDef="cubCuentaBancaria">
           <mat-header-cell *matHeaderCellDef> Cuenta bancaria </mat-header-cell>
-          <mat-cell style = "justify-content: right !important;" *matCellDef="let item">
+          <mat-cell
+            style="justify-content: right !important"
+            *matCellDef="let item"
+          >
             {{ item.cubCuentaBancaria }}
           </mat-cell>
         </ng-container>
@@ -81,16 +83,14 @@
         </ng-container>
 
         <ng-container matColumnDef="actions">
-          <mat-header-cell *matHeaderCellDef>
-            Acciones
-          </mat-header-cell>
+          <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
           <mat-cell *matCellDef="let item">
             <button
               (click)="edit(item)"
               mat-button
               color="warn"
               class="button-edit"
-                matTooltip="Editar"
+              matTooltip="Editar"
               matTooltipPosition="above"
             >
               <mat-icon>edit</mat-icon></button
@@ -102,13 +102,21 @@
       </table>
     </div>
     <div
-      *ngIf="cuentaBancariaList.length === 0"
+      *ngIf="dataSource.data.length === 0"
       style="text-align: center; padding: 40px; color: #999"
     >
       <mat-icon style="font-size: 64px; width: 64px; height: 64px">
         image_search
       </mat-icon>
       <p>No se encontraron registros de cuentas bancarias</p>
+    </div>
+    <div class="contenedor-paginator">
+      <mat-paginator
+        class="paginator"
+        [pageSizeOptions]="[10, 20, 50, 100]"
+        showFirstLastButtons
+      >
+      </mat-paginator>
     </div>
   </mat-card>
 </div>

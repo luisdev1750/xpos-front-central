@@ -19,6 +19,7 @@ import { PerfilService } from '../perfil/perfil.service';
 import { SucursalService } from '../sucursal/sucursal.service';
 import { MatSelect, MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatPaginator } from '@angular/material/paginator';
 @NgModule({
   imports: [
     CommonModule,
@@ -37,6 +38,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatSelectModule,
     MatOptionModule,
     MatTooltipModule,
+    MatPaginator
   ],
   declarations: [UsuarioListComponent, UsuarioEditComponent],
   providers: [UsuarioService, PerfilService, SucursalService],

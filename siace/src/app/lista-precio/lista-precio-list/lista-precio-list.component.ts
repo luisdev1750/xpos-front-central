@@ -8,19 +8,17 @@ import { ListaPrecioEditComponent } from '../lista-precio-edit/lista-precio-edit
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../common/confirm-dialog/confirm-dialog.component';
 import { ToastrService } from 'ngx-toastr';
-
+import { ViewChild } from '@angular/core';
+import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 @Component({
   selector: 'app-lista-precio',
   standalone: false,
   templateUrl: 'lista-precio-list.component.html',
-  styles: [
-    'table { }',
-    '.mat-column-actions {flex: 0 0 10%;}',
-  ],
+  styles: ['table { }', '.mat-column-actions {flex: 0 0 10%;}'],
 })
 export class ListaPrecioListComponent implements OnInit {
   displayedColumns = [
-
     'lprNombre',
     'lprActivo',
     'lprFechaVigencia',
@@ -28,7 +26,8 @@ export class ListaPrecioListComponent implements OnInit {
     'actions',
   ];
   filter = new ListaPrecioFilter();
-
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  dataSource = new MatTableDataSource<ListaPrecio>();
   private subs!: Subscription;
 
   /* Inicialización */
@@ -36,7 +35,8 @@ export class ListaPrecioListComponent implements OnInit {
   constructor(
     private listaPrecioService: ListaPrecioService,
     private toastr: ToastrService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private paginatorIntl: MatPaginatorIntl
   ) {
     this.subs = this.listaPrecioService.getIsUpdated().subscribe(() => {
       this.search();
@@ -46,6 +46,33 @@ export class ListaPrecioListComponent implements OnInit {
     this.filter.lprActivo = 'all';
     this.filter.lprFechaVigencia = 'all';
     this.filter.lprFechaAlta = 'all';
+    this.configurarPaginadorEspanol();
+  }
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+  }
+  private configurarPaginadorEspanol(): void {
+    this.paginatorIntl.itemsPerPageLabel = 'Elementos por página';
+    this.paginatorIntl.nextPageLabel = 'Siguiente página';
+    this.paginatorIntl.previousPageLabel = 'Página anterior';
+    this.paginatorIntl.firstPageLabel = 'Primera página';
+    this.paginatorIntl.lastPageLabel = 'Última página';
+
+    this.paginatorIntl.getRangeLabel = (
+      page: number,
+      pageSize: number,
+      length: number
+    ) => {
+      if (length === 0 || pageSize === 0) {
+        return `0 de ${length}`;
+      }
+      const startIndex = page * pageSize;
+      const endIndex =
+        startIndex < length
+          ? Math.min(startIndex + pageSize, length)
+          : startIndex + pageSize;
+      return `${startIndex + 1} – ${endIndex} de ${length}`;
+    };
   }
 
   ngOnInit() {
@@ -58,10 +85,9 @@ export class ListaPrecioListComponent implements OnInit {
   ngOnDestroy(): void {
     this.subs?.unsubscribe();
   }
-    onActivoChange(): void {
-      this.search();
-   }
-
+  onActivoChange(): void {
+    this.search();
+  }
 
   /* Accesors */
 
@@ -101,7 +127,11 @@ export class ListaPrecioListComponent implements OnInit {
       if (result === true) {
         this.listaPrecioService.delete(listaPrecio).subscribe({
           next: (result) => {
-            if (result?.lprId !== undefined && result?.lprId !== null && Number(result.lprId) >= 0) {
+            if (
+              result?.lprId !== undefined &&
+              result?.lprId !== null &&
+              Number(result.lprId) >= 0
+            ) {
               this.toastr.success(
                 'El lista precios ha sido eliminado exitosamente',
                 'Transacción exitosa'
@@ -128,6 +158,16 @@ export class ListaPrecioListComponent implements OnInit {
   }
 
   search(): void {
-    this.listaPrecioService.load(this.filter);
+    // this.listaPrecioService.load(this.filter);
+
+    this.listaPrecioService.find(this.filter).subscribe(
+      (data) => {
+        this.dataSource.data = data;
+        this.dataSource.paginator = this.paginator;
+      },
+      (err) => {
+        console.error('Error al cargar datos', err);
+      }
+    );
   }
 }

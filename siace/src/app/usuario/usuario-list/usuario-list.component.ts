@@ -12,20 +12,19 @@ import { PerfilService } from '../../perfil/perfil.service';
 import { SucursalService } from '../../sucursal/sucursal.service';
 import { Perfil } from '../../perfil/perfil';
 import { Sucursal } from '../../sucursal/sucursal';
+import { ViewChild } from '@angular/core';
+import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 // En usuario-list.component.ts (no debería ser necesario, pero por si acaso)
 import { MatSelectModule } from '@angular/material/select';
 @Component({
   selector: 'app-usuario',
   standalone: false,
   templateUrl: 'usuario-list.component.html',
-  styles: [
-    'table { }',
-    '.mat-column-actions {flex: 0 0 10%;}',
-  ],
+  styles: ['table { }', '.mat-column-actions {flex: 0 0 10%;}'],
 })
 export class UsuarioListComponent implements OnInit {
   displayedColumns = [
-
     'usuNombre',
     'usuUser',
 
@@ -37,6 +36,9 @@ export class UsuarioListComponent implements OnInit {
     'usuFecha_Modificacion',
     'actions',
   ];
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  dataSource = new MatTableDataSource<Usuario>();
   filter = new UsuarioFilter();
 
   private subs!: Subscription;
@@ -49,31 +51,56 @@ export class UsuarioListComponent implements OnInit {
     private toastr: ToastrService,
     public dialog: MatDialog,
     private perfilService: PerfilService,
-    private sucursalService: SucursalService
+    private sucursalService: SucursalService,
+    private paginatorIntl: MatPaginatorIntl
   ) {
     this.subs = this.usuarioService.getIsUpdated().subscribe(() => {
       this.search();
     });
-
+    this.configurarPaginadorEspanol();
     this.filter.usuId = '0';
     this.filter.usuPerId = '0';
     this.filter.usuSucId = '0';
     this.filter.usuActivo = 'all';
   }
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+  }
+  private configurarPaginadorEspanol(): void {
+    this.paginatorIntl.itemsPerPageLabel = 'Elementos por página';
+    this.paginatorIntl.nextPageLabel = 'Siguiente página';
+    this.paginatorIntl.previousPageLabel = 'Página anterior';
+    this.paginatorIntl.firstPageLabel = 'Primera página';
+    this.paginatorIntl.lastPageLabel = 'Última página';
 
+    this.paginatorIntl.getRangeLabel = (
+      page: number,
+      pageSize: number,
+      length: number
+    ) => {
+      if (length === 0 || pageSize === 0) {
+        return `0 de ${length}`;
+      }
+      const startIndex = page * pageSize;
+      const endIndex =
+        startIndex < length
+          ? Math.min(startIndex + pageSize, length)
+          : startIndex + pageSize;
+      return `${startIndex + 1} – ${endIndex} de ${length}`;
+    };
+  }
   ngOnInit() {
     this.loadCatalogos();
     this.search();
   }
 
-
   // En tu componente
-ajustarFechaUTC(fechaString: string): string {
-  if (!fechaString) return '';
-  // Quitar la Z y tratarla como hora local
-  const fechaSinZ = fechaString.replace('Z', '');
-  return fechaSinZ;
-}
+  ajustarFechaUTC(fechaString: string): string {
+    if (!fechaString) return '';
+    // Quitar la Z y tratarla como hora local
+    const fechaSinZ = fechaString.replace('Z', '');
+    return fechaSinZ;
+  }
   ngOnDestroy(): void {
     this.subs?.unsubscribe();
   }
@@ -152,7 +179,7 @@ ajustarFechaUTC(fechaString: string): string {
       data: {
         usuario: JSON.parse(JSON.stringify(ele)),
         sucursalListsFilter: this.sucursalListsFilter,
-         perfilListsFilter: this.perfilListsFilter,
+        perfilListsFilter: this.perfilListsFilter,
       },
 
       height: '500px',
@@ -163,6 +190,15 @@ ajustarFechaUTC(fechaString: string): string {
   }
 
   search(): void {
-    this.usuarioService.load(this.filter);
+    // this.usuarioService.load(this.filter);
+    this.usuarioService.find(this.filter).subscribe(
+      (data) => {
+        this.dataSource.data = data;
+        this.dataSource.paginator = this.paginator;
+      },
+      (err) => {
+        console.error('Error al cargar datos', err);
+      }
+    );
   }
 }

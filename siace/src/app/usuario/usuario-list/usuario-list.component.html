@@ -1,4 +1,3 @@
-
 <div class="proin-main">
   <mat-card class="proin-card">
     <h2>Catálogo de Usuarios</h2>
@@ -52,32 +51,36 @@
         <mat-icon>add</mat-icon>
       </button>
     </form>
-    <div *ngIf="usuarioList.length > 0">
-      <table mat-table #table [dataSource]="usuarioList">
+    <div *ngIf="dataSource.data.length > 0">
+      <table mat-table #table [dataSource]="dataSource">
         <ng-container matColumnDef="usuNombre">
           <mat-header-cell *matHeaderCellDef> Nombre Completo </mat-header-cell>
-          <mat-cell class="cell-angular" *matCellDef="let item"> {{ item.usuNombre }} </mat-cell>
+          <mat-cell class="cell-angular" *matCellDef="let item">
+            {{ item.usuNombre }}
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="usuUser">
           <mat-header-cell *matHeaderCellDef> Usuario </mat-header-cell>
-          <mat-cell  class="cell-angular" *matCellDef="let item"> {{ item.usuUser }} </mat-cell>
+          <mat-cell class="cell-angular" *matCellDef="let item">
+            {{ item.usuUser }}
+          </mat-cell>
         </ng-container>
-
-        
 
         <ng-container matColumnDef="usuCorreoElectronico">
           <mat-header-cell *matHeaderCellDef>
             Correo Electrónico
           </mat-header-cell>
-          <mat-cell  class="cell-angular" *matCellDef="let item">
+          <mat-cell class="cell-angular" *matCellDef="let item">
             {{ item.usuCorreoElectronico }}
           </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="usuPerId">
           <mat-header-cell *matHeaderCellDef> Perfil </mat-header-cell>
-          <mat-cell  class="cell-angular" *matCellDef="let item"> {{ item.perfilNombre }} </mat-cell>
+          <mat-cell class="cell-angular" *matCellDef="let item">
+            {{ item.perfilNombre }}
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="usuSucId">
@@ -99,8 +102,11 @@
 
         <ng-container matColumnDef="usuFechaAlta">
           <mat-header-cell *matHeaderCellDef> Fecha Alta </mat-header-cell>
-          <mat-cell style = "justify-content: center !important;" *matCellDef="let item">
-         {{ item.usuFechaAlta | date : "dd/MM/yyyy HH:mm" }}
+          <mat-cell
+            style="justify-content: center !important"
+            *matCellDef="let item"
+          >
+            {{ item.usuFechaAlta | date : "dd/MM/yyyy HH:mm" }}
           </mat-cell>
         </ng-container>
 
@@ -109,8 +115,7 @@
             Fecha Modificación
           </mat-header-cell>
           <mat-cell *matCellDef="let item">
-            
-             {{ item.usuFechaModificacion| date : "dd/MM/yyyy HH:mm" }}
+            {{ item.usuFechaModificacion | date : "dd/MM/yyyy HH:mm" }}
           </mat-cell>
         </ng-container>
 
@@ -122,7 +127,7 @@
               mat-button
               color="warn"
               class="button-edit"
-               matTooltip="Editar"
+              matTooltip="Editar"
               matTooltipPosition="above"
             >
               <mat-icon>edit</mat-icon></button
@@ -134,13 +139,21 @@
       </table>
     </div>
     <div
-      *ngIf="usuarioList.length === 0"
+      *ngIf="dataSource.data.length === 0"
       style="text-align: center; padding: 40px; color: #999"
     >
       <mat-icon style="font-size: 64px; width: 64px; height: 64px">
         image_search
       </mat-icon>
       <p>No se encontraron registros de usuarios</p>
+    </div>
+    <div class="contenedor-paginator">
+      <mat-paginator
+        class="paginator"
+        [pageSizeOptions]="[10, 20, 50, 100]"
+        showFirstLastButtons
+      >
+      </mat-paginator>
     </div>
   </mat-card>
 </div>

@@ -21,6 +21,7 @@ import { MatSelect } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   imports: [
@@ -41,7 +42,8 @@ import { MatChipsModule } from '@angular/material/chips';
     MatAutocompleteModule,
      ReactiveFormsModule,
      MatTooltipModule,
-     MatChipsModule
+     MatChipsModule,
+     MatPaginatorModule
      
   ],
   declarations: [

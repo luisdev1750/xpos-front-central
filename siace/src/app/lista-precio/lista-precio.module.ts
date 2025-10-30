@@ -17,6 +17,7 @@ import { ListaPrecioService } from './lista-precio.service';
 import { ListaPrecioRoutingModule } from './lista-precio.routing.module';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatPaginator } from '@angular/material/paginator';
 
 @NgModule({
   imports: [
@@ -32,14 +33,13 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatDialogModule,
     MatCardModule,
     ListaPrecioRoutingModule,
-      MatSelectModule,
-        MatOptionModule,
-        MatTooltipModule  ],
-  declarations: [
-    ListaPrecioListComponent,
-    ListaPrecioEditComponent
+    MatSelectModule,
+    MatOptionModule,
+    MatTooltipModule,
+    MatPaginator,
   ],
+  declarations: [ListaPrecioListComponent, ListaPrecioEditComponent],
   providers: [ListaPrecioService],
   exports: [],
 })
-export class ListaPrecioModule { }
+export class ListaPrecioModule {}

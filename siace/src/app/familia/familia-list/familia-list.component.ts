@@ -10,7 +10,9 @@ import { ConfirmDialogComponent } from '../../common/confirm-dialog/confirm-dial
 import { ToastrService } from 'ngx-toastr';
 import { SubmarcaService } from '../../submarca/submarca.service';
 import { Submarca } from '../../submarca/submarca';
-
+import { ViewChild } from '@angular/core';
+import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 @Component({
   selector: 'app-familia',
   standalone: false,
@@ -28,7 +30,8 @@ export class FamiliaListComponent implements OnInit {
     'actions',
   ];
   filter = new FamiliaFilter();
-
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  dataSource = new MatTableDataSource<Familia>(); // Cambia TuModelo por tu interface/clase
   private subs!: Subscription;
   submarcasLists: Submarca[] = [];
   familiasListFilter: Familia[] = [];
@@ -41,17 +44,43 @@ export class FamiliaListComponent implements OnInit {
     private familiaService: FamiliaService,
     private toastr: ToastrService,
     public dialog: MatDialog,
-    private submarca: SubmarcaService
+    private submarca: SubmarcaService,
+    private paginatorIntl: MatPaginatorIntl
   ) {
     this.subs = this.familiaService.getIsUpdated().subscribe(() => {
       this.search();
     });
-
+    this.configurarPaginadorEspanol();
     this.filter.famId = '0';
     this.filter.famSmaId = '0';
     this.filter.famIdParent = '0';
   }
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+  }
+  private configurarPaginadorEspanol(): void {
+    this.paginatorIntl.itemsPerPageLabel = 'Elementos por página';
+    this.paginatorIntl.nextPageLabel = 'Siguiente página';
+    this.paginatorIntl.previousPageLabel = 'Página anterior';
+    this.paginatorIntl.firstPageLabel = 'Primera página';
+    this.paginatorIntl.lastPageLabel = 'Última página';
 
+    this.paginatorIntl.getRangeLabel = (
+      page: number,
+      pageSize: number,
+      length: number
+    ) => {
+      if (length === 0 || pageSize === 0) {
+        return `0 de ${length}`;
+      }
+      const startIndex = page * pageSize;
+      const endIndex =
+        startIndex < length
+          ? Math.min(startIndex + pageSize, length)
+          : startIndex + pageSize;
+      return `${startIndex + 1} – ${endIndex} de ${length}`;
+    };
+  }
   ngOnInit() {
     this.search();
     this.loadCatalogos();
@@ -167,6 +196,15 @@ export class FamiliaListComponent implements OnInit {
   }
 
   search(): void {
-    this.familiaService.load(this.filter);
+    // this.familiaService.load(this.filter);
+    this.familiaService.find(this.filter).subscribe(
+      (data) => {
+        this.dataSource.data = data;
+        this.dataSource.paginator = this.paginator;
+      },
+      (err) => {
+        console.error('Error al cargar datos', err);
+      }
+    );
   }
 }

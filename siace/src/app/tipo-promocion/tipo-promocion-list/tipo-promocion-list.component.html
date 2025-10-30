@@ -26,8 +26,8 @@
         <mat-icon>add</mat-icon>
       </button>
     </form>
-    <div *ngIf="tipoPromocionList.length > 0">
-      <table mat-table #table [dataSource]="tipoPromocionList">
+    <div *ngIf="dataSource.data.length > 0">
+      <table mat-table #table [dataSource]="dataSource">
         <ng-container matColumnDef="tprNombre">
           <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
           <mat-cell class = "cell-angular"  *matCellDef="let item"> {{ item.tprNombre }} </mat-cell>
@@ -73,7 +73,7 @@
     </div>
 
         <div
-      *ngIf="tipoPromocionList.length === 0"
+      *ngIf="dataSource.data.length === 0"
       style="text-align: center; padding: 40px; color: #999"
     >
       <mat-icon style="font-size: 64px; width: 64px; height: 64px">
@@ -81,5 +81,13 @@
       </mat-icon>
       <p>No se encontraron registros de tipos de promociones</p>
     </div>
+    <div class="contenedor-paginator">
+  <mat-paginator
+    class="paginator"
+    [pageSizeOptions]="[10, 20, 50, 100]"
+    showFirstLastButtons
+  >
+  </mat-paginator>
+</div>
   </mat-card>
 </div>

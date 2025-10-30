@@ -1,17 +1,11 @@
-
-
 <div class="proin-main">
   <mat-card class="proin-card">
     <h2>Catálogo de Submarcas</h2>
     <form #f="ngForm">
-    
-
       <mat-form-field>
         <mat-label>Marca</mat-label>
-        <mat-select
-        (selectionChange)="OnMarcaChange($event)"
-        >
-         <mat-option value="0">Todas las marcas</mat-option>
+        <mat-select (selectionChange)="OnMarcaChange($event)">
+          <mat-option value="0">Todas las marcas</mat-option>
           <mat-option
             *ngFor="let marca of marcaListsFilter"
             [value]="marca.marId"
@@ -21,25 +15,18 @@
         </mat-select>
       </mat-form-field>
 
-    
-   
-
       <mat-form-field>
         <mat-label>Activo</mat-label>
         <mat-select
           [(ngModel)]="filter.smaActivo"
           id="banActivo"
-          name="banActivo"    
-         (ngModelChange)="onActivoModelChange($event)"
-         
-
+          name="banActivo"
+          (ngModelChange)="onActivoModelChange($event)"
         >
-        <mat-option [value]="all">Todos</mat-option>
+          <mat-option [value]="all">Todos</mat-option>
           <mat-option [value]="true">Sí</mat-option>
           <mat-option [value]="false">No</mat-option>
         </mat-select>
-        
-        
       </mat-form-field>
 
       <button
@@ -51,10 +38,8 @@
         <mat-icon>add</mat-icon>
       </button>
     </form>
-    <div *ngIf="submarcaList.length > 0">
-      <table mat-table #table [dataSource]="submarcaList">
-     
-
+    <div *ngIf="dataSource.data.length > 0">
+      <table mat-table #table [dataSource]="dataSource">
         <ng-container matColumnDef="smaMarId">
           <mat-header-cell *matHeaderCellDef> Marca </mat-header-cell>
           <mat-cell *matCellDef="let item"> {{ item.smaMarNombre }} </mat-cell>
@@ -65,18 +50,16 @@
           <mat-cell *matCellDef="let item"> {{ item.smaNombre }} </mat-cell>
         </ng-container>
 
-         <ng-container matColumnDef="smaActivo">
-          <mat-header-cell *matHeaderCellDef>
-            Activo
-          </mat-header-cell>
-          <mat-cell *matCellDef="let item" style="justify-content: center;">
+        <ng-container matColumnDef="smaActivo">
+          <mat-header-cell *matHeaderCellDef> Activo </mat-header-cell>
+          <mat-cell *matCellDef="let item" style="justify-content: center">
             <mat-icon *ngIf="item.smaActivo" color="primary"
               >check_circle</mat-icon
             >
             <mat-icon *ngIf="!item.smaActivo" color="warn">cancel</mat-icon>
           </mat-cell>
         </ng-container>
-        
+
         <ng-container matColumnDef="actions">
           <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
           <mat-cell *matCellDef="let item">
@@ -84,7 +67,7 @@
               (click)="edit(item)"
               mat-button
               color="warn"
-               matTooltip="Editar"
+              matTooltip="Editar"
               matTooltipPosition="above"
               class="button-edit"
             >
@@ -99,14 +82,22 @@
         <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
       </table>
     </div>
-      <div
-      *ngIf="submarcaList.length === 0"
+    <div
+      *ngIf="dataSource.data.length === 0"
       style="text-align: center; padding: 40px; color: #999"
     >
       <mat-icon style="font-size: 64px; width: 64px; height: 64px">
         image_search
       </mat-icon>
       <p>No se encontraron submarcas</p>
+    </div>
+    <div class="contenedor-paginator">
+      <mat-paginator
+        class="paginator"
+        [pageSizeOptions]="[10, 20, 50, 100]"
+        showFirstLastButtons
+      >
+      </mat-paginator>
     </div>
   </mat-card>
 </div>

@@ -16,7 +16,9 @@ import { ConfirmDialogComponent } from '../../common/confirm-dialog/confirm-dial
 import { ToastrService } from 'ngx-toastr';
 import { ProveedorService } from '../../proveedor/proveedor.service';
 import { ProductoService } from '../../producto/producto.service';
-
+import { ViewChild } from '@angular/core';
+import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 @Component({
   selector: 'app-producto-proveedor',
   standalone: false,
@@ -32,7 +34,8 @@ export class ProductoProveedorListComponent implements OnInit {
     'actions',
   ];
   filter = new ProductoProveedorFilter();
-
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  dataSource = new MatTableDataSource<ProductoProveedor>();
   private subs!: Subscription;
   listProvedores: any[] = [];
   listProductos: any[] = [];
@@ -50,17 +53,44 @@ export class ProductoProveedorListComponent implements OnInit {
     private toastr: ToastrService,
     public dialog: MatDialog,
     private proveedorService: ProveedorService,
-    private productoService: ProductoService
+    private productoService: ProductoService,
+    private paginatorIntl: MatPaginatorIntl
   ) {
     this.subs = this.productoProveedorService.getIsUpdated().subscribe(() => {
       this.search();
     });
-
+    this.configurarPaginadorEspanol();
     this.filter.prvProId = '0';
     this.filter.prvPveId = '0';
     this.filter.prvUnmId = '0';
   }
 
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+  }
+  private configurarPaginadorEspanol(): void {
+    this.paginatorIntl.itemsPerPageLabel = 'Elementos por página';
+    this.paginatorIntl.nextPageLabel = 'Siguiente página';
+    this.paginatorIntl.previousPageLabel = 'Página anterior';
+    this.paginatorIntl.firstPageLabel = 'Primera página';
+    this.paginatorIntl.lastPageLabel = 'Última página';
+
+    this.paginatorIntl.getRangeLabel = (
+      page: number,
+      pageSize: number,
+      length: number
+    ) => {
+      if (length === 0 || pageSize === 0) {
+        return `0 de ${length}`;
+      }
+      const startIndex = page * pageSize;
+      const endIndex =
+        startIndex < length
+          ? Math.min(startIndex + pageSize, length)
+          : startIndex + pageSize;
+      return `${startIndex + 1} – ${endIndex} de ${length}`;
+    };
+  }
   ngOnInit() {
     this.search();
     this.loadCatalogs();
@@ -92,7 +122,7 @@ export class ProductoProveedorListComponent implements OnInit {
       return value;
     }
     if (value && typeof value === 'object') {
-            if (value.pveNombre) {
+      if (value.pveNombre) {
         return value.pveNombre;
       }
 
@@ -116,8 +146,6 @@ export class ProductoProveedorListComponent implements OnInit {
     const filterValue = value.toLowerCase();
 
     const filtered = this.listProductos.filter((producto) => {
-     
-
       return (
         (producto.proNombre &&
           producto.proNombre.toLowerCase().includes(filterValue)) ||
@@ -142,7 +170,7 @@ export class ProductoProveedorListComponent implements OnInit {
   onProveedorSelected(proveedor: any) {
     if (proveedor) {
       this.filter.prvPveId = proveedor.pveId;
-     
+
       this.search();
     }
   }
@@ -150,7 +178,7 @@ export class ProductoProveedorListComponent implements OnInit {
   onProductoSelected(producto: any) {
     if (producto) {
       this.filter.prvProId = producto.proId;
-      
+
       this.search();
     }
   }
@@ -163,8 +191,8 @@ export class ProductoProveedorListComponent implements OnInit {
     this.filter.prvProId = event.value;
   }
   onUnidadMedidaChange(event: any) {
-   this.filter.prvUnmId = event.value; 
-   this.search(); 
+    this.filter.prvUnmId = event.value;
+    this.search();
   }
   loadCatalogs() {
     this.proveedorService
@@ -233,7 +261,11 @@ export class ProductoProveedorListComponent implements OnInit {
       if (result === true) {
         this.productoProveedorService.delete(productoProveedor).subscribe({
           next: (result) => {
-            if (result.prvProId != undefined && result.prvProId !== null && result.prvProId > 0) {
+            if (
+              result.prvProId != undefined &&
+              result.prvProId !== null &&
+              result.prvProId > 0
+            ) {
               this.toastr.success(
                 'El producto por proveedor ha sido eliminado exitosamente',
                 'Transacción exitosa'
@@ -250,27 +282,39 @@ export class ProductoProveedorListComponent implements OnInit {
   }
 
   edit(ele: ProductoProveedor, isEditing: boolean) {
-   if(!isEditing){
+    if (!isEditing) {
       this.dialog.open(ProductoProveedorEditComponent, {
-      data: { productoProveedor: JSON.parse(JSON.stringify(ele)), isEditing: false },
-      height: '500px',
-      width: '700px',
-      maxWidth: 'none',
-      disableClose: true,
-    });
-   }else{
+        data: {
+          productoProveedor: JSON.parse(JSON.stringify(ele)),
+          isEditing: false,
+        },
+        height: '500px',
+        width: '700px',
+        maxWidth: 'none',
+        disableClose: true,
+      });
+    } else {
       this.dialog.open(ProductoProveedorEditComponent, {
-      data: { productoProveedor: JSON.parse(JSON.stringify(ele)), isEditing: true},
-      height: '500px',
-      width: '700px',
-      maxWidth: 'none',
-      disableClose: true,
-    });
-   }
-    
+        data: {
+          productoProveedor: JSON.parse(JSON.stringify(ele)),
+          isEditing: true,
+        },
+        height: '500px',
+        width: '700px',
+        maxWidth: 'none',
+        disableClose: true,
+      });
+    }
   }
 
   search(): void {
-    this.productoProveedorService.load(this.filter);
+    // this.productoProveedorService.load(this.filter);
+    this.productoProveedorService.find(this.filter).subscribe((data) => {
+      this.dataSource.data = data;
+      this.dataSource.paginator = this.paginator;
+    },
+    (err) => {
+      console.error('Error al cargar datos', err);
+    });
   }
 }

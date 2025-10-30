@@ -17,6 +17,7 @@ import { ProveedorService } from './proveedor.service';
 import { ProveedorRoutingModule } from './proveedor.routing.module';
 import { MatSelect } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatPaginator } from '@angular/material/paginator';
 @NgModule({
   imports: [
     CommonModule,
@@ -34,6 +35,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatSelect,
     MatOption,
     MatTooltipModule,
+    MatPaginator
   ],
   declarations: [ProveedorListComponent, ProveedorEditComponent],
   providers: [ProveedorService],

@@ -83,8 +83,8 @@
         <mat-icon>add</mat-icon>
       </button>
     </form>
-    <div *ngIf="proveedorList.length > 0">
-      <table mat-table #table [dataSource]="proveedorList">
+    <div *ngIf="dataSource.data.length > 0">
+      <table mat-table #table [dataSource]="dataSource">
         <ng-container matColumnDef="pveNombre">
           <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
           <mat-cell class="cell-angular" *matCellDef="let item">
@@ -185,7 +185,7 @@
       </table>
     </div>
       <div
-      *ngIf="proveedorList.length === 0"
+      *ngIf="dataSource.data.length === 0"
       style="text-align: center; padding: 40px; color: #999"
     >
       <mat-icon style="font-size: 64px; width: 64px; height: 64px">
@@ -193,5 +193,13 @@
       </mat-icon>
       <p>No se encontraron registros de proveedores</p>
     </div>
+    <div class="contenedor-paginator">
+  <mat-paginator
+    class="paginator"
+    [pageSizeOptions]="[10, 20, 50, 100]"
+    showFirstLastButtons
+  >
+  </mat-paginator>
+</div>
   </mat-card>
 </div>

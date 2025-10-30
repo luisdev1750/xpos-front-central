@@ -25,8 +25,8 @@
         <mat-icon>add</mat-icon>
       </button>
     </form>
-    <div *ngIf="bancoList.length > 0">
-      <table mat-table #table [dataSource]="bancoList">
+    <div *ngIf="dataSource.data.length > 0">
+      <table mat-table #table [dataSource]="dataSource">
         <ng-container matColumnDef="banNombre">
           <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
           <mat-cell class="cell-angular" *matCellDef="let item">
@@ -72,14 +72,22 @@
         <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
       </table>
     </div>
-        <div
-      *ngIf="bancoList.length === 0"
+    <div
+      *ngIf="dataSource.data.length === 0"
       style="text-align: center; padding: 40px; color: #999"
     >
       <mat-icon style="font-size: 64px; width: 64px; height: 64px">
         image_search
       </mat-icon>
       <p>No se encontraron registros de bancos</p>
+    </div>
+    <div class="contenedor-paginator">
+      <mat-paginator
+        class="paginator"
+        [pageSizeOptions]="[10, 20, 50, 100]"
+        showFirstLastButtons
+      >
+      </mat-paginator>
     </div>
   </mat-card>
 </div>

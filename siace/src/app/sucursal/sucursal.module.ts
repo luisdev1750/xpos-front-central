@@ -19,6 +19,7 @@ import { MatSelect } from '@angular/material/select';
 import { ProveedorService } from '../proveedor/proveedor.service';
 import { EmpresaService } from '../empresa/empresa.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatPaginator } from '@angular/material/paginator';
 
 @NgModule({
   imports: [
@@ -37,6 +38,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatSelect,
     MatOption,
     MatTooltipModule,
+    MatPaginator
   ],
   declarations: [SucursalListComponent, SucursalEditComponent],
   providers: [SucursalService, ProveedorService, EmpresaService],

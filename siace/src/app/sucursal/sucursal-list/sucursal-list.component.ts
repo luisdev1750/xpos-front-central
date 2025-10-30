@@ -10,7 +10,9 @@ import { ToastrService } from 'ngx-toastr';
 import { ProveedorService } from '../../proveedor/proveedor.service';
 import { EmpresaFilter } from '../../empresa/empresa-filter';
 import { EmpresaService } from '../../empresa/empresa.service';
-
+import { ViewChild } from '@angular/core';
+import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 @Component({
   selector: 'app-sucursal',
   standalone: false,
@@ -27,7 +29,8 @@ export class SucursalListComponent implements OnInit, OnDestroy {
     'sucEmpNombre',
     'actions',
   ];
-
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  dataSource = new MatTableDataSource<Sucursal>();
   filter = new SucursalFilter();
   empresasList: any = [];
   estadosList: any = [];
@@ -42,12 +45,13 @@ export class SucursalListComponent implements OnInit, OnDestroy {
     private toastr: ToastrService,
     public dialog: MatDialog,
     private proveedorService: ProveedorService,
-    private empresasService: EmpresaService
+    private empresasService: EmpresaService,
+    private paginatorIntl: MatPaginatorIntl
   ) {
     this.subs = this.sucursalService.getIsUpdated().subscribe(() => {
       this.search();
     });
-
+    this.configurarPaginadorEspanol();
     // Inicializar filtros
     this.filter.sucId = '0';
     this.filter.sucEmpId = '0';
@@ -56,7 +60,32 @@ export class SucursalListComponent implements OnInit, OnDestroy {
     this.filter.sucCiuId = '0';
     this.filter.sucColId = '0';
   }
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+  }
+  private configurarPaginadorEspanol(): void {
+    this.paginatorIntl.itemsPerPageLabel = 'Elementos por página';
+    this.paginatorIntl.nextPageLabel = 'Siguiente página';
+    this.paginatorIntl.previousPageLabel = 'Página anterior';
+    this.paginatorIntl.firstPageLabel = 'Primera página';
+    this.paginatorIntl.lastPageLabel = 'Última página';
 
+    this.paginatorIntl.getRangeLabel = (
+      page: number,
+      pageSize: number,
+      length: number
+    ) => {
+      if (length === 0 || pageSize === 0) {
+        return `0 de ${length}`;
+      }
+      const startIndex = page * pageSize;
+      const endIndex =
+        startIndex < length
+          ? Math.min(startIndex + pageSize, length)
+          : startIndex + pageSize;
+      return `${startIndex + 1} – ${endIndex} de ${length}`;
+    };
+  }
   ngOnInit() {
     this.loadCatalogs();
     this.search();
@@ -83,7 +112,7 @@ export class SucursalListComponent implements OnInit, OnDestroy {
     this.empresasService.findAll().subscribe(
       (res) => {
         console.log(res);
-        this.empresasList = res; 
+        this.empresasList = res;
       },
       (error) => {
         console.log(error);
@@ -235,6 +264,15 @@ export class SucursalListComponent implements OnInit, OnDestroy {
   }
 
   search(): void {
-    this.sucursalService.load(this.filter);
+    // this.sucursalService.load(this.filter);
+    this.sucursalService.find(this.filter).subscribe(
+      (data) => {
+        this.dataSource.data = data;
+        this.dataSource.paginator = this.paginator;
+      },
+      (err) => {
+        console.error('Error al cargar datos', err);
+      }
+    );
   }
 }

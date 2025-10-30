@@ -42,8 +42,8 @@
       </button>
     </form>
 
-    <div *ngIf="listCombos.length > 0">
-      <table mat-table [dataSource]="listCombos" class="mat-elevation-z2">
+    <div *ngIf="dataSource.data.length > 0">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z2">
         <!-- Columna Nombre -->
         <ng-container matColumnDef="comboNombre">
           <mat-header-cell *matHeaderCellDef>
@@ -119,7 +119,7 @@
     </div>
 
    <div
-      *ngIf="listCombos.length === 0"
+      *ngIf="dataSource.data.length === 0"
       style="text-align: center; padding: 40px; color: #999"
     >
       <mat-icon style="font-size: 64px; width: 64px; height: 64px">
@@ -127,5 +127,13 @@
       </mat-icon>
       <p>No se encontraron registros de combos</p>
     </div>
+    <div class="contenedor-paginator">
+  <mat-paginator
+    class="paginator"
+    [pageSizeOptions]="[10, 20, 50, 100]"
+    showFirstLastButtons
+  >
+  </mat-paginator>
+</div>
   </mat-card>
 </div>

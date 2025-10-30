@@ -39,8 +39,8 @@
       </button>
     </form>
 
-    <div *ngIf="familiaList.length > 0">
-      <table mat-table #table [dataSource]="familiaList">
+    <div *ngIf="dataSource.data.length > 0">
+      <table mat-table #table [dataSource]="dataSource">
         <ng-container matColumnDef="famSmaId">
           <mat-header-cell *matHeaderCellDef> Submarca </mat-header-cell>
           <mat-cell class="cell-angular" *matCellDef="let item">
@@ -102,14 +102,22 @@
       </table>
     </div>
 
-      <div
-      *ngIf="familiaList.length === 0"
+    <div
+      *ngIf="dataSource.data.length === 0"
       style="text-align: center; padding: 40px; color: #999"
     >
       <mat-icon style="font-size: 64px; width: 64px; height: 64px">
         image_search
       </mat-icon>
       <p>No se encontraron registros de familias</p>
+    </div>
+    <div class="contenedor-paginator">
+      <mat-paginator
+        class="paginator"
+        [pageSizeOptions]="[10, 20, 50, 100]"
+        showFirstLastButtons
+      >
+      </mat-paginator>
     </div>
   </mat-card>
 </div>

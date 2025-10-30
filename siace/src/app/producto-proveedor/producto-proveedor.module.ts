@@ -23,6 +23,7 @@ import {
 } from '@angular/material/autocomplete';
 import { ProductoService } from '../producto/producto.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatPaginator } from '@angular/material/paginator';
 
 @NgModule({
   imports: [
@@ -44,6 +45,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     ReactiveFormsModule,
     MatAutocompleteModule,
     MatTooltipModule,
+    MatPaginator
   ],
   declarations: [
     ProductoProveedorListComponent,

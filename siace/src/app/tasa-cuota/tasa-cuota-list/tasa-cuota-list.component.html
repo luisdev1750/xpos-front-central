@@ -51,8 +51,8 @@
         <mat-icon>add</mat-icon>
       </button>
     </form>
-    <div *ngIf="tasaCuotaList.length > 0">
-      <table mat-table #table [dataSource]="tasaCuotaList">
+    <div *ngIf="dataSource.data.length > 0">
+      <table mat-table #table [dataSource]="dataSource">
         <ng-container matColumnDef="tocTasaocuota">
           <mat-header-cell *matHeaderCellDef> Tasa o Cuota </mat-header-cell>
           <mat-cell *matCellDef="let item"> {{ item.tocTasaocuota }} </mat-cell>
@@ -123,7 +123,7 @@
     </div>
 
     <div
-      *ngIf="tasaCuotaList.length === 0"
+      *ngIf="dataSource.data.length === 0"
       style="text-align: center; padding: 40px; color: #999"
     >
       <mat-icon style="font-size: 64px; width: 64px; height: 64px">
@@ -131,5 +131,13 @@
       </mat-icon>
       <p>No se encontraron registros de tasas o coutas</p>
     </div>
+    <div class="contenedor-paginator">
+  <mat-paginator
+    class="paginator"
+    [pageSizeOptions]="[10, 20, 50, 100]"
+    showFirstLastButtons
+  >
+  </mat-paginator>
+</div>
   </mat-card>
 </div>

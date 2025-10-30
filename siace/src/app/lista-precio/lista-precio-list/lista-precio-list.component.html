@@ -2,57 +2,54 @@
   <mat-card class="proin-card">
     <h2>Catálogo de Lista Precios</h2>
     <form #f="ngForm">
-  <mat-form-field>
-    <mat-label>Activo:</mat-label>
-    <mat-select
-      [(ngModel)]="filter.lprActivo"
-      id="marActivo"
-      name="marActivo"
-      (selectionChange)="onActivoChange()"
-    >
-      <mat-option value="all">Todos</mat-option>
-      <mat-option value="true">Sí</mat-option>
-      <mat-option value="false">No</mat-option>
-    </mat-select>
-  </mat-form-field>
+      <mat-form-field>
+        <mat-label>Activo:</mat-label>
+        <mat-select
+          [(ngModel)]="filter.lprActivo"
+          id="marActivo"
+          name="marActivo"
+          (selectionChange)="onActivoChange()"
+        >
+          <mat-option value="all">Todos</mat-option>
+          <mat-option value="true">Sí</mat-option>
+          <mat-option value="false">No</mat-option>
+        </mat-select>
+      </mat-form-field>
 
-  <mat-form-field appearance="fill">
-    <mat-label for="fechaAlta">Fecha Alta</mat-label>
-    <input
-      matInput
-      [matDatepicker]="pickerAlta"
-      [(ngModel)]="filter.lprFechaAlta"
-      (dateChange)="onFechaAltaChange($event)"
-      id="fechaAlta"
-      name="fechaAlta"
-      placeholder="Selecciona fecha alta"
-    />
-    <mat-datepicker-toggle
-      matSuffix
-      [for]="pickerAlta"
-    ></mat-datepicker-toggle>
-    <mat-datepicker #pickerAlta></mat-datepicker>
-    
+      <mat-form-field appearance="fill">
+        <mat-label for="fechaAlta">Fecha Alta</mat-label>
+        <input
+          matInput
+          [matDatepicker]="pickerAlta"
+          [(ngModel)]="filter.lprFechaAlta"
+          (dateChange)="onFechaAltaChange($event)"
+          id="fechaAlta"
+          name="fechaAlta"
+          placeholder="Selecciona fecha alta"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="pickerAlta"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #pickerAlta></mat-datepicker>
+      </mat-form-field>
 
-  </mat-form-field>
+      <button mat-mini-fab color="accent" (click)="add()">
+        <mat-icon>add</mat-icon>
+      </button>
 
-  <button mat-mini-fab color="accent" (click)="add()">
-    <mat-icon>add</mat-icon>
-  </button>
-  
- 
-  <button 
-    mat-mini-fab 
-    color="warn" 
-    (click)="clearFilters()"
-    matTooltip="Limpiar filtros"
-    matTooltipPosition="above"
-  >
-    <mat-icon>filter_alt_off</mat-icon>
-  </button>
-</form>
-    <div *ngIf="listaPrecioList.length > 0">
-      <table mat-table #table [dataSource]="listaPrecioList">
+      <button
+        mat-mini-fab
+        color="warn"
+        (click)="clearFilters()"
+        matTooltip="Limpiar filtros"
+        matTooltipPosition="above"
+      >
+        <mat-icon>filter_alt_off</mat-icon>
+      </button>
+    </form>
+    <div *ngIf="dataSource.data.length > 0">
+      <table mat-table #table [dataSource]="dataSource">
         <ng-container matColumnDef="lprNombre">
           <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
           <mat-cell class="cell-angular" *matCellDef="let item">
@@ -113,14 +110,22 @@
       </table>
     </div>
 
-      <div
-      *ngIf="listaPrecioList.length === 0"
+    <div
+      *ngIf="dataSource.data.length === 0"
       style="text-align: center; padding: 40px; color: #999"
     >
       <mat-icon style="font-size: 64px; width: 64px; height: 64px">
         image_search
       </mat-icon>
       <p>No se encontraronregistros de listas de precio</p>
+    </div>
+    <div class="contenedor-paginator">
+      <mat-paginator
+        class="paginator"
+        [pageSizeOptions]="[10, 20, 50, 100]"
+        showFirstLastButtons
+      >
+      </mat-paginator>
     </div>
   </mat-card>
 </div>

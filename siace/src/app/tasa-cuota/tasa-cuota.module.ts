@@ -17,6 +17,7 @@ import { TasaCuotaService } from './tasa-cuota.service';
 import { TasaCuotaRoutingModule } from './tasa-cuota.routing.module';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatPaginator } from '@angular/material/paginator';
 @NgModule({
   imports: [
     CommonModule,
@@ -34,6 +35,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatSelectModule,
     MatOptionModule,
     MatTooltipModule,
+    MatPaginator
   ],
   declarations: [TasaCuotaListComponent, TasaCuotaEditComponent],
   providers: [TasaCuotaService],

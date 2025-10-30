@@ -8,6 +8,9 @@ import { TasaCuotaEditComponent } from '../tasa-cuota-edit/tasa-cuota-edit.compo
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../common/confirm-dialog/confirm-dialog.component';
 import { ToastrService } from 'ngx-toastr';
+import { ViewChild } from '@angular/core';
+import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-tasa-cuota',
@@ -16,8 +19,9 @@ import { ToastrService } from 'ngx-toastr';
   styles: ['table {}', '.mat-column-actions {flex: 0 0 10%;}'],
 })
 export class TasaCuotaListComponent implements OnInit {
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  dataSource = new MatTableDataSource<TasaCuota>();
   displayedColumns = [
-    
     'tocTasaocuota',
     'tocImpId',
     'tocTfaId',
@@ -36,18 +40,44 @@ export class TasaCuotaListComponent implements OnInit {
   constructor(
     private tasaCuotaService: TasaCuotaService,
     private toastr: ToastrService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private paginatorIntl: MatPaginatorIntl
   ) {
     this.subs = this.tasaCuotaService.getIsUpdated().subscribe(() => {
       this.search();
     });
-
+    this.configurarPaginadorEspanol();
     this.filter.tocId = '0';
     this.filter.tocImpId = '0';
     this.filter.tocTfaId = '0';
     this.filter.tocActivo = 'all';
   }
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+  }
+  private configurarPaginadorEspanol(): void {
+    this.paginatorIntl.itemsPerPageLabel = 'Elementos por página';
+    this.paginatorIntl.nextPageLabel = 'Siguiente página';
+    this.paginatorIntl.previousPageLabel = 'Página anterior';
+    this.paginatorIntl.firstPageLabel = 'Primera página';
+    this.paginatorIntl.lastPageLabel = 'Última página';
 
+    this.paginatorIntl.getRangeLabel = (
+      page: number,
+      pageSize: number,
+      length: number
+    ) => {
+      if (length === 0 || pageSize === 0) {
+        return `0 de ${length}`;
+      }
+      const startIndex = page * pageSize;
+      const endIndex =
+        startIndex < length
+          ? Math.min(startIndex + pageSize, length)
+          : startIndex + pageSize;
+      return `${startIndex + 1} – ${endIndex} de ${length}`;
+    };
+  }
   ngOnInit() {
     this.search();
     this.loadCatalogos();
@@ -131,9 +161,10 @@ export class TasaCuotaListComponent implements OnInit {
 
   edit(ele: TasaCuota) {
     this.dialog.open(TasaCuotaEditComponent, {
-      data: { tasaCuota: JSON.parse(JSON.stringify(ele)) ,
-         listImpuestosFilter: this.listImpuestosFilter,
-         listTiposFactoresFilter: this.listTiposFactoresFilter
+      data: {
+        tasaCuota: JSON.parse(JSON.stringify(ele)),
+        listImpuestosFilter: this.listImpuestosFilter,
+        listTiposFactoresFilter: this.listTiposFactoresFilter,
       },
       height: '500px',
       width: '700px',
@@ -143,6 +174,15 @@ export class TasaCuotaListComponent implements OnInit {
   }
 
   search(): void {
-    this.tasaCuotaService.load(this.filter);
+    // this.tasaCuotaService.load(this.filter);
+    this.tasaCuotaService.find(this.filter).subscribe(
+      (data) => {
+        this.dataSource.data = data;
+        this.dataSource.paginator = this.paginator;
+      },
+      (err) => {
+        console.error('Error al cargar datos', err);
+      }
+    );
   }
 }

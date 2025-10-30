@@ -119,7 +119,7 @@ export class PromocionListComponent implements OnInit {
     this.tipoPromocionService
       .find({
         tprId: '0',
-        tprActivo: 'all',
+        tprActivo: 'true',
       })
       .subscribe((res) => {
         console.log('Res tipo promoción service');

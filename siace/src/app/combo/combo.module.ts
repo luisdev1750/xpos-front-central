@@ -26,6 +26,7 @@ import {
 } from '@angular/material/autocomplete';
 import { ProductoService } from '../producto/producto.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatPaginator } from '@angular/material/paginator';
 /*
   MatOption,
     ReactiveFormsModule,
@@ -56,6 +57,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatSelect,
     ReactiveFormsModule,
     MatTooltipModule,
+    MatPaginator
   ],
   declarations: [ComboListComponent, ComboEditComponent],
   providers: [

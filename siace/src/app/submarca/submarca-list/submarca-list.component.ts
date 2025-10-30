@@ -10,20 +10,26 @@ import { ConfirmDialogComponent } from '../../common/confirm-dialog/confirm-dial
 import { ToastrService } from 'ngx-toastr';
 import { MarcaService } from '../../marca/marca.service';
 import { Marca } from '../../marca/marca';
-
+import { ViewChild } from '@angular/core';
+import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 @Component({
   selector: 'app-submarca',
   standalone: false,
   templateUrl: 'submarca-list.component.html',
-  styles: ['table {min-width: 700px  }', '.mat-column-actions {flex: 0 0 10%;}'],
+  styles: [
+    'table {min-width: 700px  }',
+    '.mat-column-actions {flex: 0 0 10%;}',
+  ],
 })
 export class SubmarcaListComponent implements OnInit {
-  displayedColumns = [ 'smaNombre','smaMarId', 'smaActivo', 'actions'];
+  displayedColumns = ['smaNombre', 'smaMarId', 'smaActivo', 'actions'];
   filter = new SubmarcaFilter();
   marcaListsFilter: Marca[] = [];
   private subs!: Subscription;
   all = 'all';
-
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  dataSource = new MatTableDataSource<Submarca>();
   /* Inicialización */
 
   constructor(
@@ -31,17 +37,43 @@ export class SubmarcaListComponent implements OnInit {
     private toastr: ToastrService,
     public dialog: MatDialog,
     private submarca: SubmarcaService,
-    private marca: MarcaService
+    private marca: MarcaService,
+    private paginatorIntl: MatPaginatorIntl
   ) {
     this.subs = this.submarcaService.getIsUpdated().subscribe(() => {
       this.search();
     });
-
+    this.configurarPaginadorEspanol();
     this.filter.smaId = '0';
     this.filter.smaMarId = '0';
-      this.filter.smaActivo = 'all';
+    this.filter.smaActivo = 'all';
   }
+  ngAfterViewInit(): void {
+  this.dataSource.paginator = this.paginator;
+}
+  private configurarPaginadorEspanol(): void {
+    this.paginatorIntl.itemsPerPageLabel = 'Elementos por página';
+    this.paginatorIntl.nextPageLabel = 'Siguiente página';
+    this.paginatorIntl.previousPageLabel = 'Página anterior';
+    this.paginatorIntl.firstPageLabel = 'Primera página';
+    this.paginatorIntl.lastPageLabel = 'Última página';
 
+    this.paginatorIntl.getRangeLabel = (
+      page: number,
+      pageSize: number,
+      length: number
+    ) => {
+      if (length === 0 || pageSize === 0) {
+        return `0 de ${length}`;
+      }
+      const startIndex = page * pageSize;
+      const endIndex =
+        startIndex < length
+          ? Math.min(startIndex + pageSize, length)
+          : startIndex + pageSize;
+      return `${startIndex + 1} – ${endIndex} de ${length}`;
+    };
+  }
   ngOnInit() {
     this.search();
     this.loadCatalogos();
@@ -125,6 +157,13 @@ export class SubmarcaListComponent implements OnInit {
   }
 
   search(): void {
-    this.submarcaService.load(this.filter);
+    // this.submarcaService.load(this.filter);
+    this.submarcaService.find(this.filter).subscribe( (data) => {
+      this.dataSource.data = data;
+      this.dataSource.paginator = this.paginator;
+    },
+    (err) => {
+      console.error('Error al cargar datos', err);
+    });
   }
 }

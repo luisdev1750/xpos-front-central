@@ -32,6 +32,7 @@ import {
   MatAutocompleteModule,
 } from '@angular/material/autocomplete';
 import { ImagePreviewComponent } from './banner-edit/image-preview/image-preview.component';
+import { MatPaginator } from '@angular/material/paginator';
 
 @NgModule({
   imports: [
@@ -57,6 +58,7 @@ import { ImagePreviewComponent } from './banner-edit/image-preview/image-preview
     MatCheckboxModule,
     MatSnackBarModule,
     MatTooltipModule,
+    MatPaginator
   ],
   declarations: [
     BannerListComponent,

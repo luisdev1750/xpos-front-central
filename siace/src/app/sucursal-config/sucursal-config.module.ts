@@ -18,6 +18,7 @@ import { SucursalConfigRoutingModule } from './sucursal-config.routing.module';
 import { SucursalService } from '../sucursal/sucursal.service';
 import { MatSelect } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatPaginator } from '@angular/material/paginator';
 
 @NgModule({
   imports: [
@@ -36,6 +37,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatSelect,
     MatOption,
     MatTooltipModule,
+    MatPaginator
   ],
   declarations: [SucursalConfigListComponent, SucursalConfigEditComponent],
   providers: [SucursalConfigService, SucursalService],
