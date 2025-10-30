@@ -305,7 +305,7 @@ export class ProveedorEditComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error guardando proveedor:', err);
-        this.toastr.error('Ha ocurrido un error', 'Error');
+        this.toastr.error(err.error.error);
       },
     });
   }

@@ -21,6 +21,7 @@ import { ListaPrecioService } from '../lista-precio/lista-precio.service';
 import { SucursalProductoBusquedaComponent } from './sucursal-producto-busqueda/sucursal-producto-busqueda.component';
 import { ProductoService } from '../producto/producto.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatPaginator } from '@angular/material/paginator';
 @NgModule({
   imports: [
     CommonModule,
@@ -38,6 +39,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatSelect,
     MatOption,
     MatTooltipModule,
+    MatPaginator
   ],
   declarations: [
     SucursalProductoListComponent,

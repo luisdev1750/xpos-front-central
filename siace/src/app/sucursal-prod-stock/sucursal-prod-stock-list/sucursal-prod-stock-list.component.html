@@ -20,34 +20,7 @@
           </mat-select>
         </mat-form-field>
    
-      <!-- <div class="col-md-4">
-        <mat-form-field>
-          <mat-label>Sucursales</mat-label>
-          <mat-select
-            [value]="filter.spsSucId"
-            (selectionChange)="onSucursalChange($event)"
-          >
-            <mat-option
-              *ngFor="let sucursal of listSucursal"
-              [value]="sucursal.sucId"
-            >
-              {{ sucursal.sucNombre }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div> -->
-
-      <!-- <mat-form-field>
-        <mat-label>Sucursal:</mat-label>
-        <input
-          matInput
-          type="search"
-          [(ngModel)]="filter.spsProId"
-          id="spsProId"
-          name="spsProId"
-        />
-      </mat-form-field> -->
-
+ 
       <button
         mat-mini-fab
         color="accent"
@@ -57,8 +30,8 @@
         <mat-icon>add</mat-icon>
       </button>
     </form>
-    <div *ngIf="sucursalProdStockList.length > 0">
-      <table mat-table #table [dataSource]="sucursalProdStockList">
+    <div *ngIf="dataSource.data.length > 0">
+      <table mat-table #table [dataSource]="dataSource">
         <ng-container matColumnDef="spsSucId">
           <mat-header-cell *matHeaderCellDef> Sucursal</mat-header-cell>
           <mat-cell *matCellDef="let item">
@@ -107,7 +80,7 @@
       </table>
     </div>
       <div
-      *ngIf="sucursalProdStockList.length === 0"
+      *ngIf="dataSource.data.length === 0"
       style="text-align: center; padding: 40px; color: #999"
     >
       <mat-icon style="font-size: 64px; width: 64px; height: 64px">
@@ -115,5 +88,13 @@
       </mat-icon>
       <p>No se encontraron registros de productos stock</p>
     </div>
+    <div class="contenedor-paginator">
+  <mat-paginator
+    class="paginator"
+    [pageSizeOptions]="[10, 20, 50, 100]"
+    showFirstLastButtons
+  >
+  </mat-paginator>
+</div>
   </mat-card>
 </div>

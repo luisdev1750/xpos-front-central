@@ -11,7 +11,10 @@ import { ToastrService } from 'ngx-toastr';
 import { ListaPrecioService } from '../../lista-precio/lista-precio.service';
 import { ListaPrecio } from '../../lista-precio/lista-precio';
 import { ProductoPrecioBusquedaComponent } from '../producto-precio-busqueda/producto-precio-busqueda.component';
-import {  Inject } from '@angular/core';
+import { Inject } from '@angular/core';
+import { ViewChild } from '@angular/core';
+import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-producto-precio',
@@ -19,7 +22,7 @@ import {  Inject } from '@angular/core';
   templateUrl: 'producto-precio-list.component.html',
   styles: ['table { }', '.mat-column-actions {flex: 0 0 10%;}'],
 })
-export class ProductoPrecioListComponent implements OnInit , OnDestroy{
+export class ProductoPrecioListComponent implements OnInit, OnDestroy {
   displayedColumns = [
     'prrProId',
     'prrLprId',
@@ -33,23 +36,51 @@ export class ProductoPrecioListComponent implements OnInit , OnDestroy{
   listImpuestos: any[] = [];
   isAdding: boolean = false;
   private subs!: Subscription;
-
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  dataSource = new MatTableDataSource<ProductoPrecio>();
   /* Inicialización */
 
   constructor(
     private productoPrecioService: ProductoPrecioService,
     private toastr: ToastrService,
     public dialog: MatDialog,
-    private listaPrecioService: ListaPrecioService
+    private listaPrecioService: ListaPrecioService,
+    private paginatorIntl: MatPaginatorIntl
   ) {
     this.subs = this.productoPrecioService.getIsUpdated().subscribe(() => {
       this.search();
     });
-
+    this.configurarPaginadorEspanol();
     this.filter.prrProId = '0';
     this.filter.prrLprId = '0';
   }
+  private configurarPaginadorEspanol(): void {
+    this.paginatorIntl.itemsPerPageLabel = 'Elementos por página';
+    this.paginatorIntl.nextPageLabel = 'Siguiente página';
+    this.paginatorIntl.previousPageLabel = 'Página anterior';
+    this.paginatorIntl.firstPageLabel = 'Primera página';
+    this.paginatorIntl.lastPageLabel = 'Última página';
 
+    this.paginatorIntl.getRangeLabel = (
+      page: number,
+      pageSize: number,
+      length: number
+    ) => {
+      if (length === 0 || pageSize === 0) {
+        return `0 de ${length}`;
+      }
+      const startIndex = page * pageSize;
+      const endIndex =
+        startIndex < length
+          ? Math.min(startIndex + pageSize, length)
+          : startIndex + pageSize;
+      return `${startIndex + 1} – ${endIndex} de ${length}`;
+    };
+  }
+
+  ngAfterViewInit(): void {
+  this.dataSource.paginator = this.paginator;
+}
   ngOnInit() {
     this.search();
     this.loadCatalogs();
@@ -128,17 +159,22 @@ export class ProductoPrecioListComponent implements OnInit , OnDestroy{
                 'Transacción exitosa'
               );
               this.productoPrecioService.setIsUpdated(true);
-            } else this.toastr.error('Ha ocurrido un error. Revise las relaciones.', 'Error');
+            } else
+              this.toastr.error(
+                'Ha ocurrido un error. Revise las relaciones.',
+                'Error'
+              );
           },
           error: (err) => {
-            
             console.log(err);
-            if(err.error.errorCode == -2){
-              this.toastr.error('No se puede eliminar porque tiene registros relacionados', 'Error');
-            }else{
+            if (err.error.errorCode == -2) {
+              this.toastr.error(
+                'No se puede eliminar porque tiene registros relacionados',
+                'Error'
+              );
+            } else {
               this.toastr.error('Ha ocurrido un error', 'Error');
             }
-            
           },
         });
       }
@@ -171,6 +207,16 @@ export class ProductoPrecioListComponent implements OnInit , OnDestroy{
   }
 
   search(): void {
-    this.productoPrecioService.load(this.filter);
+    // this.productoPrecioService.load(this.filter);
+
+    this.productoPrecioService.find(this.filter).subscribe(
+         (data) => {
+      this.dataSource.data = data;
+      this.dataSource.paginator = this.paginator;
+    },
+    (err) => {
+      console.error('Error al cargar datos', err);
+    }
+    );
   }
 }

@@ -1,4 +1,4 @@
-<h2>Detalle del producto por proveedor</h2>
+<h2>Detalle del Producto por Proveedor</h2>
 <form *ngIf="productoProveedor" #editForm="ngForm" (ngSubmit)="save()" autocomplete="off">
 
 <div class="row">
@@ -24,7 +24,7 @@
                *ngFor="let producto of filteredProductos | async"
                [value]="producto"
             >
-               <span><strong>{{ producto.proId }}</strong> - {{ producto.proNombre }}</span>
+               <span><strong>{{ producto.proSku }}</strong> - {{ producto.proNombre }}</span>
                <br />
                <small style="color: #666" *ngIf="producto.proDescripcion">{{ producto.proDescripcion }}</small>
             </mat-option>

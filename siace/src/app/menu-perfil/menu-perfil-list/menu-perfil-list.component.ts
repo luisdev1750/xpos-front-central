@@ -19,6 +19,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-menu-perfil',
@@ -45,7 +46,8 @@ export class MenuPerfilListComponent
     public dialog: MatDialog,
     private perfilService: PerfilService,
     private route: ActivatedRoute,
-    private paginatorIntl: MatPaginatorIntl
+    private paginatorIntl: MatPaginatorIntl,
+    private location: Location
   ) {
     this.subs = this.menuPerfilService.getIsUpdated().subscribe(() => {
       this.search();
@@ -170,6 +172,10 @@ export class MenuPerfilListComponent
         });
       }
     });
+  }
+
+    goBack() {
+    this.location.back();
   }
 
   edit(ele: MenuPerfil) {

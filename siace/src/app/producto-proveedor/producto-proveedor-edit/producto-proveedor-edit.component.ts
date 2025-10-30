@@ -168,9 +168,8 @@ export class ProductoProveedorEditComponent implements OnInit {
          return (
             (producto.proNombre &&
                producto.proNombre.toLowerCase().includes(filterValue)) ||
-            (producto.proDescripcion &&
-               producto.proDescripcion.toLowerCase().includes(filterValue)) ||
-            producto.proId.toString().includes(filterValue)
+            (producto.proSku &&
+               producto.proSku.toLowerCase().includes(filterValue)) 
          );
       });
    }

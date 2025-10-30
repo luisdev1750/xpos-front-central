@@ -20,6 +20,7 @@ import { MatSelect } from '@angular/material/select';
 import { ProductoPrecioBusquedaComponent } from './producto-precio-busqueda/producto-precio-busqueda.component';
 import { ProductoService } from '../producto/producto.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   imports: [
@@ -38,6 +39,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatSelect,
     MatOption,
     MatTooltipModule,
+    MatPaginatorModule
   ],
   declarations: [
     ProductoPrecioListComponent,

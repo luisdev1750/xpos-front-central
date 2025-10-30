@@ -10,6 +10,9 @@ import { ConfirmDialogComponent } from '../../common/confirm-dialog/confirm-dial
 import { ToastrService } from 'ngx-toastr';
 import { SucursalService } from '../../sucursal/sucursal.service';
 import { ProductoService } from '../../producto/producto.service';
+import { ViewChild } from '@angular/core';
+import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-sucursal-prod-stock',
@@ -28,7 +31,8 @@ export class SucursalProdStockListComponent implements OnInit {
   filter = new SucursalProdStockFilter();
 
   private subs!: Subscription;
-
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  dataSource = new MatTableDataSource<SucursalProdStock>();
   /* Inicialización */
   listSucursal: any[] = [];
   listProducto: any[] = [];
@@ -37,16 +41,44 @@ export class SucursalProdStockListComponent implements OnInit {
     private toastr: ToastrService,
     public dialog: MatDialog,
     private sucursalService: SucursalService,
-    private productoService: ProductoService
+    private productoService: ProductoService,
+    private paginatorIntl: MatPaginatorIntl
   ) {
     this.subs = this.sucursalProdStockService.getIsUpdated().subscribe(() => {
       this.search();
     });
-
+    this.configurarPaginadorEspanol();
     this.filter.spsSucId = '0';
     this.filter.spsProId = '0';
   }
 
+  private configurarPaginadorEspanol(): void {
+    this.paginatorIntl.itemsPerPageLabel = 'Elementos por página';
+    this.paginatorIntl.nextPageLabel = 'Siguiente página';
+    this.paginatorIntl.previousPageLabel = 'Página anterior';
+    this.paginatorIntl.firstPageLabel = 'Primera página';
+    this.paginatorIntl.lastPageLabel = 'Última página';
+
+    this.paginatorIntl.getRangeLabel = (
+      page: number,
+      pageSize: number,
+      length: number
+    ) => {
+      if (length === 0 || pageSize === 0) {
+        return `0 de ${length}`;
+      }
+      const startIndex = page * pageSize;
+      const endIndex =
+        startIndex < length
+          ? Math.min(startIndex + pageSize, length)
+          : startIndex + pageSize;
+      return `${startIndex + 1} – ${endIndex} de ${length}`;
+    };
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+  }
   ngOnInit() {
     this.search();
     this.loadCatalogs();
@@ -73,8 +105,6 @@ export class SucursalProdStockListComponent implements OnInit {
         this.toastr.error('Ha ocurrido un error', 'Error');
       }
     );
-
-   
   }
 
   /* Accesors */
@@ -167,6 +197,16 @@ export class SucursalProdStockListComponent implements OnInit {
   }
 
   search(): void {
-    this.sucursalProdStockService.load(this.filter);
+    // this.sucursalProdStockService.load(this.filter);
+
+    this.sucursalProdStockService.find(this.filter).subscribe(
+      (data) => {
+        this.dataSource.data = data;
+        this.dataSource.paginator = this.paginator;
+      },
+      (err) => {
+        console.error('Error al cargar datos', err);
+      }
+    );
   }
 }
