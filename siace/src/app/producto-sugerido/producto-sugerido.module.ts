@@ -10,32 +10,20 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
-import { ComboService } from './combo.service';
-import { BancoRoutingModule } from './combo.routing.module';
+
+import { ProductoSugeridoListComponent } from './producto-sugerido-list/producto-sugerido-list.component';
+import { ProductoSugeridoEditComponent } from './producto-sugerido-edit/producto-sugerido-edit.component';
+import { ProductoSugeridoService } from './producto-sugerido.service';
+import { BancoRoutingModule } from './producto-sugerido.routing.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
-import { MatSelect, MatSelectModule } from '@angular/material/select';
+import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
-import { ComboListComponent } from './combo-list/combo-list.component';
-import { ComboEditComponent } from './combo-edit/combo-edit.component';
-import { SucursalService } from '../sucursal/sucursal.service';
-import { ListaPrecioService } from '../lista-precio/lista-precio.service';
-import {
-  MatAutocomplete,
-  MatAutocompleteModule,
-} from '@angular/material/autocomplete';
-import { ProductoService } from '../producto/producto.service';
+
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatPaginator } from '@angular/material/paginator';
-import { ComboCopyDialogComponent } from './combo-dialog/combo-copy-dialog.component';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-/*
-  MatOption,
-    ReactiveFormsModule,
-    MatAutocomplete, 
-    MatAutocompleteModule,
-    MatSelect
-*/
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { SucursalService } from '../sucursal/sucursal.service';
 
 @NgModule({
   imports: [
@@ -54,22 +42,13 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatSlideToggleModule,
     MatSelectModule,
     MatOptionModule,
-    MatAutocomplete,
-    MatAutocompleteModule,
-    MatSelect,
-    ReactiveFormsModule,
     MatTooltipModule,
     MatPaginator,
-    MatCheckboxModule
+    MatAutocompleteModule,
+    ReactiveFormsModule
   ],
-  declarations: [ComboListComponent, ComboEditComponent, ComboCopyDialogComponent],
-  providers: [
-    ComboService,
-    SucursalService,
-    ListaPrecioService,
-    ProductoService,
-    SucursalService,
-  ],
+  declarations: [ProductoSugeridoListComponent, ProductoSugeridoEditComponent],
+  providers: [ProductoSugeridoService, SucursalService],
   exports: [],
 })
-export class ComboModule {}
+export class ProductoSugeridoModule {}

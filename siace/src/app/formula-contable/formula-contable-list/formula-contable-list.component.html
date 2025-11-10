@@ -3,7 +3,7 @@
     <h2>Catálogo de Formulas Contables</h2>
     <form #f="ngForm">
       <mat-form-field>
-        <mat-label>Unidad de medida</mat-label>
+        <mat-label>Sucursal</mat-label>
         <mat-select
           [value]="filter.focSucId"
           (selectionChange)="OnSucursalChange($event)"
@@ -40,10 +40,24 @@
           <mat-cell *matCellDef="let item"> {{ item.focSucName }} </mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="focFormula">
-          <mat-header-cell *matHeaderCellDef> Fórmula </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.focFormula }} </mat-cell>
-        </ng-container>
+       <ng-container matColumnDef="focFormula">
+  <mat-header-cell *matHeaderCellDef> Fórmula </mat-header-cell>
+  <mat-cell *matCellDef="let item">
+    <div class="formula-display">
+      <span
+        *ngFor="let token of parseFormula(item.focFormula)"
+        class="formula-token"
+        [class.variable]="token.type === 'variable'"
+        [class.operator]="token.type === 'operator'"
+        [class.number]="token.type === 'number'"
+        [class.parenthesis]="token.type === 'parenthesis'"
+        [matTooltip]="token.tooltip || ''"
+      >
+        {{ token.value }}
+      </span>
+    </div>
+  </mat-cell>
+</ng-container>
 
         <ng-container matColumnDef="focClave">
           <mat-header-cell *matHeaderCellDef> Código </mat-header-cell>

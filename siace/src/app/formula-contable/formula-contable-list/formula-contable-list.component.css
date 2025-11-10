@@ -1,0 +1,62 @@
+table {
+  width: 100%;
+}
+
+.mat-column-actions {
+  flex: 0 0 10%;
+}
+
+.mat-column-focFormula {
+  flex: 0 0 25%;
+  min-width: 250px;
+}
+
+.formula-display {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.formula-token {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-family: "Courier New", monospace;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-block;
+  transition: all 0.2s ease;
+}
+
+.formula-token.variable {
+  background-color: #e3f2fd;
+  color: #1565c0;
+  border: 1px solid #90caf9;
+}
+
+.formula-token.operator {
+  background-color: #fff3e0;
+  color: #ef6c00;
+  border: 1px solid #ffb74d;
+  font-size: 15px;
+}
+
+.formula-token.number {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #81c784;
+}
+
+.formula-token.parenthesis {
+  background-color: #f3e5f5;
+  color: #6a1b9a;
+  border: 1px solid #ba68c8;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.formula-token:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

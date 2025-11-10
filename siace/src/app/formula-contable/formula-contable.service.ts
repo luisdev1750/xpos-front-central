@@ -49,9 +49,17 @@ export class FormulaContableService extends GeneralService {
    find(filter: FormulaContableFilter): Observable<FormulaContable[]> {
       const url = `${this.api}/${filter.focId}/${filter.focSucId}`;
       return this.http.get<FormulaContable[]>(url, {
+         headers: this.getHeaders()  
+      });
+   }
+
+    findVariables(sucId: number): Observable<any[]> {
+      const url = `${this.api}/listar-variables-contables/${sucId ?? 0}`;
+      return this.http.get<any[]>(url, {
          headers: this.getHeaders()  // Usar headers con token
       });
    }
+   
    
    
    findById(id: string): Observable<FormulaContable> {

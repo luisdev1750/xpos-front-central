@@ -1,0 +1,369 @@
+<h2>{{ isEditMode ? "Editar" : "Agregar" }} Productos Sugeridos</h2>
+<form
+  *ngIf="productoSugerido"
+  #editForm="ngForm"
+  (ngSubmit)="save()"
+  autocomplete="off"
+>
+  <div class="row">
+    <!-- Sucursal -->
+    <div class="col-md-6">
+      <mat-form-field>
+        <mat-label>Sucursal</mat-label>
+        <mat-select
+          [value]="productoSugerido.sucIdSel"
+          (selectionChange)="onSucursalChange($event)"
+          [disabled]="isEditMode"
+          [required]="true"
+        >
+          <mat-option
+            *ngFor="let sucursal of listSucursal"
+            [value]="sucursal.sucId"
+          >
+            {{ sucursal.sucNombre }}
+          </mat-option>
+        </mat-select>
+        <mat-hint *ngIf="isEditMode" style="color: #ff9800">
+          No se puede modificar la sucursal en modo edición
+        </mat-hint>
+        <mat-hint
+          *ngIf="
+            !isEditMode &&
+            (productoSugerido.productosSugeridos?.length ?? 0) > 0
+          "
+          style="color: #ff9800"
+        >
+          Elimine todos los productos sugeridos para cambiar la sucursal
+        </mat-hint>
+        <mat-error *ngIf="!productoSugerido.sucIdSel">
+          La sucursal es requerida
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Producto Principal (Lista de Precio automática) -->
+    <!-- Producto Principal -->
+    <div class="col-md-6">
+      <mat-form-field *ngIf="!isEditMode">
+        <mat-label>Producto Principal</mat-label>
+        <input
+          type="text"
+          matInput
+          [formControl]="productoPrincipalControl"
+          [matAutocomplete]="autoProductoPrincipal"
+          [disabled]="!productoSugerido.sucIdSel"
+          placeholder="Buscar por nombre, SKU o ID..."
+          [required]="true"
+        />
+        <button
+          *ngIf="productoPrincipalControl.value"
+          matSuffix
+          mat-icon-button
+          aria-label="Limpiar"
+          type="button"
+          (click)="onProductoPrincipalClear()"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+        <mat-autocomplete
+          #autoProductoPrincipal="matAutocomplete"
+          [displayWith]="displayProductoFn"
+          (optionSelected)="onProductoPrincipalSelected($event.option.value)"
+        >
+          <mat-option
+            *ngFor="let producto of filteredProductosPrincipales | async"
+            [value]="producto"
+          >
+            <span>
+              <strong>{{ producto.proNombre }}</strong> - SKU:
+              {{ producto.proSku }}
+            </span>
+            <br />
+            <small style="color: #666">Lista: {{ producto.lprNombre }}</small>
+          </mat-option>
+        </mat-autocomplete>
+        <mat-hint *ngIf="!productoSugerido.sucIdSel" style="color: #f44336">
+          Primero seleccione una sucursal
+        </mat-hint>
+      </mat-form-field>
+
+      <!-- Input para modo edición -->
+      <mat-form-field *ngIf="isEditMode">
+        <mat-label>Producto Principal</mat-label>
+        <input
+          matInput
+          [value]="productoSugerido.proNombreSel"
+          readonly
+          disabled
+        />
+        <mat-hint style="color: #ff9800">
+          No se puede cambiar el producto principal en modo edición
+        </mat-hint>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <!-- SECCIÓN BUSCADOR DE PRODUCTOS SUGERIDOS -->
+  <div class="row" style="margin-top: 24px; margin-bottom: 16px">
+    <div class="col-md-12">
+      <h3
+        style="
+          margin-bottom: 16px;
+          font-size: 16px;
+          font-weight: 500;
+          color: #666;
+        "
+      >
+        Agregar Productos Sugeridos
+      </h3>
+    </div>
+
+    <div class="col-md-10">
+      <mat-form-field>
+        <mat-label>Buscar Producto Sugerido</mat-label>
+        <input
+          type="text"
+          matInput
+          [formControl]="productoSugeridoControl"
+          [matAutocomplete]="autoProductoSugerido"
+          [disabled]="!productoSugerido.sucIdSel || !productoSugerido.proIdSel"
+          placeholder="Buscar por nombre, SKU o ID..."
+        />
+        <button
+          *ngIf="productoSugeridoControl.value"
+          matSuffix
+          mat-icon-button
+          aria-label="Limpiar"
+          type="button"
+          (click)="onProductoSugeridoClear()"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+        <mat-autocomplete
+          #autoProductoSugerido="matAutocomplete"
+          [displayWith]="displayProductoFn"
+          (optionSelected)="onProductoSugeridoSelected($event.option.value)"
+        >
+          <mat-option
+            *ngFor="let producto of filteredProductosSugeridos | async"
+            [value]="producto"
+          >
+            <span>
+              <strong>{{ producto.proNombre }}</strong> - SKU:
+              {{ producto.proSku }}
+            </span>
+            <br />
+            <small style="color: #666">Lista: {{ producto.lprNombre }}</small>
+          </mat-option>
+        </mat-autocomplete>
+        <mat-hint *ngIf="!productoSugerido.sucIdSel" style="color: #f44336">
+          Primero seleccione una sucursal
+        </mat-hint>
+        <mat-hint
+          *ngIf="!productoSugerido.proIdSel && productoSugerido.sucIdSel"
+          style="color: #f44336"
+        >
+          Seleccione el producto principal
+        </mat-hint>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-2" style="display: flex; align-items: center">
+      <button
+        type="button"
+        mat-raised-button
+        color="accent"
+        (click)="agregarProductoSugerido()"
+        [disabled]="
+          !productoSugeridoSeleccionado ||
+          !productoSugerido.sucIdSel ||
+          !productoSugerido.proIdSel
+        "
+        style="width: 100%"
+      >
+        <mat-icon>add</mat-icon>
+        Agregar
+      </button>
+    </div>
+
+    <div class="col-md-12">
+      <mat-hint
+        style="font-size: 14px; color: #666; display: flex; align-items: center"
+      >
+        <mat-icon
+          style="vertical-align: middle; font-size: 18px; margin-right: 8px"
+        >
+          info
+        </mat-icon>
+        <span *ngIf="productoSugerido.sucIdSel && productoSugerido.proIdSel">
+          Productos disponibles para sugerir:
+          {{ listProductosSugeridos.length }}
+        </span>
+        <span
+          *ngIf="!productoSugerido.sucIdSel || !productoSugerido.proIdSel"
+          style="color: #f44336"
+        >
+          Complete los campos anteriores para ver productos disponibles
+        </span>
+      </mat-hint>
+    </div>
+  </div>
+
+  <!-- TABLA DE PRODUCTOS SUGERIDOS -->
+  <div
+    *ngIf="
+      productoSugerido.productosSugeridos &&
+      productoSugerido.productosSugeridos.length > 0
+    "
+    style="margin-top: 16px"
+  >
+    <h3
+      style="
+        margin-bottom: 16px;
+        font-size: 16px;
+        font-weight: 500;
+        color: #666;
+      "
+    >
+      Productos Sugeridos ({{ productoSugerido.productosSugeridos.length }})
+    </h3>
+    <table
+      mat-table
+      [dataSource]="productoSugerido.productosSugeridos"
+      class="mat-elevation-z2"
+    >
+      <ng-container matColumnDef="ranking">
+        <mat-header-cell *matHeaderCellDef> Ranking </mat-header-cell>
+        <mat-cell *matCellDef="let item; let i = index">
+          <input
+            type="number"
+            min="1"
+            [(ngModel)]="item.ranking"
+            [name]="'ranking_' + item._tempId"
+            (ngModelChange)="onRankingChange()"
+            class="order-input"
+          />
+        </mat-cell>
+      </ng-container>
+
+      <!-- Columna Nombre -->
+      <ng-container matColumnDef="productoNombreSugerido">
+        <mat-header-cell *matHeaderCellDef>
+          Nombre de producto
+        </mat-header-cell>
+        <mat-cell *matCellDef="let item">
+          {{ item.productoNombreSugerido }}
+        </mat-cell>
+      </ng-container>
+
+      <!-- Columna SKU -->
+      <ng-container matColumnDef="productoSkuSugerido">
+        <mat-header-cell *matHeaderCellDef> SKU </mat-header-cell>
+        <mat-cell *matCellDef="let item">
+          {{ item.productoSkuSugerido }}
+        </mat-cell>
+      </ng-container>
+
+      <!-- Columna Lista Precio -->
+      <ng-container matColumnDef="listaPrecioNombreSugerido">
+        <mat-header-cell *matHeaderCellDef> Lista Precio </mat-header-cell>
+        <mat-cell *matCellDef="let item">
+          {{ item.listaPrecioNombreSugerido }}
+        </mat-cell>
+      </ng-container>
+
+      <!-- Columna Activo -->
+      <ng-container matColumnDef="productoActivoSugerido">
+        <mat-header-cell *matHeaderCellDef> Activo </mat-header-cell>
+        <mat-cell *matCellDef="let item">
+          <mat-icon *ngIf="item.productoActivoSugerido" style="color: green">
+            check_circle
+          </mat-icon>
+          <mat-icon *ngIf="!item.productoActivoSugerido" style="color: red">
+            cancel
+          </mat-icon>
+        </mat-cell>
+      </ng-container>
+
+      <!-- Columna Acciones -->
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
+        <mat-cell *matCellDef="let item">
+          <button
+            (click)="deleteProductoSugerido(item)"
+            mat-icon-button
+            color="warn"
+            matTooltip="Eliminar sugerencia"
+            type="button"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <!-- Definición de filas -->
+      <mat-header-row
+        *matHeaderRowDef="displayedColumnsSugeridos"
+      ></mat-header-row>
+      <mat-row
+        *matRowDef="let row; columns: displayedColumnsSugeridos"
+      ></mat-row>
+    </table>
+  </div>
+
+  <!-- Mensaje cuando no hay productos sugeridos -->
+  <div
+    *ngIf="
+      !productoSugerido.productosSugeridos ||
+      productoSugerido.productosSugeridos.length === 0
+    "
+    style="
+      margin-top: 16px;
+      padding: 24px;
+      text-align: center;
+      background-color: #f5f5f5;
+      border-radius: 4px;
+    "
+  >
+      <mat-icon style="font-size: 64px; width: 64px; height: 64px">
+        search_off
+      </mat-icon>
+    <p style="margin-top: 16px; color: #666">
+      No hay productos sugeridos. Usa el buscador para agregar productos.
+    </p>
+  </div>
+
+  <!-- Botones de acción -->
+  <!-- Botones de acción -->
+  <div class="button-row text-center" role="group" style="margin-top: 24px">
+    <!-- Botón GUARDAR (modo normal) -->
+    <button
+      *ngIf="!isEditMode || productoSugerido.productosSugeridos.length > 0"
+      type="submit"
+      mat-raised-button
+      color="primary"
+      [disabled]="
+        !editForm.form.valid ||
+        !productoSugerido.proIdSel ||
+        productoSugerido.productosSugeridos.length === 0
+      "
+    >
+      <mat-icon>save</mat-icon>
+      Guardar
+    </button>
+
+    <!-- Botón ELIMINAR TODAS LAS SUGERENCIAS (modo edición con lista vacía) -->
+    <button
+      *ngIf="isEditMode && productoSugerido.productosSugeridos.length === 0"
+      type="button"
+      mat-raised-button
+      color="warn"
+      (click)="deleteAllSugerencias()"
+    >
+      <mat-icon>delete_sweep</mat-icon>
+      Eliminar Todas las Sugerencias
+    </button>
+
+    <button mat-button mat-dialog-close type="button">Cancelar</button>
+  </div>
+</form>

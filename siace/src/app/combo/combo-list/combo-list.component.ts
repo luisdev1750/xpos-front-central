@@ -1,16 +1,18 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ComboService } from '../combo.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../common/confirm-dialog/confirm-dialog.component';
 import { ToastrService } from 'ngx-toastr';
 import { ComboEditComponent } from '../combo-edit/combo-edit.component';
+import { ComboCopyDialogComponent } from '../combo-dialog/combo-copy-dialog.component';
 import { SucursalService } from '../../sucursal/sucursal.service';
 import { ComboFilter } from '../combo-filter';
-import { ViewChild } from '@angular/core';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { SelectionModel } from '@angular/cdk/collections';
 import { Combo } from '../combo';
+
 @Component({
   selector: 'app-combo-list',
   standalone: false,
@@ -18,10 +20,12 @@ import { Combo } from '../combo';
   styles: [
     'table { min-width: 600px; width: 100%; }',
     '.mat-column-actions { flex: 0 0 150px; }',
+    '.mat-column-select { flex: 0 0 60px; }',
   ],
 })
 export class ComboListComponent implements OnInit, OnDestroy {
   displayedColumns = [
+    'select',
     'comboNombre',
     'sucursalId',
     'precioCombo',
@@ -30,12 +34,14 @@ export class ComboListComponent implements OnInit, OnDestroy {
   ];
 
   filter = new ComboFilter();
+  selection = new SelectionModel<Combo>(true, []);
 
   private subs!: Subscription;
   listSucursales: any[] = [];
   listCombos: any[] = [];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   dataSource = new MatTableDataSource<Combo>();
+
   constructor(
     private comboService: ComboService,
     private toastr: ToastrService,
@@ -50,9 +56,11 @@ export class ComboListComponent implements OnInit, OnDestroy {
     this.filter.comboSucId = '0';
     this.filter.comboActivo = 'all';
   }
+
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
   }
+
   private configurarPaginadorEspanol(): void {
     this.paginatorIntl.itemsPerPageLabel = 'Elementos por página';
     this.paginatorIntl.nextPageLabel = 'Siguiente página';
@@ -76,6 +84,7 @@ export class ComboListComponent implements OnInit, OnDestroy {
       return `${startIndex + 1} – ${endIndex} de ${length}`;
     };
   }
+
   ngOnInit() {
     this.loadCatalogs();
   }
@@ -86,15 +95,16 @@ export class ComboListComponent implements OnInit, OnDestroy {
 
   onSucursalChange(event: any) {
     this.filter.comboSucId = event.value;
+    this.selection.clear();
     this.search();
   }
 
   onActivoChange(): void {
+    this.selection.clear();
     this.search();
   }
 
   loadCatalogs() {
-    // Cargar sucursales
     this.sucursalSerivice
       .find({
         sucId: '0',
@@ -115,7 +125,6 @@ export class ComboListComponent implements OnInit, OnDestroy {
         }
       );
 
-    // Cargar combos iniciales
     this.search();
   }
 
@@ -181,6 +190,7 @@ export class ComboListComponent implements OnInit, OnDestroy {
                 'Transacción exitosa'
               );
               this.search();
+               this.selection.clear();
             } else {
               this.toastr.error('Ha ocurrido un error', 'Error');
             }
@@ -197,5 +207,103 @@ export class ComboListComponent implements OnInit, OnDestroy {
   getSucursalNombre(sucId: number): string {
     const sucursal = this.listSucursales.find((s) => s.sucId === sucId);
     return sucursal ? sucursal.sucNombre : 'N/A';
+  }
+
+  // ========== MÉTODOS PARA SELECCIÓN Y COPIA ==========
+
+  /** Si todas las filas están seleccionadas */
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  /** Seleccionar/deseleccionar todas las filas */
+  masterToggle() {
+    this.isAllSelected()
+      ? this.selection.clear()
+      : this.dataSource.data.forEach((row) => this.selection.select(row));
+  }
+
+  /** Abrir diálogo para copiar combos */
+  copiarCombosSeleccionados(): void {
+    if (this.selection.selected.length === 0) {
+      this.toastr.warning('Selecciona al menos un combo para copiar', 'Advertencia');
+      return;
+    }
+
+    const dialogRef = this.dialog.open(ComboCopyDialogComponent, {
+      width: '500px',
+      data: {
+        combosSeleccionados: this.selection.selected.length,
+        sucursales: this.listSucursales,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((sucursalDestino: number) => {
+      if (sucursalDestino) {
+        this.ejecutarCopiaCombos(sucursalDestino);
+      }
+    });
+  }
+
+  /** Ejecutar la copia de combos */
+  private ejecutarCopiaCombos(sucursalDestino: number): void {
+    const comboIds = this.selection.selected.map((combo) => combo.comboId);
+
+    this.comboService.copyComboToSucursal(comboIds, sucursalDestino).subscribe({
+      next: (response) => {
+        console.log('Respuesta de copia:', response);
+        
+        if (response.data.success) {
+          const copiados = response.data.copiados || 0;
+          const detalles = response.data.detalles || [];
+          const totalSeleccionados = this.selection.selected.length;
+
+          // Mostrar mensaje de éxito si hubo copias
+          if (copiados > 0) {
+            this.toastr.success(
+              `Se copiaron ${copiados} de ${totalSeleccionados} combo(s) exitosamente`,
+              'Operación exitosa',
+              { timeOut: 4000 }
+            );
+          }
+
+          // Mostrar detalles de combos que no se copiaron
+          if (detalles.length > 0) {
+            detalles.forEach((detalle: any) => {
+              if (detalle.length > 0) {
+                this.toastr.warning(
+                  detalle,
+                  'Advertencia',
+                  { timeOut: 6000, closeButton: true }
+                );
+              }
+            });
+          }
+
+          // Si no se copió ninguno
+          if (copiados === 0) {
+            this.toastr.info(
+              'No se copió ningún combo. Revisa las advertencias.',
+              'Información',
+              { timeOut: 4000 }
+            );
+          }
+
+          this.selection.clear();
+          this.search();
+        } else {
+          this.toastr.error(
+            response.errores?.join(', ') || 'No se pudo copiar ningún combo',
+            'Error'
+          );
+        }
+      },
+      error: (err) => {
+        console.error('Error al copiar combos:', err);
+        this.toastr.error('Error al copiar los combos', err.error.errores[0]);
+      },
+    });
   }
 }

@@ -34,6 +34,12 @@ const routes: Routes = [
           import('./sucursal/sucursal.module').then((m) => m.SucursalModule),
         canActivate: [AuthGuard]
       },
+        {
+        path: 'productos-sugeridos',
+        loadChildren: () =>
+          import('./producto-sugerido/producto-sugerido.module').then((m) => m.ProductoSugeridoModule),
+        canActivate: [AuthGuard]
+      },
       {
         path: 'marca',
         loadChildren: () =>

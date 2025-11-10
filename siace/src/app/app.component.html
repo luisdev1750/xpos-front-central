@@ -148,7 +148,7 @@
 
           <a
             *ngIf="tienePermiso('CEN_PROSUG')"
-            routerLink="/producto-sugerido"
+            routerLink="/productos-sugeridos"
             routerLinkActive="active"
             class="nav-subitem"
             (click)="onNavItemClick()"
@@ -220,6 +220,7 @@
           class="nav-submenu"
           *ngIf="expandedSections['finanzas'] && isMenuOpen"
         >
+       
           <a
             *ngIf="tienePermiso('CEN_BANC')"
             routerLink="/banco"

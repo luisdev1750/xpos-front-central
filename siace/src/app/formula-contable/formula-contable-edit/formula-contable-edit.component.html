@@ -6,26 +6,16 @@
   autocomplete="off"
 >
   <div class="row">
-    <div class="col-md-4">
-      <mat-form-field>
-        <mat-label>Clave</mat-label>
-        <input
-          matInput
-          [(ngModel)]="formulaContable.focId"
-          id="focId"
-          name="focId"
-          placeholder="Clave"
-          readonly
-        />
-      </mat-form-field>
-    </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
       <mat-form-field>
         <mat-label>Sucursal</mat-label>
         <mat-select
           [value]="formulaContable.focSucId"
           (selectionChange)="OnSucursalChange($event)"
+          [disabled]="sucursalBloqueada || isEditing"
+          required
         >
+          <mat-option [value]="null">Sin sucursal</mat-option>
           <mat-option
             *ngFor="let sucursal of listSucursales"
             [value]="sucursal.sucId"
@@ -33,10 +23,13 @@
             {{ sucursal.sucNombre }}
           </mat-option>
         </mat-select>
+        <mat-hint *ngIf="sucursalBloqueada" style="color: #ff9800">
+          🔒 Bloqueada por fórmulas compuestas
+        </mat-hint>
       </mat-form-field>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-3">
       <mat-form-field>
         <mat-label for="focFormula">Fórmula</mat-label>
         <input
@@ -44,19 +37,19 @@
           [(ngModel)]="formulaContable.focFormula"
           id="focFormula"
           name="focFormula"
-          placeholder="Fórmula"
+          placeholder="Fórmula (ej: VBC + DDC - PDE)"
           required
+          readonly
         />
         <mat-error *ngIf="formulaContable.focFormula == ''"
           >Fórmula es requerido</mat-error
         >
       </mat-form-field>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-md-4">
+
+    <div class="col-md-3">
       <mat-form-field>
-        <mat-label for="focClave">Código</mat-label>
+        <mat-label for="focClave">Clave</mat-label>
         <input
           matInput
           [(ngModel)]="formulaContable.focClave"
@@ -71,7 +64,7 @@
       </mat-form-field>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-3">
       <mat-form-field>
         <mat-label for="focNombre">Nombre</mat-label>
         <input
@@ -87,9 +80,10 @@
         >
       </mat-form-field>
     </div>
-    <div class="col-md-4">
+
+    <div class="col-md-3">
       <mat-form-field>
-        <mat-label>Estatus de Edición</mat-label>
+        <mat-label>Activo</mat-label>
         <mat-select
           [(ngModel)]="formulaContable.focEstatusEdicion"
           id="focEstatusEdicion"
@@ -100,18 +94,238 @@
         </mat-select>
       </mat-form-field>
     </div>
+  </div>
 
-    
+  <!-- Constructor de fórmulas -->
+  <div class="row formula-builder">
+    <div class="col-md-12">
+      <mat-card>
+        <mat-card-header>
+          <h6>Constructor de Fórmulas</h6>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="box-formulas">
+            <!-- Variables simples disponibles -->
+            <div class="variables-section">
+              <h6>
+                Variables Contables Simples
+                <span class="info-badge badge-variable">{{
+                  variablesSimples.length
+                }}</span>
+              </h6>
+              <p style="color: #666; font-size: 13px; margin-top: 5px">
+                Estas son fórmulas elementales
+              </p>
+              <div class="chip-container">
+                <mat-chip-set>
+                  <mat-chip
+                    *ngFor="let variable of variablesSimples"
+                    [disabled]="!variable.vacActivo"
+                    (click)="insertarVariable(variable)"
+                    [matTooltip]="variable.vacNombre"
+                    class="variable-chip"
+                  >
+                    {{ variable.vacClave }}
+                  </mat-chip>
+                </mat-chip-set>
+              </div>
+            </div>
+
+            <!-- Fórmulas compuestas -->
+            <div
+              class="variables-section"
+              *ngIf="formulasCompuestas.length > 0"
+            >
+              <h6>
+                Fórmulas Compuestas 📐
+                <span class="info-badge badge-formula">{{
+                  formulasCompuestas.length
+                }}</span>
+              </h6>
+              <p style="color: #666; font-size: 13px; margin-top: 5px">
+                Estas son fórmulas que ya han sido creadas y pueden ser
+                reutilizadas
+              </p>
+              <div class="chip-container">
+                <mat-chip-set>
+                  <mat-chip
+                    *ngFor="let formula of formulasCompuestas"
+                    [disabled]="!formula.vacActivo"
+                    (click)="insertarVariable(formula)"
+                    [matTooltip]="
+                      formula.vacNombre + ' ' + formula.vacFormulaDesc
+                    "
+                    class="variable-chip formula-chip"
+                  >
+                    {{ formula.vacClave }}
+                  </mat-chip>
+                </mat-chip-set>
+              </div>
+            </div>
+          </div>
+
+          <div class="box-buttons section-divider">
+            <!-- Operadores -->
+            <div class="operators-section">
+              <h6>Operadores:</h6>
+              <div class="button-group">
+                <button
+                  type="button"
+                  mat-raised-button
+                  (click)="insertarOperador('+')"
+                  class="operator-btn"
+                >
+                  +
+                </button>
+                <button
+                  type="button"
+                  mat-raised-button
+                  (click)="insertarOperador('-')"
+                  class="operator-btn"
+                >
+                  -
+                </button>
+                <button
+                  type="button"
+                  mat-raised-button
+                  (click)="insertarOperador('*')"
+                  class="operator-btn"
+                >
+                  ×
+                </button>
+                <button
+                  type="button"
+                  mat-raised-button
+                  (click)="insertarOperador('/')"
+                  class="operator-btn"
+                >
+                  ÷
+                </button>
+                <button
+                  type="button"
+                  mat-raised-button
+                  (click)="insertarOperador('^')"
+                  class="operator-btn"
+                >
+                  ^
+                </button>
+                <button
+                  type="button"
+                  mat-raised-button
+                  (click)="insertarOperador('(')"
+                  class="operator-btn"
+                >
+                  (
+                </button>
+                <button
+                  type="button"
+                  mat-raised-button
+                  (click)="insertarOperador(')')"
+                  class="operator-btn"
+                >
+                  )
+                </button>
+              </div>
+            </div>
+
+            <!-- Sección de números -->
+            <div class="numbers-section">
+              <h6>Números:</h6>
+              <div class="number-input-container">
+                <mat-form-field class="number-input">
+                  <mat-label>Ingrese un número</mat-label>
+                  <input
+                    matInput
+                    type="number"
+                    [(ngModel)]="numeroTemporal"
+                    name="numeroTemporal"
+                    placeholder="Ej: 100, 2.5, -10"
+                    (keyup.enter)="insertarNumero()"
+                  />
+                </mat-form-field>
+                <button
+                  type="button"
+                  mat-raised-button
+                  color="primary"
+                  (click)="insertarNumero()"
+                  [disabled]="!numeroTemporal && numeroTemporal !== 0"
+                  class="insert-number-btn"
+                >
+                  Insertar Número
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Vista previa de la fórmula -->
+          <div class="formula-preview section-divider">
+            <h6>
+              Vista Previa:
+              <span
+                *ngIf="!validarFormula() && formulaPreview.length > 0"
+                style="color: #f44336; font-size: 12px; margin-left: 10px"
+              >
+                ⚠️ Fórmula inválida
+              </span>
+              <span
+                *ngIf="validarFormula() && formulaPreview.length > 0"
+                style="color: #4caf50; font-size: 12px; margin-left: 10px"
+              >
+                ✓ Fórmula válida
+              </span>
+            </h6>
+            <div class="preview-box">
+              <span *ngIf="formulaPreview.length === 0" class="placeholder">
+                Selecciona variables, fórmulas, números y operadores para
+                construir tu fórmula
+              </span>
+              <span
+                *ngFor="let token of formulaPreview; let i = index"
+                class="formula-token"
+                [class.variable]="isVariable(token)"
+                [class.variable-formula]="isFormulaCompuesta(token)"
+                [class.operator]="isOperator(token)"
+                [class.number]="isNumber(token)"
+                [matTooltip]="getVariableNombre(token)"
+              >
+                {{ token }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Acciones del constructor -->
+          <div class="builder-actions">
+            <button
+              type="button"
+              mat-raised-button
+              color="warn"
+              (click)="limpiarFormula()"
+            >
+              🗑️ Limpiar Fórmula
+            </button>
+            <button
+              type="button"
+              mat-raised-button
+              (click)="eliminarUltimo()"
+              [disabled]="formulaPreview.length === 0"
+            >
+              ↶ Deshacer Último
+            </button>
+            <button
+              type="submit"
+              mat-raised-button
+              color="primary"
+              [disabled]="!puedeGuardar()"
+            >
+              💾 Guardar Fórmula Contable
+            </button>
+
+            <button mat-button mat-dialog-close>Cancelar</button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
   </div>
-  <div class="button-row text-center" role="group">
-    <button
-      type="submit"
-      mat-raised-button
-      color="primary"
-      [disabled]="!editForm.form.valid"
-    >
-      Guardar
-    </button>
-    <button mat-button mat-dialog-close>Cancelar</button>
-  </div>
+
+  <div class="button-row text-center" role="group"></div>
 </form>

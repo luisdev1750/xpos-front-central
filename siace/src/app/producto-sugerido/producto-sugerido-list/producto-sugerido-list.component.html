@@ -1,11 +1,11 @@
 <div class="proin-main">
   <mat-card class="proin-card">
-    <h2>Catálogo de Combos</h2>
+    <h2>Catálogo de Productos Sugeridos</h2>
     <form #f="ngForm">
       <mat-form-field>
         <mat-label>Sucursales</mat-label>
         <mat-select
-          [value]="filter.comboSucId"
+          [value]="filter.sucId"
           (selectionChange)="onSucursalChange($event)"
         >
           <mat-option value="0">Todas las sucursales</mat-option>
@@ -21,9 +21,9 @@
       <mat-form-field>
         <mat-label>Activo:</mat-label>
         <mat-select
-          [(ngModel)]="filter.comboActivo"
-          id="comboActivo"
-          name="comboActivo"
+          [(ngModel)]="filter.activo"
+          id="activo"
+          name="activo"
           (selectionChange)="onActivoChange()"
         >
           <mat-option value="all">Todos</mat-option>
@@ -37,90 +37,50 @@
         color="accent"
         (click)="add()"
         [disabled]="!f?.valid"
-        matTooltip="Agregar combo"
       >
         <mat-icon>add</mat-icon>
       </button>
-
-      <!-- Botón para copiar combos seleccionados -->
-      <button
-        mat-mini-fab
-        color="primary"
-        (click)="copiarCombosSeleccionados()"
-        [disabled]="selection.selected.length === 0"
-        matTooltip="Copiar combos seleccionados a otra sucursal"
-        style="margin-left: 8px;"
-      >
-        <mat-icon>content_copy</mat-icon>
-      </button>
-
-      <!-- Contador de seleccionados -->
-      <span *ngIf="selection.selected.length > 0" style="margin-left: 16px; color: #3f51b5;">
-        {{ selection.selected.length }} combo(s) seleccionado(s)
-      </span>
     </form>
 
     <div *ngIf="dataSource.data.length > 0">
       <table mat-table [dataSource]="dataSource" class="mat-elevation-z2">
-        
-        <!-- Columna de Selección -->
-        <ng-container matColumnDef="select">
-          <mat-header-cell *matHeaderCellDef>
-            <mat-checkbox
-              (change)="$event ? masterToggle() : null"
-              [checked]="selection.hasValue() && isAllSelected()"
-              [indeterminate]="selection.hasValue() && !isAllSelected()"
-            >
-            </mat-checkbox>
-          </mat-header-cell>
-          <mat-cell *matCellDef="let row">
-            <mat-checkbox
-              (click)="$event.stopPropagation()"
-              (change)="$event ? selection.toggle(row) : null"
-              [checked]="selection.isSelected(row)"
-            >
-            </mat-checkbox>
-          </mat-cell>
-        </ng-container>
-
-        <!-- Columna Nombre -->
-        <ng-container matColumnDef="comboNombre">
-          <mat-header-cell *matHeaderCellDef>
-            Nombre del Combo
-          </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.comboNombre }} </mat-cell>
-        </ng-container>
-
         <!-- Columna Sucursal -->
-        <ng-container matColumnDef="sucursalId">
+        <ng-container matColumnDef="sucNombreSel">
           <mat-header-cell *matHeaderCellDef> Sucursal </mat-header-cell>
-          <mat-cell *matCellDef="let item">
-            {{ getSucursalNombre(item.sucursalId) }}
+          <mat-cell class = "cell-angular" *matCellDef="let item"> {{ item.sucNombreSel }} </mat-cell>
+        </ng-container>
+
+        <!-- Columna Producto -->
+        <ng-container matColumnDef="proNombreSel">
+          <mat-header-cell *matHeaderCellDef>
+            Producto Principal
+          </mat-header-cell>
+          <mat-cell class = "cell-angular" *matCellDef="let item">
+            <div>
+              <strong>{{ item.proNombreSel }}</strong>
+              <br />
+              <small style="color: #666">SKU: {{ item.proSkuSel }}</small>
+            </div>
           </mat-cell>
         </ng-container>
 
-        <!-- Columna Precio -->
-        <ng-container matColumnDef="precioCombo">
-          <mat-header-cell *matHeaderCellDef> Precio </mat-header-cell>
-          <mat-cell
-            style="justify-content: right !important"
-            *matCellDef="let item"
-          >
-            ${{ item.precioCombo | number : "1.2-2" }}
-          </mat-cell>
+        <!-- Columna Lista de Precio -->
+        <ng-container matColumnDef="lprNombreSel">
+          <mat-header-cell *matHeaderCellDef> Lista Precio </mat-header-cell>
+          <mat-cell class = "cell-angular" *matCellDef="let item"> {{ item.lprNombreSel }} </mat-cell>
         </ng-container>
 
         <!-- Columna Activo -->
-        <ng-container matColumnDef="comboActivo">
+        <ng-container matColumnDef="proActivoSel">
           <mat-header-cell *matHeaderCellDef> Activo </mat-header-cell>
           <mat-cell
             style="justify-content: center !important"
             *matCellDef="let item"
           >
-            <mat-icon *ngIf="item.comboActivo" color="primary"
+            <mat-icon *ngIf="item.proActivoSel" color="primary"
               >check_circle</mat-icon
             >
-            <mat-icon *ngIf="!item.comboActivo" color="warn">cancel</mat-icon>
+            <mat-icon *ngIf="!item.proActivoSel" color="warn">cancel</mat-icon>
           </mat-cell>
         </ng-container>
 
@@ -132,7 +92,7 @@
               (click)="edit(item)"
               mat-icon-button
               color="primary"
-              matTooltip="Editar"
+              matTooltip="Editar sugerencias"
               matTooltipPosition="above"
             >
               <mat-icon>edit</mat-icon>
@@ -141,7 +101,7 @@
               (click)="delete(item)"
               mat-icon-button
               color="warn"
-              matTooltip="Eliminar"
+              matTooltip="Eliminar sugerencias"
               matTooltipPosition="above"
             >
               <mat-icon>delete</mat-icon>
@@ -162,7 +122,7 @@
       <mat-icon style="font-size: 64px; width: 64px; height: 64px">
         image_search
       </mat-icon>
-      <p>No se encontraron registros de combos</p>
+      <p>No se encontraron productos con sugerencias configuradas</p>
     </div>
     
     <div class="contenedor-paginator">
