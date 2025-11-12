@@ -4,8 +4,19 @@ import { BannerFilter } from '../banner-filter';
 import { BannerService } from '../banner.service';
 import { SucursalService } from '../../sucursal/sucursal.service';
 import { BannerEditComponent } from '../banner-edit/banner-edit.component';
+import { BannerCopyDialogComponent } from '../banner-copy/banner-copy-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
+import { SelectionModel } from '@angular/cdk/collections';
+
+// 👇 Interfaz para el banner
+interface Banner {
+  subId: number;
+  subSucId: number;
+  subNombre: string;
+  subOrden: number;
+  subActivo: boolean;
+}
 
 @Component({
   selector: 'app-banner-list',
@@ -14,9 +25,10 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './banner-list.component.css',
 })
 export class BannerListComponent implements OnInit {
-  displayedColumns = ['idSucursal', 'sucursal', 'actions'];
+  displayedColumns = ['select', 'idSucursal', 'sucursal', 'actions'];
   filter = new BannerFilter();
   listSucursales: any[] = [];
+  selection = new SelectionModel<number>(true, []); // Selección de SubSucId
   private subs!: Subscription;
   isEditing: boolean = false;
 
@@ -29,7 +41,6 @@ export class BannerListComponent implements OnInit {
     this.subs = this.bannerService.getIsUpdated().subscribe(() => {
       this.search();
     });
-    console.log(this.bannerSucList);
     this.filter.subSucId = '0';
     this.filter.subActivo = '';
   }
@@ -55,7 +66,7 @@ export class BannerListComponent implements OnInit {
     const selectedSucId = this.filter.subSucId;
     this.dialog.open(BannerEditComponent, {
       data: {
-        banner: [], // sin id porque es nuevo
+        banner: [],
         listSucursales: this.listSucursales,
         selectedSucId: selectedSucId,
         isEditing: true,
@@ -73,6 +84,7 @@ export class BannerListComponent implements OnInit {
   }
 
   onSucursalChange(): void {
+    this.selection.clear();
     this.search();
   }
 
@@ -81,7 +93,6 @@ export class BannerListComponent implements OnInit {
   }
 
   loadCatalogs() {
-    // Cargar sucursales
     this.sucursalSerivice
       .find({
         sucId: '0',
@@ -93,11 +104,9 @@ export class BannerListComponent implements OnInit {
       })
       .subscribe(
         (res) => {
-          console.log('Sucursales cargadas:', res);
           this.listSucursales = res;
         },
         (error) => {
-          console.log('Error al cargar sucursales:', error);
           this.toastr.error('Error al cargar sucursales', 'Error');
         }
       );
@@ -115,7 +124,6 @@ export class BannerListComponent implements OnInit {
   }
 
   editSuc(idSuc: number[]): void {
-    console.log('id suc ' + idSuc);
     this.dialog.open(BannerEditComponent, {
       data: {
         banner: JSON.parse(JSON.stringify(idSuc)),
@@ -129,5 +137,123 @@ export class BannerListComponent implements OnInit {
       panelClass: 'custom-dialog-container',
       disableClose: true,
     });
+  }
+
+  // ========== MÉTODOS PARA SELECCIÓN Y COPIA ==========
+
+  /** Si todas las filas están seleccionadas */
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.bannerSucList.length;
+    return numSelected === numRows;
+  }
+
+  /** Seleccionar/deseleccionar todas las filas */
+  masterToggle() {
+    this.isAllSelected()
+      ? this.selection.clear()
+      : this.bannerSucList.forEach((row) => this.selection.select(row));
+  }
+
+  /** Abrir diálogo para copiar banners */
+  copiarBannersSeleccionados(): void {
+    if (this.selection.selected.length === 0) {
+      this.toastr.warning(
+        'Selecciona al menos una sucursal para copiar sus banners',
+        'Advertencia'
+      );
+      return;
+    }
+
+    // Obtener todos los banners de las sucursales seleccionadas
+    const bannersSeleccionados = this.bannerService.bannerList.filter(
+      (banner) => this.selection.selected.includes(banner.subSucId)
+    );
+
+    const dialogRef = this.dialog.open(BannerCopyDialogComponent, {
+      width: '500px',
+      data: {
+        bannersSeleccionados: bannersSeleccionados.length,
+        sucursalesSeleccionadas: this.selection.selected.length,
+        sucursales: this.listSucursales.filter(
+          (s) => !this.selection.selected.includes(s.sucId)
+        ),
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result: { sucursalId: number }) => {
+      if (result && result.sucursalId) {
+        this.ejecutarCopiaBanners(result.sucursalId);
+      }
+    });
+  }
+
+  /** Ejecutar la copia de banners */
+  private ejecutarCopiaBanners(targetSucursalId: number): void {
+    // 👇 Mapear los banners con su clave primaria completa (SubId + SubSucId)
+    const banners = this.bannerService.bannerList
+      .filter((banner) => this.selection.selected.includes(banner.subSucId))
+      .map((banner) => ({
+        subId: banner.subId,
+        subSucId: banner.subSucId,
+      }));
+
+    console.log('Banners a copiar:', banners);
+
+    this.bannerService
+      .copyBannersToSucursal(banners, targetSucursalId)
+      .subscribe({
+        next: (response) => {
+          console.log('Respuesta de copia:', response);
+
+          if (response.data.success) {
+            const copiados = response.data.copiados || 0;
+            const errores = response.data.detalles || [];
+            const erroresArchivos = response.erroresArchivos || [];
+
+            let mensaje = `Se copiaron ${copiados} banner(s) exitosamente`;
+
+            if (erroresArchivos.length > 0) {
+              mensaje += `, pero hubo ${erroresArchivos.length} error(es) al copiar archivos de imagen`;
+            }
+
+            this.toastr.success(mensaje, 'Operación exitosa', {
+              timeOut: 5000,
+            });
+
+            if (errores.length > 0) {
+              this.toastr.warning(
+                `Advertencias: ${errores.join(', ')}`,
+                'Atención',
+                { timeOut: 5000 }
+              );
+            }
+
+            if (erroresArchivos.length > 0) {
+              this.toastr.warning(
+                `Errores en archivos: ${erroresArchivos.join(', ')}`,
+                'Atención',
+                { timeOut: 5000 }
+              );
+            }
+
+            this.selection.clear();
+            this.search();
+          } else {
+            this.toastr.error(
+              response.data.detalles?.join(', ') ||
+                'No se pudo copiar ningún banner',
+              'Error'
+            );
+          }
+        },
+        error: (err) => {
+          console.error('Error al copiar banners:', err);
+          this.toastr.error(
+            err.error?.message || 'Error al copiar los banners',
+            'Error'
+          );
+        },
+      });
   }
 }

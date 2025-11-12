@@ -152,4 +152,18 @@ export class BannerService extends GeneralService {
     }
     return formData;
   }
+
+// En banner.service.ts
+
+copyBannersToSucursal(
+  banners: Array<{ subId: number, subSucId: number }>,
+  targetSucursalId: number
+): Observable<any> {
+  return this.http.post(`${this.api}/copiar-a-sucursal`, {
+    banners: banners,
+    targetSucursalId: targetSucursalId
+  }, {
+    headers: this.getHeaders()
+  });
+}
 }

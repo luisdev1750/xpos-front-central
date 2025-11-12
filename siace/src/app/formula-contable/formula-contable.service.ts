@@ -8,91 +8,103 @@ import { map } from 'rxjs/operators';
 
 @Injectable()
 export class FormulaContableService extends GeneralService {
-   formulaContableList: FormulaContable[] = [];
-   api = this.sUrl + 'FormulasContables';
+  formulaContableList: FormulaContable[] = [];
+  api = this.sUrl + 'FormulasContables';
 
-   /* Constructores*/
-   
-   constructor(private http: HttpClient) {
-      super();
-   }
+  /* Constructores*/
 
-   // Método para obtener headers con el token
-   private getHeaders(): HttpHeaders {
-      const token = localStorage.getItem('accessToken');
-      let headers = new HttpHeaders().set('Accept', 'application/json');
+  constructor(private http: HttpClient) {
+    super();
+  }
+
+  // Método para obtener headers con el token
+  private getHeaders(): HttpHeaders {
+    const token = localStorage.getItem('accessToken');
+    let headers = new HttpHeaders().set('Accept', 'application/json');
+
+    if (token) {
+      headers = headers.set('Authorization', `Bearer ${token}`);
+    }
+
+    return headers;
+  }
+
+  /* Métodos */
+
+  delete(entity: FormulaContable): Observable<FormulaContable> {
+    let params = new HttpParams();
+    let url = '';
+    if (entity.focId) {
+      url = `${this.api}/${entity.focId.toString()}/${entity.focSucId.toString()}`;
       
-      if (token) {
-         headers = headers.set('Authorization', `Bearer ${token}`);
-      }
-      
-      return headers;
-   }
-
-   /* Métodos */
-
-   delete(entity: FormulaContable): Observable<FormulaContable> {
-      let params = new HttpParams();
-      let url = '';
-      if (entity.focId) {
-         url = `${this.api}/${entity.focId.toString()}`;
-         params = new HttpParams().set('ID', entity.focId.toString());
-         return this.http.delete<FormulaContable>(url, {
-            headers: this.getHeaders(), 
-            params
-         });
-      }
-      return EMPTY;
-   }
-  
-  
-   find(filter: FormulaContableFilter): Observable<FormulaContable[]> {
-      const url = `${this.api}/${filter.focId}/${filter.focSucId}`;
-      return this.http.get<FormulaContable[]>(url, {
-         headers: this.getHeaders()  
+      return this.http.delete<FormulaContable>(url, {
+        headers: this.getHeaders(),
+        params,
       });
-   }
+    }
+    return EMPTY;
+  }
 
-    findVariables(sucId: number): Observable<any[]> {
-      const url = `${this.api}/listar-variables-contables/${sucId ?? 0}`;
-      return this.http.get<any[]>(url, {
-         headers: this.getHeaders()  // Usar headers con token
-      });
-   }
-   
-   
-   
-   findById(id: string): Observable<FormulaContable> {
-      const url = `${this.api}/${id}`;
-      const params = { focId: id };
-      return this.http.get<FormulaContable[]>(url, {
-         headers: this.getHeaders()  // Usar headers con token
-      }).pipe(
-         map(ele => ele[0])
-      );
-   }
+  find(filter: FormulaContableFilter): Observable<FormulaContable[]> {
+    const url = `${this.api}/${filter.focId}/${filter.focSucId}`;
+    return this.http.get<FormulaContable[]>(url, {
+      headers: this.getHeaders(),
+    });
+  }
 
+  findVariables(sucId: number): Observable<any[]> {
+    const url = `${this.api}/listar-variables-contables/${sucId ?? 0}`;
+    return this.http.get<any[]>(url, {
+      headers: this.getHeaders(), // Usar headers con token
+    });
+  }
 
-   load(filter: FormulaContableFilter): void {
-      this.find(filter).subscribe({
-         next: result => {
-            this.formulaContableList = result;
-         },
-         error: err => {
-            console.error('error cargando', err);
-         }
-      });
-   }
+  findById(id: string): Observable<FormulaContable> {
+    const url = `${this.api}/${id}`;
+    const params = { focId: id };
+    return this.http
+      .get<FormulaContable[]>(url, {
+        headers: this.getHeaders(), // Usar headers con token
+      })
+      .pipe(map((ele) => ele[0]));
+  }
 
-  
-   save(entity: FormulaContable): Observable<FormulaContable> {
-      let url = `${this.api}`;
-      const headers = this.getHeaders();  // Obtener headers con token
-      
-      if (entity.focId) {
-         return this.http.put<FormulaContable>(url, entity, { headers });
-      } else {
-         return this.http.post<FormulaContable>(url, entity, { headers });
+  load(filter: FormulaContableFilter): void {
+    this.find(filter).subscribe({
+      next: (result) => {
+        this.formulaContableList = result;
+      },
+      error: (err) => {
+        console.error('error cargando', err);
+      },
+    });
+  }
+
+  save(entity: FormulaContable): Observable<FormulaContable> {
+    let url = `${this.api}`;
+    const headers = this.getHeaders(); // Obtener headers con token
+
+    if (entity.focId) {
+      return this.http.put<FormulaContable>(url, entity, { headers });
+    } else {
+      return this.http.post<FormulaContable>(url, entity, { headers });
+    }
+  }
+
+  copyFormulasToSucursal(
+    formulaIds: number[],
+    targetSucursalId: number,
+     copiarDependencias: boolean = true
+  ): Observable<any> {
+    return this.http.post(
+      `${this.api}/copiar-a-sucursal`,
+      {
+        formulaIds: formulaIds,
+        targetSucursalId: targetSucursalId,
+      },
+      {
+        headers: this.getHeaders(),
       }
-   }
+    );
+  }
 }

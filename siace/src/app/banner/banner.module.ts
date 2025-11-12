@@ -33,6 +33,7 @@ import {
 } from '@angular/material/autocomplete';
 import { ImagePreviewComponent } from './banner-edit/image-preview/image-preview.component';
 import { MatPaginator } from '@angular/material/paginator';
+import { BannerCopyDialogComponent } from './banner-copy/banner-copy-dialog.component';
 
 @NgModule({
   imports: [
@@ -64,6 +65,7 @@ import { MatPaginator } from '@angular/material/paginator';
     BannerListComponent,
     BannerEditComponent,
     ImagePreviewComponent,
+    BannerCopyDialogComponent
   ],
   providers: [BannerService, SucursalService],
   exports: [],

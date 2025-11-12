@@ -22,12 +22,52 @@
         color="accent"
         (click)="add()"
         [disabled]="!f?.valid"
+        matTooltip="Agregar fórmula"
       >
         <mat-icon>add</mat-icon>
       </button>
+
+      <!-- Botón para copiar fórmulas seleccionadas -->
+      <button
+        mat-mini-fab
+        color="primary"
+        (click)="copiarFormulasSeleccionadas()"
+        [disabled]="selection.selected.length === 0"
+        matTooltip="Copiar fórmulas seleccionadas a otra sucursal"
+        style="margin-left: 8px;"
+      >
+        <mat-icon>content_copy</mat-icon>
+      </button>
+
+      <!-- Contador de seleccionados -->
+      <span *ngIf="selection.selected.length > 0" style="margin-left: 16px; color: #3f51b5;">
+        {{ selection.selected.length }} fórmula(s) seleccionada(s)
+      </span>
     </form>
+
     <div *ngIf="formulaContableList.length > 0">
       <table mat-table #table [dataSource]="formulaContableList">
+        
+        <!-- Columna de Selección -->
+        <ng-container matColumnDef="select">
+          <mat-header-cell *matHeaderCellDef>
+            <mat-checkbox
+              (change)="$event ? masterToggle() : null"
+              [checked]="selection.hasValue() && isAllSelected()"
+              [indeterminate]="selection.hasValue() && !isAllSelected()"
+            >
+            </mat-checkbox>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <mat-checkbox
+              (click)="$event.stopPropagation()"
+              (change)="$event ? selection.toggle(row) : null"
+              [checked]="selection.isSelected(row)"
+            >
+            </mat-checkbox>
+          </mat-cell>
+        </ng-container>
+
         <ng-container matColumnDef="focId">
           <mat-header-cell *matHeaderCellDef> Clave </mat-header-cell>
           <mat-cell *matCellDef="let item"> {{ item.focId }} </mat-cell>
@@ -40,24 +80,24 @@
           <mat-cell *matCellDef="let item"> {{ item.focSucName }} </mat-cell>
         </ng-container>
 
-       <ng-container matColumnDef="focFormula">
-  <mat-header-cell *matHeaderCellDef> Fórmula </mat-header-cell>
-  <mat-cell *matCellDef="let item">
-    <div class="formula-display">
-      <span
-        *ngFor="let token of parseFormula(item.focFormula)"
-        class="formula-token"
-        [class.variable]="token.type === 'variable'"
-        [class.operator]="token.type === 'operator'"
-        [class.number]="token.type === 'number'"
-        [class.parenthesis]="token.type === 'parenthesis'"
-        [matTooltip]="token.tooltip || ''"
-      >
-        {{ token.value }}
-      </span>
-    </div>
-  </mat-cell>
-</ng-container>
+        <ng-container matColumnDef="focFormula">
+          <mat-header-cell *matHeaderCellDef> Fórmula </mat-header-cell>
+          <mat-cell *matCellDef="let item">
+            <div class="formula-display">
+              <span
+                *ngFor="let token of parseFormula(item.focFormula)"
+                class="formula-token"
+                [class.variable]="token.type === 'variable'"
+                [class.operator]="token.type === 'operator'"
+                [class.number]="token.type === 'number'"
+                [class.parenthesis]="token.type === 'parenthesis'"
+                [matTooltip]="token.tooltip || ''"
+              >
+                {{ token.value }}
+              </span>
+            </div>
+          </mat-cell>
+        </ng-container>
 
         <ng-container matColumnDef="focClave">
           <mat-header-cell *matHeaderCellDef> Código </mat-header-cell>
@@ -89,13 +129,33 @@
               matTooltip="Editar"
               matTooltipPosition="above"
             >
-              <mat-icon>edit</mat-icon></button
-            >&nbsp;
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button
+              (click)="delete(item)"
+              mat-icon-button
+              color="warn"
+              matTooltip="Eliminar"
+              matTooltipPosition="above"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
           </mat-cell>
         </ng-container>
+
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
       </table>
+    </div>
+
+    <div
+      *ngIf="formulaContableList.length === 0"
+      style="text-align: center; padding: 40px; color: #999"
+    >
+      <mat-icon style="font-size: 64px; width: 64px; height: 64px">
+        image_search
+      </mat-icon>
+      <p>No se encontraron fórmulas contables</p>
     </div>
   </mat-card>
 </div>

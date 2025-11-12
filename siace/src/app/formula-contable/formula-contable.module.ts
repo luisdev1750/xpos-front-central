@@ -19,6 +19,8 @@ import { SucursalService } from '../sucursal/sucursal.service';
 import { MatSelect } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
+import { FormulaCopyDialogComponent } from './formula-copy/formula-copy-dialog.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 @NgModule({
   imports: [
     CommonModule,
@@ -36,9 +38,14 @@ import { MatChipsModule } from '@angular/material/chips';
     MatSelect,
     MatOption,
     MatTooltipModule,
-    MatChipsModule
+    MatChipsModule,
+    MatCheckboxModule
   ],
-  declarations: [FormulaContableListComponent, FormulaContableEditComponent],
+  declarations: [
+    FormulaContableListComponent,
+    FormulaContableEditComponent,
+    FormulaCopyDialogComponent,
+  ],
   providers: [FormulaContableService, SucursalService],
   exports: [],
 })

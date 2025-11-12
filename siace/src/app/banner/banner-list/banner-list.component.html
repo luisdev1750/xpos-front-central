@@ -1,11 +1,9 @@
 <div class="proin-main">
   <mat-card class="proin-card">
-    <br />
     <h2>Catálogo de Banners</h2>
-    <br />
     <form #f="ngForm">
-      <mat-form-field appearance="outline">
-        <mat-label>Búsqueda por Sucursal:</mat-label>
+      <mat-form-field>
+        <mat-label>Sucursal</mat-label>
         <mat-select
           [(ngModel)]="filter.subSucId"
           id="sucursal"
@@ -21,18 +19,58 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-      &nbsp;&nbsp;
+
       <button
         mat-mini-fab
         color="accent"
         (click)="add(filter.subSucId)"
         [disabled]="!f?.valid"
+        matTooltip="Agregar banner"
       >
         <mat-icon>add</mat-icon>
       </button>
+
+      <!-- Botón para copiar banners seleccionados -->
+      <button
+        mat-mini-fab
+        color="primary"
+        (click)="copiarBannersSeleccionados()"
+        [disabled]="selection.selected.length === 0"
+        matTooltip="Copiar banners seleccionados a otra sucursal"
+        style="margin-left: 8px;"
+      >
+        <mat-icon>content_copy</mat-icon>
+      </button>
+
+      <!-- Contador de seleccionados -->
+      <span *ngIf="selection.selected.length > 0" style="margin-left: 16px; color: #3f51b5;">
+        {{ selection.selected.length }} banner(s) seleccionado(s)
+      </span>
     </form>
+
     <div *ngIf="bannerSucList.length > 0">
       <table mat-table #table [dataSource]="bannerSucList">
+        
+        <!-- Columna de Selección -->
+        <ng-container matColumnDef="select">
+          <mat-header-cell *matHeaderCellDef>
+            <mat-checkbox
+              (change)="$event ? masterToggle() : null"
+              [checked]="selection.hasValue() && isAllSelected()"
+              [indeterminate]="selection.hasValue() && !isAllSelected()"
+            >
+            </mat-checkbox>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <mat-checkbox
+              (click)="$event.stopPropagation()"
+              (change)="$event ? selection.toggle(row) : null"
+              [checked]="selection.isSelected(row)"
+            >
+            </mat-checkbox>
+          </mat-cell>
+        </ng-container>
+
         <ng-container matColumnDef="idSucursal">
           <mat-header-cell *matHeaderCellDef> Clave </mat-header-cell>
           <mat-cell *matCellDef="let item"> {{ item }} </mat-cell>
@@ -64,6 +102,16 @@
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
       </table>
+    </div>
+
+    <div
+      *ngIf="bannerSucList.length === 0"
+      style="text-align: center; padding: 40px; color: #999"
+    >
+      <mat-icon style="font-size: 64px; width: 64px; height: 64px">
+        image_search
+      </mat-icon>
+      <p>No se encontraron banners</p>
     </div>
   </mat-card>
 </div>
