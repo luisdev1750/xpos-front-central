@@ -10,4 +10,5 @@ export class Combo {
   comboId!: number; 
   productos!: any[];
   sucursalId!: number; 
+  comboSKU!: string; 
 }

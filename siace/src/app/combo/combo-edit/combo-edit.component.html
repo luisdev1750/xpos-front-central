@@ -61,6 +61,21 @@
         <mat-error *ngIf="combo.banNombre == ''">Nombre es requerido</mat-error>
       </mat-form-field>
     </div>
+    <div class="col-md-6">
+      <mat-form-field>
+        <mat-label for="comboSKU">SKU del combo</mat-label>
+        <input
+          matInput
+          [(ngModel)]="combo.comboSKU"
+          (input)="toUpperCase($event)"
+          id="comboSKU"
+          name="comboSKU"
+          placeholder="comboSKU"
+          required
+        />
+        <mat-error *ngIf="combo.comboSKU == ''">SKU es requerido</mat-error>
+      </mat-form-field>
+    </div>
 
     <div class="col-md-6">
       <mat-form-field>
@@ -141,13 +156,11 @@
             *ngFor="let producto of filteredProductos | async"
             [value]="producto"
           >
-       
             <span>
-              <strong>SKU: {{ producto.proSku }}</strong> - {{ producto.proNombre }}
+              <strong>SKU: {{ producto.proSku }}</strong> -
+              {{ producto.proNombre }}
             </span>
             <br />
-          
-          
           </mat-option>
         </mat-autocomplete>
         <mat-hint *ngIf="!combo.sucursalId" style="color: #f44336">

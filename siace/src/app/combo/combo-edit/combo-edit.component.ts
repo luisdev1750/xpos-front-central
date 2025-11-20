@@ -56,7 +56,7 @@ export class ComboEditComponent implements OnInit {
 
     this.isEditMode =
       this.combo.comboId && this.combo.comboId > 0 ? true : false;
-    
+
     // 🔹 Asignar IDs temporales únicos a productos existentes que no los tengan
     if (this.combo.productos && this.combo.productos.length > 0) {
       this.combo.productos = this.combo.productos.map((p: any) => {
@@ -76,6 +76,10 @@ export class ComboEditComponent implements OnInit {
     }
   }
 
+  toUpperCase(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.combo.comboSKU = input.value.toUpperCase();
+  }
   loadCatalogs() {
     this.listaPrecioService
       .find({
@@ -235,7 +239,7 @@ export class ComboEditComponent implements OnInit {
       productoNombre: this.productoSeleccionado.proNombre,
       productoSku: this.productoSeleccionado.proSku,
       productoActivo: this.productoSeleccionado.proActivo,
-      _tempId: this.nextTempId-- // ID temporal único para identificar esta fila específica
+      _tempId: this.nextTempId--, // ID temporal único para identificar esta fila específica
     };
 
     this.combo.productos = [...this.combo.productos, nuevoProducto];
@@ -276,7 +280,7 @@ export class ComboEditComponent implements OnInit {
       productos: this.combo.productos.map((p: any) => {
         const { _tempId, ...productoSinTempId } = p;
         return productoSinTempId;
-      })
+      }),
     };
 
     this.comboService.save(comboToSave).subscribe({
@@ -291,7 +295,9 @@ export class ComboEditComponent implements OnInit {
         } else this.toastr.error('Ha ocurrido un error', 'Error');
       },
       error: (err) => {
-        this.toastr.error('Ha ocurrido un error', 'Error');
+        console.log(err.error.error); 
+
+        this.toastr.error(err.error.error, 'Ha ocurrido un error' );
       },
     });
   }

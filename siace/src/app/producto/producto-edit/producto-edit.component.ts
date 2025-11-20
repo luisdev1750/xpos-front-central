@@ -73,7 +73,7 @@ export class ProductoEditComponent implements OnInit {
         } else this.toastr.error('Ha ocurrido un error', 'Error');
       },
       error: (err) => {
-        this.toastr.error('Ha ocurrido un error', 'Error');
+            this.toastr.error(err.error.error, 'Ha ocurrido un error');
       },
     });
   }
