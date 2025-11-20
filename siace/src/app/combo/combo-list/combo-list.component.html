@@ -49,27 +49,29 @@
         (click)="copiarCombosSeleccionados()"
         [disabled]="selection.selected.length === 0"
         matTooltip="Copiar combos seleccionados a otra sucursal"
-        style="margin-left: 8px;"
+        style="margin-left: 8px"
       >
         <mat-icon>content_copy</mat-icon>
       </button>
 
       <!-- Contador de seleccionados -->
-      <span *ngIf="selection.selected.length > 0" style="margin-left: 16px; color: #3f51b5;">
+      <span
+        *ngIf="selection.selected.length > 0"
+        style="margin-left: 16px; color: #3f51b5"
+      >
         {{ selection.selected.length }} combo(s) seleccionado(s)
       </span>
     </form>
 
     <div *ngIf="dataSource.data.length > 0">
       <table mat-table [dataSource]="dataSource" class="mat-elevation-z2">
-        
         <!-- Columna de Selección -->
         <ng-container matColumnDef="select">
           <mat-header-cell *matHeaderCellDef>
             <mat-checkbox
               (change)="$event ? masterToggle() : null"
               [checked]="selection.hasValue() && isAllSelected()"
-              [indeterminate]="selection.hasValue() && !isAllSelected()"
+         
             >
             </mat-checkbox>
           </mat-header-cell>
@@ -83,18 +85,30 @@
           </mat-cell>
         </ng-container>
 
-        <!-- Columna Nombre -->
+        <!-- Columna Nombre CON HOVER -->
         <ng-container matColumnDef="comboNombre">
           <mat-header-cell *matHeaderCellDef>
             Nombre del Combo
           </mat-header-cell>
-          <mat-cell *matCellDef="let item"> {{ item.comboNombre }} </mat-cell>
+          <mat-cell
+            *matCellDef="let item"
+            class="hover-cell"
+            (mouseenter)="showProductos($event, item)"
+            (mouseleave)="scheduleHide()"
+          >
+            {{ item.comboNombre }}
+          </mat-cell>
         </ng-container>
 
-        <!-- Columna Sucursal -->
+        <!-- Columna Sucursal CON HOVER -->
         <ng-container matColumnDef="sucursalId">
           <mat-header-cell *matHeaderCellDef> Sucursal </mat-header-cell>
-          <mat-cell *matCellDef="let item">
+          <mat-cell
+            *matCellDef="let item"
+            class="hover-cell"
+            (mouseenter)="showProductos($event, item)"
+            (mouseleave)="scheduleHide()"
+          >
             {{ getSucursalNombre(item.sucursalId) }}
           </mat-cell>
         </ng-container>
@@ -164,7 +178,7 @@
       </mat-icon>
       <p>No se encontraron registros de combos</p>
     </div>
-    
+
     <div class="contenedor-paginator">
       <mat-paginator
         class="paginator"
@@ -174,4 +188,231 @@
       </mat-paginator>
     </div>
   </mat-card>
+
+  <!-- POPUP DE PRODUCTOS -->
+  <div
+    class="productos-popup"
+    *ngIf="showPopup"
+    [style.left.px]="popupPosition.x"
+    [style.top.px]="popupPosition.y"
+    (mouseenter)="cancelHide()"
+    (mouseleave)="scheduleHide()"
+  >
+    <div class="popup-header">
+      <mat-icon class="popup-icon">inventory_2</mat-icon>
+      <h3>Productos del Combo</h3>
+    </div>
+
+    <div class="popup-content">
+      <table class="productos-table">
+        <thead>
+          <tr>
+            <th>SKU</th>
+            <th>Nombre</th>
+
+            <th style="text-align: center">Activo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let producto of currentProductos"
+            [class.inactive]="!producto.productoActivo"
+          >
+            <td class="producto-sku">{{ producto.productoSku }}</td>
+            <td class="producto-nombre">{{ producto.productoNombre }}</td>
+
+            <td style="text-align: center">
+              <mat-icon *ngIf="producto.productoActivo" class="icon-active"
+                >check_circle</mat-icon
+              >
+              <mat-icon *ngIf="!producto.productoActivo" class="icon-inactive"
+                >cancel</mat-icon
+              >
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div *ngIf="currentProductos.length === 0" class="no-productos">
+        <mat-icon>info</mat-icon>
+        <p>No hay productos en este combo</p>
+      </div>
+    </div>
+
+    <div class="popup-footer">
+      <span>{{ currentProductos.length }} producto(s)</span>
+    </div>
+  </div>
 </div>
+
+<style>
+  .hover-cell {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .hover-cell:hover {
+    background-color: rgba(63, 81, 181, 0.08) !important;
+  }
+
+  /* ESTILOS DEL POPUP */
+  .productos-popup {
+    position: fixed;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15), 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 10000;
+    min-width: 500px;
+    max-width: 700px;
+    animation: fadeInScale 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  @keyframes fadeInScale {
+    from {
+      opacity: 0;
+      transform: scale(0.92) translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  .popup-header {
+    background: linear-gradient(135deg, #3f51b5 0%, #5c6bc0 100%);
+    color: white;
+    padding: 12px 16px;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .popup-header h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  .popup-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+
+  .popup-content {
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 0;
+  }
+
+  .productos-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  .productos-table thead {
+    background-color: #f5f5f5;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+
+  .productos-table th {
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+    color: #424242;
+    border-bottom: 2px solid #e0e0e0;
+  }
+
+  .productos-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .productos-table tbody tr {
+    transition: background-color 0.15s ease;
+  }
+
+  .productos-table tbody tr:hover {
+    background-color: #f9f9f9;
+  }
+
+  .productos-table tbody tr.inactive {
+    opacity: 0.6;
+    background-color: #fafafa;
+  }
+
+  .producto-nombre {
+    font-weight: 500;
+    color: #212121;
+  }
+
+  .producto-sku {
+    color: #666;
+    font-family: "Courier New", monospace;
+    font-size: 13px;
+  }
+
+  .icon-active {
+    color: #4caf50;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+
+  .icon-inactive {
+    color: #f44336;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+
+  .popup-footer {
+    padding: 10px 16px;
+    background-color: #fafafa;
+    border-top: 1px solid #e0e0e0;
+    border-radius: 0 0 8px 8px;
+    font-size: 12px;
+    color: #666;
+    text-align: right;
+  }
+
+  .no-productos {
+    padding: 40px;
+    text-align: center;
+    color: #999;
+  }
+
+  .no-productos mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 10px;
+  }
+
+  .no-productos p {
+    margin: 0;
+  }
+
+  /* Scrollbar personalizado */
+  .popup-content::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .popup-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  .popup-content::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+  }
+
+  .popup-content::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+  }
+</style>

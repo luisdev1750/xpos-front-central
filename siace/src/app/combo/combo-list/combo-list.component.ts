@@ -41,7 +41,11 @@ export class ComboListComponent implements OnInit, OnDestroy {
   listCombos: any[] = [];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   dataSource = new MatTableDataSource<Combo>();
-
+  showPopup = false;
+  currentProductos: any[] = [];
+  popupPosition = { x: 0, y: 0 };
+  private hideTimeout: any;
+  private showTimeout: any;
   constructor(
     private comboService: ComboService,
     private toastr: ToastrService,
@@ -91,6 +95,12 @@ export class ComboListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subs?.unsubscribe();
+    if (this.hideTimeout) {
+      clearTimeout(this.hideTimeout);
+    }
+    if (this.showTimeout) {
+      clearTimeout(this.showTimeout);
+    }
   }
 
   onSucursalChange(event: any) {
@@ -190,7 +200,7 @@ export class ComboListComponent implements OnInit, OnDestroy {
                 'Transacción exitosa'
               );
               this.search();
-               this.selection.clear();
+              this.selection.clear();
             } else {
               this.toastr.error('Ha ocurrido un error', 'Error');
             }
@@ -228,7 +238,10 @@ export class ComboListComponent implements OnInit, OnDestroy {
   /** Abrir diálogo para copiar combos */
   copiarCombosSeleccionados(): void {
     if (this.selection.selected.length === 0) {
-      this.toastr.warning('Selecciona al menos un combo para copiar', 'Advertencia');
+      this.toastr.warning(
+        'Selecciona al menos un combo para copiar',
+        'Advertencia'
+      );
       return;
     }
 
@@ -254,7 +267,7 @@ export class ComboListComponent implements OnInit, OnDestroy {
     this.comboService.copyComboToSucursal(comboIds, sucursalDestino).subscribe({
       next: (response) => {
         console.log('Respuesta de copia:', response);
-        
+
         if (response.data.success) {
           const copiados = response.data.copiados || 0;
           const detalles = response.data.detalles || [];
@@ -273,11 +286,10 @@ export class ComboListComponent implements OnInit, OnDestroy {
           if (detalles.length > 0) {
             detalles.forEach((detalle: any) => {
               if (detalle.length > 0) {
-                this.toastr.warning(
-                  detalle,
-                  'Advertencia',
-                  { timeOut: 6000, closeButton: true }
-                );
+                this.toastr.warning(detalle, 'Advertencia', {
+                  timeOut: 6000,
+                  closeButton: true,
+                });
               }
             });
           }
@@ -305,5 +317,94 @@ export class ComboListComponent implements OnInit, OnDestroy {
         this.toastr.error('Error al copiar los combos', err.error.errores[0]);
       },
     });
+  }
+
+  showProductos(event: MouseEvent, combo: any): void {
+
+    this.cancelHide();
+
+    this.currentProductos = combo.productos || [];
+
+    const cellRect = (event.target as HTMLElement).getBoundingClientRect();
+    const popupWidth = 500; // Ancho mínimo del popup
+    const popupHeight = 300; // Altura estimada
+    const padding = 10;
+
+    let x = cellRect.left + cellRect.width / 2 - popupWidth / 2;
+    let y = cellRect.bottom + padding;
+
+    // Ajustar si se sale por la derecha
+    if (x + popupWidth > window.innerWidth) {
+      x = window.innerWidth - popupWidth - padding;
+    }
+
+    // Ajustar si se sale por la izquierda
+    if (x < padding) {
+      x = padding;
+    }
+
+    // Ajustar si se sale por abajo (mostrar arriba de la celda)
+    if (y + popupHeight > window.innerHeight) {
+      y = cellRect.top - popupHeight - padding;
+    }
+
+    // Si tampoco cabe arriba, mostrar al lado
+    if (y < padding) {
+      y = cellRect.top;
+      x = cellRect.right + padding;
+
+      // Si se sale por la derecha, mostrar a la izquierda
+      if (x + popupWidth > window.innerWidth) {
+        x = cellRect.left - popupWidth - padding;
+      }
+    }
+
+    this.popupPosition = { x, y };
+
+    // Mostrar el popup con un delay suave de 400ms
+    this.showTimeout = setTimeout(() => {
+      this.showPopup = true;
+    }, 400);
+  }
+
+  /**
+   * Oculta el popup (sin delay, se oculta inmediatamente)
+   */
+  hideProductos(): void {
+    // Solo ocultar si el mouse no está sobre el popup
+    this.hideTimeout = setTimeout(() => {
+      this.showPopup = false;
+      this.currentProductos = [];
+    }, 100);
+  }
+
+  /**
+   * Programa el ocultamiento del popup con un pequeño delay
+   */
+  scheduleHide(): void {
+    // Cancelar el timeout de mostrar si aún no se ha mostrado
+    if (this.showTimeout) {
+      clearTimeout(this.showTimeout);
+      this.showTimeout = null;
+    }
+
+    this.hideTimeout = setTimeout(() => {
+      this.showPopup = false;
+      this.currentProductos = [];
+    }, 150);
+  }
+
+  /**
+   * Cancela el ocultamiento programado del popup
+   */
+  cancelHide(): void {
+    if (this.hideTimeout) {
+      clearTimeout(this.hideTimeout);
+      this.hideTimeout = null;
+    }
+    if (this.showTimeout) {
+      clearTimeout(this.showTimeout);
+      this.showTimeout = null;
+    }
   }
 }
