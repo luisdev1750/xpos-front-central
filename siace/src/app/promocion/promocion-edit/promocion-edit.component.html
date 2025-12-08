@@ -7,8 +7,6 @@
 >
   <!-- Primera fila -->
   <div class="row">
-  
-
     <div class="col-md-6">
       <mat-form-field>
         <mat-label>Nombre de la promoción</mat-label>
@@ -110,6 +108,7 @@
           id="pmoFechaInicio"
           name="pmoFechaInicio"
           placeholder="Selecciona fecha de inicio"
+          (dateChange)="onFechaInicioChange()"
           required
         />
         <mat-datepicker-toggle
@@ -130,9 +129,11 @@
           matInput
           [matDatepicker]="pmoFechaFin"
           [(ngModel)]="promocion.pmoFechaFin"
+          [min]="promocion.pmoFechaInicio"
           id="pmoFechaFin"
           name="pmoFechaFin"
           placeholder="Selecciona fecha de fin"
+          (dateChange)="onFechaFinChange()"
           required
         />
         <mat-datepicker-toggle
@@ -142,6 +143,9 @@
         <mat-datepicker #pmoFechaFin></mat-datepicker>
         <mat-error *ngIf="promocion.pmoFechaFin == undefined">
           Fecha de fin es requerida
+        </mat-error>
+        <mat-error *ngIf="fechaFinInvalida">
+          La fecha de fin debe ser mayor o igual a la fecha de inicio
         </mat-error>
       </mat-form-field>
     </div>
@@ -170,6 +174,7 @@
           id="pmoLimiteCantidad"
           name="pmoLimiteCantidad"
           placeholder="Límite de cantidad"
+          min="0"
         />
         <mat-error *ngIf="promocion.pmoLimiteCantidad == undefined">
           Límite de cantidad es requerido

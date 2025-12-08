@@ -16,6 +16,7 @@ import { TipoSubpagoService } from '../../tipo-subpago/tipo-subpago.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+
 @Component({
   selector: 'app-promocion',
   standalone: false,
@@ -26,16 +27,16 @@ import { MatTableDataSource } from '@angular/material/table';
   ],
 })
 export class PromocionListComponent implements OnInit {
-  // Columnas adaptadas para la entidad Promocion original
+  // Columnas adaptadas para la entidad Promocion original + nueva columna
   displayedColumns = [
     'pmoNombre',
+    'detallePromocion', // Nueva columna
     'pmoFechaInicio',
     'pmoFechaFin',
     'pmoTprId',
     'pmoTpaId',
     'pmoSpaId',
     'pmoPolitica',
-
     'pmoLimiteCantidad',
     'pmoSucId',
     'actions',
@@ -46,7 +47,6 @@ export class PromocionListComponent implements OnInit {
   private subs!: Subscription;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   dataSource = new MatTableDataSource<Promocion>();
-  /* Inicialización */
 
   constructor(
     private promocionService: PromocionService,
@@ -104,6 +104,7 @@ export class PromocionListComponent implements OnInit {
       return `${startIndex + 1} – ${endIndex} de ${length}`;
     };
   }
+
   loadCatalogs() {
     this.sucursalService.findAll().subscribe(
       (res) => {
@@ -127,35 +128,33 @@ export class PromocionListComponent implements OnInit {
         this.listTipoPromocion = res;
       });
   }
+
   onTipoPromocionChange(event: any) {
     this.filter.pmoTpr = event.value;
     this.search();
   }
+
   onSucursalChange(event: any) {
     this.filter.pmoSucId = event.value;
     this.search();
   }
-  redirectToPromocionesObsequio(item: any) {
-    console.log(item.pmoFechaFin); // "2022-01-01T00:00:00Z"
 
-    // Obtener la fecha actual y establecerla al inicio del día (00:00:00)
+  redirectToPromocionesObsequio(item: any) {
+    console.log(item.pmoFechaFin);
+
     const fechaActual = new Date();
     fechaActual.setHours(0, 0, 0, 0);
 
-    // Convertir la fecha fin a objeto Date y establecerla al inicio del día (00:00:00)
     const fechaFin = new Date(item.pmoFechaFin);
     fechaFin.setHours(0, 0, 0, 0);
 
-    // Comparar si la fecha actual es menor que la fecha fin (comparación de días)
     const esFechaValida = fechaActual <= fechaFin;
 
     console.log(item);
-
     console.log('Fecha actual (00:00):', fechaActual.toISOString());
     console.log('Fecha fin (00:00):', fechaFin.toISOString());
     console.log('Es fecha válida (fecha actual < fecha fin):', esFechaValida);
 
-    // Navegar con la bandera como parámetro de consulta
     this.router.navigate([`/promocion-obsequio/${item.pmoId}`], {
       queryParams: {
         fechaValida: esFechaValida,
@@ -167,22 +166,27 @@ export class PromocionListComponent implements OnInit {
   onNombreClick(item: any) {
     console.log('nombre click');
     console.log(item);
-    // Obtener la fecha actual y establecerla al inicio del día (00:00:00)
+    if (!this.esPromocionActiva(item)) {
+      this.toastr.warning(
+        'Esta promoción ya no está vigente',
+        'Promoción vencida'
+      );
+      return;
+    }
+
     const fechaActual = new Date();
     fechaActual.setHours(0, 0, 0, 0);
 
-    // Convertir la fecha fin a objeto Date y establecerla al inicio del día (00:00:00)
     const fechaFin = new Date(item.pmoFechaFin);
     fechaFin.setHours(0, 0, 0, 0);
 
-    // Comparar si la fecha actual es menor que la fecha fin (comparación de días)
     const esFechaValida = fechaActual <= fechaFin;
 
     console.log(item);
-
     console.log('Fecha actual (00:00):', fechaActual.toISOString());
     console.log('Fecha fin (00:00):', fechaFin.toISOString());
     console.log('Es fecha válida (fecha actual < fecha fin):', esFechaValida);
+    
     this.router.navigate([`/promocion-detalle/${item.pmoId}`], {
       queryParams: {
         tipoPromocion: item.pmoTprId,
@@ -191,13 +195,10 @@ export class PromocionListComponent implements OnInit {
       },
     });
   }
-  /* Accesors */
 
   get promocionList(): Promocion[] {
     return this.promocionService.promocionList;
   }
-
-  /* Métodos */
 
   add() {
     let newPromocion: Promocion = new Promocion();
@@ -235,27 +236,73 @@ export class PromocionListComponent implements OnInit {
     });
   }
 
-  edit(ele: Promocion, isEditing:boolean = true) {
+  edit(ele: Promocion, isEditing: boolean = true) {
     this.dialog.open(PromocionEditComponent, {
-      data: { promocion: JSON.parse(JSON.stringify(ele)),  isEditing: isEditing },
-      height: '600px', 
-      width: '800px', 
+      data: {
+        promocion: JSON.parse(JSON.stringify(ele)),
+        isEditing: isEditing,
+      },
+      height: '600px',
+      width: '800px',
       maxWidth: 'none',
       disableClose: true,
-     
     });
   }
 
   search(): void {
+    this.promocionService.find(this.filter).subscribe(
+      (data) => {
+        this.dataSource.data = data;
+        this.dataSource.paginator = this.paginator;
+      },
+      (err) => {
+        console.log('Error al cargar datos', err);
+      }
+    );
+  }
 
-    this.promocionService.find(this.filter).subscribe((data)=>{
-      this.dataSource.data = data;
-      this.dataSource.paginator = this.paginator;
-    },
-      (err)=>{
-        console.log("Error al cargar datos", err);
-        
-      });
+  esPromocionActiva(item: Promocion): boolean {
+    const fechaActual = new Date();
+    fechaActual.setHours(0, 0, 0, 0);
 
+    const fechaFin = new Date(item.pmoFechaFin);
+    fechaFin.setHours(0, 0, 0, 0);
+
+    return fechaActual <= fechaFin;
+  }
+
+  /**
+   * Extrae el detalle de la promoción del nombre
+   * - Si contiene porcentaje (ej: "descuento-33%", "-33%"), devuelve "33%"
+   * - Si contiene formato NxM (ej: "gran oferta 3x2"), devuelve "3x2"
+   * - Si no contiene ninguno, devuelve cadena vacía
+   */
+  extraerDetallePromocion(nombrePromocion: string): string {
+    if (!nombrePromocion) {
+      return '';
+    }
+
+    // Regex para porcentaje: captura números (incluso con signo negativo) seguidos de %
+    // Ejemplos: "33%", "-33%", "descuento-33%"
+    const regexPorcentaje = /-?(\d+(?:\.\d+)?)\s*%/i;
+    const matchPorcentaje = nombrePromocion.match(regexPorcentaje);
+
+    if (matchPorcentaje) {
+      // Extraer solo el número positivo (sin el signo negativo si existe)
+      const numero = Math.abs(parseFloat(matchPorcentaje[1]));
+      return `${numero}%`;
+    }
+
+    // Regex para formato NxM: captura patrones como "3x2", "2x1", etc.
+    // Ejemplos: "gran oferta 3x2", "promo 2x1"
+    const regexNxM = /(\d+)\s*x\s*(\d+)/i;
+    const matchNxM = nombrePromocion.match(regexNxM);
+
+    if (matchNxM) {
+      return `${matchNxM[1]}x${matchNxM[2]}`;
+    }
+
+    // No se encontró ni porcentaje ni formato NxM
+    return '';
   }
 }

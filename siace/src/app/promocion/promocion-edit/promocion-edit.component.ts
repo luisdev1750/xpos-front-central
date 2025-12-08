@@ -30,6 +30,7 @@ export class PromocionEditComponent implements OnInit {
   listSubtipoPagos: any[] = [];
   listTiposPromocones: any[] = [];
   listSucursales: any[] = [];
+  fechaFinInvalida = false;
   /* Constructores */
   isEditing = false;
   constructor(
@@ -48,7 +49,7 @@ export class PromocionEditComponent implements OnInit {
     console.log('Promocion seleccionada');
     console.log(this.promocion);
     console.log(data.promocion);
-         this.isEditing = data.isEditing ?? false; 
+    this.isEditing = data.isEditing ?? false;
   }
 
   ngOnInit() {
@@ -105,7 +106,32 @@ export class PromocionEditComponent implements OnInit {
   onTipoPromocionesChange(event: any) {
     this.promocion.pmoTprId = event.value;
   }
+  onFechaInicioChange() {
+    if (this.promocion.pmoFechaInicio && this.promocion.pmoFechaFin) {
+      this.validarFechas();
+    }
+  }
 
+  // Método para validar cuando cambia la fecha de fin
+  onFechaFinChange() {
+    if (this.promocion.pmoFechaInicio && this.promocion.pmoFechaFin) {
+      this.validarFechas();
+    }
+  }
+
+
+  validarFechas(): boolean {
+    const fechaInicio = new Date(this.promocion.pmoFechaInicio);
+    const fechaFin = new Date(this.promocion.pmoFechaFin);
+
+  
+    fechaInicio.setHours(0, 0, 0, 0);
+    fechaFin.setHours(0, 0, 0, 0);
+
+    this.fechaFinInvalida = fechaFin < fechaInicio;
+
+    return !this.fechaFinInvalida;
+  }
   getSubtipoPagos(idTipoPago: number) {
     this.tipoSubpagoService.findByPagoId(idTipoPago.toString()).subscribe(
       (res) => {
@@ -125,118 +151,173 @@ export class PromocionEditComponent implements OnInit {
   onSucursalChange(event: any) {
     this.promocion.pmoSucId = event.value;
   }
-  save() {
-    console.log('información por enviar');
 
-    const promocionToSave = { ...this.promocion };
-
-    if (promocionToSave.pmoTprId === 0) promocionToSave.pmoTprId = null;
-    if (promocionToSave.pmoTpaId === 0) promocionToSave.pmoTpaId = null;
-    if (promocionToSave.pmoSpaId === 0) promocionToSave.pmoSpaId = null;
-
-    let cantidadCompra = null;
-    let cantidadObsequio = null;
-    let porcentajeDescuento = null;
-    console.log('información pago:');
-    console.log(this.listTiposPromocones);
-
-    console.log(
-      this.listTiposPromocones.find(
-        (tp) => tp.tprId == promocionToSave.pmoTprId
-      ).tprClave == 'PROMO_NXM'
+save() {
+  console.log('información por enviar');
+  if (!this.validarFechas()) {
+    this.toastr.error(
+      'La fecha de fin debe ser mayor o igual a la fecha de inicio',
+      'Fechas inválidas'
     );
-
-    if (
-      this.listTiposPromocones?.find(
-        (tp) => tp.tprId == promocionToSave.pmoTprId
-      )?.tprClave == 'PROMO_NXM'
-    ) {
-      const regexPromocion = /(\d+)\s*x\s*(\d+)/i;
-      const match = promocionToSave.pmoNombre.match(regexPromocion);
-
-      if (!match) {
-        this.toastr.error(
-          'El nombre de la promoción debe incluir un formato NxM (ejemplo: 3x2, 2x1)',
-          'Formato de promoción inválido'
-        );
-        return;
-      }
-
-      const cantidadLlevada = parseInt(match[1]);
-      const cantidadPagada = parseInt(match[2]);
-
-      if (cantidadLlevada <= cantidadPagada) {
-        this.toastr.error(
-          `La promoción ${cantidadLlevada}x${cantidadPagada} no es válida. Debe llevarse más unidades de las que se pagan (ejemplo: 3x2, 2x1)`,
-          'Promoción incoherente'
-        );
-        return;
-      }
-
-      cantidadCompra = cantidadLlevada;
-      cantidadObsequio = cantidadLlevada - cantidadPagada;
-
-      console.log(`Promoción válida: ${cantidadLlevada}x${cantidadPagada}`);
-    }
-  
-    if (   this.listTiposPromocones?.find(
-        (tp) => tp.tprId == promocionToSave.pmoTprId
-      )?.tprClave == "PROMO_DIR") {
-      const regexDescuento = /(\d+)\s*%/i;
-      const match = promocionToSave.pmoNombre.match(regexDescuento);
-
-      if (!match) {
-        this.toastr.error(
-          'El nombre de la promoción debe incluir un porcentaje de descuento (ejemplo: Descuento 20%, 50% de descuento)',
-          'Formato de promoción inválido'
-        );
-        return;
-      }
-
-      porcentajeDescuento = parseInt(match[1]);
-
-      if (porcentajeDescuento <= 0 || porcentajeDescuento > 100) {
-        this.toastr.error(
-          `El porcentaje de descuento ${porcentajeDescuento}% no es válido. Debe estar entre 1% y 100%`,
-          'Porcentaje inválido'
-        );
-        return;
-      }
-
-      console.log(`Promoción de descuento válida: ${porcentajeDescuento}%`);
-    }
-
-
-    // Guardar la promoción padre
-    this.promocionService.save(promocionToSave).subscribe({
-      next: (result) => {
-        if (
-          result?.pmoSucId != null &&
-          result?.pmoSucId !== undefined &&
-          result?.pmoSucId > 0
-        ) {
-          // Si es actualización (tiene pmoId), verificar si hay detalles para actualizar
-          if (promocionToSave.pmoId && promocionToSave.pmoId > 0) {
-            this.actualizarDetallesSiExisten(
-              promocionToSave.pmoId,
-              promocionToSave.pmoTprId ?? 0,
-              cantidadCompra,
-              cantidadObsequio,
-              porcentajeDescuento
-            );
-          } else {
-            // Es nuevo registro, solo mostrar éxito
-            this.mostrarExitoYCerrar();
-          }
-        } else {
-          this.toastr.error('Ha ocurrido un error', 'Error');
-        }
-      },
-      error: (err) => {
-        this.toastr.error('Ha ocurrido un error', 'Error');
-      },
-    });
+    return;
   }
+  const promocionToSave = { ...this.promocion };
+
+  if (promocionToSave.pmoTprId === 0) promocionToSave.pmoTprId = null;
+  if (promocionToSave.pmoTpaId === 0) promocionToSave.pmoTpaId = null;
+  if (promocionToSave.pmoSpaId === 0) promocionToSave.pmoSpaId = null;
+
+  let cantidadCompra = null;
+  let cantidadObsequio = null;
+  let porcentajeDescuento = null;
+
+  // Validación para promociones NxM
+  if (
+    this.listTiposPromocones?.find(
+      (tp) => tp.tprId == promocionToSave.pmoTprId
+    )?.tprClave == 'PROMO_NXM'
+  ) {
+    const regexPromocion = /(\d+(?:\.\d+)?)\s*x\s*(\d+(?:\.\d+)?)/i;
+    const match = promocionToSave.pmoNombre.match(regexPromocion);
+
+    if (!match) {
+      this.toastr.error(
+        'El nombre de la promoción debe incluir un formato NxM (ejemplo: 3x2, 2x1)',
+        'Formato de promoción inválido'
+      );
+      return;
+    }
+
+    const cantidadLlevada = parseFloat(match[1]);
+    const cantidadPagada = parseFloat(match[2]);
+
+    // Validar que no sean decimales
+    if (!Number.isInteger(cantidadLlevada) || !Number.isInteger(cantidadPagada)) {
+      this.toastr.error(
+        'Las cantidades en la promoción NxM deben ser números enteros (sin decimales)',
+        'Valores inválidos'
+      );
+      return;
+    }
+
+    // Validar que no sean ceros
+    if (cantidadLlevada === 0 || cantidadPagada === 0) {
+      this.toastr.error(
+        'Las cantidades en la promoción NxM no pueden ser cero',
+        'Valores inválidos'
+      );
+      return;
+    }
+
+    // Validar que no sean negativos
+    if (cantidadLlevada < 0 || cantidadPagada < 0) {
+      this.toastr.error(
+        'Las cantidades en la promoción NxM no pueden ser negativas',
+        'Valores inválidos'
+      );
+      return;
+    }
+
+    if (cantidadLlevada <= cantidadPagada) {
+      this.toastr.error(
+        `La promoción ${cantidadLlevada}x${cantidadPagada} no es válida. Debe llevarse más unidades de las que se pagan (ejemplo: 3x2, 2x1)`,
+        'Promoción incoherente'
+      );
+      return;
+    }
+
+    cantidadCompra = cantidadLlevada;
+    cantidadObsequio = cantidadLlevada - cantidadPagada;
+
+    console.log(`Promoción válida: ${cantidadLlevada}x${cantidadPagada}`);
+  }
+
+  // Validación para promociones de descuento directo
+  if (
+    this.listTiposPromocones?.find(
+      (tp) => tp.tprId == promocionToSave.pmoTprId
+    )?.tprClave == 'PROMO_DIR'
+  ) {
+    const regexDescuento = /(\d+(?:\.\d+)?)\s*%/i;
+    const match = promocionToSave.pmoNombre.match(regexDescuento);
+
+    if (!match) {
+      this.toastr.error(
+        'El nombre de la promoción debe incluir un porcentaje de descuento (ejemplo: Descuento 20%, 50% de descuento)',
+        'Formato de promoción inválido'
+      );
+      return;
+    }
+
+    porcentajeDescuento = parseFloat(match[1]);
+
+    // Validar que no sea decimal (si quieres solo enteros)
+    // Si permites decimales (ejemplo: 15.5%), comenta estas líneas
+    if (!Number.isInteger(porcentajeDescuento)) {
+      this.toastr.error(
+        'El porcentaje de descuento debe ser un número entero (sin decimales)',
+        'Valor inválido'
+      );
+      return;
+    }
+
+    // Validar que no sea cero
+    if (porcentajeDescuento === 0) {
+      this.toastr.error(
+        'El porcentaje de descuento no puede ser cero',
+        'Valor inválido'
+      );
+      return;
+    }
+
+    // Validar que no sea negativo
+    if (porcentajeDescuento < 0) {
+      this.toastr.error(
+        'El porcentaje de descuento no puede ser negativo',
+        'Valor inválido'
+      );
+      return;
+    }
+
+    if (porcentajeDescuento > 100) {
+      this.toastr.error(
+        `El porcentaje de descuento ${porcentajeDescuento}% no es válido. Debe estar entre 1% y 100%`,
+        'Porcentaje inválido'
+      );
+      return;
+    }
+
+    console.log(`Promoción de descuento válida: ${porcentajeDescuento}%`);
+  }
+
+  // Guardar la promoción padre
+  this.promocionService.save(promocionToSave).subscribe({
+    next: (result) => {
+      if (
+        result?.pmoSucId != null &&
+        result?.pmoSucId !== undefined &&
+        result?.pmoSucId > 0
+      ) {
+        if (promocionToSave.pmoId && promocionToSave.pmoId > 0) {
+          this.actualizarDetallesSiExisten(
+            promocionToSave.pmoId,
+            promocionToSave.pmoTprId ?? 0,
+            cantidadCompra,
+            cantidadObsequio,
+            porcentajeDescuento
+          );
+        } else {
+          this.mostrarExitoYCerrar();
+        }
+      } else {
+        this.toastr.error('Ha ocurrido un error', 'Error');
+      }
+    },
+    error: (err) => {
+      this.toastr.error('Ha ocurrido un error', 'Error');
+    },
+  });
+}
 
   private actualizarDetallesSiExisten(
     pmoId: number,
