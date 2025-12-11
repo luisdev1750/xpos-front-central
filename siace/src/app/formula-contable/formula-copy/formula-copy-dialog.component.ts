@@ -39,7 +39,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
       </button>
     </mat-dialog-actions>
   `,
-  styles: [`...`]
+  // styles: [`...`]
 })
 export class FormulaCopyDialogComponent {
   sucursalSeleccionada: number | null = null;
