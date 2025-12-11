@@ -10,10 +10,11 @@ export class Promocion {
   pmoObsequioUnico!: boolean;
   pmoLimiteCantidad!: number;
   pmoSucId!: number;
+  pmoBanId!: number| null;
 
   pmoTprNombre!: string;
   pmoTpanombre!: string;
   pmoSpaNombre!: string;
   pmoSucNombre!: string;
-  
+  pmoBanNombre!: string;
 }

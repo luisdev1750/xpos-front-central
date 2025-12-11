@@ -25,6 +25,7 @@ import { MatSelect } from '@angular/material/select';
 import { PromocionDetalleService } from '../promocion-detalle/promocion-detalle.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { BancoService } from '../banco/banco.service';
 @NgModule({
   imports: [
     CommonModule,
@@ -48,7 +49,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     PromocionListComponent,
     PromocionEditComponent
   ],
-  providers: [PromocionService, SucursalService, TipoPromocionService, TipoPagoService, TipoSubpagoService, PromocionDetalleService],
+  providers: [PromocionService, SucursalService, TipoPromocionService, TipoPagoService, TipoSubpagoService, PromocionDetalleService, BancoService],
   exports: []
 })
 export class PromocionModule { }

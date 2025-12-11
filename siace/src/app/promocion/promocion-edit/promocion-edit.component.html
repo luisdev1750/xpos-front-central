@@ -48,7 +48,7 @@
         <mat-label>Sucursal</mat-label>
         <mat-select
           [(ngModel)]="promocion.pmoSucId"
-           name="pmoSucId"
+          name="pmoSucId"
           required
           [disabled]="isEditing"
         >
@@ -62,8 +62,23 @@
       </mat-form-field>
     </div>
 
-
-
+    <div class="col-md-6">
+      <mat-form-field>
+        <mat-label>Banco</mat-label>
+        <mat-select
+          [value]="promocion.pmoBanId"
+          (selectionChange)="onBancoChange($event)"
+        >
+          <mat-option [value]="null">Sin Banco</mat-option>
+          <mat-option
+            *ngFor="let banco of listBancos"
+            [value]="banco.banId"
+          >
+            {{banco.banNombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
 
     <div class="col-md-6">
       <mat-form-field>

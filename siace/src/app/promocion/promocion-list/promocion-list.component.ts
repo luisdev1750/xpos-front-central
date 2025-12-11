@@ -16,6 +16,7 @@ import { TipoSubpagoService } from '../../tipo-subpago/tipo-subpago.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { BancoService } from '../../banco/banco.service';
 
 @Component({
   selector: 'app-promocion',
@@ -27,15 +28,15 @@ import { MatTableDataSource } from '@angular/material/table';
   ],
 })
 export class PromocionListComponent implements OnInit {
-  // Columnas adaptadas para la entidad Promocion original + nueva columna
   displayedColumns = [
     'pmoNombre',
-    'detallePromocion', // Nueva columna
+    'detallePromocion',
     'pmoFechaInicio',
     'pmoFechaFin',
     'pmoTprId',
     'pmoTpaId',
     'pmoSpaId',
+    'pmoBanId', 
     'pmoPolitica',
     'pmoLimiteCantidad',
     'pmoSucId',
@@ -48,6 +49,9 @@ export class PromocionListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   dataSource = new MatTableDataSource<Promocion>();
 
+  // Clave para guardar el estado del paginador
+  private readonly PAGINATOR_STATE_KEY = 'promocion_paginator_state';
+
   constructor(
     private promocionService: PromocionService,
     private toastr: ToastrService,
@@ -57,7 +61,8 @@ export class PromocionListComponent implements OnInit {
     private tipoPagosService: TipoPagoService,
     private tipoSubpagoService: TipoSubpagoService,
     private router: Router,
-    private paginatorIntl: MatPaginatorIntl
+    private paginatorIntl: MatPaginatorIntl,
+    private bancosService: BancoService
   ) {
     this.subs = this.promocionService.getIsUpdated().subscribe(() => {
       this.search();
@@ -79,6 +84,9 @@ export class PromocionListComponent implements OnInit {
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
+    
+    // Restaurar el estado del paginador si existe
+    this.restaurarEstadoPaginador();
   }
 
   private configurarPaginadorEspanol(): void {
@@ -105,6 +113,50 @@ export class PromocionListComponent implements OnInit {
     };
   }
 
+  /**
+   * Guarda el estado actual del paginador en sessionStorage
+   */
+  private guardarEstadoPaginador(): void {
+    if (this.paginator) {
+      const estado = {
+        pageIndex: this.paginator.pageIndex,
+        pageSize: this.paginator.pageSize
+      };
+      sessionStorage.setItem(this.PAGINATOR_STATE_KEY, JSON.stringify(estado));
+    }
+  }
+
+  /**
+   * Restaura el estado del paginador desde sessionStorage
+   */
+  private restaurarEstadoPaginador(): void {
+    const estadoGuardado = sessionStorage.getItem(this.PAGINATOR_STATE_KEY);
+    
+    if (estadoGuardado && this.paginator) {
+      try {
+        const estado = JSON.parse(estadoGuardado);
+        
+        // Restaurar el tamaño de página primero
+        if (estado.pageSize) {
+          this.paginator.pageSize = estado.pageSize;
+        }
+        
+        // Luego restaurar el índice de página
+        if (estado.pageIndex !== undefined) {
+          // Usar setTimeout para asegurar que la restauración ocurra después de que los datos estén cargados
+          setTimeout(() => {
+            this.paginator.pageIndex = estado.pageIndex;
+          }, 0);
+        }
+        
+        // Limpiar el estado guardado
+        sessionStorage.removeItem(this.PAGINATOR_STATE_KEY);
+      } catch (error) {
+        console.error('Error al restaurar estado del paginador:', error);
+      }
+    }
+  }
+
   loadCatalogs() {
     this.sucursalService.findAll().subscribe(
       (res) => {
@@ -115,6 +167,21 @@ export class PromocionListComponent implements OnInit {
       (error) => {
         console.log(error);
       }
+    );
+
+     this.bancosService
+      .find({
+        banId: '0',
+        banActivo: '',
+      })
+      .subscribe(
+        (res) => {
+          console.log('respuesta banco service');
+          console.log(res);
+        },
+        (error) => {
+          console.log(error);
+        }
     );
 
     this.tipoPromocionService
@@ -155,6 +222,9 @@ export class PromocionListComponent implements OnInit {
     console.log('Fecha fin (00:00):', fechaFin.toISOString());
     console.log('Es fecha válida (fecha actual < fecha fin):', esFechaValida);
 
+    // Guardar estado del paginador antes de navegar
+    this.guardarEstadoPaginador();
+
     this.router.navigate([`/promocion-obsequio/${item.pmoId}`], {
       queryParams: {
         fechaValida: esFechaValida,
@@ -186,6 +256,9 @@ export class PromocionListComponent implements OnInit {
     console.log('Fecha actual (00:00):', fechaActual.toISOString());
     console.log('Fecha fin (00:00):', fechaFin.toISOString());
     console.log('Es fecha válida (fecha actual < fecha fin):', esFechaValida);
+    
+    // Guardar estado del paginador antes de navegar
+    this.guardarEstadoPaginador();
     
     this.router.navigate([`/promocion-detalle/${item.pmoId}`], {
       queryParams: {
@@ -271,30 +344,19 @@ export class PromocionListComponent implements OnInit {
     return fechaActual <= fechaFin;
   }
 
-  /**
-   * Extrae el detalle de la promoción del nombre
-   * - Si contiene porcentaje (ej: "descuento-33%", "-33%"), devuelve "33%"
-   * - Si contiene formato NxM (ej: "gran oferta 3x2"), devuelve "3x2"
-   * - Si no contiene ninguno, devuelve cadena vacía
-   */
   extraerDetallePromocion(nombrePromocion: string): string {
     if (!nombrePromocion) {
       return '';
     }
 
-    // Regex para porcentaje: captura números (incluso con signo negativo) seguidos de %
-    // Ejemplos: "33%", "-33%", "descuento-33%"
     const regexPorcentaje = /-?(\d+(?:\.\d+)?)\s*%/i;
     const matchPorcentaje = nombrePromocion.match(regexPorcentaje);
 
     if (matchPorcentaje) {
-      // Extraer solo el número positivo (sin el signo negativo si existe)
       const numero = Math.abs(parseFloat(matchPorcentaje[1]));
       return `${numero}%`;
     }
 
-    // Regex para formato NxM: captura patrones como "3x2", "2x1", etc.
-    // Ejemplos: "gran oferta 3x2", "promo 2x1"
     const regexNxM = /(\d+)\s*x\s*(\d+)/i;
     const matchNxM = nombrePromocion.match(regexNxM);
 
@@ -302,7 +364,6 @@ export class PromocionListComponent implements OnInit {
       return `${matchNxM[1]}x${matchNxM[2]}`;
     }
 
-    // No se encontró ni porcentaje ni formato NxM
     return '';
   }
 }

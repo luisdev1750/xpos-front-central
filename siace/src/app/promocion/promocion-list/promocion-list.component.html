@@ -65,8 +65,12 @@
         <!-- NUEVA COLUMNA: Detalle Promoción -->
         <ng-container matColumnDef="detallePromocion">
           <mat-header-cell *matHeaderCellDef> Detalle </mat-header-cell>
-          <mat-cell 
-            style="justify-content: center !important; font-weight: 500; color: #1976d2;" 
+          <mat-cell
+            style="
+              justify-content: center !important;
+              font-weight: 500;
+              color: #1976d2;
+            "
             *matCellDef="let item"
           >
             {{ extraerDetallePromocion(item.pmoNombre) }}
@@ -111,6 +115,12 @@
           <mat-header-cell *matHeaderCellDef> Tipo Subpago </mat-header-cell>
           <mat-cell class="cell-angular" *matCellDef="let item">
             {{ item.pmoSpaNombre }}
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="pmoBanId">
+          <mat-header-cell *matHeaderCellDef> Banco </mat-header-cell>
+          <mat-cell class="cell-angular" *matCellDef="let item">
+            {{ item.pmoBanNombre  }}
           </mat-cell>
         </ng-container>
 
